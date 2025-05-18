@@ -1,10 +1,10 @@
-## About Ultimate POS
+## About Audaz POS
 
-Ultimate POS is a POS application by [Ultimate Fosters](http://ultimatefosters.com), a brand of [The Web Fosters](http://thewebfosters.com).
+Audaz POS is a POS application by [Audaz Developer](http://audaz.site), a brand of [Softandnet DR](http://softandnet.com).
 
 ## Installation & Documentation
 You will find installation guide and documentation in the downloaded zip file.
-Also, For complete updated documentation of the ultimate pos please visit online [documentation guide](http://ultimatefosters.com/ultimate-pos/).
+Also, For complete updated documentation of the ultimate pos please visit online [documentation guide](http://audaz.site/audaz-pos).
 
 ## Security Vulnerabilities
 
