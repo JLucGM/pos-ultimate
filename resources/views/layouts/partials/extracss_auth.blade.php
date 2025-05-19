@@ -79,7 +79,7 @@
     </style>
     <style>
         body {
-            background: linear-gradient(to right, #e8e8fc, #f8713c);
+            background: linear-gradient(to right, #b9401e, #f8713c);
         }
 
         h1 {
