@@ -259,7 +259,7 @@ legend {
   background-position: center;
 }
 .left-col-content {
-  color: #1A7BF9;
+  color: #f96f1a;
   width: 100%;
 }
 .login-header {
@@ -284,7 +284,7 @@ legend {
 
 /* Background color added by Prashant */
 .right-col {
-  background: linear-gradient(to right, #6366f1, #3b82f6);
+  background: linear-gradient(to right, #e8e8fc, #f8713c);
   height: 100%;
 }
 
@@ -477,7 +477,7 @@ div.pos-tab-menu div.list-group>a.active .fa{
 div.pos-tab-menu div.list-group > a.active,
 div.pos-tab-menu div.list-group > a.active .glyphicon,
 div.pos-tab-menu div.list-group > a.active .fa {
-  background: linear-gradient(to right, #6366f1, #3b82f6);
+  background: linear-gradient(to right, #b9401e, #f8713c);
   color: #ffffff;
   border-color: transparent;
 }

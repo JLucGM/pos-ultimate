@@ -23,7 +23,7 @@
         }
 
         .patt-circ.hovered {
-            background-color: #cde2f2;
+            background-color: #f96f1a;
             border: none;
         }
 
@@ -79,7 +79,7 @@
     </style>
     <style>
         body {
-            background: linear-gradient(to right, #6366f1, #3b82f6);
+            background: linear-gradient(to right, #e8e8fc, #f8713c);
         }
 
         h1 {

@@ -28,7 +28,7 @@
 	  z-index: 10;
 	}
 	.patt-circ.hovered {
-	  background-color: #cde2f2;
+	  background-color: #edf2f5;
 	  border: none;
 	}
 	.patt-circ.hovered .patt-dots {
