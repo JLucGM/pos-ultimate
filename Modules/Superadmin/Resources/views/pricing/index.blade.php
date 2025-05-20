@@ -9,7 +9,7 @@
                 <div class="tw-flex tw-flex-col tw-items-center">
                     <div
                         class="lg:tw-w-16 md:tw-h-16 tw-w-12 tw-h-12 tw-flex tw-items-center tw-justify-center tw-mx-auto tw-overflow-hidden tw-bg-white tw-rounded-full tw-p-0.5 tw-mb-4">
-                        <img src="{{ asset('img/logo-small3.png') }}" alt="lock" class="tw-rounded-full tw-object-fill" />
+                        <img src="{{ asset('img/logo-small4.png') }}" alt="lock" class="tw-rounded-full tw-object-fill" />
                     </div>
 
                     <div class="tw-flex tw-flex-col tw-gap-2 tw-text-center">
