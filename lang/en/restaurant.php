@@ -18,7 +18,7 @@ return [
     'edit_table' => 'Edit table',
     'table_name' => 'Table name',
     'short_description' => 'Short Description',
-    'select_table' => 'Select Table',
+    'select_table' => 'Consultorio',
     'show_table' => 'Show table',
     'table_label' => 'Table label',
     'show_service_staff' => 'Show service staff',

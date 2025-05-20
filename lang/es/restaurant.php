@@ -2,10 +2,10 @@
 
 return [
     'restaurant' => 'Restaurante',
-    'tables' => 'Mesas',
+    'tables' => 'Consultorios',
     'table' => 'Mesa',
-    'manage_your_tables' => 'Gestionar mesas de restaurante',
-    'all_your_tables' => 'Todas las mesas del restaurante',
+    'manage_your_tables' => 'Gestionar Consultorio',
+    'all_your_tables' => 'Todas los Consultorios',
     'description' => 'Descripción',
     'add_table' => 'Añadir tabla',
     'edit_table' => 'Editar tabla',
@@ -28,9 +28,9 @@ return [
     'manage_products' => 'Gestionar productos',
     'products' => 'Productos',
     'modifiers_for_product' => 'Modificadores para producto',
-    'kitchen' => 'Cocina',
+    'kitchen' => 'Pacientes',
     'mark_as_cooked' => 'Marcar como cocido',
-    'manage_your_kitchen' => 'Gestiona tu cocina',
+    'manage_your_kitchen' => 'Gestión de pacientes',
     'all_orders' => 'Todas las órdenes',
     'order_no' => 'N º de pedido.',
     'order_statuses' => [
