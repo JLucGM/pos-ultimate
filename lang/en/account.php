@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'account' => 'Account',
-    'manage_your_account' => 'Manage your account',
-    'all_accounts' => 'All accounts',
-    'account_number' => 'Account Number',
+    'account' => 'Cuenta',
+    'manage_your_account' => 'Manejar tu cuenta',
+    'all_accounts' => 'Cuentas',
+    'account_number' => 'Número de cuenta',
     'add_account' => 'Add Account',
     'account_created_success' => 'Account created successfully',
     'account_updated_success' => 'Account updated successfully',
