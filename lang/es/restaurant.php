@@ -28,9 +28,9 @@ return [
     'manage_products' => 'Gestionar servicios',
     'products' => 'Servicios',
     'modifiers_for_product' => 'Modificadores para servicios',
-    'kitchen' => 'Pacientes',
+    'kitchen' => 'Sala de espera',
     'mark_as_cooked' => 'Marcar como consultorio vacio',
-    'manage_your_kitchen' => 'Gestión de pacientes',
+    'manage_your_kitchen' => 'Gestión de la sala de espera',
     'all_orders' => 'Todas los servicios',
     'order_no' => 'N º de solicitud.',
     'order_statuses' => [
