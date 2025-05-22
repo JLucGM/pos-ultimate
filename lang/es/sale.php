@@ -17,8 +17,8 @@
      'draft' => 'Borrador',
      'finalize' => 'Finalizar compra', /* modified */
      'express_finalize' => 'Pago <br/> Rápido',
-     'product' => 'Producto',
-     'products' => 'Productos',
+     'product' => 'Servicio',
+     'products' => 'Servicios',
      'unit_price' => 'Precio unitario',
      'qty' => 'Cantidad',
      'subtotal' => 'Subtotal', /* modified */

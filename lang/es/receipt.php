@@ -1,7 +1,7 @@
 <?php
 
  return [
-     'product' => 'Producto',
+     'product' => 'Servicio',
      'qty' => 'Cantidad',
      'unit_price' => 'Precio unitario',
      'subtotal' => 'Subtotal', /* modified */

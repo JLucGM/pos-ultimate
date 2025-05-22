@@ -1406,7 +1406,7 @@ return [
     'add_to_location' => 'Agregar a la ubicación',
     'remove_from_location' => 'Eliminar de la ubicación',
     'deactivate_selected' => 'Desactivar Seleccionados',
-    'deactive_product_tooltip' => 'Los productos desactivados no estarán disponibles para comprar o vender',
+    'deactive_product_tooltip' => 'Los servicios desactivados no estarán disponibles para comprar o vender',
     'profit_by_service_staff' => 'Profit by service staff',
     'paid_amount' => 'Paid Amount',
     'zatca_phase' => 'مرحلة زاتكا',

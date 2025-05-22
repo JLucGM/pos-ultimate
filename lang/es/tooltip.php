@@ -1,7 +1,7 @@
 <?php
 
  return [
-     'product_stock_alert' => "Productos con poco stock. <br/> <small class='text-muted'> Basado en la cantidad de alerta del producto establecida en la pantalla agregar producto. Compre este producto antes de que el stock termine. </small>",
+     'product_stock_alert' => "servicios con poco stock. <br/> <small class='text-muted'> Basado en la cantidad de alerta del servicio establecida en la pantalla agregar servicio. Compre este servicio antes de que el stock termine. </small>",
      'payment_dues' => "Pago pendiente por compras. <br/> <small class='text-muted'> Basado en el término de pago del proveedor. <br/> Mostrando pagos a ser pagados en 7 días o menos. </small>", /* modified */
      'input_tax' => 'Impuesto total recaudado para las ventas dentro del período de tiempo seleccionado.',
      'output_tax' => 'Impuesto total pagado por compras durante el período de tiempo seleccionado.',
@@ -9,20 +9,20 @@
      'purchase_due' => 'Importe total no pagado por compras.', /* modified */
      'sell_due' => 'Cantidad total que se recibirá de las ventas',
      'over_all_sell_purchase' => '-ve value = Importe a pagar <br> + ve Valor = Importe a recibir',
-     'no_of_products_for_trending_products' => 'Número de productos de tendencia superior que se compararán en el cuadro a continuación.',
-     'top_trending_products' => "Los productos más vendidos de su tienda. <br/> <small class='text-muted'> aplique filtros para conocer los productos en tendencia para una categoría, marca, ubicación comercial específica, etc. </small>",
-     'sku' => "Id único de producto o Unidad de stock de mantenimiento <br> <br> manténgalo en blanco para generar automáticamente sku. <br> <small class='text-muted'> Puede modificar el prefijo sku en Configuración de empresa . </small> ", /* modified */
-     'enable_stock' => 'Habilitar o deshabilitar la gestión de stocks para un producto.',
-     'alert_quantity' => "Manténgase alerta cuando el stock del producto llegue o baje de la cantidad especificada. <br> <br> <small class='text-muted'> Los productos con poco stock se mostrarán en el panel de control - Sección de alerta de stock del producto. </small>", /* modified */
-     'product_type' => '<b> Producto único </ b>: Producto sin variaciones. <br> <b> Producto variable </ b>: Producto con variaciones como tamaño, color, etc.',
-     'profit_percent' => "Margen de beneficio predeterminado para el producto. <br> <small class='text-muted'> (<i> Puede administrar el margen de beneficio predeterminado en Configuración comercial. </i>) </small>",
+     'no_of_products_for_trending_products' => 'Número de servicios de tendencia superior que se compararán en el cuadro a continuación.',
+     'top_trending_products' => "Los servicios más vendidos de su tienda. <br/> <small class='text-muted'> aplique filtros para conocer los servicios en tendencia para una categoría, marca, ubicación comercial específica, etc. </small>",
+     'sku' => "Id único de servicio o Unidad de stock de mantenimiento <br> <br> manténgalo en blanco para generar automáticamente sku. <br> <small class='text-muted'> Puede modificar el prefijo sku en Configuración de empresa . </small> ", /* modified */
+     'enable_stock' => 'Habilitar o deshabilitar la gestión de stocks para un servicio.',
+     'alert_quantity' => "Manténgase alerta cuando el stock del servicio llegue o baje de la cantidad especificada. <br> <br> <small class='text-muted'> Los servicios con poco stock se mostrarán en el panel de control - Sección de alerta de stock del servicio. </small>", /* modified */
+     'product_type' => '<b> servicio único </ b>: servicio sin variaciones. <br> <b> servicio variable </ b>: servicio con variaciones como tamaño, color, etc.',
+     'profit_percent' => "Margen de beneficio predeterminado para el servicio. <br> <small class='text-muted'> (<i> Puede administrar el margen de beneficio predeterminado en Configuración comercial. </i>) </small>",
      'pay_term' => "Pagos pendientes por compras dentro del período de tiempo determinado. <br/> <small class='text-muted'> Todos los pagos vencidos o adeudados se mostrarán en el panel de control - Sección de pago vencido </small>", /* modified */
-     'order_status' => 'Los productos en esta compra estarán disponibles para la venta solo si el <b> Estado del pedido </ b> es <b> Elementos recibidos </ b>.',
-     'purchase_location' => 'Ubicación comercial donde el producto comprado estará disponible para la venta.',
+     'order_status' => 'Los servicios en esta compra estarán disponibles para la venta solo si el <b> Estado del pedido </ b> es <b> Elementos recibidos </ b>.',
+     'purchase_location' => 'Ubicación comercial donde el servicio comprado estará disponible para la venta.',
      'sale_location' => 'Ubicación comercial desde donde desea vender',
      'sale_discount' => "Establecer 'Descuento de venta predeterminado' para todas las ventas en Configuración comercial. Haga clic en el icono de editar a continuación para agregar / actualizar el descuento.",
      'sale_tax' => "Establezca 'Impuesto a la venta predeterminado' para todas las ventas en Configuración comercial. Haga clic en el icono de editar a continuación para agregar / actualizar el impuesto a la orden.",
-     'default_profit_percent' => "Margen de beneficio predeterminado de un producto. <br> <small class='text-muted'> Se usa para calcular el precio de venta en función del precio de compra ingresado. <br/> Puede modificar este valor para productos individuales al tiempo que agrega </small> ",
+     'default_profit_percent' => "Margen de beneficio predeterminado de un servicio. <br> <small class='text-muted'> Se usa para calcular el precio de venta en función del precio de compra ingresado. <br/> Puede modificar este valor para servicios individuales al tiempo que agrega </small> ",
      'fy_start_month' => 'Mes de inicio del año fiscal para su empresa', /* modified */
      'business_tax' => 'Número de identificación fiscal de su empresa.', /* modified */
      'invoice_scheme' => "Esquema de factura significa formato de numeración de factura. Seleccione el esquema que se utilizará para esta ubicación comercial <small class='text-muted'> <i> Puede agregar un nuevo esquema de factura </ b> en configuración de factura </ i > </small> ",
@@ -33,8 +33,8 @@
      'invoice_scheme_count' => 'Número total de facturas generadas para el esquema de facturación',
      'invoice_scheme_total_digits' => 'Longitud del número de factura excluyendo el prefijo de factura',
      'tax_groups' => 'Tasas impositivas grupales - definidas anteriormente, para usar en combinación en las secciones Compra / Venta.',
-     'unit_allow_decimal' => 'Decimales le permite vender los productos relacionados en fracciones.',
-     'print_label' => 'Agregar productos -> Elegir información para mostrar en Etiquetas -> Seleccionar configuración del código de barras -> Etiquetas de vista previa -> Imprimir',
+     'unit_allow_decimal' => 'Decimales le permite vender los servicios relacionados en fracciones.',
+     'print_label' => 'Agregar servicios -> Elegir información para mostrar en Etiquetas -> Seleccionar configuración del código de barras -> Etiquetas de vista previa -> Imprimir',
      'expense_for' => 'Elija el usuario para el que está relacionado el gasto. <I> (Opcional) </i> <br/> <small> Ejemplo: salario de un empleado. </small>',
      'all_location_permission' => 'Si <b> Todas las ubicaciones </ b> seleccionadas, esta función tendrá permiso para acceder a todas las ubicaciones comerciales',
      'dashboard_permission' => 'Si no se selecciona, solo se mostrará el mensaje de bienvenida en Inicio.',
