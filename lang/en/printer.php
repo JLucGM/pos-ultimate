@@ -11,22 +11,22 @@ return [
     |
     */
 
-    'printers' => 'Printers',
-    'add_printer' => 'Add Printer',
-    'name' => 'Printer Name',
-    'connection_type' => 'Connection Type',
-    'capability_profile' => 'Capability Profile',
-    'ip_address' => 'IP Address',
-    'port' => 'Port',
-    'path' => 'Path',
-    'added_success' => 'Printer added successfully',
-    'manage_your_printers' => 'Manage your Printers',
-    'all_your_printer' => 'All configured Printers',
-    'deleted_success' => 'Printer deleted successfully',
-    'edit_printer_setting' => 'Edit Printer Configuration',
-    'receipt_printers' => 'Receipt Printers',
-    'character_per_line' => 'Characters per line',
-    'printer_name' => 'Printer name',
-    'updated_success' => 'Printer updated successfully',
-    'edit_printer' => 'Edit Printer',
+    'printers' => 'Impresoras',
+    'add_printer' => 'Agregar impresora',
+    'name' => 'Nombre de la impresora',
+    'connection_type' => 'Tipo de conexión', /* modified */
+    'capability_profile' => 'Perfil de capacidad',
+    'ip_address' => 'Dirección IP',
+    'port' => 'Puerto',
+    'path' => 'Ruta', /* modified */
+    'added_success' => 'Impresora agregada con éxito',
+    'manage_your_printers' => 'Administre sus impresoras',
+    'all_your_printer' => 'Todas las impresoras configuradas',
+    'deleted_success' => 'Impresora eliminada con éxito',
+    'edit_printer_setting' => 'Editar configuración de impresora',
+    'receipt_printers' => 'Impresoras de tickets', /* modified */
+    'character_per_line' => 'Caracteres por línea', /* modified */
+    'printer_name' => 'Nombre de la impresora',
+    'updated_success' => 'Impresora actualizada con éxito',
+    'edit_printer' => 'Editar impresora',
 ];

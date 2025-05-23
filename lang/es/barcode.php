@@ -1,6 +1,16 @@
 <?php
 
  return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Brand Language Lines
+    |--------------------------------------------------------------------------
+    |
+    | The following language lines are used for Brand CRUD operations.
+    |
+    */
+
      'barcodes' => 'Códigos de barras',
      'barcode_settings' => 'Configuraciones de código de barras',
      'manage_your_barcodes' => 'Gestiona la configuración de tu código de barras',

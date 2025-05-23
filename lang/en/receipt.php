@@ -11,18 +11,18 @@ return [
     |
     */
 
-    'product' => 'Product',
-    'qty' => 'Quantity',
-    'unit_price' => 'Unit Price',
-    'subtotal' => 'Subtotal',
-    'discount' => 'Discount',
-    'tax' => 'Tax',
+    'product' => 'Servicio',
+    'qty' => 'Cantidad',
+    'unit_price' => 'Precio unitario',
+    'subtotal' => 'Subtotal', /* modified */
+    'discount' => 'Descuento',
+    'tax' => 'Impuesto',
     'total' => 'Total',
-    'invoice_number' => 'Invoice No.',
-    'date' => 'Date',
-    'receipt_settings' => 'Receipt Settings',
-    'receipt_settings_mgs' => 'All receipt related settings for this location',
-    'print_receipt_on_invoice' => 'Auto print invoice after finalizing',
-    'receipt_printer_type' => 'Receipt Printer Type',
-    'receipt_settings_updated' => 'Receipt Setting updated succesfully',
+    'invoice_number' => 'Factura no.',
+    'date' => 'Fecha',
+    'receipt_settings' => 'Configuraciones de recibo',
+    'receipt_settings_mgs' => 'Todos los ajustes relacionados con los recibos para esta ubicación',
+    'print_receipt_on_invoice' => 'Factura de impresión automática después de finalizar',
+    'receipt_printer_type' => 'Tipo de impresora de recibos',
+    'receipt_settings_updated' => 'Ajuste de recibo actualizado con éxito',
 ];

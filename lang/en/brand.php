@@ -11,16 +11,16 @@ return [
     |
     */
 
-    'brands' => 'Brands',
-    'manage_your_brands' => 'Manage your brands',
-    'all_your_brands' => 'All your brands',
-    'note' => 'Note',
-    'brand_name' => 'Brand name',
-    'short_description' => 'Short description',
-    'added_success' => 'Brand added successfully',
-    'updated_success' => 'Brand updated successfully',
-    'deleted_success' => 'Brand deleted successfully',
-    'add_brand' => 'Add brand',
-    'edit_brand' => 'Edit brand',
+     'brands' => 'Marcas',
+     'manage_your_brands' => 'Gestiona tus marcas',
+     'all_your_brands' => 'Todas tus marcas', /* modified */
+     'note' => 'Nota',
+     'brand_name' => 'Nombre de la marca',
+     'short_description' => 'Breve descripción',
+     'added_success' => 'Marca añadida con éxito',
+     'updated_success' => 'Marca actualizada con éxito',
+     'deleted_success' => 'Marca eliminada con éxito',
+     'add_brand' => 'Agregar marca',
+     'edit_brand' => 'Editar marca',
 
 ];
