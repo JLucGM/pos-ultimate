@@ -84,7 +84,7 @@ return [
     'business_location_updated_success' => 'Ubicación comercial actualizada con éxito',
     'location' => 'Ubicación',
     'already_registered' => '¿Ya registrado?',
-    'sign_in' => 'Registrarse',
+    'sign_in' => 'Iniciar Sesión',
     'not_yet_registered' => '¿Todavía no está registrado?',
     'register_now' => 'Regístrate ahora',
     'system' => 'Sistema',
