@@ -26,7 +26,7 @@ return [
     'difference_due' => 'Cantidad debida',
     'customer' => 'Clientes',
     'supplier' => 'Proveedores',
-    'total_due' => 'Debido',
+    'total_due' => 'Por pagar',
     'contacts' => 'Informe de proveedor y cliente',
     'contact' => 'Contacto',
     'stock_report' => 'Informe de stock',

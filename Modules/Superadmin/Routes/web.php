@@ -4,7 +4,12 @@
 // use App\Http\Controllers\Modules;
 // use Illuminate\Support\Facades\Route;
 
-Route::get('/pricing', [Modules\Superadmin\Http\Controllers\PricingController::class, 'index'])->name('pricing');
+// Public landing pages
+Route::get('/', [Modules\Superadmin\Http\Controllers\LandingController::class, 'index'])->name('landing');
+Route::get('/pricing', [Modules\Superadmin\Http\Controllers\LandingController::class, 'pricing'])->name('pricing');
+Route::get('/features', [Modules\Superadmin\Http\Controllers\LandingController::class, 'features'])->name('features');
+Route::get('/about', [Modules\Superadmin\Http\Controllers\LandingController::class, 'about'])->name('about');
+Route::post('/contact', [Modules\Superadmin\Http\Controllers\LandingController::class, 'contact'])->name('contact');
 
 Route::middleware('web', 'auth', 'language', 'AdminSidebarMenu', 'superadmin')->prefix('superadmin')->group(function () {
     Route::get('/install', [Modules\Superadmin\Http\Controllers\InstallController::class, 'index']);

@@ -1,0 +1,119 @@
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║   🚀 DEPLOYMENT A PRODUCCIÓN - GUÍA ULTRA SIMPLE             ║
+║                                                               ║
+╚═══════════════════════════════════════════════════════════════╝
+
+┌───────────────────────────────────────────────────────────────┐
+│ PASO 1: EN TU MÁQUINA LOCAL                                  │
+└───────────────────────────────────────────────────────────────┘
+
+  git add .
+  git commit -m "feat: Add landing page"
+  git push origin main
+
+┌───────────────────────────────────────────────────────────────┐
+│ PASO 2: EN EL SERVIDOR                                       │
+└───────────────────────────────────────────────────────────────┘
+
+  ssh usuario@servidor
+  cd /ruta/proyecto
+  
+  # Opción A: Automático (RECOMENDADO)
+  ./deploy-produccion.sh
+  
+  # Opción B: Manual
+  git pull origin main
+  php artisan optimize:clear
+  php artisan config:cache
+  php artisan route:cache
+  php artisan view:cache
+  mkdir -p public/images/landing
+  chmod -R 775 public/images/landing
+
+┌───────────────────────────────────────────────────────────────┐
+│ PASO 3: CONFIGURAR .ENV                                      │
+└───────────────────────────────────────────────────────────────┘
+
+  nano .env
+  
+  # Agregar al final:
+  CONTACT_EMAIL=contacto@tuempresa.com
+  CONTACT_PHONE="+52 55 1234 5678"
+  FACEBOOK_URL=https://facebook.com/tuempresa
+  TWITTER_URL=https://twitter.com/tuempresa
+  
+  # Guardar: Ctrl+X, Y, Enter
+  
+  php artisan config:cache
+
+┌───────────────────────────────────────────────────────────────┐
+│ PASO 4: SUBIR IMÁGENES                                       │
+└───────────────────────────────────────────────────────────────┘
+
+  # Desde tu máquina local:
+  scp -r public/images/landing/* usuario@servidor:/ruta/proyecto/public/images/landing/
+  
+  # O usar placeholders temporales en el servidor:
+  cd public/images/landing/
+  curl -o dashboard-preview.png "https://placehold.co/1200x800/667eea/white?text=Dashboard"
+  curl -o pos-interface.png "https://placehold.co/800x600/10b981/white?text=POS"
+  curl -o avatar1.jpg "https://ui-avatars.com/api/?name=Maria+Gonzalez&size=200"
+  curl -o avatar2.jpg "https://ui-avatars.com/api/?name=Carlos+Ruiz&size=200"
+  curl -o avatar3.jpg "https://ui-avatars.com/api/?name=Ana+Martinez&size=200"
+
+┌───────────────────────────────────────────────────────────────┐
+│ PASO 5: VERIFICAR                                            │
+└───────────────────────────────────────────────────────────────┘
+
+  Abre en tu navegador:
+  
+  ✅ https://tudominio.com/
+  ✅ https://tudominio.com/pricing
+  ✅ https://tudominio.com/login
+
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║   ✅ ¡LISTO! Tu landing page está en producción              ║
+║                                                               ║
+╚═══════════════════════════════════════════════════════════════╝
+
+┌───────────────────────────────────────────────────────────────┐
+│ SI ALGO SALE MAL                                             │
+└───────────────────────────────────────────────────────────────┘
+
+  # Ver errores
+  tail -f storage/logs/laravel.log
+  
+  # Limpiar todo
+  php artisan optimize:clear
+  
+  # Verificar permisos
+  chmod -R 775 storage bootstrap/cache
+  chmod -R 755 public/images/landing/
+
+┌───────────────────────────────────────────────────────────────┐
+│ TIEMPO ESTIMADO                                              │
+└───────────────────────────────────────────────────────────────┘
+
+  📊 Total: 15-20 minutos
+  
+  ⏱️  Paso 1 (Local):     2 min
+  ⏱️  Paso 2 (Servidor):  5 min
+  ⏱️  Paso 3 (.env):      3 min
+  ⏱️  Paso 4 (Imágenes):  5 min
+  ⏱️  Paso 5 (Verificar): 2 min
+
+┌───────────────────────────────────────────────────────────────┐
+│ ARCHIVOS DE AYUDA                                            │
+└───────────────────────────────────────────────────────────────┘
+
+  📄 DEPLOYMENT_PRODUCCION.md    - Guía completa
+  📄 DEPLOYMENT_CHECKLIST.md     - Checklist detallado
+  📄 COMANDOS_DEPLOYMENT.txt     - Comandos para copiar
+  📄 RESUMEN_DEPLOYMENT.md       - Resumen ejecutivo
+  🔧 deploy-produccion.sh        - Script automático
+
+╔═══════════════════════════════════════════════════════════════╗
+║  ¿Necesitas ayuda? Consulta DEPLOYMENT_PRODUCCION.md         ║
+╚═══════════════════════════════════════════════════════════════╝

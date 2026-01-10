@@ -1,0 +1,28 @@
+# Landing Page Images
+
+Coloca aquí las imágenes para la landing page:
+
+## Imágenes requeridas:
+
+1. **dashboard-preview.png** (1200x800px)
+   - Captura de pantalla del dashboard principal del sistema POS
+   - Debe mostrar gráficos, estadísticas y la interfaz principal
+
+2. **pos-interface.png** (800x600px)
+   - Captura de la interfaz del punto de venta
+   - Mostrando productos, carrito y proceso de pago
+
+3. **avatar1.jpg, avatar2.jpg, avatar3.jpg** (200x200px)
+   - Fotos de perfil para testimonios
+   - Pueden ser fotos de stock o avatares generados
+
+## Alternativa temporal:
+
+Si no tienes las imágenes, puedes usar placeholders de:
+- https://placehold.co/
+- https://picsum.photos/
+- https://ui-avatars.com/
+
+Ejemplo:
+- dashboard-preview.png → https://placehold.co/1200x800/667eea/white?text=Dashboard+Preview
+- avatar1.jpg → https://ui-avatars.com/api/?name=Maria+Gonzalez&size=200
