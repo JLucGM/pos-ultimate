@@ -400,51 +400,76 @@
 
 @section('javascript')
 <script>
-    // FAQ Accordion - Mejorado
-    document.addEventListener('DOMContentLoaded', function() {
-        const faqQuestions = document.querySelectorAll('.faq-question');
-        
-        faqQuestions.forEach(question => {
-            question.addEventListener('click', function() {
-                const item = this.parentElement;
-                const isActive = item.classList.contains('active');
+// Esperar a que TODO esté cargado
+window.addEventListener('load', function() {
+    console.log('=== Landing Page FAQ Debug ===');
+    console.log('jQuery disponible:', typeof $ !== 'undefined');
+    console.log('FAQ items encontrados:', document.querySelectorAll('.faq-item').length);
+    
+    // FAQ Accordion - Versión corregida
+    var faqQuestions = document.querySelectorAll('.faq-question');
+    console.log('FAQ questions encontradas:', faqQuestions.length);
+    
+    faqQuestions.forEach(function(question, index) {
+        question.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            var item = this.parentElement;
+            var wasActive = item.classList.contains('active');
+            
+            console.log('FAQ #' + index + ' clickeado. Estaba activo:', wasActive);
+            
+            // Cerrar todos los items primero
+            document.querySelectorAll('.faq-item').forEach(function(i) {
+                i.classList.remove('active');
+            });
+            
+            // Abrir el clickeado SOLO si NO estaba activo
+            if (!wasActive) {
+                item.classList.add('active');
+                console.log('FAQ #' + index + ' ABIERTO');
+            } else {
+                console.log('FAQ #' + index + ' CERRADO (todos cerrados)');
+            }
+            
+            // Debug: verificar estado después del click
+            setTimeout(function() {
+                console.log('Estado después del click:', item.classList.contains('active') ? 'ACTIVO' : 'INACTIVO');
+            }, 100);
+        });
+    });
+    
+    // Smooth scroll para links internos
+    var internalLinks = document.querySelectorAll('a[href^="#"]');
+    console.log('Links internos encontrados:', internalLinks.length);
+    
+    internalLinks.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            var href = this.getAttribute('href');
+            
+            // Ignorar # vacío
+            if (href === '#' || href === '#!') {
+                e.preventDefault();
+                return;
+            }
+            
+            var target = document.querySelector(href);
+            if (target) {
+                e.preventDefault();
+                var offsetTop = target.getBoundingClientRect().top + window.pageYOffset - 80;
                 
-                // Cerrar todos los items
-                document.querySelectorAll('.faq-item').forEach(i => {
-                    i.classList.remove('active');
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
                 });
                 
-                // Abrir el item clickeado si no estaba activo
-                if (!isActive) {
-                    item.classList.add('active');
-                }
-            });
+                console.log('Scroll a:', href);
+            }
         });
     });
-
-    // Smooth scroll mejorado
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                const href = this.getAttribute('href');
-                
-                // Ignorar # solo
-                if (href === '#') {
-                    e.preventDefault();
-                    return;
-                }
-                
-                const target = document.querySelector(href);
-                if (target) {
-                    e.preventDefault();
-                    const offsetTop = target.offsetTop - 80; // 80px para el navbar
-                    window.scrollTo({
-                        top: offsetTop,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-    });
+    
+    console.log('=== FAQ inicializado correctamente ===');
+});
 </script>
 @endsection

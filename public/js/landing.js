@@ -64,7 +64,10 @@
         });
     }
 
-    // FAQ Accordion
+    // FAQ Accordion - DESHABILITADO (ahora está en la página)
+    // El código del FAQ ahora está en landing/index.blade.php
+    // para evitar conflictos de event listeners duplicados
+    /*
     const faqItems = document.querySelectorAll('.faq-item');
     
     faqItems.forEach(item => {
@@ -82,6 +85,7 @@
             }
         });
     });
+    */
 
     // Animate numbers on scroll
     const animateNumbers = () => {
