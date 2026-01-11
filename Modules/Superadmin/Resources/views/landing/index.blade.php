@@ -18,7 +18,7 @@
                 <a href="{{ route('pricing') }}" class="btn btn-primary btn-lg">
                     <i class="fas fa-rocket"></i> Ver Planes y Precios
                 </a>
-                <a href="#features" class="btn btn-outline btn-lg">
+                <a href="#features" class="btn btn-outline-white btn-lg">
                     <i class="fas fa-play-circle"></i> Ver Demo
                 </a>
             </div>
@@ -242,7 +242,7 @@
 </section>
 
 <!-- Testimonials Section -->
-<section class="testimonials-section">
+<section id="testimonials" class="testimonials-section">
     <div class="container">
         <div class="section-header" data-aos="fade-up">
             <span class="section-badge">Testimonios</span>
@@ -308,7 +308,7 @@
 </section>
 
 <!-- FAQ Section -->
-<section class="faq-section">
+<section id="faq" class="faq-section">
     <div class="container">
         <div class="section-header" data-aos="fade-up">
             <span class="section-badge">FAQ</span>
@@ -400,28 +400,50 @@
 
 @section('javascript')
 <script>
-    // FAQ Accordion
-    document.querySelectorAll('.faq-question').forEach(question => {
-        question.addEventListener('click', () => {
-            const item = question.parentElement;
-            const isActive = item.classList.contains('active');
-            
-            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
-            
-            if (!isActive) {
-                item.classList.add('active');
-            }
+    // FAQ Accordion - Mejorado
+    document.addEventListener('DOMContentLoaded', function() {
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', function() {
+                const item = this.parentElement;
+                const isActive = item.classList.contains('active');
+                
+                // Cerrar todos los items
+                document.querySelectorAll('.faq-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                
+                // Abrir el item clickeado si no estaba activo
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
         });
     });
 
-    // Smooth scroll
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+    // Smooth scroll mejorado
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                
+                // Ignorar # solo
+                if (href === '#') {
+                    e.preventDefault();
+                    return;
+                }
+                
+                const target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    const offsetTop = target.offsetTop - 80; // 80px para el navbar
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
         });
     });
 </script>

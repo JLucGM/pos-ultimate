@@ -31,7 +31,7 @@
             
             <div class="nav-menu" id="navMenu">
                 <a href="#features" class="nav-link">Características</a>
-                <a href="#pricing" class="nav-link">Precios</a>
+                <a href="{{ route('pricing') }}" class="nav-link">Precios</a>
                 <a href="#testimonials" class="nav-link">Testimonios</a>
                 <a href="#faq" class="nav-link">FAQ</a>
                 
