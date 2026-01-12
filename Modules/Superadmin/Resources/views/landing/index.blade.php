@@ -160,7 +160,7 @@
                         </div>
                     </li>
                 </ul>
-                <a href="{{ route('pricing') }}" class="btn btn-primary btn-lg">
+                <a href="{{ route('pricing') }}" class="btn btn-accent btn-lg">
                     Comenzar Ahora <i class="fas fa-arrow-right"></i>
                 </a>
             </div>

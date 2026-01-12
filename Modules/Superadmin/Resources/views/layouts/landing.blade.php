@@ -24,9 +24,8 @@
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="container nav-container">
-            <a href="/" class="logo">
-                <img src="{{ asset('img/logo-small4.png') }}" alt="Logo">
-                <span>{{ config('app.name', 'POS System') }}</span>
+            <a href="/" class="logo logo-only">
+                <img src="{{ asset('img/logo-audaz.png') }}" alt="{{ config('app.name', 'POS System') }}" class="logo-img">
             </a>
             
             <div class="nav-menu" id="navMenu">
@@ -37,7 +36,7 @@
                 
                 @guest
                     <a href="{{ route('login') }}" class="nav-link">Iniciar Sesión</a>
-                    <a href="{{ route('business.getRegister') }}" class="btn btn-primary btn-sm">Registrarse</a>
+                    <a href="{{ route('business.getRegister') }}" class="btn btn-accent btn-sm">Registrarse</a>
                 @else
                     <a href="{{ url('/home') }}" class="btn btn-primary btn-sm">
                         <i class="fas fa-tachometer-alt"></i> Dashboard
@@ -62,8 +61,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <div class="footer-logo">
-                        <img src="{{ asset('img/logo-small4.png') }}" alt="Logo">
-                        <span>{{ config('app.name', 'POS System') }}</span>
+                        <img src="{{ asset('img/logo-audaz.png') }}" alt="{{ config('app.name', 'POS System') }}" class="logo-img">
                     </div>
                     <p>Sistema POS completo para pequeñas y medianas empresas. Gestiona tu negocio desde cualquier lugar.</p>
                     <div class="social-links">
