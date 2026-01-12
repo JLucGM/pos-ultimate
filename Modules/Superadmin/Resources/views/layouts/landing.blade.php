@@ -124,6 +124,87 @@
         </div>
     </footer>
 
+    <!-- Modal de Pago -->
+    <div id="paymentModal" class="payment-modal">
+        <div class="payment-modal-content">
+            <span class="payment-modal-close">&times;</span>
+            <h2 class="payment-modal-title">Completar Pago</h2>
+            
+            <div class="payment-package-info">
+                <h3 id="modalPackageName"></h3>
+                <div class="payment-price">
+                    <span id="modalPackagePrice"></span>
+                </div>
+            </div>
+
+            <form id="paymentForm" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" id="packageId" name="package_id">
+                
+                <div class="form-group">
+                    <label>Nombre del Negocio *</label>
+                    <input type="text" name="business_name" required class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label>Nombre de Contacto *</label>
+                    <input type="text" name="contact_name" required class="form-control">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" name="email" required class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="tel" name="phone" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Método de Pago *</label>
+                    <select name="payment_method" id="paymentMethod" required class="form-control">
+                        <option value="">Selecciona un método</option>
+                        <option value="transferencia">Transferencia Bancaria</option>
+                        <option value="binance">Binance Pay</option>
+                        <option value="paypal">PayPal</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+
+                <div id="paymentInfo" class="payment-info-box" style="display: none;">
+                    <div class="payment-info-content"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Número de Referencia / ID de Transacción *</label>
+                    <input type="text" name="reference_number" required class="form-control" placeholder="Ej: TRX123456789">
+                </div>
+
+                <div class="form-group">
+                    <label>Comprobante de Pago (Imagen)</label>
+                    <input type="file" name="payment_proof" accept="image/*" class="form-control">
+                    <small>Formatos: JPG, PNG. Máximo 5MB</small>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="closePaymentModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Enviar Solicitud
+                    </button>
+                </div>
+            </form>
+
+            <div id="paymentSuccess" style="display: none;" class="payment-success">
+                <i class="fas fa-check-circle"></i>
+                <h3>¡Solicitud Enviada!</h3>
+                <p>Hemos recibido tu solicitud de pago. Te contactaremos pronto para confirmar tu suscripción.</p>
+                <button class="btn btn-primary" onclick="closePaymentModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -223,6 +304,88 @@
                     }
                 }, 100);
             }
+        });
+
+        // Payment Modal Functions
+        window.openPaymentModal = function(packageId, packageName, packagePrice) {
+            document.getElementById('packageId').value = packageId;
+            document.getElementById('modalPackageName').textContent = packageName;
+            document.getElementById('modalPackagePrice').textContent = packagePrice;
+            document.getElementById('paymentModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closePaymentModal = function() {
+            document.getElementById('paymentModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.getElementById('paymentForm').reset();
+            document.getElementById('paymentSuccess').style.display = 'none';
+            document.getElementById('paymentForm').style.display = 'block';
+        };
+
+        // Close modal on click outside
+        document.getElementById('paymentModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePaymentModal();
+            }
+        });
+
+        // Close button
+        document.querySelector('.payment-modal-close').addEventListener('click', closePaymentModal);
+
+        // Payment method change
+        document.getElementById('paymentMethod').addEventListener('change', function() {
+            const method = this.value;
+            const infoBox = document.getElementById('paymentInfo');
+            const infoContent = infoBox.querySelector('.payment-info-content');
+            
+            if (method) {
+                fetch('/payment-info/' + document.getElementById('packageId').value)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.payment_methods[method]) {
+                            infoContent.innerHTML = '<strong>' + data.payment_methods[method].name + '</strong><br>' + data.payment_methods[method].info;
+                            infoBox.style.display = 'block';
+                        }
+                    });
+            } else {
+                infoBox.style.display = 'none';
+            }
+        });
+
+        // Form submission
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+            
+            fetch('/payment-request', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('paymentForm').style.display = 'none';
+                    document.getElementById('paymentSuccess').style.display = 'block';
+                } else {
+                    alert('Error: ' + (data.message || 'Ocurrió un error'));
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Solicitud';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Ocurrió un error al enviar la solicitud');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Solicitud';
+            });
         });
     </script>
 </body>

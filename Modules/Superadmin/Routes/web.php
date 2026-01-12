@@ -11,6 +11,10 @@ Route::get('/features', [Modules\Superadmin\Http\Controllers\LandingController::
 Route::get('/about', [Modules\Superadmin\Http\Controllers\LandingController::class, 'about'])->name('about');
 Route::post('/contact', [Modules\Superadmin\Http\Controllers\LandingController::class, 'contact'])->name('contact');
 
+// Payment requests (public)
+Route::post('/payment-request', [Modules\Superadmin\Http\Controllers\PaymentRequestController::class, 'store'])->name('payment-request.store');
+Route::get('/payment-info/{package}', [Modules\Superadmin\Http\Controllers\PaymentRequestController::class, 'getPaymentInfo'])->name('payment-info');
+
 Route::middleware('web', 'auth', 'language', 'AdminSidebarMenu', 'superadmin')->prefix('superadmin')->group(function () {
     Route::get('/install', [Modules\Superadmin\Http\Controllers\InstallController::class, 'index']);
     Route::post('/install', [Modules\Superadmin\Http\Controllers\InstallController::class, 'install']);

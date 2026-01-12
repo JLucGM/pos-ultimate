@@ -105,10 +105,10 @@
                             Seleccionar Plan
                         </a>
                     @else
-                        <a href="{{ route('business.getRegister') }}?package={{ $package->id }}" 
+                        <button onclick="openPaymentModal({{ $package->id }}, '{{ $package->name }}', '{{ $package->currency }}{{ number_format($package->price, 0) }}/mes')" 
                            class="btn {{ $package->is_popular ? 'btn-primary' : 'btn-outline' }} btn-block">
                             Comenzar Ahora
-                        </a>
+                        </button>
                     @endauth
                 </div>
             </div>
