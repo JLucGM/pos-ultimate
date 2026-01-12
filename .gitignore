@@ -26,3 +26,4 @@ npm-debug.log
 #/public/docs
 #/public/js/skins/
 #/public/js/icons/storage/logs/*.log
+storage/logs/*.log
