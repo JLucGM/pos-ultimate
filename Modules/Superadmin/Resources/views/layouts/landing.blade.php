@@ -29,10 +29,10 @@
             </a>
             
             <div class="nav-menu" id="navMenu">
-                <a href="#features" class="nav-link">Características</a>
+                <a href="{{ url('/#features') }}" class="nav-link">Características</a>
                 <a href="{{ route('pricing') }}" class="nav-link">Precios</a>
-                <a href="#testimonials" class="nav-link">Testimonios</a>
-                <a href="#faq" class="nav-link">FAQ</a>
+                <a href="{{ url('/#testimonials') }}" class="nav-link">Testimonios</a>
+                <a href="{{ url('/#faq') }}" class="nav-link">FAQ</a>
                 
                 @guest
                     <a href="{{ route('login') }}" class="nav-link">Iniciar Sesión</a>
@@ -168,6 +168,60 @@
                 navMenu.classList.remove('active');
                 mobileMenuBtn.querySelector('i').classList.add('fa-bars');
                 mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+            }
+        });
+
+        // Smooth scroll para links internos
+        document.addEventListener('DOMContentLoaded', function() {
+            var internalLinks = document.querySelectorAll('a[href^="#"]');
+            
+            internalLinks.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    var href = this.getAttribute('href');
+                    
+                    // Ignorar # vacío
+                    if (href === '#' || href === '#!') {
+                        e.preventDefault();
+                        return;
+                    }
+                    
+                    var target = document.querySelector(href);
+                    if (target) {
+                        e.preventDefault();
+                        var offsetTop = target.getBoundingClientRect().top + window.pageYOffset - 80;
+                        
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Cerrar menú móvil si está abierto
+                        if (navMenu.classList.contains('active')) {
+                            navMenu.classList.remove('active');
+                            mobileMenuBtn.querySelector('i').classList.add('fa-bars');
+                            mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+                        }
+                    } else {
+                        // Si la sección no existe, redirigir a la página principal con el hash
+                        if (window.location.pathname !== '/') {
+                            window.location.href = '/' + href;
+                        }
+                    }
+                });
+            });
+            
+            // Si llegamos con un hash en la URL, hacer scroll a esa sección
+            if (window.location.hash) {
+                setTimeout(function() {
+                    var target = document.querySelector(window.location.hash);
+                    if (target) {
+                        var offsetTop = target.getBoundingClientRect().top + window.pageYOffset - 80;
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 100);
             }
         });
     </script>
