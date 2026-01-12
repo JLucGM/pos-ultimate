@@ -18,7 +18,7 @@ class PaymentRequestController extends Controller
             'contact_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'nullable|string|max:20',
-            'payment_method' => 'required|in:transferencia,binance,paypal,otro',
+            'payment_method' => 'required|in:transferencia,binance,paypal,pago movil,otro',
             'reference_number' => 'required|string|max:255',
             'payment_proof' => 'nullable|image|max:5120', // 5MB max
         ]);
@@ -57,19 +57,19 @@ class PaymentRequestController extends Controller
             'payment_methods' => [
                 'transferencia' => [
                     'name' => 'Transferencia Bancaria',
-                    'info' => '<strong>Banco:</strong> [Tu Banco Aquí]<br><strong>Cuenta:</strong> [Tu Número de Cuenta]<br><strong>Titular:</strong> [Tu Nombre]<br><strong>RIF/CI:</strong> [Tu RIF]'
+                    'info' => '<strong>Banco:</strong> Banco Mercantil <br><strong>Cuenta:</strong> 0105 0160 1111 6003 8953 <br><strong>Titular:</strong> Edduar Villegas<br><strong>RIF/CI:</strong> 13710797'
                 ],
                 'binance' => [
                     'name' => 'Binance Pay / USDT',
-                    'info' => '<strong>Binance ID:</strong> [Tu ID de Binance]<br><strong>Email:</strong> [Tu Email de Binance]<br><strong>Red:</strong> TRC20 o BEP20'
+                    'info' => '<strong>Binance ID:</strong> @etherven<br><strong>Email:</strong> edduar.villegas@gmail.com<br><strong>Red:</strong> Binance Pay'
                 ],
                 'paypal' => [
                     'name' => 'PayPal',
-                    'info' => '<strong>Email de PayPal:</strong> [Tu Email de PayPal]<br><strong>Nota:</strong> Enviar como "Amigos y Familia" para evitar comisiones'
+                    'info' => '<strong>Email de PayPal:</strong> detoditollc@gmail.com<br><strong>Nota:</strong> Enviar como "Amigos y Familia" para evitar comisiones'
                 ],
                 'otro' => [
                     'name' => 'Otro Método',
-                    'info' => '<strong>Contáctanos:</strong><br>WhatsApp: [Tu WhatsApp]<br>Email: [Tu Email]<br>Telegram: [Tu Telegram]'
+                    'info' => '<strong>Contáctanos:</strong><br>WhatsApp: +584242909870<br>Email: edduar@audaz.site<br>Telegram: @evill_etherven'
                 ]
             ]
         ]);
