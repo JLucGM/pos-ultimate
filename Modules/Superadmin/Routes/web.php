@@ -49,6 +49,12 @@ Route::middleware('web', 'auth', 'language', 'AdminSidebarMenu', 'superadmin')->
     Route::post('/communicator/send', [Modules\Superadmin\Http\Controllers\CommunicatorController::class, 'send']);
     Route::get('/communicator/get-history', [Modules\Superadmin\Http\Controllers\CommunicatorController::class, 'getHistory']);
 
+    // Payment Requests Management
+    Route::get('/payment-requests', [Modules\Superadmin\Http\Controllers\PaymentRequestController::class, 'index'])->name('superadmin.payment-requests.index');
+    Route::get('/payment-requests/{id}', [Modules\Superadmin\Http\Controllers\PaymentRequestController::class, 'show']);
+    Route::post('/payment-requests/{id}/approve', [Modules\Superadmin\Http\Controllers\PaymentRequestController::class, 'approve']);
+    Route::post('/payment-requests/{id}/reject', [Modules\Superadmin\Http\Controllers\PaymentRequestController::class, 'reject']);
+
     Route::resource('/frontend-pages', 'Modules\Superadmin\Http\Controllers\PageController');
 });
 
