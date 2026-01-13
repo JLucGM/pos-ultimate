@@ -850,6 +850,14 @@ class AdminSidebarMenu
                                 ['icon' => '', 'active' => request()->segment(1) == 'tax-rates']
                             );
                         }
+                        
+                        if (auth()->user()->can('view_exchange_rate') || auth()->user()->can('create_exchange_rate')) {
+                            $sub->url(
+                                action([\App\Http\Controllers\ExchangeRateController::class, 'index']),
+                                'Tasas de Cambio',
+                                ['icon' => '', 'active' => request()->segment(1) == 'exchange-rates']
+                            );
+                        }
 
                         if (in_array('tables', $enabled_modules) && auth()->user()->can('access_tables')) {
                             $sub->url(

@@ -119,6 +119,11 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     Route::post('/attach-medias-to-model', [HomeController::class, 'attachMediasToGivenModel'])->name('attach.medias.to.model');
     Route::get('/calendar', [HomeController::class, 'getCalendar'])->name('calendar');
 
+    // Exchange Rates
+    Route::resource('exchange-rates', App\Http\Controllers\ExchangeRateController::class);
+    Route::get('/exchange-rates-data', [App\Http\Controllers\ExchangeRateController::class, 'getData'])->name('exchange-rates.data');
+    Route::get('/get-current-rate', [App\Http\Controllers\ExchangeRateController::class, 'getCurrentRate'])->name('get-current-rate');
+
     Route::post('/test-email', [BusinessController::class, 'testEmailConfiguration']);
     Route::post('/test-sms', [BusinessController::class, 'testSmsConfiguration']);
     Route::get('/business/settings', [BusinessController::class, 'getBusinessSettings'])->name('business.getBusinessSettings');
