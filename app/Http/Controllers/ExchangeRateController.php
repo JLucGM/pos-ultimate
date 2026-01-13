@@ -139,9 +139,18 @@ class ExchangeRateController extends Controller
 
         $business_id = request()->session()->get('user.business_id');
 
-        $rates = ExchangeRate::where('business_id', $business_id)
-            ->with(['fromCurrency', 'toCurrency', 'creator'])
-            ->select('exchange_rates.*');
+        $rates = ExchangeRate::where('exchange_rates.business_id', $business_id)
+            ->leftJoin('currencies as from_curr', 'exchange_rates.from_currency_id', '=', 'from_curr.id')
+            ->leftJoin('currencies as to_curr', 'exchange_rates.to_currency_id', '=', 'to_curr.id')
+            ->leftJoin('users', 'exchange_rates.created_by', '=', 'users.id')
+            ->select([
+                'exchange_rates.*',
+                'from_curr.currency as from_currency_name',
+                'from_curr.code as from_currency_code',
+                'to_curr.currency as to_currency_name',
+                'to_curr.code as to_currency_code',
+                'users.username as creator_name'
+            ]);
 
         return DataTables::of($rates)
             ->addColumn('action', function ($row) {
@@ -159,20 +168,20 @@ class ExchangeRateController extends Controller
                 $html .= '</div>';
                 return $html;
             })
-            ->editColumn('from_currency', function ($row) {
-                return $row->fromCurrency->currency . ' (' . $row->fromCurrency->code . ')';
+            ->editColumn('from_currency_name', function ($row) {
+                return $row->from_currency_name . ' (' . $row->from_currency_code . ')';
             })
-            ->editColumn('to_currency', function ($row) {
-                return $row->toCurrency->currency . ' (' . $row->toCurrency->code . ')';
+            ->editColumn('to_currency_name', function ($row) {
+                return $row->to_currency_name . ' (' . $row->to_currency_code . ')';
             })
             ->editColumn('rate', function ($row) {
                 return number_format($row->rate, 6);
             })
             ->editColumn('effective_date', function ($row) {
-                return $row->effective_date->format('d/m/Y');
+                return \Carbon\Carbon::parse($row->effective_date)->format('d/m/Y');
             })
-            ->editColumn('created_by', function ($row) {
-                return $row->creator ? $row->creator->username : '-';
+            ->editColumn('creator_name', function ($row) {
+                return $row->creator_name ?? '-';
             })
             ->rawColumns(['action'])
             ->make(true);

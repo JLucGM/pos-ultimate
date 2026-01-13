@@ -49,12 +49,12 @@ $(document).ready(function() {
         serverSide: true,
         ajax: '{{ action([\App\Http\Controllers\ExchangeRateController::class, 'getData']) }}',
         columns: [
-            { data: 'effective_date', name: 'effective_date' },
-            { data: 'from_currency', name: 'fromCurrency.currency', searchable: false },
-            { data: 'to_currency', name: 'toCurrency.currency', searchable: false },
-            { data: 'rate', name: 'rate' },
-            { data: 'created_by', name: 'creator.username', searchable: false },
-            { data: 'notes', name: 'notes' },
+            { data: 'effective_date', name: 'exchange_rates.effective_date' },
+            { data: 'from_currency_name', name: 'from_curr.currency' },
+            { data: 'to_currency_name', name: 'to_curr.currency' },
+            { data: 'rate', name: 'exchange_rates.rate' },
+            { data: 'creator_name', name: 'users.username' },
+            { data: 'notes', name: 'exchange_rates.notes' },
             { data: 'action', orderable: false, searchable: false }
         ],
         order: [[0, 'desc']],
