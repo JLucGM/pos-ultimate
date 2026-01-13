@@ -124,6 +124,15 @@
         </div>
     </footer>
 
+    <!-- WhatsApp Flotante -->
+    <a href="https://wa.me/584242909870?text=Hola!%20Estoy%20interesado%20en%20el%20sistema%20POS" 
+       class="whatsapp-float" 
+       target="_blank"
+       rel="noopener noreferrer">
+        <i class="fab fa-whatsapp"></i>
+        <span class="whatsapp-text">¿Necesitas ayuda?</span>
+    </a>
+
     <!-- Modal de Pago -->
     <div id="paymentModal" class="payment-modal">
         <div class="payment-modal-content">
@@ -314,6 +323,25 @@
             document.getElementById('paymentModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         };
+
+        // WhatsApp Float - Mostrar tooltip después de 3 segundos
+        setTimeout(function() {
+            var whatsappBtn = document.querySelector('.whatsapp-float');
+            if (whatsappBtn && !sessionStorage.getItem('whatsapp_tooltip_shown')) {
+                whatsappBtn.style.animation = 'bounce 1s ease 3';
+                sessionStorage.setItem('whatsapp_tooltip_shown', 'true');
+            }
+        }, 3000);
+        
+        // Animación de rebote
+        var style = document.createElement('style');
+        style.textContent = `
+            @keyframes bounce {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-10px); }
+            }
+        `;
+        document.head.appendChild(style);
 
         window.closePaymentModal = function() {
             document.getElementById('paymentModal').style.display = 'none';

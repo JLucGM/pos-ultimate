@@ -1135,3 +1135,116 @@ section {
         flex-direction: column;
     }
 }
+
+/* ===== WhatsApp Flotante ===== */
+.whatsapp-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #25D366;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+    z-index: 9999;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    overflow: hidden;
+}
+
+.whatsapp-float:hover {
+    background: #128C7E;
+    transform: scale(1.1);
+    box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
+    width: 200px;
+    border-radius: 30px;
+}
+
+.whatsapp-float i {
+    transition: all 0.3s ease;
+}
+
+.whatsapp-float:hover i {
+    margin-right: 10px;
+}
+
+.whatsapp-text {
+    display: none;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.whatsapp-float:hover .whatsapp-text {
+    display: inline;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Animación de pulso */
+.whatsapp-float::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    background: #25D366;
+    animation: pulse 2s infinite;
+    z-index: -1;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1.2);
+        opacity: 0;
+    }
+}
+
+.whatsapp-float:hover::before {
+    animation: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .whatsapp-float {
+        bottom: 20px;
+        right: 20px;
+        width: 56px;
+        height: 56px;
+        font-size: 28px;
+    }
+    
+    .whatsapp-float:hover {
+        width: 56px;
+        border-radius: 50%;
+    }
+    
+    .whatsapp-text {
+        display: none !important;
+    }
+}
