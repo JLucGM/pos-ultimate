@@ -140,19 +140,74 @@ function viewDetails(id) {
 
 function approvePayment(id) {
     if (confirm('¿Aprobar esta solicitud de pago?\n\nSe creará automáticamente:\n- El negocio\n- El usuario\n- La suscripción')) {
+        
+        // Pedir contraseña para el nuevo usuario
+        let password = prompt('Establece una contraseña para el cliente:\n(Mínimo 6 caracteres)', '');
+        
+        if (password === null) {
+            return; // Usuario canceló
+        }
+        
+        if (password.length < 6) {
+            toastr.error('La contraseña debe tener al menos 6 caracteres');
+            return;
+        }
+        
         $.post('/superadmin/payment-requests/' + id + '/approve', {
-            _token: '{{ csrf_token() }}'
+            _token: '{{ csrf_token() }}',
+            password: password
         }, function(response) {
             if (response.success) {
                 let message = 'Pago aprobado exitosamente!\n\n';
                 if (response.business_id) {
                     message += 'Business ID: ' + response.business_id + '\n';
-                    message += 'Subscription ID: ' + response.subscription_id;
+                    message += 'Subscription ID: ' + response.subscription_id + '\n';
+                    message += 'Email: ' + response.email + '\n';
+                    message += 'Contraseña: ' + password;
                 }
-                toastr.success(message);
+                
+                // Mostrar en un modal más grande
+                $('#modalContent').html(`
+                    <div class="alert alert-success">
+                        <h4><i class="fa fa-check"></i> ¡Pago Aprobado Exitosamente!</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Credenciales de Acceso</h4>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>Business ID:</th>
+                                    <td>${response.business_id}</td>
+                                </tr>
+                                <tr>
+                                    <th>Subscription ID:</th>
+                                    <td>${response.subscription_id}</td>
+                                </tr>
+                                <tr>
+                                    <th>Email:</th>
+                                    <td>${response.email}</td>
+                                </tr>
+                                <tr>
+                                    <th>Contraseña:</th>
+                                    <td><code>${password}</code></td>
+                                </tr>
+                                <tr>
+                                    <th>URL de Acceso:</th>
+                                    <td><a href="${window.location.origin}/login" target="_blank">${window.location.origin}/login</a></td>
+                                </tr>
+                            </table>
+                            <div class="alert alert-info">
+                                <i class="fa fa-info-circle"></i> Copia estas credenciales y envíaselas al cliente por email o WhatsApp.
+                            </div>
+                        </div>
+                    </div>
+                `);
+                $('#detailsModal .modal-title').text('Suscripción Creada');
+                $('#detailsModal').modal('show');
+                
                 setTimeout(function() {
                     location.reload();
-                }, 2000);
+                }, 5000);
             } else {
                 toastr.error(response.message || 'Error al aprobar el pago');
             }

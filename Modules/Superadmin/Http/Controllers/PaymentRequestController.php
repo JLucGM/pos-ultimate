@@ -90,7 +90,7 @@ class PaymentRequestController extends Controller
         return response()->json($request);
     }
 
-    public function approve($id)
+    public function approve(Request $request, $id)
     {
         $paymentRequest = PaymentRequest::findOrFail($id);
         
@@ -99,6 +99,15 @@ class PaymentRequestController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Esta solicitud ya fue aprobada anteriormente'
+            ]);
+        }
+
+        // Validar contraseña
+        $password = $request->input('password', 'password123');
+        if (strlen($password) < 6) {
+            return response()->json([
+                'success' => false,
+                'message' => 'La contraseña debe tener al menos 6 caracteres'
             ]);
         }
 
@@ -116,13 +125,13 @@ class PaymentRequestController extends Controller
                 'fy_start_month' => 1,
             ]);
 
-            // Crear usuario propietario
+            // Crear usuario propietario con la contraseña proporcionada
             $user = \App\Models\User::create([
                 'surname' => $paymentRequest->contact_name,
                 'first_name' => '',
                 'username' => $this->generateUsername($paymentRequest->email),
                 'email' => $paymentRequest->email,
-                'password' => bcrypt('password123'), // Contraseña temporal
+                'password' => bcrypt($password),
                 'language' => 'es',
                 'business_id' => $business->id,
                 'is_superadmin' => 0,
@@ -151,16 +160,16 @@ class PaymentRequestController extends Controller
         // Actualizar el estado de la solicitud
         $paymentRequest->status = 'approved';
         $paymentRequest->approved_at = now();
-        $paymentRequest->admin_notes = 'Suscripción creada automáticamente. Business ID: ' . $business->id . ', Subscription ID: ' . $subscription->id;
+        $paymentRequest->admin_notes = 'Suscripción creada automáticamente. Business ID: ' . $business->id . ', Subscription ID: ' . $subscription->id . ', Email: ' . $user->email;
         $paymentRequest->save();
-
-        // TODO: Enviar email al cliente con credenciales de acceso
 
         return response()->json([
             'success' => true,
             'message' => 'Pago aprobado y suscripción creada exitosamente',
             'business_id' => $business->id,
-            'subscription_id' => $subscription->id
+            'subscription_id' => $subscription->id,
+            'email' => $user->email,
+            'username' => $user->username
         ]);
     }
 
