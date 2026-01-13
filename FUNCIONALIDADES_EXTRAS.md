@@ -587,7 +587,7 @@ Agrega después de la tabla de comparación:
                 <div class="quiz-options">
                     <button class="quiz-option" data-value="retail">Tienda/Retail</button>
                     <button class="quiz-option" data-value="restaurant">Restaurante</button>
-                    <button class="quiz-option" data-value="service">Servicios</button>
+                    <button class="quiz-option" data-value="service">productos</button>
                 </div>
             </div>
             

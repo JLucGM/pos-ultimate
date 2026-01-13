@@ -14,7 +14,7 @@
     'sells_last_30_days' => 'Ventas de los últimos 30 días',
     'sells_current_fy' => 'Ventas Año Financiero Actual',
     'total_sells' => 'Ventas totales (:currency)',
-    'product_stock_alert' => 'Alerta de stock de servicios',
+    'product_stock_alert' => 'Alerta de stock de productos',
     'payment_dues' => 'Cuotas de pago',
     'due_amount' => 'Monto adeudado',
     'stock_expiry_alert' => 'Alerta de stock por vencer',

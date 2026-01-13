@@ -15,7 +15,7 @@ return [
     'inc_of_tax' => 'Impuesto incluido', /* modified */
     'profit_percent' => 'x Margen (%)',
     'add_new_product' => 'Agregar nuevo servicio',
-    'add_product_for_labels' => 'Agregar Servicios para generar etiquetas',
+    'add_product_for_labels' => 'Agregar productos para generar etiquetas',
     'product_type' => 'Tipo de servicio',
     'category' => 'Categoría',
     'sub_category' => 'Subcategoría',
@@ -55,7 +55,7 @@ return [
     'view_product' => 'Ver el servicio',
     'add_product' => 'Agregar servicio',
     'variations' => 'Variaciones',
-    'import_products' => 'Importar Servicios',
+    'import_products' => 'Importar productos',
     'file_to_import' => 'Archivo para importar',
     'file_imported_successfully' => 'Archivo importado con éxito',
     'variation_sku_format' => 'Formato de SKU de Variación',

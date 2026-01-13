@@ -38,7 +38,7 @@ return [
      'default_set_success' => 'Ajuste predeterminado establecido con éxito',
      'stickers_in_one_sheet' => 'Nº de pegatinas por hoja',
      'is_continuous' => 'Alimentación continua o rollos',
-     'products' => 'Servicios',
+     'products' => 'productos',
      'no_of_labels' => 'Nº de etiquetas',
      'info_in_labels' => 'Información para mostrar en etiquetas',
      'print_name' => 'Nombre del servicio',

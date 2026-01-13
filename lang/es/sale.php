@@ -28,7 +28,7 @@ return [
     'finalize' => 'Finalizar compra', /* modified */
     'express_finalize' => 'Pago <br/> Rápido',
     'product' => 'Servicio',
-    'products' => 'Servicios',
+    'products' => 'productos',
     'unit_price' => 'Precio unitario',
     'qty' => 'Cantidad',
     'subtotal' => 'Subtotal', /* modified */
