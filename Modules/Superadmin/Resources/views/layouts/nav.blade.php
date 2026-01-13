@@ -26,6 +26,8 @@
                     <li @if(request()->segment(1) == 'superadmin' && request()->segment(2) == 'settings') class="active" @endif><a href="{{action([\Modules\Superadmin\Http\Controllers\SuperadminSettingsController::class, 'edit'])}}">@lang('superadmin::lang.super_admin_settings')</a></li>
 
                     <li @if(request()->segment(1) == 'superadmin' && request()->segment(2) == 'communicator') class="active" @endif><a href="{{action([\Modules\Superadmin\Http\Controllers\CommunicatorController::class, 'index'])}}">@lang('superadmin::lang.communicator')</a></li>
+
+                    <li @if(request()->segment(1) == 'superadmin' && request()->segment(2) == 'payment-requests') class="active" @endif><a href="{{action([\Modules\Superadmin\Http\Controllers\PaymentRequestController::class, 'index'])}}">Solicitudes de Pago</a></li>
                 </ul>
 
             </div><!-- /.navbar-collapse -->
