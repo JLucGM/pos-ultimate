@@ -38,7 +38,7 @@ return [
     'purchase_quantity' => 'Cantidad de compra',
     'unit_cost_before_tax' => 'Costo unitario (antes de impuestos)',
     'subtotal_before_tax' => 'Subtotal (antes de impuestos)',
-    'product_tax' => 'Impuesto sobre el servicio',
+    'product_tax' => 'Impuesto sobre el Producto',
     'net_cost' => 'Coste neto', /* modified */
     'line_total' => 'Linea total',
     'unit_selling_price' => 'Precio de venta unitario', /* modified */

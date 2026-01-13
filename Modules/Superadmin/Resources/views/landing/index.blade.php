@@ -98,7 +98,7 @@
                     <i class="fas fa-chart-bar"></i>
                 </div>
                 <h3>Reportes Avanzados</h3>
-                <p>Análisis de ventas, productos más vendidos, reportes financieros y gráficos en tiempo real.</p>
+                <p>Análisis de ventas, Productos más vendidos, reportes financieros y gráficos en tiempo real.</p>
             </div>
 
             <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
@@ -114,7 +114,7 @@
                     <i class="fas fa-utensils"></i>
                 </div>
                 <h3>Módulo Restaurante</h3>
-                <p>Gestión de mesas, comandas de cocina, modificadores y servicio de meseros.</p>
+                <p>Gestión de mesas, comandas de cocina, modificadores y Producto de meseros.</p>
             </div>
         </div>
     </div>

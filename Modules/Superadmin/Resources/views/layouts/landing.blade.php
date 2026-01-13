@@ -105,7 +105,7 @@
                 <div class="footer-section">
                     <h4>Legal</h4>
                     <ul>
-                        <li><a href="#">Términos de Servicio</a></li>
+                        <li><a href="#">Términos de Producto</a></li>
                         <li><a href="#">Política de Privacidad</a></li>
                         <li><a href="#">Política de Cookies</a></li>
                         <li><a href="#">GDPR</a></li>

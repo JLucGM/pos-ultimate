@@ -115,7 +115,7 @@
 - [ ] Crear al menos 3 paquetes en `/superadmin/packages`
 - [ ] Configurar precios mensuales
 - [ ] Configurar precios anuales (con descuento)
-- [ ] Definir límites (sucursales, usuarios, productos)
+- [ ] Definir límites (sucursales, usuarios, Productos)
 - [ ] Marcar un paquete como "Popular"
 
 ### Características de Paquetes

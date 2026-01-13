@@ -52,7 +52,7 @@
     'owner_info' => 'Información del propietario',
     'sale' => 'Venta',
     'sell_price_tax' => 'Precio de venta',
-    'product' => 'Servicio',
+    'product' => 'Producto',
     'sku_prefix' => 'Prefijo SKU',
     'language' => 'Idioma',
     'time_zone' => 'Zona horaria',

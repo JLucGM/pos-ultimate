@@ -11,7 +11,7 @@ return [
     |
     */
 
-    'product' => 'Servicio',
+    'product' => 'Producto',
     'qty' => 'Cantidad',
     'unit_price' => 'Precio unitario',
     'subtotal' => 'Subtotal', /* modified */

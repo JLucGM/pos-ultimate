@@ -89,7 +89,7 @@ return [
             'icon' => 'fas fa-chart-bar',
             'color' => 'orange',
             'title' => 'Reportes Avanzados',
-            'description' => 'Análisis de ventas, productos más vendidos, reportes financieros y gráficos en tiempo real.',
+            'description' => 'Análisis de ventas, Productos más vendidos, reportes financieros y gráficos en tiempo real.',
         ],
         [
             'icon' => 'fas fa-store-alt',
@@ -101,7 +101,7 @@ return [
             'icon' => 'fas fa-utensils',
             'color' => 'teal',
             'title' => 'Módulo Restaurante',
-            'description' => 'Gestión de mesas, comandas de cocina, modificadores y servicio de meseros.',
+            'description' => 'Gestión de mesas, comandas de cocina, modificadores y Producto de meseros.',
         ],
     ],
 

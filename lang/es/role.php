@@ -30,10 +30,10 @@
     'customer.create' => 'Agregar cliente',
     'customer.update' => 'Editar cliente',
     'customer.delete' => 'Eliminar cliente',
-    'product.view' => 'Ver el servicio',
-    'product.create' => 'Agregar servicio',
-    'product.update' => 'Editar servicio',
-    'product.delete' => 'Eliminar servicio',
+    'product.view' => 'Ver el Producto',
+    'product.create' => 'Agregar Producto',
+    'product.update' => 'Editar Producto',
+    'product.delete' => 'Eliminar Producto',
     'purchase.view' => 'Ver ajuste de compra y stock',
     'purchase.create' => 'Agregar compra y ajuste de stock',
     'purchase.update' => 'Editar compra y ajuste de stock',
@@ -46,7 +46,7 @@
     'contacts_report.view' => 'Ver informe de proveedor y cliente',
     'stock_report.view' => 'Ver informe de stock, informe de ajuste de stock e informe de vencimiento de stock',
     'tax_report.view' => 'Ver informe de impuestos',
-    'trending_product_report.view' => 'Ver el informe de tendencias de servicio', /* modified */
+    'trending_product_report.view' => 'Ver el informe de tendencias de Producto', /* modified */
     'register_report.view' => 'Ver informe de registro',
     'sales_representative.view' => 'Ver informe de agente comercial', /* modified */
     'expense_report.view' => 'Ver informe de gastos',

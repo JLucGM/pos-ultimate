@@ -79,7 +79,7 @@
                         @if($package->product_count == 0)
                         <li><i class="fas fa-check"></i> <strong>Productos ilimitados</strong></li>
                         @else
-                        <li><i class="fas fa-check"></i> Hasta <strong>{{ number_format($package->product_count) }}</strong> productos</li>
+                        <li><i class="fas fa-check"></i> Hasta <strong>{{ number_format($package->product_count) }}</strong> Productos</li>
                         @endif
                         
                         @if($package->invoice_count == 0)

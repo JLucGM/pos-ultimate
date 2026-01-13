@@ -350,7 +350,7 @@ php artisan migrate --force
 # Limpiar y cachear
 php artisan optimize
 
-# Reiniciar productos
+# Reiniciar Productos
 sudo systemctl restart php8.1-fpm
 sudo systemctl restart nginx
 ```
