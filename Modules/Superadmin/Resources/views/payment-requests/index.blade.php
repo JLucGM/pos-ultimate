@@ -139,14 +139,25 @@ function viewDetails(id) {
 }
 
 function approvePayment(id) {
-    if (confirm('¿Aprobar esta solicitud de pago?')) {
+    if (confirm('¿Aprobar esta solicitud de pago?\n\nSe creará automáticamente:\n- El negocio\n- El usuario\n- La suscripción')) {
         $.post('/superadmin/payment-requests/' + id + '/approve', {
             _token: '{{ csrf_token() }}'
         }, function(response) {
             if (response.success) {
-                toastr.success('Pago aprobado exitosamente');
-                location.reload();
+                let message = 'Pago aprobado exitosamente!\n\n';
+                if (response.business_id) {
+                    message += 'Business ID: ' + response.business_id + '\n';
+                    message += 'Subscription ID: ' + response.subscription_id;
+                }
+                toastr.success(message);
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            } else {
+                toastr.error(response.message || 'Error al aprobar el pago');
             }
+        }).fail(function(xhr) {
+            toastr.error('Error: ' + (xhr.responseJSON?.message || 'Ocurrió un error'));
         });
     }
 }

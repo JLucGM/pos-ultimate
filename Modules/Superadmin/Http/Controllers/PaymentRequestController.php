@@ -93,11 +93,90 @@ class PaymentRequestController extends Controller
     public function approve($id)
     {
         $paymentRequest = PaymentRequest::findOrFail($id);
+        
+        // Verificar si ya fue aprobado
+        if ($paymentRequest->status == 'approved') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Esta solicitud ya fue aprobada anteriormente'
+            ]);
+        }
+
+        // Buscar si el negocio ya existe por email
+        $user = \App\Models\User::where('email', $paymentRequest->email)->first();
+        
+        if (!$user) {
+            // Crear nuevo negocio y usuario
+            $business = \App\Models\Business::create([
+                'name' => $paymentRequest->business_name,
+                'currency_id' => 1, // USD por defecto, ajusta según necesites
+                'start_date' => now()->toDateString(),
+                'default_profit_percent' => 25,
+                'time_zone' => config('app.timezone'),
+                'fy_start_month' => 1,
+            ]);
+
+            // Crear usuario propietario
+            $user = \App\Models\User::create([
+                'surname' => $paymentRequest->contact_name,
+                'first_name' => '',
+                'username' => $this->generateUsername($paymentRequest->email),
+                'email' => $paymentRequest->email,
+                'password' => bcrypt('password123'), // Contraseña temporal
+                'language' => 'es',
+                'business_id' => $business->id,
+                'is_superadmin' => 0,
+            ]);
+
+            // Asignar rol de admin al usuario
+            $user->assignRole('Admin#' . $business->id);
+        } else {
+            $business = $user->business;
+        }
+
+        // Crear la suscripción usando el método del sistema
+        $baseController = new \Modules\Superadmin\Http\Controllers\BaseController();
+        
+        $subscription = $baseController->_add_subscription(
+            null, // código de cupón
+            $paymentRequest->amount, // precio
+            $business->id, // business_id
+            $paymentRequest->package, // package
+            'manual', // gateway (pago manual)
+            $paymentRequest->reference_number, // transaction_id
+            $user->id, // user_id
+            true // is_superadmin (para que se apruebe automáticamente)
+        );
+
+        // Actualizar el estado de la solicitud
         $paymentRequest->status = 'approved';
         $paymentRequest->approved_at = now();
+        $paymentRequest->admin_notes = 'Suscripción creada automáticamente. Business ID: ' . $business->id . ', Subscription ID: ' . $subscription->id;
         $paymentRequest->save();
 
-        return response()->json(['success' => true]);
+        // TODO: Enviar email al cliente con credenciales de acceso
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pago aprobado y suscripción creada exitosamente',
+            'business_id' => $business->id,
+            'subscription_id' => $subscription->id
+        ]);
+    }
+
+    private function generateUsername($email)
+    {
+        $username = explode('@', $email)[0];
+        $username = preg_replace('/[^a-zA-Z0-9]/', '', $username);
+        
+        // Verificar si el username ya existe
+        $count = \App\Models\User::where('username', 'like', $username . '%')->count();
+        
+        if ($count > 0) {
+            $username = $username . ($count + 1);
+        }
+        
+        return $username;
     }
 
     public function reject(Request $request, $id)
