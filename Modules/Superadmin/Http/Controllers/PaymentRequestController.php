@@ -74,4 +74,39 @@ class PaymentRequestController extends Controller
             ]
         ]);
     }
+
+    public function index()
+    {
+        $requests = PaymentRequest::with('package')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        return view('superadmin::payment-requests.index', compact('requests'));
+    }
+
+    public function show($id)
+    {
+        $request = PaymentRequest::with('package')->findOrFail($id);
+        return response()->json($request);
+    }
+
+    public function approve($id)
+    {
+        $paymentRequest = PaymentRequest::findOrFail($id);
+        $paymentRequest->status = 'approved';
+        $paymentRequest->approved_at = now();
+        $paymentRequest->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function reject(Request $request, $id)
+    {
+        $paymentRequest = PaymentRequest::findOrFail($id);
+        $paymentRequest->status = 'rejected';
+        $paymentRequest->admin_notes = $request->input('reason');
+        $paymentRequest->save();
+
+        return response()->json(['success' => true]);
+    }
 }
