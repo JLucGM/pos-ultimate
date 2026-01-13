@@ -50,14 +50,17 @@ $(document).ready(function() {
         ajax: '{{ action([\App\Http\Controllers\ExchangeRateController::class, 'getData']) }}',
         columns: [
             { data: 'effective_date', name: 'effective_date' },
-            { data: 'from_currency', name: 'fromCurrency.currency' },
-            { data: 'to_currency', name: 'toCurrency.currency' },
+            { data: 'from_currency', name: 'fromCurrency.currency', searchable: false },
+            { data: 'to_currency', name: 'toCurrency.currency', searchable: false },
             { data: 'rate', name: 'rate' },
-            { data: 'created_by', name: 'creator.username' },
+            { data: 'created_by', name: 'creator.username', searchable: false },
             { data: 'notes', name: 'notes' },
             { data: 'action', orderable: false, searchable: false }
         ],
-        order: [[0, 'desc']]
+        order: [[0, 'desc']],
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+        }
     });
 });
 </script>
