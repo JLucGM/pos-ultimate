@@ -3316,6 +3316,33 @@ function saveFormDataToLocalStorage() {
 
 // ===== MULTI-CURRENCY EXCHANGE RATE HANDLER =====
 $(document).ready(function() {
+    // Función para actualizar símbolos de moneda en los subtotales de productos
+    function updateProductCurrencySymbols() {
+        var currency_code = $('.transaction_currency_symbol').text();
+        if (currency_code) {
+            // Actualizar cada fila de producto
+            $('table#pos_table tbody tr').each(function() {
+                var $subtotalSpan = $(this).find('span.pos_line_total_text');
+                if ($subtotalSpan.length) {
+                    var currentText = $subtotalSpan.text();
+                    // Remover cualquier símbolo de moneda existente
+                    currentText = currentText.replace(/\s*(USD|VEF|EUR|Bs|COP|ARS|MXN|CLP|PEN|UYU|BOB|PYG|GTQ|HNL|NIO|CRC|PAB|DOP|CUP|HTG|JMD|TTD|BBD|BZD|GYD|SRD|FKP|XCD|ANG|AWG|BMD|KYD|XOF|XAF|XPF|CHF|GBP|JPY|CNY|INR|BRL|CAD|AUD|NZD|ZAR|RUB|TRY|SAR|AED|QAR|KWD|BHD|OMR|JOD|ILS|EGP|MAD|DZD|TND|LYD|SDG|ETB|KES|TZS|UGX|RWF|BIF|DJF|ERN|SOS|MGA|MUR|SCR|KMF|MWK|ZMW|BWP|SZL|LSL|NAD|AOA|MZN|ZWL|GHS|NGN|XOF|XAF|CDF|STN|CVE|GMD|GNF|LRD|SLL|MRU|SHP|WST|TOP|VUV|FJD|PGK|SBD|TVD|NRD|KID|AUD|NZD|USD|EUR|GBP|JPY|CHF|CAD|AUD|HKD|SGD|SEK|NOK|DKK|PLN|CZK|HUF|RON|BGN|HRK|RSD|MKD|ALL|BAM|MDL|UAH|BYN|GEL|AMD|AZN|KZT|UZS|TJS|KGS|TMT|AFN|PKR|BDT|LKR|NPR|BTN|MVR|MMK|THB|LAK|KHR|VND|IDR|MYR|PHP|BND|TWD|KRW|MNT|CNY|HKD|MOP|JPY)\s*$/gi, '');
+                    // Agregar el nuevo símbolo
+                    $subtotalSpan.text(currentText + ' ' + currency_code);
+                }
+            });
+        }
+    }
+
+    // Sobrescribir la función pos_total_row original para agregar símbolos
+    var original_pos_total_row = window.pos_total_row;
+    window.pos_total_row = function() {
+        if (original_pos_total_row) {
+            original_pos_total_row();
+        }
+        updateProductCurrencySymbols();
+    };
+
     // Cuando cambia la moneda de transacción
     $('#transaction_currency_id').on('change', function() {
         var transaction_currency_id = $(this).val();
@@ -3339,6 +3366,7 @@ $(document).ready(function() {
             $('#exchange_rate').val(1);
             $('#exchange_rate_value').text('1');
             $('#transaction_currency_code').text($('#base_currency_code').text());
+            updateProductCurrencySymbols();
             return;
         }
 
@@ -3363,6 +3391,8 @@ $(document).ready(function() {
                     if (typeof pos_total_row === 'function') {
                         pos_total_row();
                     }
+                    
+                    updateProductCurrencySymbols();
                 } else {
                     toastr.warning('No se encontró tasa de cambio para esta moneda. Por favor, configure una tasa en el sistema.');
                     $('#exchange_rate').val(1);
@@ -3391,5 +3421,8 @@ $(document).ready(function() {
         var currency_code_match = currency_text.match(/\(([^)]+)\)/);
         var currency_code = currency_code_match ? currency_code_match[1] : base_currency_code;
         $('.transaction_currency_symbol').text(currency_code);
+        
+        // Actualizar símbolos en productos existentes (para edición)
+        setTimeout(updateProductCurrencySymbols, 500);
     }
 });
