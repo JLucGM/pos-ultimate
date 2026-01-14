@@ -1,6 +1,7 @@
 var global_brand_id = null;
 var global_p_category_id = null;
 var global_is_clear_local_storage = false;
+var global_transaction_currency_code = null; // Código de la moneda de transacción (USD, EUR, etc.)
 $(document).ready(function() {
     customer_set = false;
     //Prevent enter key function except texarea
@@ -3352,6 +3353,7 @@ $(document).ready(function() {
             $('#exchange_rate').val(1);
             $('#exchange_rate_value').text('1');
             $('.transaction_currency_symbol').text('');
+            global_transaction_currency_code = null;
             return;
         }
 
@@ -3366,9 +3368,13 @@ $(document).ready(function() {
             $('#exchange_rate').val(1);
             $('#exchange_rate_value').text('1');
             $('#transaction_currency_code').text($('#base_currency_code').text());
+            global_transaction_currency_code = null; // Usar moneda base
             updateProductCurrencySymbols();
             return;
         }
+
+        // Establecer la variable global con el código de la moneda
+        global_transaction_currency_code = currency_code;
 
         // Obtener la tasa de cambio del servidor
         $.ajax({
@@ -3421,6 +3427,15 @@ $(document).ready(function() {
         var currency_code_match = currency_text.match(/\(([^)]+)\)/);
         var currency_code = currency_code_match ? currency_code_match[1] : base_currency_code;
         $('.transaction_currency_symbol').text(currency_code);
+        
+        // Inicializar variable global de moneda de transacción
+        // Si es diferente a la moneda base, establecer el código
+        var transaction_currency_id = $('#transaction_currency_id').val();
+        if (transaction_currency_id != base_currency_id && currency_code) {
+            global_transaction_currency_code = currency_code;
+        } else {
+            global_transaction_currency_code = null;
+        }
         
         // Actualizar símbolos en productos existentes (para edición)
         setTimeout(updateProductCurrencySymbols, 500);
