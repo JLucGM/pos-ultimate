@@ -82,9 +82,28 @@ function __currency_trans_from_en(
         
         // Si hay una moneda de transacción diferente a la base, obtener su símbolo
         if (transaction_currency_id && base_currency_id && transaction_currency_id != base_currency_id) {
-            var currency_text = $('#transaction_currency_id option:selected').text();
+            var $selected = $('#transaction_currency_id option:selected');
+            var currency_text = $selected.text();
+            
+            // Intentar extraer el código entre paréntesis: "Dólar estadounidense (USD)"
             var currency_code_match = currency_text.match(/\(([^)]+)\)/);
-            var currency_code = currency_code_match ? currency_code_match[1] : '';
+            var currency_code = '';
+            
+            if (currency_code_match && currency_code_match[1]) {
+                currency_code = currency_code_match[1];
+            } else {
+                // Si no hay paréntesis, usar el texto completo
+                currency_code = currency_text.trim();
+            }
+            
+            // Debug - remover después de probar
+            console.log('Transaction Currency:', {
+                id: transaction_currency_id,
+                base_id: base_currency_id,
+                text: currency_text,
+                code: currency_code,
+                amount: input
+            });
             
             if (currency_code) {
                 var s = currency_code;
