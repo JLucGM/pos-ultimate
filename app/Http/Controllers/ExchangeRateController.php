@@ -119,15 +119,28 @@ class ExchangeRateController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $business_id = request()->session()->get('user.business_id');
-        $rate = ExchangeRate::where('business_id', $business_id)->findOrFail($id);
-        $rate->delete();
+        try {
+            $business_id = request()->session()->get('user.business_id');
+            $rate = ExchangeRate::where('business_id', $business_id)->findOrFail($id);
+            $rate->delete();
 
-        $output = [
-            'success' => true,
-            'msg' => __('exchange_rate.deleted_success')
-        ];
+            $output = [
+                'success' => true,
+                'msg' => 'Tasa de cambio eliminada exitosamente'
+            ];
+        } catch (\Exception $e) {
+            $output = [
+                'success' => false,
+                'msg' => 'Error al eliminar la tasa de cambio: ' . $e->getMessage()
+            ];
+        }
 
+        // Si es una petición AJAX, devolver JSON
+        if (request()->ajax()) {
+            return response()->json($output);
+        }
+
+        // Si no es AJAX, redirigir
         return redirect()->route('exchange-rates.index')->with('status', $output);
     }
 

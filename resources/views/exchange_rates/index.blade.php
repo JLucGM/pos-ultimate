@@ -62,6 +62,69 @@ $(document).ready(function() {
             url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
         }
     });
+
+    // Manejar el botón de eliminar
+    $(document).on('click', '.delete_button', function(e) {
+        e.preventDefault();
+        var url = $(this).data('href');
+        
+        swal({
+            title: '¿Estás seguro?',
+            text: 'Esta tasa de cambio será eliminada permanentemente',
+            icon: 'warning',
+            buttons: {
+                cancel: {
+                    text: 'Cancelar',
+                    value: null,
+                    visible: true,
+                    className: '',
+                    closeModal: true,
+                },
+                confirm: {
+                    text: 'Sí, eliminar',
+                    value: true,
+                    visible: true,
+                    className: 'bg-danger',
+                    closeModal: true
+                }
+            }
+        }).then((willDelete) => {
+            if (willDelete) {
+                $.ajax({
+                    method: 'DELETE',
+                    url: url,
+                    dataType: 'json',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(result) {
+                        if (result.success) {
+                            toastr.success(result.msg || 'Tasa de cambio eliminada exitosamente');
+                            exchange_rates_table.ajax.reload();
+                        } else {
+                            toastr.error(result.msg || 'Error al eliminar la tasa de cambio');
+                        }
+                    },
+                    error: function(xhr) {
+                        toastr.error('Error al eliminar la tasa de cambio');
+                    }
+                });
+            }
+        });
+    });
+
+    // Manejar el modal de ver detalles
+    $(document).on('click', '.btn-modal', function(e) {
+        e.preventDefault();
+        var container = $(this).data('container');
+        $.ajax({
+            url: $(this).data('href'),
+            dataType: 'html',
+            success: function(result) {
+                $(container).html(result).modal('show');
+            }
+        });
+    });
 });
 </script>
 @endsection
