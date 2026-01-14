@@ -279,7 +279,7 @@ class PurchaseController extends Controller
         $common_settings = ! empty(session('business.common_settings')) ? session('business.common_settings') : [];
 
         // Obtener monedas disponibles para multimoneda
-        $currencies = \App\Models\Currency::where('status', 1)->get();
+        $currencies = \App\Models\Currency::all();
         $currencies_dropdown = [];
         foreach ($currencies as $currency) {
             $currencies_dropdown[$currency->id] = $currency->currency . ' (' . $currency->code . ')';
