@@ -3374,7 +3374,6 @@ $(document).ready(function() {
 
         // Establecer la variable global con el código de la moneda
         global_transaction_currency_code = currency_code;
-        console.log('Moneda cambiada a:', global_transaction_currency_code);
 
         // Obtener la tasa de cambio del servidor
         $.ajax({
@@ -3431,20 +3430,11 @@ $(document).ready(function() {
         // Inicializar variable global de moneda de transacción
         var transaction_currency_id = $('#transaction_currency_id').val();
         
-        console.log('Inicializando moneda:', {
-            transaction_currency_id: transaction_currency_id,
-            base_currency_id: base_currency_id,
-            currency_code: currency_code,
-            currency_text: currency_text
-        });
-        
         // Si es diferente a la moneda base, establecer el código
         if (transaction_currency_id != base_currency_id && currency_code) {
             global_transaction_currency_code = currency_code;
-            console.log('Moneda de transacción establecida:', global_transaction_currency_code);
         } else {
             global_transaction_currency_code = null;
-            console.log('Usando moneda base');
         }
         
         // Actualizar símbolos en productos existentes (para edición)

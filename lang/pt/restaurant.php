@@ -50,7 +50,7 @@ return [
     'order_details' => 'Detalles del pedido',
     'refresh' => 'Refrescar',
     'no_orders_found' => 'No se encontraron pedidos',
-    'select_service_staff' => 'Seleccionar personal de Producto',
+    'select_service_staff' => 'Seleccionar personal de servicio',
     'service_staff' => 'Personal de Producto',
     'kitchen_for_restaurant' => 'Cocina (Para restaurantes)',
     'products_for_modifier' => 'Productos para modificador',

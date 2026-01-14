@@ -60,7 +60,7 @@ return [
     'order_details' => 'Detalles de la solicitud',
     'refresh' => 'Refrescar',
     'no_orders_found' => 'No se encontraron solicitudes',
-    'select_service_staff' => 'Seleccionar personal de Producto',
+    'select_service_staff' => 'Seleccionar personal de servicio',
     'service_staff' => 'Personal de Producto',
     'kitchen_for_restaurant' => 'Sala de espera (Para Clinicas)',
     'products_for_modifier' => 'Modificadores para Productos',
