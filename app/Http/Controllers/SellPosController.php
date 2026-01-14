@@ -776,9 +776,7 @@ class SellPosController extends Controller
         $receipt_details = $this->transactionUtil->getReceiptDetails($transaction_id, $location_id, $invoice_layout, $business_details, $location_details, $receipt_printer_type);
 
         // Obtener información de la transacción para moneda
-        $transaction = Transaction::with(['currency' => function($q) {
-            $q->select('id', 'currency', 'code', 'symbol');
-        }])->find($transaction_id);
+        $transaction = Transaction::find($transaction_id);
 
         $currency_details = [
             'symbol' => $business_details->currency_symbol,
