@@ -88,6 +88,7 @@
 		</div>
 	@endif
 	@if(config('constants.enable_sell_in_diff_currency') == true)
+		<input type="hidden" id="base_currency_id" value="{{ $base_currency->id ?? '' }}">
 		<div class="col-md-4 col-sm-6">
 			<div class="form-group">
 				<div class="input-group">

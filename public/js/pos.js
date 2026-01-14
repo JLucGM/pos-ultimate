@@ -1909,7 +1909,10 @@ function calculate_billing_details(price_total) {
     var shown_total = total_payable_rounded * curr_exchange_rate;
     $('span#total_payable').text(__currency_trans_from_en(shown_total, false));
 
-    $('span.total_payable_span').text(__currency_trans_from_en(total_payable_rounded, true));
+    // Usar moneda de transacción en el modal de pago si es diferente a la moneda base
+    var use_transaction_currency = $('#transaction_currency_id').length > 0 && $('#transaction_currency_id').val() != $('#base_currency_id').val();
+    
+    $('span.total_payable_span').text(__currency_trans_from_en(total_payable_rounded, true, use_transaction_currency));
 
     //Check if edit form then don't update price.
     if ($('form#edit_pos_sell_form').length == 0 && $('form#edit_sell_form').length == 0) {
@@ -1962,15 +1965,18 @@ function calculate_balance_due() {
     var bal_due = total_payable - total_paying;
     var change_return = 0;
 
+    // Usar moneda de transacción en el modal de pago si es diferente a la moneda base
+    var use_transaction_currency = $('#transaction_currency_id').length > 0 && $('#transaction_currency_id').val() != $('#base_currency_id').val();
+
     //change_return
     if (bal_due < 0 || Math.abs(bal_due) < 0.05) {
         __write_number($('input#change_return'), bal_due * -1);
-        $('span.change_return_span').text(__currency_trans_from_en(bal_due * -1, true));
+        $('span.change_return_span').text(__currency_trans_from_en(bal_due * -1, true, use_transaction_currency));
         change_return = bal_due * -1;
         bal_due = 0;
     } else {
         __write_number($('input#change_return'), 0);
-        $('span.change_return_span').text(__currency_trans_from_en(0, true));
+        $('span.change_return_span').text(__currency_trans_from_en(0, true, use_transaction_currency));
         change_return = 0;
         
     }
@@ -1982,10 +1988,10 @@ function calculate_balance_due() {
     }
 
     __write_number($('input#total_paying_input'), total_paying);
-    $('span.total_paying').text(__currency_trans_from_en(total_paying, true));
+    $('span.total_paying').text(__currency_trans_from_en(total_paying, true, use_transaction_currency));
 
     __write_number($('input#in_balance_due'), bal_due);
-    $('span.balance_due').text(__currency_trans_from_en(bal_due, true));
+    $('span.balance_due').text(__currency_trans_from_en(bal_due, true, use_transaction_currency));
 
     __highlight(bal_due * -1, $('span.balance_due'));
     __highlight(change_return * -1, $('span.change_return_span'));
