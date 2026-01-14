@@ -1,5 +1,8 @@
 //This file contains all functions used in the app.
 
+// Variable global para la moneda de transacción (se establece desde pos.js)
+var global_transaction_currency_code = null;
+
 function __calculate_amount(calculation_type, calculation_amount, amount) {
     var calculation_amount = parseFloat(calculation_amount);
     calculation_amount = isNaN(calculation_amount) ? 0 : calculation_amount;
@@ -76,8 +79,8 @@ function __currency_trans_from_en(
     is_quantity = false
 ) {
     // Si hay una moneda de transacción global definida (desde el POS), usarla
-    if (!use_page_currency && typeof global_transaction_currency_code !== 'undefined' && global_transaction_currency_code) {
-        console.log('Usando moneda de transacción:', global_transaction_currency_code, 'para monto:', input);
+    if (!use_page_currency && typeof global_transaction_currency_code !== 'undefined' && global_transaction_currency_code !== null && global_transaction_currency_code !== '') {
+        console.log('✓ Usando moneda de transacción:', global_transaction_currency_code, 'para monto:', input);
         
         var s = global_transaction_currency_code;
         var thousand = __currency_thousand_separator;
@@ -95,6 +98,8 @@ function __currency_trans_from_en(
         }
 
         return accounting.formatMoney(input, symbol, precision, thousand, decimal, format);
+    } else {
+        console.log('✗ Usando moneda base. global_transaction_currency_code:', global_transaction_currency_code, 'use_page_currency:', use_page_currency);
     }
     
     // Comportamiento original

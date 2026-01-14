@@ -1,7 +1,6 @@
 var global_brand_id = null;
 var global_p_category_id = null;
 var global_is_clear_local_storage = false;
-var global_transaction_currency_code = null; // Código de la moneda de transacción (USD, EUR, etc.)
 $(document).ready(function() {
     customer_set = false;
     //Prevent enter key function except texarea
