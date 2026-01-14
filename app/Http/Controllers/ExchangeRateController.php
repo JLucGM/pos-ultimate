@@ -206,18 +206,39 @@ class ExchangeRateController extends Controller
      */
     public function getCurrentRate(Request $request)
     {
-        $business_id = $request->session()->get('user.business_id');
-        
-        $rate = ExchangeRate::getRate(
-            $business_id,
-            $request->from_currency_id,
-            $request->to_currency_id,
-            $request->date
-        );
+        try {
+            $business_id = $request->session()->get('user.business_id');
+            
+            if (!$request->from_currency_id || !$request->to_currency_id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Faltan parámetros requeridos'
+                ], 400);
+            }
+            
+            $rate = ExchangeRate::getRate(
+                $business_id,
+                $request->from_currency_id,
+                $request->to_currency_id,
+                $request->date
+            );
 
-        return response()->json([
-            'success' => true,
-            'rate' => $rate
-        ]);
+            if ($rate === null) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No se encontró tasa de cambio para estas monedas'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'rate' => $rate
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener la tasa: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

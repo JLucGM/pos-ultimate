@@ -763,7 +763,7 @@ return [
     'admin_role_location_permission_help' => 'El administrador puede acceder a todas las ubicaciones',
     'edit_product_price_from_pos_screen' => 'Editar precio del Producto desde la pantalla POS',
     'edit_product_discount_from_pos_screen' => 'Editar descuento del Producto desde la pantalla POS',
-    'download_template_file' => 'Descargar archivo de plantilla',
+    'download_template_file' => 'Descargar plantilla ejemplo',
     'types_of_service' => 'Tipos de Producto',
     'add_type_of_service' => 'Agregar tipo de Producto',
     'packing_charge_type' => 'Tipo de carga de embalaje',
