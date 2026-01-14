@@ -75,6 +75,39 @@ function __currency_trans_from_en(
     precision = __currency_precision,
     is_quantity = false
 ) {
+    // Detectar automáticamente si hay una moneda de transacción diferente
+    if (!use_page_currency && typeof $ !== 'undefined') {
+        var transaction_currency_id = $('#transaction_currency_id').length ? $('#transaction_currency_id').val() : null;
+        var base_currency_id = $('#base_currency_id').length ? $('#base_currency_id').val() : null;
+        
+        // Si hay una moneda de transacción diferente a la base, obtener su símbolo
+        if (transaction_currency_id && base_currency_id && transaction_currency_id != base_currency_id) {
+            var currency_text = $('#transaction_currency_id option:selected').text();
+            var currency_code_match = currency_text.match(/\(([^)]+)\)/);
+            var currency_code = currency_code_match ? currency_code_match[1] : '';
+            
+            if (currency_code) {
+                var s = currency_code;
+                var thousand = __currency_thousand_separator;
+                var decimal = __currency_decimal_separator;
+                
+                symbol = '';
+                var format = '%s%v';
+                if (show_symbol) {
+                    symbol = s;
+                    format = '%s %v';
+                }
+
+                if (is_quantity) {
+                    precision = __quantity_precision;
+                }
+
+                return accounting.formatMoney(input, symbol, precision, thousand, decimal, format);
+            }
+        }
+    }
+    
+    // Comportamiento original
     if (use_page_currency && __p_currency_symbol) {
         var s = __p_currency_symbol;
         var thousand = __p_currency_thousand_separator;
