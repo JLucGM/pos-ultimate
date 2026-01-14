@@ -77,6 +77,8 @@ function __currency_trans_from_en(
 ) {
     // Si hay una moneda de transacción global definida (desde el POS), usarla
     if (!use_page_currency && typeof global_transaction_currency_code !== 'undefined' && global_transaction_currency_code) {
+        console.log('Usando moneda de transacción:', global_transaction_currency_code, 'para monto:', input);
+        
         var s = global_transaction_currency_code;
         var thousand = __currency_thousand_separator;
         var decimal = __currency_decimal_separator;
