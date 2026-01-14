@@ -14,7 +14,10 @@
                         {{-- <div>Payable:</div> --}}
                     </div>
                     <input type="hidden" name="final_total" id="final_total_input" value="0.00">
-                    <span id="total_payable" class="tw-text-green-900 tw-font-bold tw-text-sm number">0.00</span>
+                    <div class="tw-flex tw-items-baseline tw-gap-1">
+                        <span id="total_payable" class="tw-text-green-900 tw-font-bold tw-text-sm number">0.00</span>
+                        <span class="base_currency_symbol tw-text-xs tw-text-gray-600 tw-font-semibold">{{ $base_currency->code ?? '' }}</span>
+                    </div>
                 </div>
             </div>
 
@@ -128,8 +131,11 @@
                             <div>@lang('lang_v1.payable'):</div>
                         </div>
                         <input type="hidden" name="final_total" id="final_total_input" value="0.00">
-                        <span id="total_payable"
-                            class="tw-text-green-900 tw-font-bold tw-text-base md:tw-text-2xl number">0.00</span>
+                        <div class="tw-flex tw-items-baseline tw-gap-2">
+                            <span id="total_payable"
+                                class="tw-text-green-900 tw-font-bold tw-text-base md:tw-text-2xl number">0.00</span>
+                            <span class="base_currency_symbol tw-text-lg tw-text-gray-600 tw-font-semibold">{{ $base_currency->code ?? '' }}</span>
+                        </div>
                     </div>
                 @endif
             </div>

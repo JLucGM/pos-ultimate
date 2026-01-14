@@ -3324,8 +3324,15 @@ $(document).ready(function() {
         if (!transaction_currency_id) {
             $('#exchange_rate').val(1);
             $('#exchange_rate_value').text('1');
+            $('.transaction_currency_symbol').text('');
             return;
         }
+
+        // Actualizar el símbolo de la moneda de transacción en el subtotal
+        var currency_text = $('#transaction_currency_id option:selected').text();
+        var currency_code_match = currency_text.match(/\(([^)]+)\)/);
+        var currency_code = currency_code_match ? currency_code_match[1] : '';
+        $('.transaction_currency_symbol').text(currency_code);
 
         // Si es la misma moneda base, la tasa es 1
         if (transaction_currency_id == base_currency_id) {
@@ -3350,11 +3357,7 @@ $(document).ready(function() {
                     $('#exchange_rate_value').text(response.rate);
                     
                     // Actualizar el código de moneda
-                    var currency_text = $('#transaction_currency_id option:selected').text();
-                    var currency_code = currency_text.match(/\(([^)]+)\)/);
-                    if (currency_code) {
-                        $('#transaction_currency_code').text(currency_code[1]);
-                    }
+                    $('#transaction_currency_code').text(currency_code);
                     
                     // Recalcular totales si es necesario
                     if (typeof pos_total_row === 'function') {
@@ -3382,5 +3385,11 @@ $(document).ready(function() {
         // Guardar el ID de la moneda base en el elemento
         var base_currency_id = $('#transaction_currency_id').val();
         $('#base_currency_code').data('currency-id', base_currency_id);
+        
+        // Inicializar el símbolo de la moneda de transacción
+        var currency_text = $('#transaction_currency_id option:selected').text();
+        var currency_code_match = currency_text.match(/\(([^)]+)\)/);
+        var currency_code = currency_code_match ? currency_code_match[1] : base_currency_code;
+        $('.transaction_currency_symbol').text(currency_code);
     }
 });
