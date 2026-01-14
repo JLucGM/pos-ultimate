@@ -209,12 +209,27 @@ class ExchangeRateController extends Controller
         try {
             $business_id = $request->session()->get('user.business_id');
             
+            if (!$business_id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No se pudo obtener el ID del negocio'
+                ], 400);
+            }
+            
             if (!$request->from_currency_id || !$request->to_currency_id) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Faltan parámetros requeridos'
+                    'message' => 'Faltan parámetros requeridos: from_currency_id y to_currency_id'
                 ], 400);
             }
+            
+            // Log para debug
+            \Log::info('Getting exchange rate', [
+                'business_id' => $business_id,
+                'from' => $request->from_currency_id,
+                'to' => $request->to_currency_id,
+                'date' => $request->date
+            ]);
             
             $rate = ExchangeRate::getRate(
                 $business_id,
@@ -226,7 +241,7 @@ class ExchangeRateController extends Controller
             if ($rate === null) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No se encontró tasa de cambio para estas monedas'
+                    'message' => 'No se encontró tasa de cambio para estas monedas en la fecha especificada'
                 ], 404);
             }
 
@@ -235,6 +250,7 @@ class ExchangeRateController extends Controller
                 'rate' => $rate
             ]);
         } catch (\Exception $e) {
+            \Log::error('Error getting exchange rate: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Error al obtener la tasa: ' . $e->getMessage()
