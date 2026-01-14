@@ -92,9 +92,22 @@
 			<div class="form-group">
 				<div class="input-group">
 					<span class="input-group-addon">
+						<i class="fas fa-money-bill-wave"></i>
+					</span>
+					{!! Form::select('transaction_currency_id', $currencies_dropdown ?? [], $base_currency->id ?? null, ['class' => 'form-control select2', 'id' => 'transaction_currency_id', 'placeholder' => __('lang_v1.select_currency')]); !!}
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 col-sm-6">
+			<div class="form-group">
+				<div class="input-group">
+					<span class="input-group-addon">
 						<i class="fas fa-exchange-alt"></i>
 					</span>
-					{!! Form::text('exchange_rate', config('constants.currency_exchange_rate'), ['class' => 'form-control input-sm input_number', 'placeholder' => __('lang_v1.currency_exchange_rate'), 'id' => 'exchange_rate']); !!}
+					{!! Form::text('exchange_rate', 1, ['class' => 'form-control input-sm input_number', 'placeholder' => __('lang_v1.currency_exchange_rate'), 'id' => 'exchange_rate', 'readonly']); !!}
+					<span class="input-group-addon">
+						<small class="text-muted" id="exchange_rate_text">1 <span id="transaction_currency_code"></span> = <span id="exchange_rate_value">1</span> <span id="base_currency_code">{{ $base_currency->code ?? '' }}</span></small>
+					</span>
 				</div>
 			</div>
 		</div>

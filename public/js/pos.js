@@ -3312,3 +3312,75 @@ function saveFormDataToLocalStorage() {
 
     // console.log("Form data successfully saved to LocalStorage.");
 }
+
+
+// ===== MULTI-CURRENCY EXCHANGE RATE HANDLER =====
+$(document).ready(function() {
+    // Cuando cambia la moneda de transacción
+    $('#transaction_currency_id').on('change', function() {
+        var transaction_currency_id = $(this).val();
+        var base_currency_id = $('#base_currency_code').data('currency-id');
+        
+        if (!transaction_currency_id) {
+            $('#exchange_rate').val(1);
+            $('#exchange_rate_value').text('1');
+            return;
+        }
+
+        // Si es la misma moneda base, la tasa es 1
+        if (transaction_currency_id == base_currency_id) {
+            $('#exchange_rate').val(1);
+            $('#exchange_rate_value').text('1');
+            $('#transaction_currency_code').text($('#base_currency_code').text());
+            return;
+        }
+
+        // Obtener la tasa de cambio del servidor
+        $.ajax({
+            url: '/exchange-rates/get-current-rate',
+            method: 'GET',
+            data: {
+                from_currency_id: transaction_currency_id,
+                to_currency_id: base_currency_id,
+                date: $('#transaction_date').val() || null
+            },
+            success: function(response) {
+                if (response.success && response.rate) {
+                    $('#exchange_rate').val(response.rate);
+                    $('#exchange_rate_value').text(response.rate);
+                    
+                    // Actualizar el código de moneda
+                    var currency_text = $('#transaction_currency_id option:selected').text();
+                    var currency_code = currency_text.match(/\(([^)]+)\)/);
+                    if (currency_code) {
+                        $('#transaction_currency_code').text(currency_code[1]);
+                    }
+                    
+                    // Recalcular totales si es necesario
+                    if (typeof pos_total_row === 'function') {
+                        pos_total_row();
+                    }
+                } else {
+                    toastr.warning('No se encontró tasa de cambio para esta moneda. Por favor, configure una tasa en el sistema.');
+                    $('#exchange_rate').val(1);
+                    $('#exchange_rate_value').text('1');
+                }
+            },
+            error: function() {
+                toastr.error('Error al obtener la tasa de cambio');
+                $('#exchange_rate').val(1);
+                $('#exchange_rate_value').text('1');
+            }
+        });
+    });
+
+    // Inicializar con la moneda base
+    if ($('#transaction_currency_id').length) {
+        var base_currency_code = $('#base_currency_code').text();
+        $('#transaction_currency_code').text(base_currency_code);
+        
+        // Guardar el ID de la moneda base en el elemento
+        var base_currency_id = $('#transaction_currency_id').val();
+        $('#base_currency_code').data('currency-id', base_currency_id);
+    }
+});

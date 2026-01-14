@@ -83,6 +83,8 @@ class SellPosController extends Controller
 
     protected $notificationUtil;
 
+    protected $currencyUtil;
+
     /**
      * Constructor
      *
@@ -96,7 +98,8 @@ class SellPosController extends Controller
         TransactionUtil $transactionUtil,
         CashRegisterUtil $cashRegisterUtil,
         ModuleUtil $moduleUtil,
-        NotificationUtil $notificationUtil
+        NotificationUtil $notificationUtil,
+        \App\Utils\CurrencyUtil $currencyUtil
     ) {
         $this->contactUtil = $contactUtil;
         $this->productUtil = $productUtil;
@@ -105,6 +108,7 @@ class SellPosController extends Controller
         $this->cashRegisterUtil = $cashRegisterUtil;
         $this->moduleUtil = $moduleUtil;
         $this->notificationUtil = $notificationUtil;
+        $this->currencyUtil = $currencyUtil;
 
         $this->dummyPaymentLine = ['method' => 'cash', 'amount' => 0, 'note' => '', 'card_transaction_number' => '', 'card_number' => '', 'card_type' => '', 'card_holder_name' => '', 'card_month' => '', 'card_year' => '', 'card_security' => '', 'cheque_number' => '', 'bank_account_number' => '',
             'is_return' => 0, 'transaction_no' => ''];
@@ -261,6 +265,16 @@ class SellPosController extends Controller
         //Added check because $users is of no use if enable_contact_assign if false
         $users = config('constants.enable_contact_assign') ? User::forDropdown($business_id, false, false, false, true) : [];
 
+        // Obtener monedas disponibles y tasa de cambio
+        $currencies = $this->currencyUtil->getActiveCurrencies();
+        $base_currency = $this->currencyUtil->getBusinessCurrency($business_id);
+        
+        // Preparar dropdown de monedas
+        $currencies_dropdown = [];
+        foreach ($currencies as $currency) {
+            $currencies_dropdown[$currency->id] = $currency->currency . ' (' . $currency->code . ')';
+        }
+
         return view('sale_pos.create')
             ->with(compact(
                 'edit_discount',
@@ -294,6 +308,8 @@ class SellPosController extends Controller
                 'default_invoice_schemes',
                 'invoice_layouts',
                 'users',
+                'currencies_dropdown',
+                'base_currency'
             ));
     }
 
@@ -491,6 +507,11 @@ class SellPosController extends Controller
 
                 //upload document
                 $input['document'] = $this->transactionUtil->uploadFile($request, 'sell_document', 'documents');
+
+                // Guardar la moneda de transacción
+                if (!empty($request->input('transaction_currency_id'))) {
+                    $input['transaction_currency_id'] = $request->input('transaction_currency_id');
+                }
 
                 $transaction = $this->transactionUtil->createSellTransaction($business_id, $input, $invoice_total, $user_id);
 

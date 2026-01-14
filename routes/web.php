@@ -122,7 +122,7 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     // Exchange Rates
     Route::resource('exchange-rates', App\Http\Controllers\ExchangeRateController::class);
     Route::get('/exchange-rates-data', [App\Http\Controllers\ExchangeRateController::class, 'getData'])->name('exchange-rates.getData');
-    Route::get('/get-current-rate', [App\Http\Controllers\ExchangeRateController::class, 'getCurrentRate'])->name('get-current-rate');
+    Route::get('/exchange-rates/get-current-rate', [App\Http\Controllers\ExchangeRateController::class, 'getCurrentRate'])->name('exchange-rates.get-current-rate');
 
     Route::post('/test-email', [BusinessController::class, 'testEmailConfiguration']);
     Route::post('/test-sms', [BusinessController::class, 'testSmsConfiguration']);
