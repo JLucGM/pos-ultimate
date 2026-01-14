@@ -85,8 +85,17 @@
 				</div>
 			</div>
 
+			<!-- Selector de Moneda -->
+			<div class="col-sm-3">
+				<div class="form-group">
+					{!! Form::label('transaction_currency_id', __('lang_v1.currency') . ':') !!}
+					{!! Form::select('transaction_currency_id', $currencies_dropdown, $base_currency->id, ['class' => 'form-control select2', 'id' => 'transaction_currency_id']); !!}
+					<small class="text-muted">Moneda de la compra</small>
+				</div>
+			</div>
+
 			<!-- Currency Exchange Rate -->
-			<div class="col-sm-3 @if(!$currency_details->purchase_in_diff_currency) hide @endif">
+			<div class="col-sm-3" id="exchange_rate_div">
 				<div class="form-group">
 					{!! Form::label('exchange_rate', __('purchase.p_exchange_rate') . ':*') !!}
 					@show_tooltip(__('tooltip.currency_exchange_factor'))
@@ -94,10 +103,10 @@
 						<span class="input-group-addon">
 							<i class="fa fa-info"></i>
 						</span>
-						{!! Form::number('exchange_rate', $currency_details->p_exchange_rate, ['class' => 'form-control', 'required', 'step' => 0.001]); !!}
+						{!! Form::number('exchange_rate', $currency_details->p_exchange_rate, ['class' => 'form-control', 'required', 'step' => 0.001, 'id' => 'exchange_rate']); !!}
 					</div>
-					<span class="help-block text-danger">
-						@lang('purchase.diff_purchase_currency_help', ['currency' => $currency_details->name])
+					<span class="help-block" id="exchange_rate_help">
+						<span id="exchange_rate_text"></span>
 					</span>
 				</div>
 			</div>
@@ -600,6 +609,53 @@
 			set_payment_type_dropdown();
 			$('select#location_id').change(function() {
 				set_payment_type_dropdown();
+			});
+
+			// Manejar cambio de moneda
+			var base_currency_id = {{ $base_currency->id }};
+			var base_currency_code = '{{ $base_currency->code }}';
+			
+			// Función para actualizar tasa de cambio
+			function updateExchangeRate() {
+				var selected_currency_id = $('#transaction_currency_id').val();
+				
+				if (selected_currency_id == base_currency_id) {
+					// Misma moneda que la base
+					$('#exchange_rate').val(1);
+					$('#exchange_rate_div').hide();
+				} else {
+					// Moneda diferente, obtener tasa de cambio
+					$('#exchange_rate_div').show();
+					
+					$.ajax({
+						url: '/get-exchange-rate',
+						method: 'GET',
+						data: {
+							from_currency_id: selected_currency_id,
+							to_currency_id: base_currency_id
+						},
+						success: function(response) {
+							if (response.success) {
+								$('#exchange_rate').val(response.rate);
+								var currency_code = response.from_currency_code;
+								$('#exchange_rate_text').html('1 ' + currency_code + ' = ' + response.rate + ' ' + base_currency_code);
+							} else {
+								toastr.error(response.msg || 'Error al obtener tasa de cambio');
+							}
+						},
+						error: function() {
+							toastr.error('Error al obtener tasa de cambio');
+						}
+					});
+				}
+			}
+			
+			// Ejecutar al cargar la página
+			updateExchangeRate();
+			
+			// Ejecutar cuando cambia la moneda
+			$('#transaction_currency_id').change(function() {
+				updateExchangeRate();
 			});
     	});
     	$(document).on('change', '.payment_types_dropdown, #location_id', function(e) {

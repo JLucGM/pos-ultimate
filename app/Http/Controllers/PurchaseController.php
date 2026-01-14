@@ -278,8 +278,16 @@ class PurchaseController extends Controller
 
         $common_settings = ! empty(session('business.common_settings')) ? session('business.common_settings') : [];
 
+        // Obtener monedas disponibles para multimoneda
+        $currencies = \App\Models\Currency::where('status', 1)->get();
+        $currencies_dropdown = [];
+        foreach ($currencies as $currency) {
+            $currencies_dropdown[$currency->id] = $currency->currency . ' (' . $currency->code . ')';
+        }
+        $base_currency = \App\Models\Currency::find($business_details->currency_id);
+
         return view('purchase.create')
-            ->with(compact('taxes', 'orderStatuses', 'business_locations', 'currency_details', 'default_purchase_status', 'customer_groups', 'types', 'shortcuts', 'payment_line', 'payment_types', 'accounts', 'bl_attributes', 'common_settings'));
+            ->with(compact('taxes', 'orderStatuses', 'business_locations', 'currency_details', 'default_purchase_status', 'customer_groups', 'types', 'shortcuts', 'payment_line', 'payment_types', 'accounts', 'bl_attributes', 'common_settings', 'currencies_dropdown', 'base_currency'));
     }
 
     /**
@@ -303,6 +311,11 @@ class PurchaseController extends Controller
             }
 
             $transaction_data = $request->only(['ref_no', 'status', 'contact_id', 'transaction_date', 'total_before_tax', 'location_id', 'discount_type', 'discount_amount', 'tax_id', 'tax_amount', 'shipping_details', 'shipping_charges', 'final_total', 'additional_notes', 'exchange_rate', 'pay_term_number', 'pay_term_type', 'purchase_order_ids']);
+
+            // Guardar la moneda de transacción si se especifica
+            if (!empty($request->input('transaction_currency_id'))) {
+                $transaction_data['transaction_currency_id'] = $request->input('transaction_currency_id');
+            }
 
             $exchange_rate = $transaction_data['exchange_rate'];
 
