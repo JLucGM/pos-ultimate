@@ -797,8 +797,8 @@ class SellPosController extends Controller
                 $receipt_details->is_multi_currency = true;
                 
                 // Calcular el total en moneda base
-                $exchange_rate = $transaction->exchange_rate ?? 1;
-                $total_in_base = $transaction->final_total * $exchange_rate;
+                $exchange_rate = floatval($transaction->exchange_rate ?? 1);
+                $total_in_base = floatval($transaction->final_total) * $exchange_rate;
                 $receipt_details->total_in_base_currency = $this->transactionUtil->num_f($total_in_base, false, $business_details);
                 
                 // Reformatear montos con la moneda de transacción
@@ -809,26 +809,18 @@ class SellPosController extends Controller
                 
                 // Reformatear los montos principales
                 if (!empty($receipt_details->total)) {
-                    $receipt_details->total = $this->transactionUtil->num_f($transaction->final_total, false, $temp_business);
+                    $receipt_details->total = $this->transactionUtil->num_f(floatval($transaction->final_total), false, $temp_business);
                 }
                 if (!empty($receipt_details->subtotal)) {
-                    $receipt_details->subtotal = $this->transactionUtil->num_f($transaction->total_before_tax, false, $temp_business);
+                    $receipt_details->subtotal = $this->transactionUtil->num_f(floatval($transaction->total_before_tax), false, $temp_business);
                 }
                 if (!empty($receipt_details->total_paid)) {
-                    $total_paid_amount = $transaction->final_total; // En moneda de transacción
+                    $total_paid_amount = floatval($transaction->final_total); // En moneda de transacción
                     $receipt_details->total_paid = $this->transactionUtil->num_f($total_paid_amount, false, $temp_business);
                 }
                 
-                // Reformatear pagos
-                if (!empty($receipt_details->payments)) {
-                    foreach ($receipt_details->payments as $key => $payment) {
-                        if (isset($payment['amount'])) {
-                            // Los pagos están en moneda base, convertir a moneda de transacción
-                            $amount_in_transaction_currency = $payment['amount'] / $exchange_rate;
-                            $receipt_details->payments[$key]['amount'] = $this->transactionUtil->num_f($amount_in_transaction_currency, false, $temp_business);
-                        }
-                    }
-                }
+                // No reformatear pagos - mantener en moneda base
+                // Los pagos ya vienen formateados correctamente por getReceiptDetails()
             }
         } else {
             $receipt_details->is_multi_currency = false;
