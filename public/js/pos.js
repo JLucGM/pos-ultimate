@@ -3337,7 +3337,7 @@ $(document).ready(function() {
 
         // Obtener la tasa de cambio del servidor
         $.ajax({
-            url: '/exchange-rates/get-current-rate',
+            url: '/get-exchange-rate',
             method: 'GET',
             data: {
                 from_currency_id: transaction_currency_id,

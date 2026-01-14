@@ -120,7 +120,7 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     Route::get('/calendar', [HomeController::class, 'getCalendar'])->name('calendar');
 
     // Exchange Rates - Las rutas específicas deben ir ANTES del resource
-    Route::get('/exchange-rates/get-current-rate', [App\Http\Controllers\ExchangeRateController::class, 'getCurrentRate'])->name('exchange-rates.get-current-rate');
+    Route::get('/get-exchange-rate', [App\Http\Controllers\ExchangeRateController::class, 'getCurrentRate'])->name('get-exchange-rate');
     Route::get('/exchange-rates-data', [App\Http\Controllers\ExchangeRateController::class, 'getData'])->name('exchange-rates.getData');
     Route::resource('exchange-rates', App\Http\Controllers\ExchangeRateController::class);
 
