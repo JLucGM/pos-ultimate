@@ -131,6 +131,7 @@ return [
     'bank_transfer' => 'Transferencia bancaria',
     'other' => 'Otro',
     'payment' => 'Pago',
+    'currency' => 'Moneda',
     'total_items' => 'Total artículos', /* modified */
     'total_paying' => 'Pago total',
     'balance' => 'Saldo', /* modified */
