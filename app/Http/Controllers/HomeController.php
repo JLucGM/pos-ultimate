@@ -209,8 +209,92 @@ class HomeController extends Controller
 
         $common_settings = ! empty(session('business.common_settings')) ? session('business.common_settings') : [];
 
+        // Datos multimoneda para el dashboard
+        $multimoneda_data = $this->getMultimonedaData($business_id);
 
-        return view('home.index', compact('sells_chart_1', 'sells_chart_2', 'widgets', 'all_locations', 'common_settings', 'is_admin'));
+        return view('home.index', compact('sells_chart_1', 'sells_chart_2', 'widgets', 'all_locations', 'common_settings', 'is_admin', 'multimoneda_data'));
+    }
+
+    /**
+     * Obtiene datos de ventas por moneda para el dashboard
+     */
+    private function getMultimonedaData($business_id)
+    {
+        $data = [];
+        
+        // Obtener monedas activas
+        $currencies = \App\Models\Currency::all();
+        $base_currency = \App\Models\Currency::find(session('business.currency_id'));
+        
+        // Ventas del día por moneda
+        $today = \Carbon::today();
+        $ventas_hoy = DB::table('transactions')
+            ->where('business_id', $business_id)
+            ->where('type', 'sell')
+            ->where('status', 'final')
+            ->whereDate('transaction_date', $today)
+            ->select('transaction_currency_id', DB::raw('SUM(final_total) as total'), DB::raw('COUNT(*) as cantidad'))
+            ->groupBy('transaction_currency_id')
+            ->get();
+        
+        $data['ventas_hoy'] = [];
+        foreach ($ventas_hoy as $venta) {
+            $currency_id = $venta->transaction_currency_id ?? $base_currency->id;
+            $currency = $currencies->firstWhere('id', $currency_id) ?? $base_currency;
+            
+            $data['ventas_hoy'][] = [
+                'currency_code' => $currency->code,
+                'currency_symbol' => $currency->symbol,
+                'total' => $venta->total,
+                'cantidad' => $venta->cantidad
+            ];
+        }
+        
+        // Ventas del mes por moneda
+        $start_of_month = \Carbon::now()->startOfMonth();
+        $ventas_mes = DB::table('transactions')
+            ->where('business_id', $business_id)
+            ->where('type', 'sell')
+            ->where('status', 'final')
+            ->whereDate('transaction_date', '>=', $start_of_month)
+            ->select('transaction_currency_id', DB::raw('SUM(final_total) as total'), DB::raw('COUNT(*) as cantidad'))
+            ->groupBy('transaction_currency_id')
+            ->get();
+        
+        $data['ventas_mes'] = [];
+        foreach ($ventas_mes as $venta) {
+            $currency_id = $venta->transaction_currency_id ?? $base_currency->id;
+            $currency = $currencies->firstWhere('id', $currency_id) ?? $base_currency;
+            
+            $data['ventas_mes'][] = [
+                'currency_code' => $currency->code,
+                'currency_symbol' => $currency->symbol,
+                'total' => $venta->total,
+                'cantidad' => $venta->cantidad
+            ];
+        }
+        
+        // Tasa de cambio actual (USD a moneda base)
+        $usd_currency = $currencies->firstWhere('code', 'USD');
+        if ($usd_currency && $usd_currency->id != $base_currency->id) {
+            $exchange_rate = \App\Models\ExchangeRate::where('from_currency_id', $usd_currency->id)
+                ->where('to_currency_id', $base_currency->id)
+                ->orderBy('created_at', 'desc')
+                ->first();
+            
+            $data['tasa_cambio'] = [
+                'from' => $usd_currency->code,
+                'to' => $base_currency->code,
+                'rate' => $exchange_rate ? $exchange_rate->exchange_rate : 1,
+                'updated_at' => $exchange_rate ? $exchange_rate->updated_at->diffForHumans() : null
+            ];
+        } else {
+            $data['tasa_cambio'] = null;
+        }
+        
+        $data['base_currency'] = $base_currency;
+        
+        return $data;
     }
 
     /**

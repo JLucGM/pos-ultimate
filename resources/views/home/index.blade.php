@@ -207,6 +207,106 @@
                             </div>
                         @endif
                     @endif
+
+                    {{-- Widgets Multimoneda --}}
+                    @if(auth()->user()->can('dashboard.data') && $is_admin && !empty($multimoneda_data))
+                        <div class="tw-mt-6">
+                            <h3 class="tw-text-lg tw-font-semibold tw-text-white tw-mb-4">
+                                <i class="fas fa-exchange-alt tw-mr-2"></i>
+                                Resumen Multimoneda
+                            </h3>
+                            
+                            <div class="tw-grid tw-grid-cols-1 tw-gap-4 sm:tw-grid-cols-2 xl:tw-grid-cols-3 sm:tw-gap-5">
+                                {{-- Tasa de Cambio Actual --}}
+                                @if(!empty($multimoneda_data['tasa_cambio']))
+                                <div class="tw-transition-all tw-duration-200 tw-bg-gradient-to-br tw-from-purple-500 tw-to-purple-700 tw-shadow-lg hover:tw-shadow-xl tw-rounded-xl tw-ring-1 tw-ring-purple-400">
+                                    <div class="tw-p-4 sm:tw-p-5">
+                                        <div class="tw-flex tw-items-center tw-justify-between">
+                                            <div>
+                                                <p class="tw-text-sm tw-font-medium tw-text-purple-100 tw-mb-1">
+                                                    Tasa de Cambio
+                                                </p>
+                                                <p class="tw-text-3xl tw-font-bold tw-text-white tw-font-mono">
+                                                    {{ number_format($multimoneda_data['tasa_cambio']['rate'], 2) }}
+                                                </p>
+                                                <p class="tw-text-xs tw-text-purple-200 tw-mt-1">
+                                                    1 {{ $multimoneda_data['tasa_cambio']['from'] }} = {{ number_format($multimoneda_data['tasa_cambio']['rate'], 2) }} {{ $multimoneda_data['tasa_cambio']['to'] }}
+                                                </p>
+                                                @if($multimoneda_data['tasa_cambio']['updated_at'])
+                                                <p class="tw-text-xs tw-text-purple-300 tw-mt-2">
+                                                    <i class="fas fa-clock tw-mr-1"></i>
+                                                    Actualizado {{ $multimoneda_data['tasa_cambio']['updated_at'] }}
+                                                </p>
+                                                @endif
+                                            </div>
+                                            <div class="tw-inline-flex tw-items-center tw-justify-center tw-w-16 tw-h-16 tw-bg-white/20 tw-rounded-full">
+                                                <i class="fas fa-exchange-alt tw-text-3xl tw-text-white"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+
+                                {{-- Ventas del Día por Moneda --}}
+                                @if(!empty($multimoneda_data['ventas_hoy']))
+                                <div class="tw-transition-all tw-duration-200 tw-bg-white tw-shadow-sm hover:tw-shadow-md tw-rounded-xl tw-ring-1 tw-ring-gray-200">
+                                    <div class="tw-p-4 sm:tw-p-5">
+                                        <div class="tw-flex tw-items-center tw-gap-3 tw-mb-3">
+                                            <div class="tw-inline-flex tw-items-center tw-justify-center tw-w-10 tw-h-10 tw-bg-blue-100 tw-text-blue-600 tw-rounded-full">
+                                                <i class="fas fa-calendar-day tw-text-lg"></i>
+                                            </div>
+                                            <h4 class="tw-text-sm tw-font-semibold tw-text-gray-700">Ventas de Hoy</h4>
+                                        </div>
+                                        @foreach($multimoneda_data['ventas_hoy'] as $venta)
+                                        <div class="tw-flex tw-items-center tw-justify-between tw-py-2 tw-border-b tw-border-gray-100 last:tw-border-0">
+                                            <div>
+                                                <span class="tw-inline-flex tw-items-center tw-px-2 tw-py-1 tw-text-xs tw-font-semibold tw-bg-blue-50 tw-text-blue-700 tw-rounded">
+                                                    {{ $venta['currency_code'] }}
+                                                </span>
+                                                <span class="tw-text-xs tw-text-gray-500 tw-ml-2">
+                                                    {{ $venta['cantidad'] }} {{ $venta['cantidad'] == 1 ? 'venta' : 'ventas' }}
+                                                </span>
+                                            </div>
+                                            <span class="tw-text-lg tw-font-bold tw-text-gray-900 tw-font-mono">
+                                                {{ $venta['currency_code'] }} {{ number_format($venta['total'], 2) }}
+                                            </span>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                @endif
+
+                                {{-- Ventas del Mes por Moneda --}}
+                                @if(!empty($multimoneda_data['ventas_mes']))
+                                <div class="tw-transition-all tw-duration-200 tw-bg-white tw-shadow-sm hover:tw-shadow-md tw-rounded-xl tw-ring-1 tw-ring-gray-200">
+                                    <div class="tw-p-4 sm:tw-p-5">
+                                        <div class="tw-flex tw-items-center tw-gap-3 tw-mb-3">
+                                            <div class="tw-inline-flex tw-items-center tw-justify-center tw-w-10 tw-h-10 tw-bg-green-100 tw-text-green-600 tw-rounded-full">
+                                                <i class="fas fa-calendar-alt tw-text-lg"></i>
+                                            </div>
+                                            <h4 class="tw-text-sm tw-font-semibold tw-text-gray-700">Ventas del Mes</h4>
+                                        </div>
+                                        @foreach($multimoneda_data['ventas_mes'] as $venta)
+                                        <div class="tw-flex tw-items-center tw-justify-between tw-py-2 tw-border-b tw-border-gray-100 last:tw-border-0">
+                                            <div>
+                                                <span class="tw-inline-flex tw-items-center tw-px-2 tw-py-1 tw-text-xs tw-font-semibold tw-bg-green-50 tw-text-green-700 tw-rounded">
+                                                    {{ $venta['currency_code'] }}
+                                                </span>
+                                                <span class="tw-text-xs tw-text-gray-500 tw-ml-2">
+                                                    {{ $venta['cantidad'] }} {{ $venta['cantidad'] == 1 ? 'venta' : 'ventas' }}
+                                                </span>
+                                            </div>
+                                            <span class="tw-text-lg tw-font-bold tw-text-gray-900 tw-font-mono">
+                                                {{ $venta['currency_code'] }} {{ number_format($venta['total'], 2) }}
+                                            </span>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
               
         </div>
         @if (auth()->user()->can('dashboard.data'))
