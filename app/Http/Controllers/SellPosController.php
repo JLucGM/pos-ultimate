@@ -775,12 +775,37 @@ class SellPosController extends Controller
 
         $receipt_details = $this->transactionUtil->getReceiptDetails($transaction_id, $location_id, $invoice_layout, $business_details, $location_details, $receipt_printer_type);
 
+        // Obtener información de la transacción para moneda
+        $transaction = Transaction::with(['currency' => function($q) {
+            $q->select('id', 'currency', 'code', 'symbol');
+        }])->find($transaction_id);
+
         $currency_details = [
             'symbol' => $business_details->currency_symbol,
             'thousand_separator' => $business_details->thousand_separator,
             'decimal_separator' => $business_details->decimal_separator,
         ];
         $receipt_details->currency = $currency_details;
+
+        // Agregar información de moneda de transacción si es diferente
+        if (!empty($transaction->transaction_currency_id) && $transaction->transaction_currency_id != $business_details->currency_id) {
+            $transaction_currency = \App\Models\Currency::find($transaction->transaction_currency_id);
+            if ($transaction_currency) {
+                $receipt_details->transaction_currency = [
+                    'code' => $transaction_currency->code,
+                    'symbol' => $transaction_currency->symbol,
+                    'exchange_rate' => $transaction->exchange_rate ?? 1,
+                ];
+                $receipt_details->is_multi_currency = true;
+                
+                // Calcular el total en moneda base
+                $exchange_rate = $transaction->exchange_rate ?? 1;
+                $total_in_base = $transaction->final_total * $exchange_rate;
+                $receipt_details->total_in_base_currency = $this->transactionUtil->num_f($total_in_base, false, $business_details);
+            }
+        } else {
+            $receipt_details->is_multi_currency = false;
+        }
 
         if ($is_package_slip) {
             $output['html_content'] = view('sale_pos.receipts.packing_slip', compact('receipt_details'))->render();

@@ -157,6 +157,12 @@
 				<br><b>{{$receipt_details->due_date_label}}</b> {{$receipt_details->due_date ?? ''}}
 				@endif
 
+				{{-- Multi-currency information --}}
+				@if(!empty($receipt_details->is_multi_currency) && $receipt_details->is_multi_currency)
+					<br><b>Moneda:</b> {{$receipt_details->transaction_currency['code']}}
+					<br><b>Tasa:</b> 1 {{$receipt_details->transaction_currency['code']}} = {{number_format($receipt_details->transaction_currency['exchange_rate'], 2)}} {{$receipt_details->currency['symbol']}}
+				@endif
+
 				@if(!empty($receipt_details->brand_label) || !empty($receipt_details->repair_brand))
 					<br>
 					@if(!empty($receipt_details->brand_label))
@@ -604,6 +610,20 @@
 							@endif
 						</td>
 					</tr>
+					
+					{{-- Multi-currency: Show equivalent in base currency --}}
+					@if(!empty($receipt_details->is_multi_currency) && $receipt_details->is_multi_currency)
+						<tr style="border-top: 2px solid #ddd;">
+							<td colspan="2" class="text-center">
+								<small><i>
+									Transacción en {{$receipt_details->transaction_currency['code']}}
+									<br>
+									Equivalente: {{$receipt_details->total}} {{$receipt_details->transaction_currency['code']}} 
+									= {{$receipt_details->total_in_base_currency}} {{$receipt_details->currency['symbol']}}
+								</i></small>
+							</td>
+						</tr>
+					@endif
 				</tbody>
         	</table>
         </div>
