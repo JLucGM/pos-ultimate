@@ -402,4 +402,41 @@ class AppointmentController extends Controller
 
         return response()->json($output);
     }
+
+    public function changeStatus(Request $request, $id)
+    {
+        try {
+            $business_id = request()->session()->get('user.business_id');
+            
+            $appointment = Appointment::where('business_id', $business_id)->findOrFail($id);
+            
+            $new_status = $request->status;
+            
+            // Actualizar el estado directamente sin validación de transiciones
+            $appointment->status = $new_status;
+            $appointment->save();
+            
+            $status_names = [
+                'reserved' => 'Reservada',
+                'waiting' => 'En Espera',
+                'in_service' => 'Atendiendo',
+                'completed' => 'Atendido',
+                'cancelled' => 'Cancelada',
+            ];
+            
+            $output = [
+                'success' => true,
+                'msg' => 'Estado cambiado a: ' . ($status_names[$new_status] ?? $new_status)
+            ];
+        } catch (\Exception $e) {
+            \Log::emergency("File:" . $e->getFile() . " Line:" . $e->getLine() . " Message:" . $e->getMessage());
+            
+            $output = [
+                'success' => false,
+                'msg' => 'Error al cambiar el estado: ' . $e->getMessage()
+            ];
+        }
+
+        return response()->json($output);
+    }
 }
