@@ -292,11 +292,22 @@ class ProductionOrderController extends Controller
 
     public function getRecipeDetails($id)
     {
-        $recipe = MfgRecipe::with(['product', 'ingredients.product'])->findOrFail($id);
-        
-        return response()->json([
-            'success' => true,
-            'recipe' => $recipe
-        ]);
+        try {
+            $business_id = request()->session()->get('user.business_id');
+            
+            $recipe = MfgRecipe::where('business_id', $business_id)
+                ->with(['product', 'ingredients.product', 'ingredients.unit'])
+                ->findOrFail($id);
+            
+            return response()->json([
+                'success' => true,
+                'recipe' => $recipe
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Error al obtener detalles de la receta'
+            ]);
+        }
     }
 }

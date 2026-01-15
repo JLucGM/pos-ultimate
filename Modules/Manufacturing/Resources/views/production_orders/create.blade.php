@@ -7,7 +7,7 @@
 </section>
 
 <section class="content">
-    {!! Form::open(['action' => '\Modules\Manufacturing\Http\Controllers\ProductionOrderController@store', 'method' => 'post']) !!}
+    {!! Form::open(['url' => action([\Modules\Manufacturing\Http\Controllers\ProductionOrderController::class, 'store']), 'method' => 'post']) !!}
     
     @component('components.widget', ['class' => 'box-primary'])
         <div class="row">
