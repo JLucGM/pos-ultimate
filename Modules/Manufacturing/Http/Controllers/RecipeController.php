@@ -159,7 +159,7 @@ class RecipeController extends Controller
 
             $output = [
                 'success' => true,
-                'msg' => 'Receta creada exitosamente'
+                'msg' => 'Proceso creado exitosamente'
             ];
         } catch (\Exception $e) {
             DB::rollBack();
@@ -167,7 +167,7 @@ class RecipeController extends Controller
             
             $output = [
                 'success' => false,
-                'msg' => 'Error al crear la receta: ' . $e->getMessage()
+                'msg' => 'Error al crear el proceso: ' . $e->getMessage()
             ];
         }
 
@@ -288,7 +288,7 @@ class RecipeController extends Controller
 
             $output = [
                 'success' => true,
-                'msg' => 'Receta actualizada exitosamente'
+                'msg' => 'Proceso actualizado exitosamente'
             ];
         } catch (\Exception $e) {
             DB::rollBack();
@@ -296,7 +296,7 @@ class RecipeController extends Controller
             
             $output = [
                 'success' => false,
-                'msg' => 'Error al actualizar la receta: ' . $e->getMessage()
+                'msg' => 'Error al actualizar el proceso: ' . $e->getMessage()
             ];
         }
 
@@ -317,14 +317,14 @@ class RecipeController extends Controller
 
             $output = [
                 'success' => true,
-                'msg' => 'Receta eliminada exitosamente'
+                'msg' => 'Proceso eliminado exitosamente'
             ];
         } catch (\Exception $e) {
             \Log::emergency("File:" . $e->getFile() . " Line:" . $e->getLine() . " Message:" . $e->getMessage());
             
             $output = [
                 'success' => false,
-                'msg' => 'Error al eliminar la receta'
+                'msg' => 'Error al eliminar el proceso'
             ];
         }
 

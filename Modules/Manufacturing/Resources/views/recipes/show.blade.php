@@ -1,9 +1,9 @@
 @extends('layouts.app')
-@section('title', 'Detalle de Receta')
+@section('title', 'Detalle de Proceso')
 
 @section('content')
 <section class="content-header">
-    <h1>Receta: {{ $recipe->name }}</h1>
+    <h1>Proceso: {{ $recipe->name }}</h1>
 </section>
 
 <section class="content">
@@ -105,7 +105,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="5" class="text-right">Costo Total de la Receta:</th>
+                        <th colspan="5" class="text-right">Costo Total del Proceso:</th>
                         <th><span class="display_currency" data-currency_symbol="true">{{ $recipe->total_cost }}</span></th>
                     </tr>
                 </tfoot>

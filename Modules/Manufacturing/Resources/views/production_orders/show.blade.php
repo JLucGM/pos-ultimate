@@ -16,7 +16,7 @@
                         <td>{{ $order->ref_no }}</td>
                     </tr>
                     <tr>
-                        <th>Receta:</th>
+                        <th>Proceso:</th>
                         <td>{{ $order->recipe->name }}</td>
                     </tr>
                     <tr>

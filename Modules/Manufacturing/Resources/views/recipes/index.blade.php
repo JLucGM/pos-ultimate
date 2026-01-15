@@ -1,10 +1,10 @@
 @extends('layouts.app')
-@section('title', 'Recetas de Producción')
+@section('title', 'Procesos de Producción')
 
 @section('content')
 <section class="content-header">
-    <h1>Recetas de Producción
-        <small>Gestiona las recetas de productos</small>
+    <h1>Procesos de Producción
+        <small>Gestiona los procesos de productos</small>
     </h1>
 </section>
 

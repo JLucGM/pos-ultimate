@@ -13,8 +13,8 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    {!! Form::label('recipe_id', 'Receta *') !!}
-                    {!! Form::select('recipe_id', $recipes, null, ['class' => 'form-control select2', 'required', 'placeholder' => 'Seleccione una receta', 'id' => 'recipe_id']) !!}
+                    {!! Form::label('recipe_id', 'Proceso *') !!}
+                    {!! Form::select('recipe_id', $recipes, null, ['class' => 'form-control select2', 'required', 'placeholder' => 'Seleccione un proceso', 'id' => 'recipe_id']) !!}
                 </div>
             </div>
             
@@ -53,7 +53,7 @@
 
         <div id="recipe_details" style="display:none;">
             <hr>
-            <h4>Detalles de la Receta</h4>
+            <h4>Detalles del Proceso</h4>
             <div class="row">
                 <div class="col-md-12">
                     <table class="table table-bordered">

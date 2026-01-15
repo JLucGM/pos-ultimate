@@ -900,7 +900,7 @@ class AdminSidebarMenu
                         if (auth()->user()->can('manufacturing.view')) {
                             $sub->url(
                                 action([\Modules\Manufacturing\Http\Controllers\RecipeController::class, 'index']),
-                                __('Recetas'),
+                                __('Procesos'),
                                 ['icon' => '', 'active' => request()->segment(1) == 'manufacturing' && request()->segment(2) == 'recipes']
                             );
                         }

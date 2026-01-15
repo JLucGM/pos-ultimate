@@ -1,9 +1,9 @@
 @extends('layouts.app')
-@section('title', 'Nueva Receta')
+@section('title', 'Nuevo Proceso')
 
 @section('content')
 <section class="content-header">
-    <h1>Nueva Receta de Producción</h1>
+    <h1>Nuevo Proceso de Producción</h1>
 </section>
 
 <section class="content">
@@ -20,7 +20,7 @@
             
             <div class="col-md-6">
                 <div class="form-group">
-                    {!! Form::label('name', 'Nombre de la Receta *') !!}
+                    {!! Form::label('name', 'Nombre del Proceso *') !!}
                     {!! Form::text('name', null, ['class' => 'form-control', 'required']) !!}
                 </div>
             </div>
@@ -65,7 +65,7 @@
                 <div class="form-group">
                     <div class="checkbox">
                         <label>
-                            {!! Form::checkbox('is_active', 1, true) !!} Receta Activa
+                            {!! Form::checkbox('is_active', 1, true) !!} Proceso Activo
                         </label>
                     </div>
                 </div>
@@ -99,7 +99,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="3" class="text-right">Costo Total de la Receta:</th>
+                        <th colspan="3" class="text-right">Costo Total del Proceso:</th>
                         <th><span id="recipe_total_cost">0.00</span></th>
                         <th></th>
                     </tr>
@@ -109,7 +109,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <button type="submit" class="btn btn-primary">Guardar Receta</button>
+                <button type="submit" class="btn btn-primary">Guardar Proceso</button>
                 <a href="{{ action([\Modules\Manufacturing\Http\Controllers\RecipeController::class, 'index']) }}" class="btn btn-default">Cancelar</a>
             </div>
         </div>
