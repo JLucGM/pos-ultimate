@@ -1,0 +1,11 @@
+{
+    "name": "Consultorio",
+    "alias": "consultorio",
+    "description": "Módulo de gestión de consultorios médicos y salones de belleza",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Consultorio\\Providers\\ConsultorioServiceProvider"
+    ],
+    "files": []
+}

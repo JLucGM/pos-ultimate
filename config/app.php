@@ -199,6 +199,10 @@ return [
         ConsoleTVs\Charts\ChartsServiceProvider::class,
         Nwidart\Menus\MenusServiceProvider::class,
         Knox\Pesapal\PesapalServiceProvider::class,
+        
+        // Módulos personalizados
+        Modules\Manufacturing\Providers\ManufacturingServiceProvider::class,
+        Modules\Consultorio\Providers\ConsultorioServiceProvider::class,
     ],
 
     /*

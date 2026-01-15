@@ -505,6 +505,10 @@ class ModuleUtil extends Util
             'manufacturing' => ['name' => 'Producción',
                 'tooltip' => 'Gestiona procesos de producción y órdenes de manufactura',
             ],
+            'consultorio' => [
+                'name' => 'Consultorio',
+                'tooltip' => 'Gestión de citas para consultorios médicos y salones de belleza',
+            ],
         ];
     }
 

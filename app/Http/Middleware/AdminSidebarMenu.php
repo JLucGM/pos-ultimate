@@ -920,6 +920,33 @@ class AdminSidebarMenu
                   </svg>']
                 )->order(50);
             }
+
+            //Consultorio dropdown
+            if (in_array('consultorio', $enabled_modules) && auth()->user()->can('consultorio.view')) {
+                $menu->dropdown(
+                    'Consultorio',
+                    function ($sub) {
+                        if (auth()->user()->can('consultorio.view')) {
+                            $sub->url(
+                                action([\Modules\Consultorio\Http\Controllers\AppointmentController::class, 'index']),
+                                'Citas',
+                                ['icon' => '', 'active' => request()->segment(1) == 'consultorio' && request()->segment(2) == 'appointments']
+                            );
+                        }
+                        if (auth()->user()->can('consultorio.view')) {
+                            $sub->url(
+                                action([\Modules\Consultorio\Http\Controllers\WaitingRoomController::class, 'index']),
+                                'Sala de Espera',
+                                ['icon' => '', 'active' => request()->segment(1) == 'consultorio' && request()->segment(2) == 'waiting-room']
+                            );
+                        }
+                    },
+                    ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" class="tw-size-5 tw-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 11l3 3L22 4"></path>
+                    <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
+                  </svg>']
+                )->order(55);
+            }
         });
 
         //Add menus from modules
