@@ -282,12 +282,32 @@ class HomeController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->first();
             
-            $data['tasa_cambio'] = [
-                'from' => $usd_currency->code,
-                'to' => $base_currency->code,
-                'rate' => $exchange_rate ? $exchange_rate->exchange_rate : 1,
-                'updated_at' => $exchange_rate ? $exchange_rate->updated_at->diffForHumans() : null
-            ];
+            if (!$exchange_rate) {
+                // Intentar buscar en dirección inversa
+                $exchange_rate = \App\Models\ExchangeRate::where('from_currency_id', $base_currency->id)
+                    ->where('to_currency_id', $usd_currency->id)
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+                
+                if ($exchange_rate) {
+                    // Invertir la tasa
+                    $data['tasa_cambio'] = [
+                        'from' => $usd_currency->code,
+                        'to' => $base_currency->code,
+                        'rate' => 1 / $exchange_rate->rate,
+                        'updated_at' => $exchange_rate->updated_at->diffForHumans()
+                    ];
+                } else {
+                    $data['tasa_cambio'] = null;
+                }
+            } else {
+                $data['tasa_cambio'] = [
+                    'from' => $usd_currency->code,
+                    'to' => $base_currency->code,
+                    'rate' => $exchange_rate->rate,
+                    'updated_at' => $exchange_rate->updated_at->diffForHumans()
+                ];
+            }
         } else {
             $data['tasa_cambio'] = null;
         }

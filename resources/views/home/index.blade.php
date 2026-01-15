@@ -216,31 +216,31 @@
                                 Resumen Multimoneda
                             </h3>
                             
-                            <div class="tw-grid tw-grid-cols-1 tw-gap-4 sm:tw-grid-cols-2 xl:tw-grid-cols-3 sm:tw-gap-5">
+                            <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-4 sm:tw-gap-5">
                                 {{-- Tasa de Cambio Actual --}}
                                 @if(!empty($multimoneda_data['tasa_cambio']))
-                                <div class="tw-transition-all tw-duration-200 tw-bg-gradient-to-br tw-from-purple-500 tw-to-purple-700 tw-shadow-lg hover:tw-shadow-xl tw-rounded-xl tw-ring-1 tw-ring-purple-400">
+                                <div class="tw-transition-all tw-duration-200 tw-bg-white tw-shadow-sm hover:tw-shadow-md tw-rounded-xl tw-ring-1 tw-ring-gray-200">
                                     <div class="tw-p-4 sm:tw-p-5">
-                                        <div class="tw-flex tw-items-center tw-justify-between">
-                                            <div>
-                                                <p class="tw-text-sm tw-font-medium tw-text-purple-100 tw-mb-1">
+                                        <div class="tw-flex tw-items-center tw-gap-4">
+                                            <div class="tw-inline-flex tw-items-center tw-justify-center tw-w-10 tw-h-10 tw-rounded-full sm:tw-w-12 sm:tw-h-12 tw-shrink-0 tw-bg-sky-100 tw-text-sky-500">
+                                                <i class="fas fa-exchange-alt tw-text-lg"></i>
+                                            </div>
+                                            <div class="tw-flex-1 tw-min-w-0">
+                                                <p class="tw-text-sm tw-font-medium tw-text-gray-500 tw-truncate tw-whitespace-nowrap">
                                                     Tasa de Cambio
                                                 </p>
-                                                <p class="tw-text-3xl tw-font-bold tw-text-white tw-font-mono">
+                                                <p class="tw-mt-0.5 tw-text-gray-900 tw-text-xl tw-truncate tw-font-semibold tw-tracking-tight tw-font-mono">
                                                     {{ number_format($multimoneda_data['tasa_cambio']['rate'], 2) }}
                                                 </p>
-                                                <p class="tw-text-xs tw-text-purple-200 tw-mt-1">
+                                                <p class="tw-text-xs tw-text-gray-500 tw-mt-1">
                                                     1 {{ $multimoneda_data['tasa_cambio']['from'] }} = {{ number_format($multimoneda_data['tasa_cambio']['rate'], 2) }} {{ $multimoneda_data['tasa_cambio']['to'] }}
                                                 </p>
                                                 @if($multimoneda_data['tasa_cambio']['updated_at'])
-                                                <p class="tw-text-xs tw-text-purple-300 tw-mt-2">
+                                                <p class="tw-text-xs tw-text-gray-400 tw-mt-1">
                                                     <i class="fas fa-clock tw-mr-1"></i>
-                                                    Actualizado {{ $multimoneda_data['tasa_cambio']['updated_at'] }}
+                                                    {{ $multimoneda_data['tasa_cambio']['updated_at'] }}
                                                 </p>
                                                 @endif
-                                            </div>
-                                            <div class="tw-inline-flex tw-items-center tw-justify-center tw-w-16 tw-h-16 tw-bg-white/20 tw-rounded-full">
-                                                <i class="fas fa-exchange-alt tw-text-3xl tw-text-white"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -267,7 +267,7 @@
                                                     {{ $venta['cantidad'] }} {{ $venta['cantidad'] == 1 ? 'venta' : 'ventas' }}
                                                 </span>
                                             </div>
-                                            <span class="tw-text-lg tw-font-bold tw-text-gray-900 tw-font-mono">
+                                            <span class="tw-text-base tw-font-bold tw-text-gray-900 tw-font-mono">
                                                 {{ $venta['currency_code'] }} {{ number_format($venta['total'], 2) }}
                                             </span>
                                         </div>
@@ -296,7 +296,7 @@
                                                     {{ $venta['cantidad'] }} {{ $venta['cantidad'] == 1 ? 'venta' : 'ventas' }}
                                                 </span>
                                             </div>
-                                            <span class="tw-text-lg tw-font-bold tw-text-gray-900 tw-font-mono">
+                                            <span class="tw-text-base tw-font-bold tw-text-gray-900 tw-font-mono">
                                                 {{ $venta['currency_code'] }} {{ number_format($venta['total'], 2) }}
                                             </span>
                                         </div>
