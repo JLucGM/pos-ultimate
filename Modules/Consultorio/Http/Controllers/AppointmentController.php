@@ -112,7 +112,11 @@ class AppointmentController extends Controller
                 return [$user->id => $user->first_name . ' ' . $user->last_name];
             });
 
-        return view('consultorio::appointments.index', compact('business_locations', 'customers', 'staff'));
+        // Variables para el modal de creación de contactos
+        $types = Contact::getContactTypes();
+        $customer_groups = \App\CustomerGroup::forDropdown($business_id);
+
+        return view('consultorio::appointments.index', compact('business_locations', 'customers', 'staff', 'types', 'customer_groups'));
     }
 
     public function create()
