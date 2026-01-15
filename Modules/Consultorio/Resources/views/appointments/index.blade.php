@@ -128,6 +128,12 @@ $(document).ready(function(){
             element.attr('data-container', '.view_modal');
             element.addClass('btn-modal');
         },
+        eventClick: function(event, jsEvent, view) {
+            // Cargar el modal con los detalles de la cita
+            $('div.view_modal').load(event.url, function(){
+                $(this).modal('show');
+            });
+        },
         dayClick: function(date, jsEvent, view) {
             clickCount++;
             if(clickCount == 2){
