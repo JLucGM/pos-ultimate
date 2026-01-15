@@ -22,7 +22,7 @@ class WaitingRoomController extends Controller
         
         $appointments = Appointment::where('business_id', $business_id)
             ->whereBetween('appointment_datetime', [$today, $tomorrow])
-            ->whereIn('status', ['reserved', 'waiting', 'attending'])
+            ->whereIn('status', ['reserved', 'waiting', 'in_service'])
             ->with(['contact', 'assignedTo', 'location'])
             ->orderBy('appointment_datetime')
             ->get();
@@ -39,7 +39,7 @@ class WaitingRoomController extends Controller
         
         $appointments = Appointment::where('business_id', $business_id)
             ->whereBetween('appointment_datetime', [$today, $tomorrow])
-            ->whereIn('status', ['reserved', 'waiting', 'attending'])
+            ->whereIn('status', ['reserved', 'waiting', 'in_service'])
             ->with(['contact', 'assignedTo'])
             ->orderBy('appointment_datetime')
             ->get();
