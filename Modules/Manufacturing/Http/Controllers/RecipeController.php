@@ -118,10 +118,30 @@ class RecipeController extends Controller
             if ($request->has('ingredients')) {
                 foreach ($request->ingredients as $index => $ingredient) {
                     if (!empty($ingredient['product_id']) && !empty($ingredient['quantity'])) {
+                        // Obtener la primera variación del producto
+                        $product = Product::find($ingredient['product_id']);
+                        $variation_id = null;
+                        
+                        if ($product) {
+                            $product_variation = \DB::table('product_variations')
+                                ->where('product_id', $product->id)
+                                ->first();
+                            
+                            if ($product_variation) {
+                                $variation = \DB::table('variations')
+                                    ->where('product_variation_id', $product_variation->id)
+                                    ->first();
+                                
+                                if ($variation) {
+                                    $variation_id = $variation->id;
+                                }
+                            }
+                        }
+                        
                         MfgRecipeIngredient::create([
                             'recipe_id' => $recipe->id,
                             'ingredient_product_id' => $ingredient['product_id'],
-                            'variation_id' => $ingredient['variation_id'] ?? null,
+                            'variation_id' => $variation_id,
                             'quantity' => $ingredient['quantity'],
                             'unit_id' => $ingredient['unit_id'] ?? null,
                             'cost_per_unit' => $ingredient['cost_per_unit'] ?? 0,
@@ -227,10 +247,30 @@ class RecipeController extends Controller
             if ($request->has('ingredients')) {
                 foreach ($request->ingredients as $index => $ingredient) {
                     if (!empty($ingredient['product_id']) && !empty($ingredient['quantity'])) {
+                        // Obtener la primera variación del producto
+                        $product = Product::find($ingredient['product_id']);
+                        $variation_id = null;
+                        
+                        if ($product) {
+                            $product_variation = \DB::table('product_variations')
+                                ->where('product_id', $product->id)
+                                ->first();
+                            
+                            if ($product_variation) {
+                                $variation = \DB::table('variations')
+                                    ->where('product_variation_id', $product_variation->id)
+                                    ->first();
+                                
+                                if ($variation) {
+                                    $variation_id = $variation->id;
+                                }
+                            }
+                        }
+                        
                         MfgRecipeIngredient::create([
                             'recipe_id' => $recipe->id,
                             'ingredient_product_id' => $ingredient['product_id'],
-                            'variation_id' => $ingredient['variation_id'] ?? null,
+                            'variation_id' => $variation_id,
                             'quantity' => $ingredient['quantity'],
                             'unit_id' => $ingredient['unit_id'] ?? null,
                             'cost_per_unit' => $ingredient['cost_per_unit'] ?? 0,
