@@ -893,7 +893,7 @@ class AdminSidebarMenu
             }
 
             //Manufacturing dropdown
-            if (auth()->user()->can('manufacturing.view')) {
+            if (in_array('manufacturing', $enabled_modules) && auth()->user()->can('manufacturing.view')) {
                 $menu->dropdown(
                     __('Producción'),
                     function ($sub) {

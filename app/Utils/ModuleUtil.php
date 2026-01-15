@@ -502,6 +502,9 @@ class ModuleUtil extends Util
             'types_of_service' => ['name' => __('lang_v1.types_of_service'),
                 'tooltip' => __('lang_v1.types_of_service_help_long'),
             ],
+            'manufacturing' => ['name' => 'Producción',
+                'tooltip' => 'Gestiona procesos de producción y órdenes de manufactura',
+            ],
         ];
     }
 
