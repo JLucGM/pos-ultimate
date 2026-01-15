@@ -1,0 +1,75 @@
+========================================
+COMANDOS PARA DEPLOYMENT DEL MÓDULO CONSULTORIO
+========================================
+
+EJECUTAR EN EL SERVIDOR (SSH):
+-------------------------------
+
+1. Conectarse al servidor:
+   ssh root@detodito
+
+2. Ir al directorio del proyecto:
+   cd /home/audaz.site/public_html
+
+3. Ejecutar el script de deployment:
+   bash deploy-consultorio.sh
+
+4. Agregar permisos a la base de datos:
+   mysql -u root -p audaz_pos < add-consultorio-permissions.sql
+   
+   (Cuando pida la contraseña, ingresarla)
+
+5. Verificar que no haya errores:
+   tail -50 storage/logs/laravel.log
+
+========================================
+CONFIGURACIÓN EN LA INTERFAZ WEB
+========================================
+
+1. Ir a: https://audaz.site/business-settings
+
+2. Click en la pestaña "Módulos"
+
+3. Buscar "Consultorio" en la lista
+
+4. Activar el checkbox
+
+5. Click en "Guardar"
+
+6. Refrescar la página (F5)
+
+7. Verificar que aparezca "Consultorio" en el menú lateral
+
+========================================
+VERIFICACIÓN
+========================================
+
+1. Click en "Consultorio" en el menú
+
+2. Deberías ver la lista de citas vacía
+
+3. Click en "Nueva Cita"
+
+4. Llenar el formulario y guardar
+
+5. Verificar que se cree correctamente
+
+========================================
+SOLUCIÓN DE PROBLEMAS
+========================================
+
+Si no aparece el módulo en el menú:
+- Limpiar caché: php artisan optimize:clear
+- Verificar permisos: ls -la storage/logs/
+- Revisar logs: tail -50 storage/logs/laravel.log
+
+Si hay error de permisos:
+- chmod -R 777 storage bootstrap/cache
+- chown -R www-data:www-data storage bootstrap/cache
+
+Si la migración falla:
+- Verificar que la tabla no exista: 
+  mysql -u root -p audaz_pos -e "SHOW TABLES LIKE 'appointments';"
+- Si existe, eliminarla primero o usar --force
+
+========================================
