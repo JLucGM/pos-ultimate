@@ -1,0 +1,69 @@
+========================================
+ALTERNATIVAS PARA AGREGAR PERMISOS
+========================================
+
+OPCIÓN 1: Usando Tinker (MÁS FÁCIL) ✅
+--------------------------------------
+Ejecutar en el servidor:
+
+cd /home/audaz.site/public_html
+php artisan tinker
+
+Luego copiar y pegar esto:
+
+$permissions = ['consultorio.view', 'consultorio.create', 'consultorio.edit', 'consultorio.delete'];
+foreach ($permissions as $p) { \Spatie\Permission\Models\Permission::firstOrCreate(['name' => $p, 'guard_name' => 'web']); }
+$admin = \Spatie\Permission\Models\Role::where('name', 'like', 'Admin#%')->first();
+$admin->givePermissionTo($permissions);
+echo "✅ Permisos agregados";
+exit
+
+
+OPCIÓN 2: Usando el archivo PHP
+--------------------------------
+cd /home/audaz.site/public_html
+php artisan tinker < agregar-permisos-consultorio.php
+
+
+OPCIÓN 3: MySQL directo (línea por línea)
+------------------------------------------
+mysql -u root -p audaz_pos
+
+Luego ejecutar:
+
+INSERT INTO permissions (name, guard_name, created_at, updated_at) VALUES ('consultorio.view', 'web', NOW(), NOW());
+INSERT INTO permissions (name, guard_name, created_at, updated_at) VALUES ('consultorio.create', 'web', NOW(), NOW());
+INSERT INTO permissions (name, guard_name, created_at, updated_at) VALUES ('consultorio.edit', 'web', NOW(), NOW());
+INSERT INTO permissions (name, guard_name, created_at, updated_at) VALUES ('consultorio.delete', 'web', NOW(), NOW());
+
+exit
+
+
+OPCIÓN 4: Desde phpMyAdmin (si tienes acceso)
+----------------------------------------------
+1. Ir a phpMyAdmin
+2. Seleccionar base de datos: audaz_pos
+3. Click en pestaña "SQL"
+4. Pegar el contenido de add-consultorio-permissions.sql
+5. Click en "Continuar"
+
+
+OPCIÓN 5: Crear un Seeder (para futuro)
+----------------------------------------
+php artisan make:seeder ConsultorioPermissionsSeeder
+
+Editar el seeder y luego:
+php artisan db:seed --class=ConsultorioPermissionsSeeder
+
+
+========================================
+RECOMENDACIÓN
+========================================
+
+La OPCIÓN 1 (Tinker) es la más fácil y segura porque:
+- No necesitas conocer la estructura de la BD
+- Usa el ORM de Laravel
+- Evita duplicados automáticamente
+- Asigna permisos al rol Admin automáticamente
+
+========================================
