@@ -125,10 +125,25 @@ $(document).ready(function(){
             element.addClass('btn-modal');
         },
         eventClick: function(event, jsEvent, view) {
+            // Prevenir el comportamiento por defecto
+            jsEvent.preventDefault();
+            
             // Cargar el modal con los detalles de la cita
-            $('div.view_modal').load(event.url, function(){
-                $(this).modal('show');
+            $.ajax({
+                url: event.url,
+                type: 'GET',
+                dataType: 'html',
+                success: function(response) {
+                    $('div.view_modal').html(response);
+                    $('div.view_modal').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading appointment:', error);
+                    toastr.error('Error al cargar los detalles de la cita');
+                }
             });
+            
+            return false;
         },
         dayClick: function(date, jsEvent, view) {
             clickCount++;

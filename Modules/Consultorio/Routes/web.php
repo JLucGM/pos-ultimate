@@ -14,6 +14,7 @@ Route::middleware(['web', 'auth', 'SetSessionData', 'language', 'timezone', 'Adm
     Route::get('/appointments/{id}', [AppointmentController::class, 'show'])->name('consultorio.appointments.show');
     Route::get('/appointments/{id}/edit', [AppointmentController::class, 'edit'])->name('consultorio.appointments.edit');
     Route::put('/appointments/{id}', [AppointmentController::class, 'update'])->name('consultorio.appointments.update');
+    Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy'])->name('consultorio.appointments.destroy');
     Route::post('/appointments/{id}/cancel', [AppointmentController::class, 'cancel'])->name('consultorio.appointments.cancel');
     Route::post('/appointments/{id}/change-status', [AppointmentController::class, 'changeStatus'])->name('consultorio.appointments.changeStatus');
     
