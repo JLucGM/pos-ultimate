@@ -73,7 +73,7 @@ return [
     'start_time' => 'Start time',
     'end_time' => 'End time',
     'booking_not_available' => 'Table already booked for <b>:customer_name</b> between <b>:booking_time_range</b>',
-    'select_correspondent' => 'Select correspondent',
+    'select_correspondent' => 'Seleccionar responsable',
     'send_notification_to_customer' => 'Send Email/SMS notification to customer',
     'booking_details' => 'Booking Details',
     'correspondent' => 'Correspondent',

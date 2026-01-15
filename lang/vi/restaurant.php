@@ -73,7 +73,7 @@ return [
     'start_time' => 'Bắt đầu',
     'end_time' => 'Kết thúc',
     'booking_not_available' => 'Bàn đã được đặt cho <b>:customer_name</b> giữa <b>:booking_time_range</b>',
-    'select_correspondent' => 'Select correspondent',
+    'select_correspondent' => 'Seleccionar responsable',
     'send_notification_to_customer' => 'Gửi thông báo Email / SMS cho khách hàng',
     'booking_details' => 'Chi tiết đặt phòng',
     'correspondent' => 'Correspondent',
