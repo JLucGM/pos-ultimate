@@ -895,7 +895,7 @@ class AdminSidebarMenu
             //Manufacturing dropdown
             if (auth()->user()->can('manufacturing.view')) {
                 $menu->dropdown(
-                    __('Manufacturing'),
+                    __('Producción'),
                     function ($sub) {
                         if (auth()->user()->can('manufacturing.view')) {
                             $sub->url(
