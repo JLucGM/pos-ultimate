@@ -27,8 +27,17 @@ chown -R www-data:www-data storage bootstrap/cache
 echo "✅ Permisos configurados"
 echo ""
 
-# 3. Ejecutar migraciones
-echo "3. Ejecutando migraciones..."
+# 3. Limpiar caché
+echo "3. Limpiando caché..."
+php artisan cache:clear
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+echo "✅ Caché limpiado"
+echo ""
+
+# 4. Ejecutar migraciones
+echo "4. Ejecutando migraciones..."
 php artisan migrate --force
 
 if [ $? -ne 0 ]; then
@@ -37,15 +46,6 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "✅ Migraciones ejecutadas"
-echo ""
-
-# 4. Limpiar caché
-echo "4. Limpiando caché..."
-php artisan optimize:clear
-php artisan config:clear
-php artisan route:clear
-php artisan view:clear
-echo "✅ Caché limpiado"
 echo ""
 
 # 5. Optimizar
@@ -76,3 +76,12 @@ echo "2. Ir a Configuración → Módulos"
 echo "3. Habilitar el módulo 'Consultorio'"
 echo "4. Verificar que aparezca en el menú lateral"
 echo ""
+echo "CARACTERÍSTICAS DEL MÓDULO:"
+echo "- Calendario interactivo estilo Restaurant"
+echo "- Gestión completa de citas"
+echo "- Creación rápida de clientes con nombre, apellido y teléfono"
+echo "- Tipo de servicio requerido"
+echo "- Sala de espera en tiempo real"
+echo "- Estados: Reservada → En Espera → Atendiendo → Atendido"
+echo ""
+
