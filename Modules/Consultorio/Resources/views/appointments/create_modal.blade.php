@@ -18,11 +18,12 @@
                             <div class="input-group">
                                 {!! Form::select('contact_id', $customers, null, ['class' => 'form-control select2', 'placeholder' => 'Seleccionar cliente', 'required', 'style' => 'width: 100%;', 'id' => 'contact_id']) !!}
                                 <span class="input-group-btn">
-                                    <button type="button" class="btn btn-info btn-flat add_new_customer">
+                                    <a href="{{ action([\App\Http\Controllers\ContactController::class, 'create']) }}?type=customer" target="_blank" class="btn btn-info btn-flat" title="Agregar nuevo cliente">
                                         <i class="fa fa-plus"></i>
-                                    </button>
+                                    </a>
                                 </span>
                             </div>
+                            <small class="text-muted">Si necesitas crear un cliente nuevo, haz click en el botón + (se abrirá en nueva pestaña)</small>
                         </div>
                     </div>
                 </div>

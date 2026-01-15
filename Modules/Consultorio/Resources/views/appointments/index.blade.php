@@ -97,10 +97,6 @@
     @include('consultorio::appointments.create_modal')
 </section>
 
-<div class="modal fade contact_modal" tabindex="-1" role="dialog">
-    @include('contact.create', ['quick_add' => true])
-</div>
-
 <div class="modal fade view_modal" tabindex="-1" role="dialog"></div>
 
 @endsection
@@ -309,55 +305,6 @@ $(document).ready(function(){
         $('#calendar').fullCalendar('addEventSource', events_source);         
         $('#calendar').fullCalendar('refetchEvents');
     }
-
-    $(document).on('click', '.add_new_customer', function() {
-        $('.contact_modal')
-            .find('select#contact_type')
-            .val('customer')
-            .closest('div.contact_type_div')
-            .addClass('hide');
-        $('.contact_modal').modal('show');
-    });
-
-    $('form#quick_add_contact')
-        .submit(function(e) {
-            e.preventDefault();
-        })
-        .validate({
-            submitHandler: function(form) {
-                var data = $(form).serialize();
-                $.ajax({
-                    method: 'POST',
-                    url: $(form).attr('action'),
-                    dataType: 'json',
-                    data: data,
-                    beforeSend: function(xhr) {
-                        __disable_submit_button($(form).find('button[type="submit"]'));
-                    },
-                    success: function(result) {
-                        if (result.success == true) {
-                            $('select#contact_id').append(
-                                $('<option>', { value: result.data.id, text: result.data.name })
-                            );
-                            $('select#contact_id')
-                                .val(result.data.id)
-                                .trigger('change');
-                            $('div.contact_modal').modal('hide');
-                            toastr.success(result.msg);
-                        } else {
-                            toastr.error(result.msg);
-                        }
-                    },
-                });
-            },
-        });
-
-    $('.contact_modal').on('hidden.bs.modal', function() {
-        $('form#quick_add_contact')
-            .find('button[type="submit"]')
-            .removeAttr('disabled');
-        $('form#quick_add_contact')[0].reset();
-    });
 });
 </script>
 @endsection
