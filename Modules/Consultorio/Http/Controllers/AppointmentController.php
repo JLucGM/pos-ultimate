@@ -48,15 +48,17 @@ class AppointmentController extends Controller
 
             $events = [];
             foreach ($appointments->get() as $appointment) {
-                $color = '#f39c12'; // yellow - reserved
-                if ($appointment->status == 'waiting') {
-                    $color = '#f39c12'; // yellow
+                $color = '#00a65a'; // green - default
+                if ($appointment->status == 'reserved') {
+                    $color = '#3c8dbc'; // blue - reservada
+                } elseif ($appointment->status == 'waiting') {
+                    $color = '#f39c12'; // orange - en espera
                 } elseif ($appointment->status == 'in_service') {
-                    $color = '#3c8dbc'; // blue
+                    $color = '#00c0ef'; // light blue - atendiendo
                 } elseif ($appointment->status == 'completed') {
-                    $color = '#00a65a'; // green
+                    $color = '#00a65a'; // green - completado
                 } elseif ($appointment->status == 'cancelled') {
-                    $color = '#dd4b39'; // red
+                    $color = '#dd4b39'; // red - cancelada
                 }
 
                 $events[] = [

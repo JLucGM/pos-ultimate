@@ -68,13 +68,13 @@
         <div class="col-sm-2">
             <div class="box box-solid">
                 <div class="box-body">
-                    <div class="external-event bg-yellow text-center" style="position: relative;">
+                    <div class="external-event bg-blue text-center" style="position: relative;">
                         <small>Reservada</small>
                     </div>
                     <div class="external-event bg-yellow text-center" style="position: relative;">
                         <small>En Espera</small>
                     </div>
-                    <div class="external-event bg-light-blue text-center" style="position: relative;">
+                    <div class="external-event bg-aqua text-center" style="position: relative;">
                         <small>Atendiendo</small>
                     </div>
                     <div class="external-event bg-green text-center" style="position: relative;">

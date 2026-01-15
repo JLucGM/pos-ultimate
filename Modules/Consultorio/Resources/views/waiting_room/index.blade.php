@@ -28,7 +28,7 @@
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#reserved" data-toggle="tab">Reservadas ({{ $appointments->where('status', 'reserved')->count() }})</a></li>
                         <li><a href="#waiting" data-toggle="tab">En Espera ({{ $appointments->where('status', 'waiting')->count() }})</a></li>
-                        <li><a href="#attending" data-toggle="tab">Atendiendo ({{ $appointments->where('status', 'attending')->count() }})</a></li>
+                        <li><a href="#in_service" data-toggle="tab">Atendiendo ({{ $appointments->where('status', 'in_service')->count() }})</a></li>
                     </ul>
                     <div class="tab-content" id="appointments_container">
                         <div class="tab-pane active" id="reserved">
@@ -37,8 +37,8 @@
                         <div class="tab-pane" id="waiting">
                             @include('consultorio::waiting_room.partials.appointments_list', ['filtered_appointments' => $appointments->where('status', 'waiting')])
                         </div>
-                        <div class="tab-pane" id="attending">
-                            @include('consultorio::waiting_room.partials.appointments_list', ['filtered_appointments' => $appointments->where('status', 'attending')])
+                        <div class="tab-pane" id="in_service">
+                            @include('consultorio::waiting_room.partials.appointments_list', ['filtered_appointments' => $appointments->where('status', 'in_service')])
                         </div>
                     </div>
                 </div>
@@ -77,7 +77,7 @@ $(document).ready(function() {
         var new_status = $(this).data('status');
         var status_names = {
             'waiting': 'En Espera',
-            'attending': 'Atendiendo',
+            'in_service': 'Atendiendo',
             'completed': 'Atendido',
             'cancelled': 'Cancelada'
         };

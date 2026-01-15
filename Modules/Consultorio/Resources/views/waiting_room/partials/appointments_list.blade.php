@@ -13,7 +13,7 @@
                         <span class="description">
                             <i class="fa fa-clock-o"></i> {{ $appointment->appointment_datetime->format('H:i') }}
                             @if($appointment->assignedTo)
-                                | <i class="fa fa-user"></i> {{ $appointment->assignedTo->user_full_name }}
+                                | <i class="fa fa-user"></i> {{ $appointment->assignedTo->first_name }} {{ $appointment->assignedTo->last_name }}
                             @endif
                         </span>
                     </div>
@@ -39,12 +39,12 @@
                     @endif
 
                     @if($appointment->status == 'waiting')
-                        <button type="button" class="btn btn-primary btn-sm change-status-btn" data-id="{{ $appointment->id }}" data-status="attending">
+                        <button type="button" class="btn btn-primary btn-sm change-status-btn" data-id="{{ $appointment->id }}" data-status="in_service">
                             <i class="fa fa-user-md"></i> Atendiendo
                         </button>
                     @endif
 
-                    @if($appointment->status == 'attending')
+                    @if($appointment->status == 'in_service')
                         <button type="button" class="btn btn-success btn-sm change-status-btn" data-id="{{ $appointment->id }}" data-status="completed">
                             <i class="fa fa-check"></i> Completar
                         </button>
