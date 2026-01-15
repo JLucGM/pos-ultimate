@@ -63,7 +63,7 @@ class Appointment extends Model
         $badges = [
             'reserved' => '<span class="label label-info">Reservada</span>',
             'waiting' => '<span class="label label-warning">En Espera</span>',
-            'attending' => '<span class="label label-primary">Atendiendo</span>',
+            'in_service' => '<span class="label label-primary">Atendiendo</span>',
             'completed' => '<span class="label label-success">Atendido</span>',
             'cancelled' => '<span class="label label-danger">Cancelada</span>',
         ];
@@ -76,7 +76,7 @@ class Appointment extends Model
         $names = [
             'reserved' => 'Reservada',
             'waiting' => 'En Espera',
-            'attending' => 'Atendiendo',
+            'in_service' => 'Atendiendo',
             'completed' => 'Atendido',
             'cancelled' => 'Cancelada',
         ];
@@ -105,8 +105,8 @@ class Appointment extends Model
     {
         $allowed_transitions = [
             'reserved' => ['waiting', 'cancelled'],
-            'waiting' => ['attending', 'cancelled'],
-            'attending' => ['completed', 'cancelled'],
+            'waiting' => ['in_service', 'cancelled'],
+            'in_service' => ['completed', 'cancelled'],
             'completed' => [],
             'cancelled' => [],
         ];

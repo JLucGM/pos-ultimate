@@ -211,27 +211,43 @@ class AppointmentController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $business_id = request()->session()->get('user.business_id');
-        
-        $appointment = Appointment::where('business_id', $business_id)
-            ->with(['contact', 'assignedTo', 'location', 'transaction', 'creator'])
-            ->findOrFail($id);
-
-        if (request()->ajax()) {
-            $appointment_datetime = $this->commonUtil->format_date($appointment->appointment_datetime, true);
+        try {
+            $business_id = request()->session()->get('user.business_id');
             
-            $appointment_statuses = [
-                'reserved' => 'Reservada',
-                'waiting' => 'En Espera',
-                'in_service' => 'Atendiendo',
-                'completed' => 'Atendido',
-                'cancelled' => 'Cancelada',
-            ];
+            $appointment = Appointment::where('business_id', $business_id)
+                ->with(['contact', 'assignedTo', 'location', 'transaction', 'creator'])
+                ->findOrFail($id);
 
-            return view('consultorio::appointments.show_modal', compact('appointment', 'appointment_datetime', 'appointment_statuses'));
+            if (request()->ajax()) {
+                $appointment_datetime = $this->commonUtil->format_date($appointment->appointment_datetime, true);
+                
+                $appointment_statuses = [
+                    'reserved' => 'Reservada',
+                    'waiting' => 'En Espera',
+                    'in_service' => 'Atendiendo',
+                    'completed' => 'Atendido',
+                    'cancelled' => 'Cancelada',
+                ];
+
+                return view('consultorio::appointments.show_modal', compact('appointment', 'appointment_datetime', 'appointment_statuses'));
+            }
+
+            return view('consultorio::appointments.show', compact('appointment'));
+        } catch (\Exception $e) {
+            \Log::emergency("File:" . $e->getFile() . " Line:" . $e->getLine() . " Message:" . $e->getMessage());
+            
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'msg' => 'Error al cargar la cita: ' . $e->getMessage()
+                ], 500);
+            }
+            
+            return redirect()->back()->with('status', [
+                'success' => false,
+                'msg' => 'Error al cargar la cita'
+            ]);
         }
-
-        return view('consultorio::appointments.show', compact('appointment'));
     }
 
     public function edit($id)
