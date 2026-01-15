@@ -28,16 +28,42 @@
                     <h3 class="box-title">Citas de Hoy</h3>
                 </div>
                 <div class="box-body">
-                    <table class="table table-bordered table-condensed" id="todays_appointments_table">
-                        <thead>
-                            <tr>
-                                <th>Paciente/Cliente</th>
-                                <th>Hora</th>
-                                <th>Asignado a</th>
-                                <th>Ubicación</th>
-                            </tr>
-                        </thead>
-                    </table>
+                    @php
+                        $today = \Carbon\Carbon::now()->format('Y-m-d');
+                        $todays_appointments = \Modules\Consultorio\Entities\Appointment::where('business_id', session('user.business_id'))
+                            ->whereDate('appointment_datetime', $today)
+                            ->whereIn('status', ['reserved', 'waiting', 'in_service'])
+                            ->with(['contact', 'assignedTo', 'location'])
+                            ->orderBy('appointment_datetime')
+                            ->get();
+                    @endphp
+                    
+                    @if($todays_appointments->count() > 0)
+                        <table class="table table-bordered table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Paciente/Cliente</th>
+                                    <th>Hora</th>
+                                    <th>Asignado a</th>
+                                    <th>Ubicación</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($todays_appointments as $apt)
+                                <tr>
+                                    <td>{{ $apt->contact ? $apt->contact->name : '-' }}</td>
+                                    <td>{{ $apt->appointment_datetime->format('H:i') }}</td>
+                                    <td>{{ $apt->assignedTo ? $apt->assignedTo->first_name . ' ' . $apt->assignedTo->last_name : '-' }}</td>
+                                    <td>{{ $apt->location ? $apt->location->name : '-' }}</td>
+                                    <td>{!! $apt->status_badge !!}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <p class="text-muted">No hay citas para hoy</p>
+                    @endif
                 </div>
             </div>
         </div>
@@ -183,7 +209,7 @@ $(document).ready(function(){
                             $('div#add_appointment_modal').modal('hide');
                             toastr.success(result.msg);
                             reload_calendar();
-                            todays_appointments_table.ajax.reload();
+                            location.reload(); // Recargar para actualizar la tabla de hoy
                         } else {
                             toastr.error(result.msg);
                         }
@@ -224,38 +250,15 @@ $(document).ready(function(){
                             $('div.view_modal').modal('hide');
                             toastr.success(result.msg);
                             reload_calendar();
-                            todays_appointments_table.ajax.reload();
-                            $(form).find('button[type="submit"]').attr('disabled', false);
+                            location.reload(); // Recargar para actualizar la tabla de hoy
                         } else {
                             toastr.error(result.msg);
                         }
+                        $(form).find('button[type="submit"]').attr('disabled', false);
                     }
                 });
             }
         });
-    });
-
-    var todays_appointments_table = $('#todays_appointments_table').DataTable({
-        processing: true,
-        serverSide: true,
-        fixedHeader: false,
-        "ordering": false,
-        'searching': false,
-        "pageLength": 10,
-        dom: 'frtip',
-        "ajax": {
-            "url": "{{ action([\Modules\Consultorio\Http\Controllers\AppointmentController::class, 'index']) }}",
-            "data": function (d) {
-                d.location_id = $('#business_location_id').val();
-                d.today = 1;
-            }
-        },
-        columns: [
-            {data: 'contact'},
-            {data: 'appointment_datetime'},
-            {data: 'assignedTo'},
-            {data: 'location'},
-        ]
     });
 
     $('button#add_new_appointment_btn').click(function(){
@@ -264,7 +267,7 @@ $(document).ready(function(){
 
     $(document).on('change', 'select#business_location_id', function(){
         reload_calendar();
-        todays_appointments_table.ajax.reload();
+        location.reload(); // Recargar para actualizar la tabla de hoy
     });
 
     $(document).on('click', 'button#delete_appointment', function(){
@@ -285,7 +288,7 @@ $(document).ready(function(){
                             $('div.view_modal').modal('hide');
                             toastr.success(result.msg);
                             reload_calendar();
-                            todays_appointments_table.ajax.reload();
+                            location.reload(); // Recargar para actualizar la tabla de hoy
                         } else {
                             toastr.error(result.msg);
                         }
