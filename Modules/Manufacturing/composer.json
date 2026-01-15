@@ -1,0 +1,17 @@
+{
+    "name": "audaz/manufacturing",
+    "description": "Manufacturing module for AudazPOS",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Audaz Team",
+            "email": "info@audaz.site"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Modules\\Manufacturing\\": ""
+        }
+    }
+}

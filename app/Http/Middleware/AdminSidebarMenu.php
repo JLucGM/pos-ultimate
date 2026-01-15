@@ -891,6 +891,35 @@ class AdminSidebarMenu
                   </svg>', 'id' => 'tour_step3']
                 )->order(85);
             }
+
+            //Manufacturing dropdown
+            if (auth()->user()->can('manufacturing.view')) {
+                $menu->dropdown(
+                    __('Manufacturing'),
+                    function ($sub) {
+                        if (auth()->user()->can('manufacturing.view')) {
+                            $sub->url(
+                                action([\Modules\Manufacturing\Http\Controllers\RecipeController::class, 'index']),
+                                __('Recetas'),
+                                ['icon' => '', 'active' => request()->segment(1) == 'manufacturing' && request()->segment(2) == 'recipes']
+                            );
+                        }
+                        if (auth()->user()->can('manufacturing.view')) {
+                            $sub->url(
+                                action([\Modules\Manufacturing\Http\Controllers\ProductionOrderController::class, 'index']),
+                                __('Órdenes de Producción'),
+                                ['icon' => '', 'active' => request()->segment(1) == 'manufacturing' && request()->segment(2) == 'production-orders']
+                            );
+                        }
+                    },
+                    ['icon' => '<svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M3 21l18 0"></path>
+                    <path d="M5 21v-12l5 4v-4l5 4h4"></path>
+                    <path d="M19 21v-8l-1.436 -9.574a.5 .5 0 0 0 -.495 -.426h-1.145a.5 .5 0 0 0 -.494 .418l-1.43 8.582"></path>
+                  </svg>']
+                )->order(50);
+            }
         });
 
         //Add menus from modules
