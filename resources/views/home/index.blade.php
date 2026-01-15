@@ -216,11 +216,23 @@
                                 Resumen Multimoneda
                             </h3>
                             
-                            <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-4 sm:tw-gap-5">
+                            <style>
+                                .multimoneda-grid {
+                                    display: grid;
+                                    grid-template-columns: repeat(3, 1fr);
+                                    gap: 1.25rem;
+                                }
+                                @media (max-width: 768px) {
+                                    .multimoneda-grid {
+                                        grid-template-columns: 1fr;
+                                    }
+                                }
+                            </style>
+                            <div class="multimoneda-grid">
                                 {{-- Tasa de Cambio Actual --}}
-                                @if(!empty($multimoneda_data['tasa_cambio']))
                                 <div class="tw-transition-all tw-duration-200 tw-bg-white tw-shadow-sm hover:tw-shadow-md tw-rounded-xl tw-ring-1 tw-ring-gray-200">
                                     <div class="tw-p-4 sm:tw-p-5">
+                                        @if(!empty($multimoneda_data['tasa_cambio']))
                                         <div class="tw-flex tw-items-center tw-gap-4">
                                             <div class="tw-inline-flex tw-items-center tw-justify-center tw-w-10 tw-h-10 tw-rounded-full sm:tw-w-12 sm:tw-h-12 tw-shrink-0 tw-bg-sky-100 tw-text-sky-500">
                                                 <i class="fas fa-exchange-alt tw-text-lg"></i>
@@ -243,12 +255,15 @@
                                                 @endif
                                             </div>
                                         </div>
+                                        @else
+                                        <div class="tw-text-center tw-py-4">
+                                            <p class="tw-text-sm tw-text-gray-500">No hay tasa de cambio configurada</p>
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
-                                @endif
 
                                 {{-- Ventas del Día por Moneda --}}
-                                @if(!empty($multimoneda_data['ventas_hoy']))
                                 <div class="tw-transition-all tw-duration-200 tw-bg-white tw-shadow-sm hover:tw-shadow-md tw-rounded-xl tw-ring-1 tw-ring-gray-200">
                                     <div class="tw-p-4 sm:tw-p-5">
                                         <div class="tw-flex tw-items-center tw-gap-3 tw-mb-3">
@@ -257,6 +272,7 @@
                                             </div>
                                             <h4 class="tw-text-sm tw-font-semibold tw-text-gray-700">Ventas de Hoy</h4>
                                         </div>
+                                        @if(!empty($multimoneda_data['ventas_hoy']))
                                         @foreach($multimoneda_data['ventas_hoy'] as $venta)
                                         <div class="tw-flex tw-items-center tw-justify-between tw-py-2 tw-border-b tw-border-gray-100 last:tw-border-0">
                                             <div>
@@ -272,12 +288,15 @@
                                             </span>
                                         </div>
                                         @endforeach
+                                        @else
+                                        <div class="tw-text-center tw-py-4">
+                                            <p class="tw-text-sm tw-text-gray-500">No hay ventas hoy</p>
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
-                                @endif
 
                                 {{-- Ventas del Mes por Moneda --}}
-                                @if(!empty($multimoneda_data['ventas_mes']))
                                 <div class="tw-transition-all tw-duration-200 tw-bg-white tw-shadow-sm hover:tw-shadow-md tw-rounded-xl tw-ring-1 tw-ring-gray-200">
                                     <div class="tw-p-4 sm:tw-p-5">
                                         <div class="tw-flex tw-items-center tw-gap-3 tw-mb-3">
@@ -286,6 +305,7 @@
                                             </div>
                                             <h4 class="tw-text-sm tw-font-semibold tw-text-gray-700">Ventas del Mes</h4>
                                         </div>
+                                        @if(!empty($multimoneda_data['ventas_mes']))
                                         @foreach($multimoneda_data['ventas_mes'] as $venta)
                                         <div class="tw-flex tw-items-center tw-justify-between tw-py-2 tw-border-b tw-border-gray-100 last:tw-border-0">
                                             <div>
@@ -301,9 +321,13 @@
                                             </span>
                                         </div>
                                         @endforeach
+                                        @else
+                                        <div class="tw-text-center tw-py-4">
+                                            <p class="tw-text-sm tw-text-gray-500">No hay ventas este mes</p>
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
-                                @endif
                             </div>
                         </div>
                     @endif
