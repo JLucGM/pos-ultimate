@@ -210,27 +210,62 @@ class ProductionOrderController extends Controller
             foreach ($order->recipe->ingredients as $ingredient) {
                 $quantity_needed = $ingredient->quantity * $order->quantity_to_produce;
                 
-                $this->productUtil->decreaseProductQuantity(
-                    $ingredient->ingredient_product_id,
-                    $ingredient->variation_id,
-                    $order->location_id,
-                    $quantity_needed
-                );
+                if (!$ingredient->variation_id) {
+                    throw new \Exception("El ingrediente no tiene variación asignada");
+                }
+                
+                // Descontar directamente del stock
+                $affected = \DB::table('variation_location_details')
+                    ->where('variation_id', $ingredient->variation_id)
+                    ->where('location_id', $order->location_id)
+                    ->decrement('qty_available', $quantity_needed);
+                
+                if ($affected == 0) {
+                    throw new \Exception("No se pudo descontar el ingrediente del inventario");
+                }
             }
 
             // Agregar producto final al inventario
             $product = $order->recipe->product;
             $quantity_produced = $order->recipe->quantity_produced * $order->quantity_to_produce;
             
-            $this->productUtil->updateProductQuantity(
-                $order->location_id,
-                $order->recipe->product_id,
-                $product->product_variations->first()->variations->first()->id ?? null,
-                $quantity_produced,
-                0,
-                null,
-                true
-            );
+            // Obtener la primera variación del producto final
+            $product_variation = \DB::table('product_variations')
+                ->where('product_id', $product->id)
+                ->first();
+            
+            if ($product_variation) {
+                $variation = \DB::table('variations')
+                    ->where('product_variation_id', $product_variation->id)
+                    ->first();
+                
+                if ($variation) {
+                    // Verificar si existe el registro en variation_location_details
+                    $existing = \DB::table('variation_location_details')
+                        ->where('variation_id', $variation->id)
+                        ->where('location_id', $order->location_id)
+                        ->first();
+                    
+                    if ($existing) {
+                        // Actualizar stock existente
+                        \DB::table('variation_location_details')
+                            ->where('variation_id', $variation->id)
+                            ->where('location_id', $order->location_id)
+                            ->increment('qty_available', $quantity_produced);
+                    } else {
+                        // Crear nuevo registro
+                        \DB::table('variation_location_details')->insert([
+                            'product_id' => $product->id,
+                            'product_variation_id' => $product_variation->id,
+                            'variation_id' => $variation->id,
+                            'location_id' => $order->location_id,
+                            'qty_available' => $quantity_produced,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
+                }
+            }
 
             // Marcar orden como completada
             $order->markAsCompleted();

@@ -79,18 +79,25 @@ class MfgRecipe extends Model
      */
     private function getIngredientStock($ingredient, $location_id)
     {
-        $product = Product::find($ingredient->ingredient_product_id);
+        $variation_id = $ingredient->variation_id;
         
-        if (!$product) {
+        if (!$variation_id) {
             return 0;
         }
-
+        
         if ($location_id) {
-            return $product->variation_location_details()
+            $stock = \DB::table('variation_location_details')
+                ->where('variation_id', $variation_id)
                 ->where('location_id', $location_id)
-                ->sum('qty_available');
+                ->value('qty_available');
+            
+            return $stock ?? 0;
         }
-
-        return $product->variation_location_details()->sum('qty_available');
+        
+        $stock = \DB::table('variation_location_details')
+            ->where('variation_id', $variation_id)
+            ->sum('qty_available');
+        
+        return $stock ?? 0;
     }
 }
