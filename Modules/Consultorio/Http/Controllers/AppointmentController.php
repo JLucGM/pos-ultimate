@@ -30,6 +30,70 @@ class AppointmentController extends Controller
         return view('consultorio::appointments.index_simple');
     }
 
+    public function calendar()
+    {
+        if (!auth()->user()->can('consultorio.view')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('consultorio::appointments.calendar');
+    }
+
+    public function getCalendarEvents(Request $request)
+    {
+        if (!auth()->user()->can('consultorio.view')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $business_id = request()->session()->get('user.business_id');
+        
+        $start = $request->start;
+        $end = $request->end;
+        
+        $appointments = Appointment::where('business_id', $business_id)
+            ->whereBetween('appointment_datetime', [$start, $end])
+            ->with(['contact', 'assignedTo'])
+            ->get();
+        
+        $events = [];
+        
+        foreach ($appointments as $appointment) {
+            $color = '#3c8dbc'; // Azul por defecto
+            
+            switch ($appointment->status) {
+                case 'reserved':
+                    $color = '#0073b7'; // Azul
+                    break;
+                case 'waiting':
+                    $color = '#f39c12'; // Naranja
+                    break;
+                case 'in_service':
+                    $color = '#00c0ef'; // Azul claro
+                    break;
+                case 'completed':
+                    $color = '#00a65a'; // Verde
+                    break;
+                case 'cancelled':
+                    $color = '#dd4b39'; // Rojo
+                    break;
+            }
+            
+            $endTime = $appointment->appointment_datetime->copy()->addMinutes($appointment->duration_minutes);
+            
+            $events[] = [
+                'id' => $appointment->id,
+                'title' => $appointment->contact ? $appointment->contact->name : 'Sin cliente',
+                'start' => $appointment->appointment_datetime->toIso8601String(),
+                'end' => $endTime->toIso8601String(),
+                'color' => $color,
+                'url' => action([\Modules\Consultorio\Http\Controllers\AppointmentController::class, 'show'], [$appointment->id]),
+                'time' => $appointment->appointment_datetime->format('H:i'),
+            ];
+        }
+        
+        return response()->json($events);
+    }
+
     public function create()
     {
         if (!auth()->user()->can('consultorio.create')) {

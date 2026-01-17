@@ -13,6 +13,9 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">Citas</h3>
                     <div class="box-tools pull-right">
+                        <a href="{{ route('consultorio.appointments.calendar') }}" class="btn btn-success btn-sm">
+                            <i class="fa fa-calendar"></i> Ver Calendario
+                        </a>
                         <a href="{{ action([\Modules\Consultorio\Http\Controllers\AppointmentController::class, 'create']) }}" class="btn btn-primary btn-sm">
                             <i class="fa fa-plus"></i> Nueva Cita
                         </a>

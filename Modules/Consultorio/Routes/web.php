@@ -9,6 +9,8 @@ Route::middleware(['web', 'auth', 'SetSessionData', 'language', 'timezone', 'Adm
     
     // Rutas de Citas
     Route::get('/appointments', [AppointmentController::class, 'index'])->name('consultorio.appointments.index');
+    Route::get('/appointments/calendar', [AppointmentController::class, 'calendar'])->name('consultorio.appointments.calendar');
+    Route::get('/appointments/calendar-events', [AppointmentController::class, 'getCalendarEvents'])->name('consultorio.appointments.calendarEvents');
     Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('consultorio.appointments.create');
     Route::post('/appointments', [AppointmentController::class, 'store'])->name('consultorio.appointments.store');
     Route::get('/appointments/{id}', [AppointmentController::class, 'show'])->name('consultorio.appointments.show');
