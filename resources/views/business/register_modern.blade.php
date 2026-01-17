@@ -115,6 +115,8 @@
                 'files' => true,
             ]) !!}
 
+                {!! Form::hidden('language', request()->lang); !!}
+
                 <!-- Información del Negocio -->
                 <div class="form-section">
                     <h3 class="section-title">Información del Negocio</h3>
@@ -125,22 +127,20 @@
                             <i class="fas fa-store input-icon"></i>
                             {!! Form::text('name', null, [
                                 'class' => 'form-input',
-                                'placeholder' => 'Este será el enlace para ingresar a su cuenta',
+                                'placeholder' => 'Nombre de tu negocio',
                                 'required'
                             ]); !!}
                         </div>
-                        <span class="helper-text">finepartner.com</span>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="start_date" class="form-label">Fecha de inicio *</label>
+                            <label for="start_date" class="form-label">Fecha de inicio</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-calendar input-icon"></i>
-                                {!! Form::text('start_date', @format_date('now'), [
-                                    'class' => 'form-input',
+                                {!! Form::text('start_date', null, [
+                                    'class' => 'form-input start-date-picker',
                                     'placeholder' => 'Fecha de inicio',
-                                    'required',
                                     'readonly'
                                 ]); !!}
                             </div>
@@ -150,9 +150,211 @@
                             <label for="currency_id" class="form-label">Moneda *</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-dollar-sign input-icon"></i>
-                                {!! Form::select('currency_id', $currencies, 'USD', [
-                                    'class' => 'form-input',
+                                {!! Form::select('currency_id', $currencies, '', [
+                                    'class' => 'form-input select2_register',
                                     'placeholder' => 'Selecciona la moneda',
+                                    'required'
+                                ]); !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="business_logo" class="form-label">Logo del negocio</label>
+                            {!! Form::file('business_logo', ['accept' => 'image/*', 'class' => 'form-input']); !!}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="website" class="form-label">Sitio web</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-globe input-icon"></i>
+                                {!! Form::text('website', null, [
+                                    'class' => 'form-input',
+                                    'placeholder' => 'www.ejemplo.com'
+                                ]); !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="mobile" class="form-label">Teléfono del negocio</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-phone input-icon"></i>
+                                {!! Form::text('mobile', null, [
+                                    'class' => 'form-input',
+                                    'placeholder' => 'Teléfono'
+                                ]); !!}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="alternate_number" class="form-label">Teléfono alternativo</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-phone input-icon"></i>
+                                {!! Form::text('alternate_number', null, [
+                                    'class' => 'form-input',
+                                    'placeholder' => 'Teléfono alternativo'
+                                ]); !!}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ubicación del Negocio -->
+                <div class="form-section">
+                    <h3 class="section-title">Ubicación del Negocio</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="country" class="form-label">País *</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-globe input-icon"></i>
+                                {!! Form::text('country', null, [
+                                    'class' => 'form-input',
+                                    'placeholder' => 'País',
+                                    'required'
+                                ]); !!}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="state" class="form-label">Estado *</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-map-marker-alt input-icon"></i>
+                                {!! Form::text('state', null, [
+                                    'class' => 'form-input',
+                                    'placeholder' => 'Estado',
+                                    'required'
+                                ]); !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city" class="form-label">Ciudad *</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-map-marker-alt input-icon"></i>
+                                {!! Form::text('city', null, [
+                                    'class' => 'form-input',
+                                    'placeholder' => 'Ciudad',
+                                    'required'
+                                ]); !!}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="zip_code" class="form-label">Código postal *</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-map-pin input-icon"></i>
+                                {!! Form::text('zip_code', null, [
+                                    'class' => 'form-input',
+                                    'placeholder' => 'Código postal',
+                                    'required'
+                                ]); !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="landmark" class="form-label">Punto de referencia *</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-map-marker-alt input-icon"></i>
+                                {!! Form::text('landmark', null, [
+                                    'class' => 'form-input',
+                                    'placeholder' => 'Punto de referencia',
+                                    'required'
+                                ]); !!}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="time_zone" class="form-label">Zona horaria *</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-clock input-icon"></i>
+                                {!! Form::select('time_zone', $timezone_list, config('app.timezone'), [
+                                    'class' => 'form-input select2_register',
+                                    'placeholder' => 'Zona horaria',
+                                    'required'
+                                ]); !!}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Configuración Fiscal -->
+                <div class="form-section">
+                    <h3 class="section-title">Configuración Fiscal</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tax_label_1" class="form-label">Nombre del impuesto 1</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-file-invoice input-icon"></i>
+                                {!! Form::text('tax_label_1', null, [
+                                    'class' => 'form-input',
+                                    'placeholder' => 'Ej: IVA'
+                                ]); !!}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tax_number_1" class="form-label">Número de impuesto 1</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-hashtag input-icon"></i>
+                                {!! Form::text('tax_number_1', null, [
+                                    'class' => 'form-input',
+                                    'placeholder' => 'Número'
+                                ]); !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tax_label_2" class="form-label">Nombre del impuesto 2</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-file-invoice input-icon"></i>
+                                {!! Form::text('tax_label_2', null, [
+                                    'class' => 'form-input',
+                                    'placeholder' => 'Ej: ISR'
+                                ]); !!}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tax_number_2" class="form-label">Número de impuesto 2</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-hashtag input-icon"></i>
+                                {!! Form::text('tax_number_2', null, [
+                                    'class' => 'form-input',
+                                    'placeholder' => 'Número'
+                                ]); !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fy_start_month" class="form-label">Mes de inicio del año fiscal *</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-calendar input-icon"></i>
+                                {!! Form::select('fy_start_month', $months, null, [
+                                    'class' => 'form-input select2_register',
+                                    'required'
+                                ]); !!}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="accounting_method" class="form-label">Método contable *</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-calculator input-icon"></i>
+                                {!! Form::select('accounting_method', $accounting_methods, null, [
+                                    'class' => 'form-input select2_register',
                                     'required'
                                 ]); !!}
                             </div>
@@ -166,13 +368,12 @@
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="surname" class="form-label">Apellido *</label>
+                            <label for="surname" class="form-label">Prefijo</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-user input-icon"></i>
                                 {!! Form::text('surname', null, [
                                     'class' => 'form-input',
-                                    'placeholder' => 'Apellido',
-                                    'required'
+                                    'placeholder' => 'Sr., Sra., Dr.'
                                 ]); !!}
                             </div>
                         </div>
@@ -190,39 +391,29 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="email" class="form-label">Email *</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-envelope input-icon"></i>
-                            {!! Form::email('email', null, [
-                                'class' => 'form-input',
-                                'placeholder' => 'correo@ejemplo.com',
-                                'required'
-                            ]); !!}
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="last_name" class="form-label">Apellido</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-user input-icon"></i>
+                                {!! Form::text('last_name', null, [
+                                    'class' => 'form-input',
+                                    'placeholder' => 'Apellido'
+                                ]); !!}
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="contact_no" class="form-label">Número de teléfono del dueño del negocio *</label>
-                        <div class="phone-input-group">
-                            <div class="input-wrapper country-code">
-                                <i class="fas fa-flag input-icon"></i>
-                                {!! Form::text('country_code', '+58', [
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email *</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-envelope input-icon"></i>
+                                {!! Form::text('email', null, [
                                     'class' => 'form-input',
-                                    'placeholder' => '+58',
-                                    'required'
-                                ]); !!}
-                            </div>
-                            <div class="input-wrapper phone-number">
-                                <i class="fas fa-phone input-icon"></i>
-                                {!! Form::text('contact_no', null, [
-                                    'class' => 'form-input',
-                                    'placeholder' => '4123456789',
+                                    'placeholder' => 'correo@ejemplo.com',
                                     'required'
                                 ]); !!}
                             </div>
                         </div>
-                        <span class="helper-text">IMPORTANTE: no puede ser el teléfono de ningún empleado ni del negocio</span>
                     </div>
                 </div>
 
@@ -257,7 +448,6 @@
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
-                            <span class="helper-text">Contraseña con al menos 8 caracteres</span>
                         </div>
 
                         <div class="form-group">
@@ -274,9 +464,22 @@
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
-                            <span class="helper-text">Las contraseñas coinciden</span>
                         </div>
                     </div>
+
+                    @if(!empty($system_settings['superadmin_enable_register_tc']))
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                {!! Form::checkbox('accept_tc', 0, false, ['required', 'class' => 'input-check-box']); !!}
+                                <span class="checkbox-text">
+                                    <a class="terms_condition" data-toggle="modal" data-target="#tc_modal" style="color: #7c3aed; text-decoration: none;">
+                                        Acepto los términos y condiciones
+                                    </a>
+                                </span>
+                            </label>
+                        </div>
+                        @include('business.partials.terms_conditions')
+                    @endif
                 </div>
 
                 {!! Form::hidden('package_id', $package_id) !!}
@@ -303,8 +506,24 @@
 
 @section('javascript')
 <script src="{{ asset('js/login.js?v=' . $asset_v) }}"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
 <script>
 $(document).ready(function() {
+    // Initialize Select2
+    $('.select2_register').select2({
+        width: '100%'
+    });
+
+    // Initialize Datepicker
+    $('.start-date-picker').datepicker({
+        autoclose: true,
+        format: 'dd/mm/yyyy'
+    });
+
     // Toggle password visibility
     $('#togglePassword').on('click', function() {
         const passwordInput = $('#password');
@@ -336,14 +555,31 @@ $(document).ready(function() {
     $('#confirm_password').on('keyup', function() {
         const password = $('#password').val();
         const confirmPassword = $(this).val();
-        const helperText = $(this).closest('.form-group').find('.helper-text');
         
         if (confirmPassword === '') {
-            helperText.text('Las contraseñas coinciden').css('color', '#999');
+            $(this).css('border-color', '#e5e5e5');
         } else if (password === confirmPassword) {
-            helperText.text('✓ Las contraseñas coinciden').css('color', '#10b981');
+            $(this).css('border-color', '#10b981');
         } else {
-            helperText.text('✗ Las contraseñas no coinciden').css('color', '#ef4444');
+            $(this).css('border-color', '#ef4444');
+        }
+    });
+
+    // Form validation
+    $('#business_register_form').on('submit', function(e) {
+        const password = $('#password').val();
+        const confirmPassword = $('#confirm_password').val();
+        
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            alert('Las contraseñas no coinciden');
+            return false;
+        }
+        
+        if (password.length < 8) {
+            e.preventDefault();
+            alert('La contraseña debe tener al menos 8 caracteres');
+            return false;
         }
     });
 });
