@@ -22,11 +22,11 @@
     'zip_code' => 'Código postal',
     'zip_code_placeholder' => 'Código Postal / Zip',
     'landmark' => 'Punto de referencia',
-     'tax_1_name' => 'Impuesto 1 Nombre', /* modified */
-    'tax_1_no' => 'Impuesto 1 No',
-     'tax_2_name' => 'Impuesto 2 Nombre', /* modified */
-    'tax_2_no' => 'Impuesto 2 No',
-    'tax_1_placeholder' => 'GST / VAT / Otro',
+     'tax_1_name' => 'RIF Juridico', /* modified */
+    'tax_1_no' => 'No',
+     'tax_2_name' => 'RIF Personal', /* modified */
+    'tax_2_no' => 'No',
+    'tax_1_placeholder' => 'V / J / G / Otro',
     'prefix' => 'Prefijo',
      'prefix_placeholder' => 'Señor, señora, señorita', /* modified */
     'first_name' => 'Nombre de pila',
