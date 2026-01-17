@@ -72,9 +72,8 @@
                     <h3 class="box-title">Cambiar Estado</h3>
                 </div>
                 <div class="box-body">
-                    <form action="{{ action([\Modules\Consultorio\Http\Controllers\AppointmentController::class, 'update'], [$appointment->id]) }}" method="POST">
+                    <form action="{{ action([\Modules\Consultorio\Http\Controllers\AppointmentController::class, 'changeStatus'], [$appointment->id]) }}" method="POST">
                         @csrf
-                        @method('PUT')
                         
                         <div class="form-group">
                             <label>Estado Actual:</label>

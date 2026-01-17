@@ -301,6 +301,14 @@ class AppointmentController extends Controller
                 'success' => true,
                 'msg' => 'Estado cambiado a: ' . ($status_names[$new_status] ?? $new_status)
             ];
+            
+            // Si es una petición AJAX, devolver JSON
+            if ($request->ajax()) {
+                return response()->json($output);
+            }
+            
+            // Si no es AJAX, redirigir de vuelta
+            return redirect()->back()->with('status', $output);
         } catch (\Exception $e) {
             \Log::emergency("File:" . $e->getFile() . " Line:" . $e->getLine() . " Message:" . $e->getMessage());
             
@@ -308,8 +316,12 @@ class AppointmentController extends Controller
                 'success' => false,
                 'msg' => 'Error al cambiar el estado: ' . $e->getMessage()
             ];
+            
+            if ($request->ajax()) {
+                return response()->json($output);
+            }
+            
+            return redirect()->back()->with('status', $output);
         }
-
-        return response()->json($output);
     }
 }
