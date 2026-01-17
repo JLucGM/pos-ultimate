@@ -216,6 +216,7 @@ class AppointmentController extends Controller
             ];
 
             return redirect()->back()->with('status', $output);
+        }
     }
 
     public function destroy($id)
