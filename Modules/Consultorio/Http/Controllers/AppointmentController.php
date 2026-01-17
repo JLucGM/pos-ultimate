@@ -27,98 +27,7 @@ class AppointmentController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $business_id = request()->session()->get('user.business_id');
-
-        // Para el calendario (AJAX)
-        if (request()->ajax() && request()->has('start')) {
-            $filters = [
-                'start_date' => request()->start,
-                'end_date' => request()->end,
-                'location_id' => !empty(request()->location_id) ? request()->location_id : null,
-                'business_id' => $business_id,
-            ];
-
-            $appointments = Appointment::where('business_id', $business_id)
-                ->whereBetween('appointment_datetime', [$filters['start_date'], $filters['end_date']])
-                ->with(['contact', 'assignedTo']);
-
-            if ($filters['location_id']) {
-                $appointments->where('location_id', $filters['location_id']);
-            }
-
-            $events = [];
-            foreach ($appointments->get() as $appointment) {
-                $color = '#00a65a'; // green - default
-                if ($appointment->status == 'reserved') {
-                    $color = '#3c8dbc'; // blue - reservada
-                } elseif ($appointment->status == 'waiting') {
-                    $color = '#f39c12'; // orange - en espera
-                } elseif ($appointment->status == 'in_service') {
-                    $color = '#00c0ef'; // light blue - atendiendo
-                } elseif ($appointment->status == 'completed') {
-                    $color = '#00a65a'; // green - completado
-                } elseif ($appointment->status == 'cancelled') {
-                    $color = '#dd4b39'; // red - cancelada
-                }
-
-                $events[] = [
-                    'id' => $appointment->id,
-                    'title' => $appointment->contact->name ?? 'Sin nombre',
-                    'start' => $appointment->appointment_datetime->toIso8601String(),
-                    'end' => $appointment->appointment_datetime->addMinutes($appointment->duration_minutes)->toIso8601String(),
-                    'color' => $color,
-                    'customer_name' => $appointment->contact->name ?? 'Sin nombre',
-                    'staff' => $appointment->assignedTo ? $appointment->assignedTo->first_name . ' ' . $appointment->assignedTo->last_name : 'No asignado',
-                    'url' => action([\Modules\Consultorio\Http\Controllers\AppointmentController::class, 'show'], [$appointment->id]),
-                ];
-            }
-
-            return response()->json($events);
-        }
-
-        // Para DataTable de citas de hoy
-        if (request()->ajax() && request()->has('today')) {
-            $today = \Carbon\Carbon::now()->format('Y-m-d');
-            $appointments = Appointment::where('business_id', $business_id)
-                ->whereDate('appointment_datetime', $today)
-                ->whereIn('status', ['reserved', 'waiting', 'in_service'])
-                ->with(['contact', 'assignedTo', 'location']);
-
-            if (!empty(request()->location_id)) {
-                $appointments->where('location_id', request()->location_id);
-            }
-
-            return DataTables::of($appointments)
-                ->editColumn('contact', function ($row) {
-                    return $row->contact ? $row->contact->name : '-';
-                })
-                ->editColumn('appointment_datetime', function ($row) {
-                    return $row->appointment_datetime->format('H:i');
-                })
-                ->editColumn('assignedTo', function ($row) {
-                    return $row->assignedTo ? $row->assignedTo->first_name . ' ' . $row->assignedTo->last_name : '-';
-                })
-                ->editColumn('location', function ($row) {
-                    return $row->location ? $row->location->name : '-';
-                })
-                ->removeColumn('id')
-                ->make(true);
-        }
-
-        $business_locations = BusinessLocation::forDropdown($business_id);
-        $customers = Contact::customersDropdown($business_id, false);
-        $staff = User::where('business_id', $business_id)
-            ->select('id', 'first_name', 'last_name')
-            ->get()
-            ->mapWithKeys(function ($user) {
-                return [$user->id => $user->first_name . ' ' . $user->last_name];
-            });
-
-        // Variables para el modal de creación de contactos
-        $types = Contact::getContactTypes();
-        $customer_groups = \App\CustomerGroup::forDropdown($business_id);
-
-        return view('consultorio::appointments.index', compact('business_locations', 'customers', 'staff', 'types', 'customer_groups'));
+        return view('consultorio::appointments.index_simple');
     }
 
     public function create()
@@ -213,43 +122,13 @@ class AppointmentController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        try {
-            $business_id = request()->session()->get('user.business_id');
-            
-            $appointment = Appointment::where('business_id', $business_id)
-                ->with(['contact', 'assignedTo', 'location', 'transaction', 'creator'])
-                ->findOrFail($id);
+        $business_id = request()->session()->get('user.business_id');
+        
+        $appointment = Appointment::where('business_id', $business_id)
+            ->with(['contact', 'assignedTo', 'location', 'transaction', 'creator'])
+            ->findOrFail($id);
 
-            if (request()->ajax()) {
-                $appointment_datetime = $this->commonUtil->format_date($appointment->appointment_datetime, true);
-                
-                $appointment_statuses = [
-                    'reserved' => 'Reservada',
-                    'waiting' => 'En Espera',
-                    'in_service' => 'Atendiendo',
-                    'completed' => 'Atendido',
-                    'cancelled' => 'Cancelada',
-                ];
-
-                return view('consultorio::appointments.show_modal', compact('appointment', 'appointment_datetime', 'appointment_statuses'));
-            }
-
-            return view('consultorio::appointments.show', compact('appointment'));
-        } catch (\Exception $e) {
-            \Log::emergency("File:" . $e->getFile() . " Line:" . $e->getLine() . " Message:" . $e->getMessage());
-            
-            if (request()->ajax()) {
-                return response()->json([
-                    'success' => false,
-                    'msg' => 'Error al cargar la cita: ' . $e->getMessage()
-                ], 500);
-            }
-            
-            return redirect()->back()->with('status', [
-                'success' => false,
-                'msg' => 'Error al cargar la cita'
-            ]);
-        }
+        return view('consultorio::appointments.show_simple', compact('appointment'));
     }
 
     public function edit($id)
@@ -326,9 +205,7 @@ class AppointmentController extends Controller
                 'msg' => 'Cita actualizada exitosamente'
             ];
 
-            if (request()->ajax()) {
-                return response()->json($output);
-            }
+            return redirect()->action([\Modules\Consultorio\Http\Controllers\AppointmentController::class, 'show'], [$id])->with('status', $output);
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::emergency("File:" . $e->getFile() . " Line:" . $e->getLine() . " Message:" . $e->getMessage());
@@ -338,12 +215,7 @@ class AppointmentController extends Controller
                 'msg' => 'Error al actualizar la cita'
             ];
 
-            if (request()->ajax()) {
-                return response()->json($output);
-            }
-        }
-
-        return redirect()->action([\Modules\Consultorio\Http\Controllers\AppointmentController::class, 'index'])->with('status', $output);
+            return redirect()->back()->with('status', $output);
     }
 
     public function destroy($id)
