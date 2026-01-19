@@ -654,6 +654,30 @@
             font-size: 18px;
         }
 
+        /* Botones específicos para pricing cards */
+        .pricing-card-modern .btn-outline-modern {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .pricing-card-modern .btn-outline-modern:hover {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .pricing-card-modern .btn-primary-modern {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            color: var(--white);
+            border: 2px solid transparent;
+        }
+
+        .pricing-card-modern .btn-primary-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
+        }
+
         .w-full {
             width: 100%;
             display: inline-flex;
