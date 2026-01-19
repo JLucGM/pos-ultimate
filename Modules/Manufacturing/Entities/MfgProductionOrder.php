@@ -61,10 +61,13 @@ class MfgProductionOrder extends Model
         $prefix = config('manufacturing.production_order_prefix', 'PRD');
         $year = date('Y');
         $month = date('m');
+        $day = date('d');
         
+        // Buscar el último número del día actual
         $last = self::where('business_id', $business_id)
-            ->where('ref_no', 'like', $prefix . $year . $month . '%')
+            ->where('ref_no', 'like', $prefix . $year . $month . $day . '%')
             ->orderBy('id', 'desc')
+            ->lockForUpdate() // Bloqueo para evitar duplicados en concurrencia
             ->first();
         
         if ($last) {
@@ -74,7 +77,17 @@ class MfgProductionOrder extends Model
             $newNumber = 1;
         }
         
-        return $prefix . $year . $month . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+        $refNo = $prefix . $year . $month . $day . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+        
+        // Verificar que no exista (doble verificación)
+        $attempts = 0;
+        while (self::where('ref_no', $refNo)->exists() && $attempts < 10) {
+            $newNumber++;
+            $refNo = $prefix . $year . $month . $day . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+            $attempts++;
+        }
+        
+        return $refNo;
     }
 
     /**

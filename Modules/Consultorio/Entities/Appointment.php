@@ -89,16 +89,33 @@ class Appointment extends Model
         $prefix = 'APT';
         $year = date('Y');
         $month = date('m');
+        $day = date('d');
         
+        // Buscar el último número del día actual con bloqueo
         $last = self::where('business_id', $business_id)
-            ->whereYear('created_at', $year)
-            ->whereMonth('created_at', $month)
+            ->where('appointment_number', 'like', $prefix . $year . $month . $day . '%')
             ->orderBy('id', 'desc')
+            ->lockForUpdate() // Bloqueo para evitar duplicados en concurrencia
             ->first();
         
-        $number = $last ? (int)substr($last->appointment_number, -4) + 1 : 1;
+        if ($last) {
+            $lastNumber = intval(substr($last->appointment_number, -4));
+            $newNumber = $lastNumber + 1;
+        } else {
+            $newNumber = 1;
+        }
         
-        return $prefix . $year . $month . str_pad($number, 4, '0', STR_PAD_LEFT);
+        $appointmentNumber = $prefix . $year . $month . $day . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+        
+        // Verificar que no exista (doble verificación)
+        $attempts = 0;
+        while (self::where('appointment_number', $appointmentNumber)->exists() && $attempts < 10) {
+            $newNumber++;
+            $appointmentNumber = $prefix . $year . $month . $day . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+            $attempts++;
+        }
+        
+        return $appointmentNumber;
     }
 
     public function canChangeStatus($new_status)
