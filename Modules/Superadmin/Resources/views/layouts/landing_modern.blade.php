@@ -656,6 +656,7 @@
 
         .w-full {
             width: 100%;
+            display: inline-flex;
             justify-content: center;
         }
 
@@ -883,11 +884,6 @@
             .btn-modern {
                 font-size: 15px;
                 padding: 12px 24px;
-            }
-
-            .w-full {
-                display: inline-flex;
-                width: 100%;
             }
 
             .footer-content {
