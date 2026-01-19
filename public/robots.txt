@@ -1,2 +1,47 @@
+# robots.txt para Audaz POS
+# https://audaz.site/robots.txt
+
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /login
+Disallow: /register
+Disallow: /password/
+Disallow: /home
+Disallow: /dashboard
+Disallow: /pos/
+Disallow: /sells/
+Disallow: /purchases/
+Disallow: /products/
+Disallow: /contacts/
+Disallow: /reports/
+Disallow: /settings/
+
+# Allow important pages
+Allow: /
+Allow: /pricing
+Allow: /features
+Allow: /contact
+
+# Sitemap
+Sitemap: https://audaz.site/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 10
+
+# Specific bots
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Slurp
+Allow: /
+Disallow: /admin/
+Disallow: /api/

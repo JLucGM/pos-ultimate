@@ -3,10 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Sistema POS') - {{ config('app.name') }}</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>@yield('title', 'Sistema POS para Pequeñas Empresas | Audaz POS') - {{ config('app.name') }}</title>
+    <meta name="title" content="@yield('meta_title', 'Sistema POS para Pequeñas Empresas | Audaz POS - Software de Punto de Venta en la Nube')">
+    <meta name="description" content="@yield('meta_description', 'Sistema POS completo en la nube para restaurantes, tiendas, consultorios y pequeñas empresas. Control de ventas, inventario, citas y reportes desde cualquier lugar. Prueba gratis.')">
+    <meta name="keywords" content="sistema pos, punto de venta, software pos, pos en la nube, sistema de ventas, control de inventario, pos para restaurantes, pos para tiendas, pos venezuela, software facturación, sistema citas, pos consultorio, audaz pos">
+    <meta name="author" content="Audaz POS">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Spanish">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ url()->current() }}">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="@yield('og_title', 'Sistema POS para Pequeñas Empresas | Audaz POS')">
+    <meta property="og:description" content="@yield('og_description', 'Sistema POS completo en la nube. Control de ventas, inventario, clientes y reportes desde cualquier lugar. Perfecto para restaurantes, tiendas y consultorios.')">
+    <meta property="og:image" content="{{ asset('images/landing/og-image.jpg') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Audaz POS">
+    <meta property="og:locale" content="es_ES">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="@yield('twitter_title', 'Sistema POS para Pequeñas Empresas | Audaz POS')">
+    <meta property="twitter:description" content="@yield('twitter_description', 'Sistema POS completo en la nube para gestionar tu negocio desde cualquier lugar.')">
+    <meta property="twitter:image" content="{{ asset('images/landing/twitter-image.jpg') }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+    
+    <!-- Geo Tags -->
+    <meta name="geo.region" content="VE">
+    <meta name="geo.placename" content="Venezuela">
     
     <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- Font Awesome -->
@@ -1222,6 +1265,233 @@
         }
 
         // Smooth scroll para links internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Cerrar menú móvil si está abierto
+                    navMenu.classList.remove('active');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    icon.classList.add('fa-bars');
+                    icon.classList.remove('fa-times');
+                }
+            });
+        });
+    </script>
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Audaz POS",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web, Windows, macOS, Linux, iOS, Android",
+        "offers": {
+            "@type": "AggregateOffer",
+            "lowPrice": "8",
+            "highPrice": "28",
+            "priceCurrency": "USD",
+            "priceSpecification": {
+                "@type": "UnitPriceSpecification",
+                "price": "8",
+                "priceCurrency": "USD",
+                "billingDuration": "P1M"
+            }
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "500",
+            "bestRating": "5",
+            "worstRating": "1"
+        },
+        "description": "Sistema POS completo en la nube para restaurantes, tiendas, consultorios y pequeñas empresas. Control de ventas, inventario, clientes y reportes desde cualquier lugar.",
+        "featureList": [
+            "Punto de Venta Rápido",
+            "Control de Inventario",
+            "Gestión de Citas",
+            "Reportes Inteligentes",
+            "Multi-Sucursal",
+            "Módulo Restaurante",
+            "Facturación Electrónica",
+            "Soporte 24/7"
+        ],
+        "screenshot": "{{ asset('images/landing/dashboard-preview.png') }}",
+        "softwareVersion": "2.0",
+        "author": {
+            "@type": "Organization",
+            "name": "Audaz POS",
+            "url": "{{ url('/') }}"
+        },
+        "provider": {
+            "@type": "Organization",
+            "name": "Audaz POS",
+            "url": "{{ url('/') }}",
+            "logo": "{{ asset('img/logo-audaz.png') }}",
+            "sameAs": [
+                "https://www.facebook.com/audazpos",
+                "https://www.instagram.com/audazpos",
+                "https://twitter.com/audazpos"
+            ]
+        }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Audaz POS",
+        "url": "{{ url('/') }}",
+        "logo": "{{ asset('img/logo-audaz.png') }}",
+        "description": "Sistema POS completo en la nube para pequeñas y medianas empresas",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "VE",
+            "addressRegion": "Venezuela"
+        },
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+58-424-290-9870",
+            "contactType": "Customer Service",
+            "availableLanguage": ["Spanish"],
+            "areaServed": "VE"
+        },
+        "sameAs": [
+            "https://www.facebook.com/audazpos",
+            "https://www.instagram.com/audazpos",
+            "https://twitter.com/audazpos"
+        ]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Audaz POS",
+        "url": "{{ url('/') }}",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "{{ url('/') }}/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Audaz POS - Sistema de Punto de Venta",
+        "image": "{{ asset('images/landing/dashboard-preview.png') }}",
+        "description": "Sistema POS completo en la nube para gestionar ventas, inventario, clientes y reportes. Perfecto para restaurantes, tiendas, consultorios y pequeñas empresas.",
+        "brand": {
+            "@type": "Brand",
+            "name": "Audaz POS"
+        },
+        "offers": [
+            {
+                "@type": "Offer",
+                "name": "Plan Basic",
+                "price": "8",
+                "priceCurrency": "USD",
+                "priceSpecification": {
+                    "@type": "UnitPriceSpecification",
+                    "price": "8",
+                    "priceCurrency": "USD",
+                    "billingDuration": "P1M"
+                },
+                "availability": "https://schema.org/InStock",
+                "url": "{{ url('/pricing') }}"
+            },
+            {
+                "@type": "Offer",
+                "name": "Plan Pymes",
+                "price": "15",
+                "priceCurrency": "USD",
+                "priceSpecification": {
+                    "@type": "UnitPriceSpecification",
+                    "price": "15",
+                    "priceCurrency": "USD",
+                    "billingDuration": "P1M"
+                },
+                "availability": "https://schema.org/InStock",
+                "url": "{{ url('/pricing') }}"
+            },
+            {
+                "@type": "Offer",
+                "name": "Plan Business",
+                "price": "28",
+                "priceCurrency": "USD",
+                "priceSpecification": {
+                    "@type": "UnitPriceSpecification",
+                    "price": "28",
+                    "priceCurrency": "USD",
+                    "billingDuration": "P1M"
+                },
+                "availability": "https://schema.org/InStock",
+                "url": "{{ url('/pricing') }}"
+            }
+        ],
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "reviewCount": "500"
+        }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "¿Qué es Audaz POS?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Audaz POS es un sistema de punto de venta completo en la nube que permite gestionar ventas, inventario, clientes y reportes desde cualquier lugar. Es perfecto para restaurantes, tiendas, consultorios y pequeñas empresas."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "¿Cuánto cuesta Audaz POS?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Audaz POS ofrece planes desde $8/mes (Plan Basic) hasta $28/mes (Plan Business). Todos los planes incluyen soporte técnico y actualizaciones gratuitas."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "¿Necesito instalar software?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No, Audaz POS es 100% en la nube. Solo necesitas un navegador web y conexión a internet para acceder desde cualquier dispositivo."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "¿Puedo probar Audaz POS gratis?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Sí, ofrecemos una prueba gratuita para que puedas conocer todas las funcionalidades del sistema antes de contratar un plan."
+                }
+            }
+        ]
+    }
+    </script>
+
+    @yield('scripts')
+</body>
+</html>
         document.addEventListener('DOMContentLoaded', function() {
             var internalLinks = document.querySelectorAll('a[href^="#"], a[href^="/#"]');
             
