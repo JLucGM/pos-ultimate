@@ -102,12 +102,15 @@
         }
 
         .logo-modern img {
-            height: 48px;
+            height: 55px;
             width: auto;
+            transition: all 0.3s ease;
+            filter: brightness(0) invert(1);
         }
 
         .navbar-modern.scrolled .logo-modern img {
-            height: 40px;
+            height: 48px;
+            filter: none;
         }
 
         .nav-menu-modern {
