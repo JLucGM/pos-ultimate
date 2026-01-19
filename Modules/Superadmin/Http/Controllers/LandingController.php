@@ -31,7 +31,10 @@ class LandingController extends Controller
             ->take(3)
             ->get();
 
-        return view('superadmin::landing.index', compact('packages'));
+        $theme = config('ui.landing_theme', 'modern');
+        $view = $theme === 'modern' ? 'superadmin::landing.index_modern' : 'superadmin::landing.index';
+
+        return view($view, compact('packages'));
     }
 
     /**
