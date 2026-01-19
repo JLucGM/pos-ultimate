@@ -1,0 +1,291 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                    🚨 GUÍA RÁPIDA DE SOLUCIÓN 🚨                            ║
+║                                                                              ║
+║                  Sistema Caído + Botones POS Deshabilitados                 ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                          PASO 1: RECUPERAR SISTEMA                         ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  1. Conecta al servidor:
+     
+     $ ssh tu_usuario@audaz.site
+     $ cd /home/audaz.site/public_html
+
+  2. Ejecuta el script:
+     
+     $ bash fix-sistema-completo.sh
+
+  3. Espera 2-3 minutos mientras el script:
+     ✓ Limpia cachés
+     ✓ Corrige permisos
+     ✓ Verifica base de datos
+     ✓ Diagnostica problemas
+
+  4. Verifica que el sistema cargue:
+     
+     Abre: https://audaz.site/
+     
+     ✅ Si carga → Continúa al Paso 2
+     ❌ Si no carga → Ver sección "Problemas" al final
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                    PASO 2: HABILITAR SOBREVENTA                            ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  1. Inicia sesión en: https://audaz.site/
+
+  2. Navega a:
+     
+     Configuración → Configuración del Negocio → Productos
+
+  3. Busca la opción:
+     
+     ☐ Permitir sobreventa
+     ☐ Enable Overselling
+
+  4. Activa la casilla:
+     
+     ☑ Permitir sobreventa
+
+  5. Haz clic en "Guardar" al final de la página
+
+  6. Limpia el caché del navegador:
+     
+     Windows/Linux: Ctrl + Shift + R
+     Mac: Cmd + Shift + R
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                         PASO 3: PROBAR POS                                 ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  1. Ve a: POS (Punto de Venta)
+
+  2. Selecciona:
+     ✓ Ubicación
+     ✓ Cliente (Walk-in Customer)
+
+  3. Agrega un producto manufacturado al carrito
+
+  4. Verifica que los botones estén habilitados:
+     
+     ┌─────────────┐  ┌──────────────────┐
+     │  Efectivo   │  │  Pago Múltiple   │  ← Deben estar ACTIVOS
+     └─────────────┘  └──────────────────┘
+
+  5. Haz clic en "Efectivo"
+
+  6. Completa la venta de prueba
+
+  7. ✅ Si la venta se completa → ¡PROBLEMA RESUELTO!
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                            COMANDOS ÚTILES                                 ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  Ver logs en tiempo real:
+  $ tail -f storage/logs/laravel.log
+
+  Limpiar caché manualmente:
+  $ php artisan optimize:clear
+
+  Corregir permisos manualmente:
+  $ chmod -R 777 storage bootstrap/cache
+
+  Verificar estado del sistema:
+  $ bash check-system-status.sh
+
+  Recuperación básica:
+  $ bash emergency-recovery.sh
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                         PROBLEMAS COMUNES                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ PROBLEMA: El sistema no carga después del script                        │
+├──────────────────────────────────────────────────────────────────────────┤
+│ SOLUCIÓN:                                                                │
+│                                                                          │
+│ 1. Ver logs:                                                             │
+│    $ tail -50 storage/logs/laravel.log                                  │
+│                                                                          │
+│ 2. Verificar servicios:                                                  │
+│    $ sudo systemctl status apache2                                       │
+│    $ sudo systemctl status mysql                                         │
+│                                                                          │
+│ 3. Reiniciar servicios:                                                  │
+│    $ sudo systemctl restart apache2                                      │
+│    $ sudo systemctl restart mysql                                        │
+│                                                                          │
+│ 4. Verificar .env:                                                       │
+│    $ cat .env | grep DB_                                                 │
+└──────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ PROBLEMA: Los botones siguen deshabilitados                             │
+├──────────────────────────────────────────────────────────────────────────┤
+│ SOLUCIÓN:                                                                │
+│                                                                          │
+│ 1. Verificar que sobreventa esté habilitada:                            │
+│    $ php artisan tinker                                                  │
+│    DB::table('business')->select('enable_overselling')->first();        │
+│    (Debe mostrar: enable_overselling: 1)                                │
+│                                                                          │
+│ 2. Limpiar caché del servidor:                                          │
+│    $ php artisan cache:clear                                             │
+│    $ php artisan view:clear                                              │
+│                                                                          │
+│ 3. Limpiar caché del navegador:                                         │
+│    Ctrl + Shift + R (Windows/Linux)                                     │
+│    Cmd + Shift + R (Mac)                                                │
+│                                                                          │
+│ 4. Abrir consola del navegador (F12):                                   │
+│    - Buscar errores en rojo                                              │
+│    - Tomar captura si hay errores                                        │
+│                                                                          │
+│ 5. Verificar que el producto tenga:                                      │
+│    ✓ Precio configurado                                                  │
+│    ✓ Cliente seleccionado en POS                                         │
+│    ✓ Ubicación seleccionada en POS                                       │
+└──────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ PROBLEMA: Error de permisos persiste                                    │
+├──────────────────────────────────────────────────────────────────────────┤
+│ SOLUCIÓN:                                                                │
+│                                                                          │
+│ 1. Corregir permisos con usuario correcto:                              │
+│    $ sudo chown -R www-data:www-data storage                            │
+│    $ sudo chown -R www-data:www-data bootstrap/cache                    │
+│    $ sudo chmod -R 775 storage                                           │
+│    $ sudo chmod -R 775 bootstrap/cache                                   │
+│                                                                          │
+│ 2. Si no tienes acceso sudo:                                             │
+│    $ chmod -R 777 storage                                                │
+│    $ chmod -R 777 bootstrap/cache                                        │
+│                                                                          │
+│ 3. Verificar permisos:                                                   │
+│    $ ls -la storage/logs/                                                │
+└──────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ PROBLEMA: Error de conexión a base de datos                             │
+├──────────────────────────────────────────────────────────────────────────┤
+│ SOLUCIÓN:                                                                │
+│                                                                          │
+│ 1. Verificar que MySQL esté corriendo:                                   │
+│    $ sudo systemctl status mysql                                         │
+│                                                                          │
+│ 2. Verificar credenciales en .env:                                       │
+│    $ cat .env | grep DB_                                                 │
+│                                                                          │
+│ 3. Probar conexión:                                                      │
+│    $ php artisan tinker                                                  │
+│    DB::connection()->getPdo();                                           │
+│                                                                          │
+│ 4. Si las credenciales son incorrectas:                                  │
+│    $ nano .env                                                           │
+│    (Editar DB_HOST, DB_DATABASE, DB_USERNAME, DB_PASSWORD)              │
+│    $ php artisan config:cache                                            │
+└──────────────────────────────────────────────────────────────────────────┘
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                        ARCHIVOS DE DOCUMENTACIÓN                           ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  📄 README_SOLUCION.md                → Índice completo
+  📄 INSTRUCCIONES_URGENTES.md         → Guía rápida de 3 pasos
+  📄 RESUMEN_SOLUCION.md                → Resumen ejecutivo
+  📄 SOLUCION_COMPLETA_SISTEMA.md       → Documentación técnica
+  📄 HABILITAR_SOBREVENTA.md            → Guía de sobreventa
+  📄 DIAGNOSTICO_POS_MANUFACTURING.md   → Análisis técnico
+  📄 FLUJO_SOLUCION.txt                 → Diagrama visual
+  📄 GUIA_RAPIDA.txt                    → Este archivo
+
+  🔧 fix-sistema-completo.sh            → Script principal ⭐
+  🔧 emergency-recovery.sh              → Recuperación básica
+  🔧 check-system-status.sh             → Verificación de estado
+  🔧 diagnostico-pos-manufacturing.sh   → Diagnóstico POS
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                              CHECKLIST                                     ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  RECUPERACIÓN DEL SISTEMA:
+  ☐ Conectado al servidor
+  ☐ Script fix-sistema-completo.sh ejecutado
+  ☐ Sistema carga en https://audaz.site/
+  ☐ Sin errores en logs
+
+  HABILITAR SOBREVENTA:
+  ☐ Sesión iniciada en Audaz POS
+  ☐ Navegado a Configuración → Configuración del Negocio
+  ☐ Opción "Permitir sobreventa" activada
+  ☐ Cambios guardados
+  ☐ Caché del navegador limpiado
+
+  VERIFICACIÓN POS:
+  ☐ Ubicación seleccionada
+  ☐ Cliente seleccionado
+  ☐ Producto manufacturado agregado
+  ☐ Botones "Efectivo" y "Pago Múltiple" habilitados
+  ☐ Venta de prueba completada exitosamente
+
+  ✅ TODOS LOS PASOS COMPLETADOS = PROBLEMA RESUELTO
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                          TIEMPO ESTIMADO                                   ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  Paso 1: Recuperar sistema          →  2-3 minutos
+  Paso 2: Habilitar sobreventa       →  5 minutos
+  Paso 3: Probar POS                 →  5 minutos
+  ─────────────────────────────────────────────────
+  TOTAL:                                10-15 minutos
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                         CONTACTO DE EMERGENCIA                             ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  Si después de seguir todos los pasos el problema persiste:
+
+  1. Toma capturas de pantalla de:
+     - Errores en storage/logs/laravel.log
+     - Errores en consola del navegador (F12)
+     - Pantalla del POS con botones deshabilitados
+
+  2. Verifica:
+     - PHP versión: $ php -v
+     - MySQL corriendo: $ sudo systemctl status mysql
+     - Apache/Nginx corriendo: $ sudo systemctl status apache2
+     - Espacio en disco: $ df -h
+
+  3. Comparte la información recopilada para análisis adicional
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                    ✅ ¡ÉXITO! SISTEMA FUNCIONANDO                           ║
+║                                                                              ║
+║  Si completaste todos los pasos, tu sistema debería estar funcionando       ║
+║  correctamente y los botones del POS habilitados.                           ║
+║                                                                              ║
+║  Próximos pasos:                                                             ║
+║  • Monitorear logs regularmente                                              ║
+║  • Hacer backups periódicos                                                  ║
+║  • Documentar cualquier cambio                                               ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝

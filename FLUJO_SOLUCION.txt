@@ -1,0 +1,222 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    FLUJO DE SOLUCIÓN - AUDAZ POS                             ║
+║                  Sistema Caído + Botones POS Deshabilitados                  ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PROBLEMA 1: Sistema Caído                                                   │
+│ Error: Permission denied en storage/logs/laravel.log                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ SOLUCIÓN INMEDIATA                                                          │
+│                                                                             │
+│ $ ssh tu_usuario@audaz.site                                                │
+│ $ cd /home/audaz.site/public_html                                          │
+│ $ bash fix-sistema-completo.sh                                             │
+│                                                                             │
+│ El script ejecutará:                                                        │
+│ ✓ Limpiar cachés (config, route, view, optimize)                          │
+│ ✓ Eliminar archivos compilados                                             │
+│ ✓ Corregir permisos (chmod 777 storage bootstrap/cache)                   │
+│ ✓ Verificar conexión a BD                                                  │
+│ ✓ Reconstruir caché                                                        │
+│ ✓ Diagnosticar productos manufacturados                                    │
+│ ✓ Verificar órdenes de producción                                          │
+│ ✓ Revisar configuración de sobreventa                                      │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ VERIFICACIÓN                                                                │
+│                                                                             │
+│ Abrir navegador: https://audaz.site/                                       │
+│                                                                             │
+│ ¿El sistema carga correctamente?                                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+                    │                                   │
+                    │ SÍ ✓                             │ NO ✗
+                    ▼                                   ▼
+    ┌───────────────────────────┐       ┌─────────────────────────────────┐
+    │ Sistema Recuperado ✓      │       │ Ejecutar Recuperación Manual    │
+    │ Continuar al Problema 2   │       │                                 │
+    └───────────────────────────┘       │ $ php artisan optimize:clear    │
+                    │                    │ $ chmod -R 777 storage          │
+                    │                    │ $ php artisan config:cache      │
+                    │                    │                                 │
+                    │                    │ Ver logs:                       │
+                    │                    │ $ tail -f storage/logs/laravel.log │
+                    │                    └─────────────────────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PROBLEMA 2: Botones POS Deshabilitados                                     │
+│ Botones "Efectivo" y "Pago Múltiple" deshabilitados para productos         │
+│ manufacturados                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ CAUSA RAÍZ                                                                  │
+│                                                                             │
+│ Archivo: public/js/pos.js (líneas 201-202, 235, 263)                      │
+│                                                                             │
+│ Validación:                                                                 │
+│ if ((enable_stock == 1 && qty_available > 0) ||                           │
+│     (enable_stock == 0) ||                                                 │
+│     is_overselling_allowed ||                                              │
+│     for_so) {                                                              │
+│     // Habilitar botones                                                   │
+│ }                                                                           │
+│                                                                             │
+│ Problema: Productos manufacturados tienen qty_available = 0                │
+│ después de crear orden de producción pero antes de completarla             │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ SOLUCIÓN: Elegir una opción                                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+                    │
+        ┌───────────┴───────────┐
+        │                       │
+        ▼                       ▼
+┌──────────────────┐    ┌──────────────────────┐
+│ OPCIÓN A ⭐      │    │ OPCIÓN B             │
+│ (Recomendada)    │    │ (Manual)             │
+│                  │    │                      │
+│ Habilitar        │    │ Completar Órdenes    │
+│ Sobreventa       │    │ de Producción        │
+└──────────────────┘    └──────────────────────┘
+        │                       │
+        ▼                       ▼
+┌──────────────────────────────────────┐  ┌────────────────────────────────┐
+│ PASOS OPCIÓN A:                      │  │ PASOS OPCIÓN B:                │
+│                                      │  │                                │
+│ 1. Iniciar sesión en Audaz POS      │  │ 1. Ir a Manufacturing →        │
+│    https://audaz.site/               │  │    Órdenes de Producción       │
+│                                      │  │                                │
+│ 2. Ir a: Configuración →             │  │ 2. Buscar órdenes con estado:  │
+│    Configuración del Negocio         │  │    - Pendiente                 │
+│                                      │  │    - En Proceso                │
+│ 3. Buscar sección: Productos         │  │                                │
+│                                      │  │ 3. Abrir cada orden            │
+│ 4. Activar: "Permitir sobreventa"   │  │                                │
+│    ☑ Enable Overselling              │  │ 4. Hacer clic en "Completar"   │
+│                                      │  │                                │
+│ 5. Guardar cambios                   │  │ 5. Verificar stock actualizado │
+│                                      │  │                                │
+│ 6. Limpiar caché navegador:          │  │ 6. Repetir para cada orden     │
+│    Ctrl + Shift + R                  │  │    pendiente                   │
+│                                      │  │                                │
+│ ✓ Tiempo: 5 minutos                  │  │ ✓ Tiempo: 10-30 minutos        │
+│ ✓ Solución permanente                │  │ ✗ Debe repetirse cada vez      │
+│ ✓ No requiere código                 │  │ ✗ Puede olvidarse              │
+└──────────────────────────────────────┘  └────────────────────────────────┘
+        │                                           │
+        └───────────────┬───────────────────────────┘
+                        ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ VERIFICACIÓN FINAL                                                          │
+│                                                                             │
+│ 1. Ir a POS: https://audaz.site/pos/create                                │
+│                                                                             │
+│ 2. Seleccionar ubicación                                                   │
+│                                                                             │
+│ 3. Seleccionar cliente (Walk-in Customer)                                 │
+│                                                                             │
+│ 4. Agregar producto manufacturado al carrito                               │
+│                                                                             │
+│ 5. Verificar botones:                                                      │
+│    ┌─────────────┐  ┌──────────────────┐                                 │
+│    │  Efectivo   │  │  Pago Múltiple   │  ← Deben estar HABILITADOS     │
+│    └─────────────┘  └──────────────────┘                                 │
+│                                                                             │
+│ 6. Hacer clic en "Efectivo"                                                │
+│                                                                             │
+│ 7. Completar venta de prueba                                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ¿Botones habilitados y venta completada?                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+                    │                                   │
+                    │ SÍ ✓                             │ NO ✗
+                    ▼                                   ▼
+    ┌───────────────────────────┐       ┌─────────────────────────────────┐
+    │ ✅ PROBLEMA RESUELTO      │       │ TROUBLESHOOTING                 │
+    │                           │       │                                 │
+    │ Sistema funcionando       │       │ 1. Abrir consola navegador (F12)│
+    │ correctamente             │       │    Buscar errores JavaScript    │
+    │                           │       │                                 │
+    │ Próximos pasos:           │       │ 2. Verificar que producto tenga:│
+    │ • Monitorear logs         │       │    ✓ Precio configurado         │
+    │ • Backup regular          │       │    ✓ Cliente seleccionado       │
+    │ • Documentar proceso      │       │    ✓ Ubicación seleccionada     │
+    └───────────────────────────┘       │                                 │
+                                        │ 3. Limpiar caché servidor:      │
+                                        │    $ php artisan cache:clear    │
+                                        │    $ php artisan view:clear     │
+                                        │                                 │
+                                        │ 4. Ver logs:                    │
+                                        │    $ tail -f storage/logs/      │
+                                        │      laravel.log                │
+                                        │                                 │
+                                        │ 5. Verificar sobreventa:        │
+                                        │    $ php artisan tinker         │
+                                        │    DB::table('business')        │
+                                        │      ->select('enable_          │
+                                        │       overselling')->first();   │
+                                        └─────────────────────────────────┘
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                           ARCHIVOS DE REFERENCIA                             ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║ 📄 INSTRUCCIONES_URGENTES.md        → Guía rápida de 3 pasos               ║
+║ 📄 RESUMEN_SOLUCION.md               → Resumen ejecutivo completo           ║
+║ 📄 SOLUCION_COMPLETA_SISTEMA.md      → Documentación técnica detallada      ║
+║ 📄 HABILITAR_SOBREVENTA.md           → Guía paso a paso con capturas        ║
+║ 📄 DIAGNOSTICO_POS_MANUFACTURING.md  → Análisis técnico del problema        ║
+║                                                                              ║
+║ 🔧 fix-sistema-completo.sh           → Script principal (EJECUTAR PRIMERO)  ║
+║ 🔧 emergency-recovery.sh             → Recuperación básica                  ║
+║ 🔧 check-system-status.sh            → Verificación de estado               ║
+║ 🔧 diagnostico-pos-manufacturing.sh  → Diagnóstico específico POS           ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                              TIEMPO ESTIMADO                                 ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║ Recuperación del sistema:        2-3 minutos                                ║
+║ Habilitar sobreventa:            5 minutos                                  ║
+║ Verificación y pruebas:          5 minutos                                  ║
+║                                                                              ║
+║ TOTAL:                           10-15 minutos                               ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                            COMANDOS RÁPIDOS                                  ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║ Recuperar sistema:                                                           ║
+║ $ bash fix-sistema-completo.sh                                              ║
+║                                                                              ║
+║ Ver logs:                                                                    ║
+║ $ tail -f storage/logs/laravel.log                                          ║
+║                                                                              ║
+║ Limpiar caché:                                                               ║
+║ $ php artisan optimize:clear                                                ║
+║                                                                              ║
+║ Verificar estado:                                                            ║
+║ $ bash check-system-status.sh                                               ║
+║                                                                              ║
+║ Corregir permisos:                                                           ║
+║ $ chmod -R 777 storage bootstrap/cache                                      ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
