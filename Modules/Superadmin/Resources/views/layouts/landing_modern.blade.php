@@ -656,6 +656,7 @@
         .w-full {
             width: 100%;
             justify-content: center;
+            display: flex;
         }
 
         /* CTA Section */
@@ -810,7 +811,8 @@
 
             .pricing-grid-modern {
                 grid-template-columns: 1fr;
-                max-width: 400px;
+                max-width: 100%;
+                padding: 0 20px;
             }
 
             .stats-grid-modern {
@@ -866,6 +868,14 @@
 
             .features-grid-modern {
                 grid-template-columns: 1fr;
+            }
+
+            .pricing-card-modern {
+                padding: 30px 20px;
+            }
+
+            .pricing-grid-modern {
+                padding: 0 10px;
             }
 
             .footer-content {
