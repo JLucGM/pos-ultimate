@@ -11,6 +11,9 @@
 <!-- app css -->
 <link rel="stylesheet" href="{{ asset('css/app.css?v='.$asset_v) }}">
 
+<!-- Modern Rounded Borders -->
+<link rel="stylesheet" href="{{ asset('css/modern-rounded.css?v='.$asset_v) }}">
+
 @if(isset($pos_layout) && $pos_layout)
 	<style type="text/css">
 		.content{

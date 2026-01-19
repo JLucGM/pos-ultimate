@@ -1,0 +1,444 @@
+/**
+ * Modern Rounded Borders - Audaz POS
+ * Aplica bordes redondeados de 25px a todos los elementos principales
+ * para un aspecto más moderno y profesional
+ */
+
+/* ========================================
+   BOXES Y CONTENEDORES PRINCIPALES
+   ======================================== */
+
+/* AdminLTE Boxes */
+.box,
+.info-box,
+.small-box {
+    border-radius: 25px !important;
+    overflow: hidden;
+}
+
+.box-header,
+.box-body,
+.box-footer {
+    border-radius: 0 !important;
+}
+
+.box-header {
+    border-top-left-radius: 25px !important;
+    border-top-right-radius: 25px !important;
+}
+
+.box-footer {
+    border-bottom-left-radius: 25px !important;
+    border-bottom-right-radius: 25px !important;
+}
+
+/* ========================================
+   MODALES
+   ======================================== */
+
+.modal-content {
+    border-radius: 25px !important;
+    overflow: hidden;
+}
+
+.modal-header {
+    border-top-left-radius: 25px !important;
+    border-top-right-radius: 25px !important;
+}
+
+.modal-footer {
+    border-bottom-left-radius: 25px !important;
+    border-bottom-right-radius: 25px !important;
+}
+
+/* ========================================
+   BOTONES
+   ======================================== */
+
+.btn,
+button,
+input[type="submit"],
+input[type="button"] {
+    border-radius: 25px !important;
+}
+
+.btn-group > .btn:first-child {
+    border-top-left-radius: 25px !important;
+    border-bottom-left-radius: 25px !important;
+}
+
+.btn-group > .btn:last-child {
+    border-top-right-radius: 25px !important;
+    border-bottom-right-radius: 25px !important;
+}
+
+/* ========================================
+   INPUTS Y FORMULARIOS
+   ======================================== */
+
+.form-control,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="time"],
+textarea,
+select {
+    border-radius: 25px !important;
+}
+
+/* Select2 */
+.select2-container--default .select2-selection--single,
+.select2-container--default .select2-selection--multiple {
+    border-radius: 25px !important;
+}
+
+.select2-dropdown {
+    border-radius: 25px !important;
+}
+
+/* Input Groups */
+.input-group .form-control:first-child {
+    border-top-left-radius: 25px !important;
+    border-bottom-left-radius: 25px !important;
+}
+
+.input-group .form-control:last-child {
+    border-top-right-radius: 25px !important;
+    border-bottom-right-radius: 25px !important;
+}
+
+.input-group-addon:first-child {
+    border-top-left-radius: 25px !important;
+    border-bottom-left-radius: 25px !important;
+}
+
+.input-group-addon:last-child {
+    border-top-right-radius: 25px !important;
+    border-bottom-right-radius: 25px !important;
+}
+
+/* ========================================
+   TABLAS
+   ======================================== */
+
+.table-responsive {
+    border-radius: 25px !important;
+    overflow: hidden;
+}
+
+.table {
+    border-radius: 25px !important;
+}
+
+.table thead tr:first-child th:first-child {
+    border-top-left-radius: 25px !important;
+}
+
+.table thead tr:first-child th:last-child {
+    border-top-right-radius: 25px !important;
+}
+
+/* DataTables */
+.dataTables_wrapper .dataTables_filter input {
+    border-radius: 25px !important;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    border-radius: 25px !important;
+}
+
+/* ========================================
+   ALERTS Y NOTIFICACIONES
+   ======================================== */
+
+.alert {
+    border-radius: 25px !important;
+}
+
+.callout {
+    border-radius: 25px !important;
+}
+
+/* Toastr */
+#toast-container > div {
+    border-radius: 25px !important;
+}
+
+/* SweetAlert2 */
+.swal2-popup {
+    border-radius: 25px !important;
+}
+
+/* ========================================
+   PANELS Y CARDS
+   ======================================== */
+
+.panel,
+.card {
+    border-radius: 25px !important;
+    overflow: hidden;
+}
+
+.panel-heading,
+.card-header {
+    border-top-left-radius: 25px !important;
+    border-top-right-radius: 25px !important;
+}
+
+.panel-footer,
+.card-footer {
+    border-bottom-left-radius: 25px !important;
+    border-bottom-right-radius: 25px !important;
+}
+
+/* ========================================
+   NAVEGACIÓN Y TABS
+   ======================================== */
+
+.nav-tabs > li > a {
+    border-radius: 25px 25px 0 0 !important;
+}
+
+.nav-pills > li > a {
+    border-radius: 25px !important;
+}
+
+.pagination > li > a,
+.pagination > li > span {
+    border-radius: 25px !important;
+    margin: 0 2px;
+}
+
+/* ========================================
+   BADGES Y LABELS
+   ======================================== */
+
+.badge,
+.label {
+    border-radius: 25px !important;
+}
+
+/* ========================================
+   DROPDOWNS
+   ======================================== */
+
+.dropdown-menu {
+    border-radius: 25px !important;
+}
+
+/* ========================================
+   PROGRESS BARS
+   ======================================== */
+
+.progress {
+    border-radius: 25px !important;
+}
+
+.progress-bar {
+    border-radius: 25px !important;
+}
+
+/* ========================================
+   IMÁGENES Y AVATARES
+   ======================================== */
+
+.img-thumbnail {
+    border-radius: 25px !important;
+}
+
+.user-panel > .image > img {
+    border-radius: 25px !important;
+}
+
+/* ========================================
+   SIDEBAR
+   ======================================== */
+
+.sidebar-menu > li > a {
+    border-radius: 25px !important;
+    margin: 2px 10px;
+}
+
+.sidebar-menu .treeview-menu > li > a {
+    border-radius: 25px !important;
+    margin: 2px 10px;
+}
+
+/* ========================================
+   CONTENT WRAPPER
+   ======================================== */
+
+.content-wrapper {
+    border-radius: 0 !important;
+}
+
+.content-header {
+    border-radius: 0 !important;
+}
+
+/* ========================================
+   POS ESPECÍFICO
+   ======================================== */
+
+.product_box {
+    border-radius: 25px !important;
+}
+
+#pos_table {
+    border-radius: 25px !important;
+}
+
+.pos-form-actions {
+    border-radius: 25px !important;
+}
+
+/* ========================================
+   MÓDULO CONSULTORIO
+   ======================================== */
+
+.appointment-card {
+    border-radius: 25px !important;
+}
+
+.waiting-room-card {
+    border-radius: 25px !important;
+}
+
+/* ========================================
+   MÓDULO MANUFACTURING
+   ======================================== */
+
+.production-order-card {
+    border-radius: 25px !important;
+}
+
+.recipe-card {
+    border-radius: 25px !important;
+}
+
+/* ========================================
+   LANDING PAGE MODERNA
+   ======================================== */
+
+.hero-section,
+.features-section,
+.pricing-section,
+.stats-section {
+    border-radius: 25px !important;
+}
+
+.feature-card-modern,
+.pricing-card-modern,
+.stat-card-modern {
+    border-radius: 25px !important;
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+
+@media (max-width: 768px) {
+    /* En móviles, reducir un poco el radio para mejor uso del espacio */
+    .box,
+    .modal-content,
+    .panel,
+    .card {
+        border-radius: 20px !important;
+    }
+    
+    .btn,
+    .form-control {
+        border-radius: 20px !important;
+    }
+}
+
+/* ========================================
+   ANIMACIONES SUAVES
+   ======================================== */
+
+.box,
+.btn,
+.form-control,
+.modal-content,
+.alert,
+.panel,
+.card {
+    transition: all 0.3s ease !important;
+}
+
+/* ========================================
+   HOVER EFFECTS
+   ======================================== */
+
+.box:hover,
+.panel:hover,
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================
+   SOMBRAS MODERNAS
+   ======================================== */
+
+.box,
+.modal-content,
+.panel,
+.card,
+.dropdown-menu {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+.btn {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* ========================================
+   FIX PARA ELEMENTOS ESPECÍFICOS
+   ======================================== */
+
+/* Evitar que algunos elementos se vean mal con bordes redondeados */
+.table td,
+.table th {
+    border-radius: 0 !important;
+}
+
+/* Mantener el diseño original del sidebar */
+.main-sidebar {
+    border-radius: 0 !important;
+}
+
+/* Mantener el diseño original del header */
+.main-header {
+    border-radius: 0 !important;
+}
+
+/* ========================================
+   MEJORAS ADICIONALES
+   ======================================== */
+
+/* Espaciado mejorado para boxes */
+.box {
+    margin-bottom: 20px;
+}
+
+/* Padding mejorado para modales */
+.modal-body {
+    padding: 25px;
+}
+
+/* Mejor apariencia de inputs con focus */
+.form-control:focus {
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1) !important;
+    border-color: #007bff !important;
+}
