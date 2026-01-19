@@ -285,6 +285,7 @@
             transition: all 0.3s;
             cursor: pointer;
             border: none;
+            white-space: nowrap;
         }
 
         .btn-primary-modern {
@@ -656,7 +657,6 @@
         .w-full {
             width: 100%;
             justify-content: center;
-            display: flex;
         }
 
         /* CTA Section */
@@ -811,8 +811,8 @@
 
             .pricing-grid-modern {
                 grid-template-columns: 1fr;
-                max-width: 100%;
-                padding: 0 20px;
+                max-width: 500px;
+                margin: 0 auto;
             }
 
             .stats-grid-modern {
@@ -872,10 +872,22 @@
 
             .pricing-card-modern {
                 padding: 30px 20px;
+                margin-bottom: 20px;
             }
 
             .pricing-grid-modern {
-                padding: 0 10px;
+                padding: 0;
+                gap: 20px;
+            }
+
+            .btn-modern {
+                font-size: 15px;
+                padding: 12px 24px;
+            }
+
+            .w-full {
+                display: inline-flex;
+                width: 100%;
             }
 
             .footer-content {
