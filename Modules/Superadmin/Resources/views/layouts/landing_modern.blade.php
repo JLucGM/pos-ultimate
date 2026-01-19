@@ -327,6 +327,8 @@
         /* Dashboard Mockup */
         .dashboard-mockup {
             position: relative;
+            max-width: 80%;
+            margin: 0 auto;
         }
 
         .mockup-window {
@@ -363,21 +365,23 @@
         .floating-stat {
             position: absolute;
             background: var(--white);
-            padding: 16px;
-            border-radius: 12px;
+            padding: 16px 20px;
+            border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             display: flex;
             align-items: center;
             gap: 12px;
+            min-width: 200px;
         }
 
-        .stat-1 { top: 10%; right: -10%; }
-        .stat-2 { bottom: 30%; left: -10%; }
-        .stat-3 { bottom: 10%; right: 10%; }
+        .stat-1 { top: 10%; right: -15%; }
+        .stat-2 { bottom: 30%; left: -15%; }
+        .stat-3 { bottom: 10%; right: 5%; }
 
         .stat-icon {
             width: 48px;
             height: 48px;
+            min-width: 48px;
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -396,18 +400,21 @@
         .stat-info {
             display: flex;
             flex-direction: column;
+            min-width: 100px;
         }
 
         .stat-label {
             font-size: 12px;
             color: var(--gray-500);
             font-weight: 500;
+            white-space: nowrap;
         }
 
         .stat-value {
             font-size: 20px;
             font-weight: 700;
             color: var(--gray-900);
+            white-space: nowrap;
         }
 
         /* Features Section */
@@ -456,7 +463,7 @@
             padding: 32px;
             background: var(--white);
             border: 1px solid var(--gray-200);
-            border-radius: 16px;
+            border-radius: 30px;
             transition: all 0.3s;
         }
 
@@ -469,7 +476,7 @@
         .feature-icon-modern {
             width: 64px;
             height: 64px;
-            border-radius: 14px;
+            border-radius: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -790,6 +797,10 @@
                 order: -1;
             }
 
+            .dashboard-mockup {
+                max-width: 90%;
+            }
+
             .features-grid-modern {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -840,6 +851,10 @@
 
             .hero-title-modern {
                 font-size: 36px;
+            }
+
+            .dashboard-mockup {
+                max-width: 100%;
             }
 
             .section-title-modern {
