@@ -286,6 +286,70 @@
     </div>
 </section>
 
+<!-- How to Start Section -->
+<section id="como-empezar" class="how-to-start-modern">
+    <div class="container">
+        <div class="how-to-start-card">
+            <div class="section-header-modern" data-aos="fade-up">
+                <h2 class="section-title-white">¿Cómo empezar con Audaz POS?</h2>
+            </div>
+
+            <div class="steps-container">
+                <div class="step-item" data-aos="fade-up" data-aos-delay="0">
+                    <div class="step-content">
+                        <div class="step-icon-wrapper">
+                            <div class="step-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                        </div>
+                        <div class="step-text">
+                            <h3>1. Regístrate para empezar</h3>
+                            <p>Cuéntanos sobre tu negocio para ayudarte a aprovechar Audaz POS desde el primer día.</p>
+                        </div>
+                    </div>
+                    <div class="step-divider"></div>
+                </div>
+
+                <div class="step-item" data-aos="fade-up" data-aos-delay="100">
+                    <div class="step-content reverse">
+                        <div class="step-text text-right">
+                            <h3>2. Configuración inicial con expertos</h3>
+                            <p>Recibirás apoyo para configurar el sistema según las necesidades específicas de tu negocio, sin costos adicionales.</p>
+                        </div>
+                        <div class="step-icon-wrapper">
+                            <div class="step-icon">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step-divider"></div>
+                </div>
+
+                <div class="step-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="step-content">
+                        <div class="step-icon-wrapper">
+                            <div class="step-icon">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                        </div>
+                        <div class="step-text">
+                            <h3>3. Personaliza y comienza</h3>
+                            <p>Configura Audaz POS en pocos minutos según las necesidades de tu negocio. Podrás registrar tus productos, organizar tu inventario y automatizar tareas clave desde el primer día, sin complicaciones.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="how-to-cta" data-aos="fade-up" data-aos-delay="300">
+                <a href="{{ route('business.getRegister') }}" class="btn-modern btn-gradient-modern btn-lg">
+                    <span>Crea tu cuenta hoy</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- CTA Section -->
 <section class="cta-modern">
     <div class="container">

@@ -678,6 +678,129 @@
             box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
         }
 
+        /* How to Start Section */
+        .how-to-start-modern {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #1e0a3c 0%, #2d1b4e 50%, #4a2c7c 100%);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .how-to-start-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 60px 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-title-white {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .steps-container {
+            margin-bottom: 50px;
+        }
+
+        .step-item {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .step-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-item:last-child .step-divider {
+            display: none;
+        }
+
+        .step-content {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .step-content.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .step-icon-wrapper {
+            flex-shrink: 0;
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: var(--white);
+            box-shadow: 0 10px 30px rgba(236, 72, 153, 0.3);
+        }
+
+        .step-text {
+            flex: 1;
+        }
+
+        .step-text.text-right {
+            text-align: right;
+        }
+
+        .step-text h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 12px;
+        }
+
+        .step-text p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .step-divider {
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
+            margin: 20px auto;
+            position: relative;
+            left: 40px;
+        }
+
+        .step-content.reverse + .step-divider {
+            left: auto;
+            right: 40px;
+        }
+
+        .how-to-cta {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .btn-gradient-modern {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            color: var(--white);
+            border: none;
+            box-shadow: 0 10px 30px rgba(236, 72, 153, 0.3);
+        }
+
+        .btn-gradient-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(236, 72, 153, 0.4);
+        }
+
         .w-full {
             width: 100%;
             display: inline-flex;
@@ -929,6 +1052,45 @@
             .container-fluid {
                 padding: 0 20px;
             }
+
+            .how-to-start-card {
+                padding: 40px 20px;
+            }
+
+            .section-title-white {
+                font-size: 28px;
+                margin-bottom: 40px;
+            }
+
+            .step-content {
+                flex-direction: column !important;
+                text-align: center;
+                gap: 20px;
+            }
+
+            .step-text.text-right {
+                text-align: center;
+            }
+
+            .step-text h3 {
+                font-size: 20px;
+            }
+
+            .step-text p {
+                font-size: 15px;
+            }
+
+            .step-divider {
+                left: 50% !important;
+                right: auto !important;
+                transform: translateX(-50%);
+            }
+
+            .step-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 28px;
+            }
         }
     </style>
     
@@ -946,6 +1108,7 @@
                 <div class="nav-menu-modern" id="navMenu">
                     <a href="/#features" class="nav-link-modern">Características</a>
                     <a href="/#pricing" class="nav-link-modern">Precios</a>
+                    <a href="/#como-empezar" class="nav-link-modern">Cómo Empezar</a>
                     <a href="/#stats" class="nav-link-modern">Estadísticas</a>
                     @guest
                         <a href="{{ route('login') }}" class="nav-link-modern">Iniciar Sesión</a>
