@@ -57,9 +57,13 @@
         }
 
         .container-fluid {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 24px;
+            width: 100%;
+            padding: 0 40px;
+        }
+
+        .container-full {
+            width: 100%;
+            padding: 0;
         }
 
         /* Navigation */
@@ -124,6 +128,18 @@
             color: var(--primary);
         }
 
+        .navbar-modern.scrolled .nav-link-modern {
+            color: var(--gray-700);
+        }
+
+        .navbar-modern .nav-link-modern {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .navbar-modern.scrolled .nav-link-modern {
+            color: var(--gray-700);
+        }
+
         .mobile-menu-btn {
             display: none;
             background: none;
@@ -131,6 +147,14 @@
             font-size: 24px;
             color: var(--gray-700);
             cursor: pointer;
+        }
+
+        .navbar-modern .mobile-menu-btn {
+            color: var(--white);
+        }
+
+        .navbar-modern.scrolled .mobile-menu-btn {
+            color: var(--gray-700);
         }
 
         /* Hero Section */
@@ -142,6 +166,7 @@
             padding: 120px 0 80px;
             overflow: hidden;
             background: linear-gradient(135deg, #1e0a3c 0%, #2d1b4e 50%, #4a2c7c 100%);
+            width: 100%;
         }
 
         .hero-background {
@@ -250,7 +275,7 @@
             align-items: center;
             gap: 10px;
             padding: 14px 28px;
-            border-radius: 12px;
+            border-radius: 30px;
             font-size: 16px;
             font-weight: 600;
             text-decoration: none;
@@ -389,6 +414,7 @@
         .features-modern {
             padding: 100px 0;
             background: var(--white);
+            width: 100%;
         }
 
         .section-header-modern {
@@ -485,6 +511,7 @@
         .stats-modern {
             padding: 80px 0;
             background: linear-gradient(135deg, #1e0a3c 0%, #2d1b4e 50%, #4a2c7c 100%);
+            width: 100%;
         }
 
         .stats-grid-modern {
@@ -513,6 +540,7 @@
         .pricing-modern {
             padding: 100px 0;
             background: var(--gray-50);
+            width: 100%;
         }
 
         .pricing-grid-modern {
@@ -626,6 +654,7 @@
             background: linear-gradient(135deg, #1e0a3c 0%, #2d1b4e 50%, #4a2c7c 100%);
             position: relative;
             overflow: hidden;
+            width: 100%;
         }
 
         .cta-content-modern {
@@ -773,11 +802,36 @@
             .stats-grid-modern {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .container-fluid {
+                padding: 0 24px;
+            }
         }
 
         @media (max-width: 768px) {
             .nav-menu-modern {
                 display: none;
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                gap: 16px;
+            }
+
+            .nav-menu-modern.active {
+                display: flex;
+            }
+
+            .navbar-modern .nav-menu-modern {
+                background: var(--dark);
+            }
+
+            .navbar-modern.scrolled .nav-menu-modern {
+                background: var(--white);
             }
 
             .mobile-menu-btn {
@@ -811,6 +865,10 @@
             .floating-stat {
                 display: none;
             }
+
+            .container-fluid {
+                padding: 0 20px;
+            }
         }
     </style>
     
@@ -826,7 +884,9 @@
                 </a>
                 
                 <div class="nav-menu-modern" id="navMenu">
-                    <a href="{{ route('pricing') }}" class="nav-link-modern">Precios</a>
+                    <a href="/#features" class="nav-link-modern">Características</a>
+                    <a href="/#pricing" class="nav-link-modern">Precios</a>
+                    <a href="/#stats" class="nav-link-modern">Estadísticas</a>
                     @guest
                         <a href="{{ route('login') }}" class="nav-link-modern">Iniciar Sesión</a>
                         <a href="{{ route('business.getRegister') }}" class="btn-modern btn-primary-modern">
@@ -937,6 +997,45 @@
                 icon.classList.toggle('fa-times');
             });
         }
+
+        // Smooth scroll para links internos
+        document.addEventListener('DOMContentLoaded', function() {
+            var internalLinks = document.querySelectorAll('a[href^="#"], a[href^="/#"]');
+            
+            internalLinks.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    var href = this.getAttribute('href');
+                    
+                    // Extraer el hash
+                    var hash = href.includes('#') ? href.split('#')[1] : '';
+                    
+                    // Ignorar # vacío
+                    if (!hash || hash === '!') {
+                        return;
+                    }
+                    
+                    var target = document.getElementById(hash);
+                    if (target) {
+                        e.preventDefault();
+                        var offsetTop = target.getBoundingClientRect().top + window.pageYOffset - 80;
+                        
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Cerrar menú móvil si está abierto
+                        if (navMenu && navMenu.classList.contains('active')) {
+                            navMenu.classList.remove('active');
+                            if (mobileMenuBtn) {
+                                mobileMenuBtn.querySelector('i').classList.add('fa-bars');
+                                mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+                            }
+                        }
+                    }
+                });
+            });
+        });
     </script>
     
     @yield('javascript')

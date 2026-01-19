@@ -102,7 +102,7 @@
 </section>
 
 <!-- Features Section -->
-<section class="features-modern">
+<section id="features" class="features-modern">
     <div class="container">
         <div class="section-header-modern" data-aos="fade-up">
             <span class="section-badge-modern">Características</span>
@@ -181,7 +181,7 @@
 </section>
 
 <!-- Stats Section -->
-<section class="stats-modern">
+<section id="stats" class="stats-modern">
     <div class="container">
         <div class="stats-grid-modern" data-aos="fade-up">
             <div class="stat-item-modern">
@@ -205,7 +205,7 @@
 </section>
 
 <!-- Pricing Section -->
-<section class="pricing-modern">
+<section id="pricing" class="pricing-modern">
     <div class="container">
         <div class="section-header-modern" data-aos="fade-up">
             <span class="section-badge-modern">Precios</span>
