@@ -1492,9 +1492,8 @@
     }
     </script>
 
-    @yield('scripts')
-</body>
-</html>
+    <!-- Smooth scroll para links internos -->
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             var internalLinks = document.querySelectorAll('a[href^="#"], a[href^="/#"]');
             
@@ -1521,6 +1520,9 @@
                         });
                         
                         // Cerrar menú móvil si está abierto
+                        var navMenu = document.querySelector('.nav-menu-modern');
+                        var mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+                        
                         if (navMenu && navMenu.classList.contains('active')) {
                             navMenu.classList.remove('active');
                             if (mobileMenuBtn) {
@@ -1533,7 +1535,10 @@
             });
         });
     </script>
-    
+
+    @yield('scripts')
     @yield('javascript')
+</body>
+</html>
 </body>
 </html>
