@@ -767,7 +767,7 @@
 
         .step-content {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 30px;
         }
 
@@ -794,6 +794,7 @@
 
         .step-text {
             flex: 1;
+            padding-top: 8px;
         }
 
         .step-text.text-right {
@@ -805,12 +806,14 @@
             font-weight: 700;
             color: var(--white);
             margin-bottom: 12px;
+            line-height: 1.3;
         }
 
         .step-text p {
             font-size: 16px;
             line-height: 1.6;
             color: rgba(255, 255, 255, 0.8);
+            margin: 0;
         }
 
         .step-divider {

@@ -3343,6 +3343,27 @@ $(document).ready(function() {
         updateProductCurrencySymbols();
     };
 
+    // Función para actualizar el indicador visual de tasa
+    function updateExchangeRateIndicator(from_code, to_code, rate) {
+        if (rate && rate != 1 && from_code && to_code) {
+            var display_text = '1 ' + from_code + ' = ' + parseFloat(rate).toFixed(2) + ' ' + to_code;
+            $('#exchange_rate_display').text(display_text);
+            
+            // Actualizar fecha
+            var today = new Date();
+            var date_str = ('0' + today.getDate()).slice(-2) + '/' + 
+                          ('0' + (today.getMonth() + 1)).slice(-2) + '/' + 
+                          today.getFullYear();
+            $('#exchange_rate_date').text(date_str);
+            
+            // Mostrar el indicador con animación
+            $('#exchange_rate_indicator').slideDown(300);
+        } else {
+            // Ocultar el indicador si es moneda base
+            $('#exchange_rate_indicator').slideUp(300);
+        }
+    }
+
     // Cuando cambia la moneda de transacción
     $('#transaction_currency_id').on('change', function() {
         var transaction_currency_id = $(this).val();
@@ -3353,6 +3374,7 @@ $(document).ready(function() {
             $('#exchange_rate_value').text('1');
             $('.transaction_currency_symbol').text('');
             global_transaction_currency_code = null;
+            updateExchangeRateIndicator(null, null, 1);
             return;
         }
 
@@ -3369,6 +3391,7 @@ $(document).ready(function() {
             $('#transaction_currency_code').text($('#base_currency_code').text());
             global_transaction_currency_code = null; // Usar moneda base
             updateProductCurrencySymbols();
+            updateExchangeRateIndicator(null, null, 1);
             return;
         }
 
@@ -3392,6 +3415,10 @@ $(document).ready(function() {
                     // Actualizar el código de moneda
                     $('#transaction_currency_code').text(currency_code);
                     
+                    // Actualizar indicador visual
+                    var base_code = $('#base_currency_code').text();
+                    updateExchangeRateIndicator(currency_code, base_code, response.rate);
+                    
                     // Recalcular totales si es necesario
                     if (typeof pos_total_row === 'function') {
                         pos_total_row();
@@ -3402,12 +3429,14 @@ $(document).ready(function() {
                     toastr.warning('No se encontró tasa de cambio para esta moneda. Por favor, configure una tasa en el sistema.');
                     $('#exchange_rate').val(1);
                     $('#exchange_rate_value').text('1');
+                    updateExchangeRateIndicator(null, null, 1);
                 }
             },
             error: function() {
                 toastr.error('Error al obtener la tasa de cambio');
                 $('#exchange_rate').val(1);
                 $('#exchange_rate_value').text('1');
+                updateExchangeRateIndicator(null, null, 1);
             }
         });
     });
@@ -3433,6 +3462,12 @@ $(document).ready(function() {
         // Si es diferente a la moneda base, establecer el código
         if (transaction_currency_id != base_currency_id && currency_code) {
             global_transaction_currency_code = currency_code;
+            
+            // Mostrar indicador si hay tasa diferente de 1
+            var current_rate = $('#exchange_rate').val();
+            if (current_rate && current_rate != 1) {
+                updateExchangeRateIndicator(currency_code, base_currency_code, current_rate);
+            }
         } else {
             global_transaction_currency_code = null;
         }

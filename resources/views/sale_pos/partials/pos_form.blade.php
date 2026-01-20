@@ -112,6 +112,43 @@
 				</div>
 			</div>
 		</div>
+		
+		<!-- Indicador Visual de Tasa de Cambio -->
+		<div class="col-md-12">
+			<div class="alert alert-info" id="exchange_rate_indicator" style="display:none; margin: 10px 0; padding: 15px; border-radius: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+				<div style="display: flex; align-items: center; color: white;">
+					<i class="fa fa-exchange-alt fa-2x" style="margin-right: 15px; animation: pulse 2s infinite;"></i>
+					<div style="flex: 1;">
+						<strong style="font-size: 14px; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">Tasa de Cambio Activa</strong>
+						<span style="font-size: 22px; font-weight: bold; display: block;" id="exchange_rate_display">
+							1 USD = 1 USD
+						</span>
+					</div>
+					<div style="text-align: right;">
+						<small style="display: block; opacity: 0.9; font-size: 11px;">
+							<i class="fa fa-calendar"></i> Actualizado
+						</small>
+						<small style="display: block; font-weight: bold; font-size: 12px;" id="exchange_rate_date">
+							{{ date('d/m/Y') }}
+						</small>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<style>
+			@keyframes pulse {
+				0%, 100% { transform: scale(1); }
+				50% { transform: scale(1.1); }
+			}
+			#exchange_rate_indicator {
+				transition: all 0.3s ease;
+			}
+			#exchange_rate_indicator:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+			}
+		</style>
 	@endif
 	@if(!empty($price_groups) && count($price_groups) > 1)
 		<div class="col-md-4 col-sm-6">
