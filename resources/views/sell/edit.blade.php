@@ -862,6 +862,7 @@
 
 @section('javascript')
 	<script src="{{ asset('js/pos.js?v=' . $asset_v) }}"></script>
+	<script src="{{ asset('js/payment_currency.js?v=' . $asset_v) }}"></script>
 	<script src="{{ asset('js/product.js?v=' . $asset_v) }}"></script>
 	<script src="{{ asset('js/opening_stock.js?v=' . $asset_v) }}"></script>
 	<!-- Call restaurant module if defined -->

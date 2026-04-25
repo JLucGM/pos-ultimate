@@ -45,6 +45,14 @@ return [
 
     'enable_sell_in_diff_currency' => true,
     'currency_exchange_rate' => 1,
+
+    // ── Configuración de monedas Audaz POS ──
+    // Moneda base: en la que se registran precios y se almacenan transacciones
+    // Moneda local: en la que el cliente puede pagar (se convierte con la tasa del día)
+    'base_currency_code' => 'USD',
+    'local_currency_code' => 'VEF',  // VEF = Bolívares
+    'base_currency_label' => 'Dólares (USD)',
+    'local_currency_label' => 'Bolívares (Bs)',
     'orders_refresh_interval' => 600, //Auto refresh interval on Kitchen and Orders page in seconds,
 
     'default_date_format' => 'm/d/Y', //Default date format to be used if session is not set. All valid formats can be found on https://www.php.net/manual/en/function.date.php

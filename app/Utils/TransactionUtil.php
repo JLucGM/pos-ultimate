@@ -766,7 +766,16 @@ class TransactionUtil extends Util
                         'payment_for' => $transaction->contact_id,
                         'payment_ref_no' => $payment_ref_no,
                         'account_id' => ! empty($payment['account_id']) && $payment['method'] != 'advance' ? $payment['account_id'] : null,
+                        'payment_currency_id' => ! empty($payment['payment_currency_id']) ? $payment['payment_currency_id'] : null,
+                        'payment_exchange_rate' => ! empty($payment['payment_exchange_rate']) ? $payment['payment_exchange_rate'] : null,
                     ];
+
+                    // Calcular monto en moneda base si se pagó en otra moneda
+                    if (! empty($payment_data['payment_currency_id']) && ! empty($payment_data['payment_exchange_rate']) && $payment_data['payment_exchange_rate'] > 1) {
+                        $payment_data['amount_in_base_currency'] = $payment_amount / $payment_data['payment_exchange_rate'];
+                    } else {
+                        $payment_data['amount_in_base_currency'] = $payment_amount;
+                    }
 
                     for ($i = 1; $i < 8; $i++) {
                         if ($payment['method'] == 'custom_pay_'.$i) {

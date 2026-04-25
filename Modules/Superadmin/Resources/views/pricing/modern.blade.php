@@ -12,12 +12,12 @@
             
             <!-- Billing Toggle -->
             <div class="billing-toggle">
-                <span class="toggle-label" :class="{ active: !isYearly }">Mensual</span>
+                <span class="toggle-label active" id="label-monthly">Mensual</span>
                 <label class="switch">
                     <input type="checkbox" class="duration_check" id="billingToggle">
                     <span class="slider"></span>
                 </label>
-                <span class="toggle-label" :class="{ active: isYearly }">
+                <span class="toggle-label" id="label-yearly">
                     Anual
                     <span class="save-badge">Ahorra 20%</span>
                 </span>
@@ -43,15 +43,18 @@
                     <p class="plan-description">{{ $package->description }}</p>
                     
                     <div class="plan-price">
-                        <div class="months">
+                        <div class="price-monthly months">
                             <span class="currency">{{ $package->currency }}</span>
                             <span class="amount">{{ number_format($package->price, 0) }}</span>
                             <span class="period">/mes</span>
                         </div>
-                        <div class="years" style="display: none;">
+                        <div class="price-yearly years" style="display: none;">
                             <span class="currency">{{ $package->currency }}</span>
-                            <span class="amount">{{ number_format($package->annual_price ?? ($package->price * 12 * 0.8), 0) }}</span>
+                            <span class="amount">{{ number_format($package->annual_price, 0) }}</span>
                             <span class="period">/año</span>
+                            <div class="tw-text-sm tw-text-green-600 tw-font-semibold tw-mt-1">
+                                Ahorras ${{ number_format(($package->price * 12) - $package->annual_price, 0) }}/año
+                            </div>
                         </div>
                     </div>
                     
@@ -609,15 +612,23 @@ window.addEventListener('load', function() {
     var billingToggle = document.getElementById('billingToggle');
     if (billingToggle) {
         billingToggle.addEventListener('change', function() {
-            var monthsElements = document.querySelectorAll('.months');
-            var yearsElements = document.querySelectorAll('.years');
+            var monthlyEls = document.querySelectorAll('.price-monthly');
+            var yearlyEls = document.querySelectorAll('.price-yearly');
+            var labelMonthly = document.getElementById('label-monthly');
+            var labelYearly = document.getElementById('label-yearly');
             
             if (this.checked) {
-                monthsElements.forEach(function(el) { el.style.display = 'none'; });
-                yearsElements.forEach(function(el) { el.style.display = 'block'; });
+                // Mostrar anual
+                monthlyEls.forEach(function(el) { el.style.display = 'none'; });
+                yearlyEls.forEach(function(el) { el.style.display = 'block'; });
+                labelMonthly.classList.remove('active');
+                labelYearly.classList.add('active');
             } else {
-                yearsElements.forEach(function(el) { el.style.display = 'none'; });
-                monthsElements.forEach(function(el) { el.style.display = 'block'; });
+                // Mostrar mensual
+                yearlyEls.forEach(function(el) { el.style.display = 'none'; });
+                monthlyEls.forEach(function(el) { el.style.display = 'block'; });
+                labelYearly.classList.remove('active');
+                labelMonthly.classList.add('active');
             }
         });
     }

@@ -13,7 +13,7 @@
                     <div class="sm:tw-flex sm:tw-items-center sm:tw-justify-between sm:tw-gap-12">
                         <div class="tw-mt-2 sm:tw-w-1/2 md:tw-w-1/2">
                             <h1
-                                class="tw-text-2xl md:tw-text-4xl tw-tracking-tight tw-text-primary-800 tw-font-semibold text-white tw-mb-10 md:tw-mb-0">
+                                class="tw-text-2xl md:tw-text-4xl tw-tracking-tight tw-font-semibold tw-mb-10 md:tw-mb-0" style="color: #ffffff !important;">
                                 {{ __('home.welcome_message', ['name' => Session::get('user.first_name')]) }}
                             </h1>
                         </div>
@@ -139,7 +139,7 @@
                                     <div class="tw-p-4 sm:tw-p-5">
                                         <div class="tw-flex tw-items-center tw-gap-4">
                                             <div
-                                                class="tw-inline-flex tw-items-center tw-justify-center tw-w-10 tw-h-10 tw-text-yellow-500 tw-bg-yellow-100 tw-rounded-full sm:tw-w-12 sm:tw-h-12 shrink-0">
+                                                class="tw-inline-flex tw-items-center tw-justify-center tw-w-10 tw-h-10 tw-text-violet-500 tw-bg-violet-100 tw-rounded-full sm:tw-w-12 sm:tw-h-12 shrink-0">
                                                 <svg aria-hidden="true" class="tw-w-6 tw-h-6" xmlns="http://www.w3.org/2000/svg"
                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
@@ -211,7 +211,7 @@
                     {{-- Widgets Multimoneda --}}
                     @if(auth()->user()->can('dashboard.data') && $is_admin && !empty($multimoneda_data))
                         <div class="tw-mt-6">
-                            <h3 class="tw-text-lg tw-font-semibold tw-text-white tw-mb-4">
+                            <h3 class="tw-text-lg tw-font-semibold tw-mb-4" style="color: #ffffff !important;">
                                 <i class="fas fa-exchange-alt tw-mr-2"></i>
                                 Resumen Multimoneda
                             </h3>
@@ -234,25 +234,22 @@
                                     <div class="tw-p-4 sm:tw-p-5">
                                         @if(!empty($multimoneda_data['tasa_cambio']))
                                         <div class="tw-flex tw-items-center tw-gap-4">
-                                            <div class="tw-inline-flex tw-items-center tw-justify-center tw-w-10 tw-h-10 tw-rounded-full sm:tw-w-12 sm:tw-h-12 tw-shrink-0 tw-bg-sky-100 tw-text-sky-500">
+                                            <div class="tw-inline-flex tw-items-center tw-justify-center tw-w-10 tw-h-10 tw-rounded-full sm:tw-w-12 sm:tw-h-12 tw-shrink-0 tw-bg-indigo-100 tw-text-indigo-600">
                                                 <i class="fas fa-exchange-alt tw-text-lg"></i>
                                             </div>
                                             <div class="tw-flex-1 tw-min-w-0">
                                                 <p class="tw-text-sm tw-font-medium tw-text-gray-500 tw-truncate tw-whitespace-nowrap">
-                                                    Tasa de Cambio
+                                                    Tasa BCV del día
                                                 </p>
-                                                <p class="tw-mt-0.5 tw-text-gray-900 tw-text-xl tw-truncate tw-font-semibold tw-tracking-tight tw-font-mono">
-                                                    {{ number_format($multimoneda_data['tasa_cambio']['rate'], 2) }}
+                                                <p class="tw-mt-0.5 tw-text-gray-900 tw-text-2xl tw-truncate tw-font-bold tw-tracking-tight tw-font-mono">
+                                                    {{ number_format($multimoneda_data['tasa_cambio']['rate'], 2) }} <span class="tw-text-sm tw-font-medium tw-text-gray-400">Bs</span>
                                                 </p>
                                                 <p class="tw-text-xs tw-text-gray-500 tw-mt-1">
-                                                    1 {{ $multimoneda_data['tasa_cambio']['from'] }} = {{ number_format($multimoneda_data['tasa_cambio']['rate'], 2) }} {{ $multimoneda_data['tasa_cambio']['to'] }}
+                                                    1 USD = {{ number_format($multimoneda_data['tasa_cambio']['rate'], 2) }} {{ $multimoneda_data['tasa_cambio']['to'] }}
                                                 </p>
-                                                @if($multimoneda_data['tasa_cambio']['updated_at'])
-                                                <p class="tw-text-xs tw-text-gray-400 tw-mt-1">
-                                                    <i class="fas fa-clock tw-mr-1"></i>
-                                                    {{ $multimoneda_data['tasa_cambio']['updated_at'] }}
+                                                <p class="tw-text-xs tw-text-gray-400 tw-mt-0.5">
+                                                    <i class="fas fa-clock tw-mr-1"></i>{{ $multimoneda_data['tasa_cambio']['updated_at'] }}
                                                 </p>
-                                                @endif
                                             </div>
                                         </div>
                                         @else
@@ -335,6 +332,8 @@
         </div>
         @if (auth()->user()->can('dashboard.data'))
             @if ($is_admin)
+                {{-- === SECCIÓN COMPRAS OCULTA (disponible en Informes) === --}}
+                @if(false)
                 <div class="tw-relative">
                     <div class="tw-absolute tw-inset-0 tw-grid" aria-hidden="true">
                         <div class="tw-bg-gradient-to-r tw-from-@if(!empty(session('business.theme_color'))){{session('business.theme_color')}}@else{{'primary'}}@endif-800 tw-to-@if(!empty(session('business.theme_color'))){{session('business.theme_color')}}@else{{'primary'}}@endif-900"></div>
@@ -482,11 +481,13 @@
                         </div>
                     </div>
                 </div>
-                {{-- @if (!empty($widgets['after_sale_purchase_totals']))
+                @if (!empty($widgets['after_sale_purchase_totals']))
                     @foreach ($widgets['after_sale_purchase_totals'] as $widget)
                         {!! $widget !!}
                     @endforeach
-                @endif --}}
+                @endif
+                @endif
+                {{-- === FIN SECCIÓN COMPRAS OCULTA === --}}
             @endif
         @endif
     </div>
@@ -534,6 +535,8 @@
                             {!! $widget !!}
                         @endforeach
                     @endif --}}
+                    {{-- === GRÁFICO AÑO FISCAL OCULTO (disponible en Informes) === --}}
+                    @if(false)
                     @if (!empty($all_locations))
                         <div
                             class="tw-transition-all lg:tw-col-span-2 xl:tw-col-span-2 tw-duration-200 tw-bg-white tw-shadow-sm tw-rounded-xl tw-ring-1 hover:tw-shadow-md hover:tw--translate-y-0.5 tw-ring-gray-200">
@@ -567,15 +570,17 @@
                             </div>
                         </div>
                     @endif
+                    @endif
+                    {{-- === FIN GRÁFICO AÑO FISCAL OCULTO === --}}
                 @endif
                 {{-- @if (!empty($widgets['after_sales_current_fy']))
                     @foreach ($widgets['after_sales_current_fy'] as $widget)
                         {!! $widget !!}
                     @endforeach
                 @endif --}}
+                {{-- === TABLAS DE DETALLE OCULTAS (disponible en Informes) === --}}
+                @if(false)
                 @if (auth()->user()->can('sell.view') || auth()->user()->can('direct_sell.view'))
-                    <div
-                        class="tw-transition-all lg:tw-col-span-1 tw-duration-200 tw-bg-white tw-shadow-sm tw-rounded-xl tw-ring-1 hover:tw-shadow-md hover:tw--translate-y-0.5 tw-ring-gray-200">
                         <div class="tw-p-4 sm:tw-p-5">
                             <div class="tw-flex tw-items-center tw-gap-2.5">
                                 <div
@@ -1127,11 +1132,8 @@
                         </div>
                     </div>
                 @endif
-                {{-- @if (!empty($widgets['after_dashboard_reports']))
-                    @foreach ($widgets['after_dashboard_reports'] as $widget)
-                        {!! $widget !!}
-                    @endforeach
-                @endif --}}
+                @endif
+                {{-- === FIN TABLAS DE DETALLE OCULTAS === --}}
             </div>
         </div>
     @endif

@@ -1,0 +1,581 @@
+/**
+ * Audaz POS - Dashboard Modern Theme
+ * Paleta unificada: Slate (neutros) + Indigo (acento)
+ *
+ * PALETA:
+ *   Fondo app:     #f1f5f9 (slate-100)
+ *   Cards:         #ffffff
+ *   Texto fuerte:  #0f172a (slate-900)
+ *   Texto medio:   #475569 (slate-600)
+ *   Texto suave:   #94a3b8 (slate-400)
+ *   Bordes:        #e2e8f0 (slate-200)
+ *   Acento:        #4f46e5 (indigo-600)
+ *   Acento hover:  #4338ca (indigo-700)
+ *   Acento light:  #e0e7ff (indigo-100)
+ *   Éxito:         #059669 (emerald-600)
+ *   Error:         #dc2626 (red-600)
+ *   Header bg:     #1e293b (slate-800)
+ */
+
+:root {
+    --c-bg: #f1f5f9;
+    --c-card: #ffffff;
+    --c-text: #0f172a;
+    --c-text-mid: #475569;
+    --c-text-soft: #94a3b8;
+    --c-border: #e2e8f0;
+    --c-accent: #4f46e5;
+    --c-accent-hover: #4338ca;
+    --c-accent-light: #e0e7ff;
+    --c-accent-soft: #eef2ff;
+    --c-success: #059669;
+    --c-success-light: #d1fae5;
+    --c-error: #dc2626;
+    --c-error-light: #fee2e2;
+    --c-header: #1e293b;
+    --c-header-deep: #0f172a;
+    --radius: 14px;
+    --radius-sm: 10px;
+    --shadow: 0 1px 3px rgb(0 0 0 / 0.06);
+    --shadow-md: 0 4px 12px rgb(0 0 0 / 0.08);
+    --shadow-lg: 0 8px 24px rgb(0 0 0 / 0.1);
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+body, .tw-font-sans {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+.tw-font-mono, .tw-font-mono.tw-font-semibold {
+    font-family: 'Inter', ui-monospace, monospace !important;
+    letter-spacing: -0.02em !important;
+}
+
+/* ============================================
+   DASHBOARD HEADER — Slate oscuro, no azul
+   ============================================ */
+[class*="tw-from-primary-800"],
+[class*="tw-from-indigo-800"],
+.tw-bg-primary-800,
+.tw-bg-indigo-800 {
+    --tw-gradient-from: var(--c-header) !important;
+    background-color: var(--c-header) !important;
+}
+
+[class*="tw-to-primary-900"],
+[class*="tw-to-indigo-900"],
+.tw-bg-primary-900,
+.tw-bg-indigo-900 {
+    --tw-gradient-to: var(--c-header-deep) !important;
+    background-color: var(--c-header-deep) !important;
+}
+
+/* ============================================
+   STAT CARDS
+   ============================================ */
+.tw-ring-1.tw-ring-gray-200 {
+    --tw-ring-color: var(--c-border) !important;
+    border-radius: var(--radius) !important;
+    box-shadow: var(--shadow) !important;
+    transition: all 0.25s ease !important;
+}
+
+.tw-ring-1.tw-ring-gray-200:hover {
+    box-shadow: var(--shadow-md) !important;
+    transform: translateY(-1px) !important;
+    --tw-ring-color: var(--c-border) !important;
+}
+
+/* Card icon circles — todos usan acento */
+.tw-bg-sky-100,
+.tw-bg-blue-100 {
+    background-color: var(--c-accent-light) !important;
+}
+.tw-text-sky-500,
+.tw-text-blue-500,
+.tw-text-blue-600 {
+    color: var(--c-accent) !important;
+}
+
+.tw-bg-green-100 {
+    background-color: var(--c-success-light) !important;
+}
+.tw-text-green-500,
+.tw-text-green-600 {
+    color: var(--c-success) !important;
+}
+
+.tw-bg-red-100 {
+    background-color: var(--c-error-light) !important;
+}
+.tw-text-red-500 {
+    color: var(--c-error) !important;
+}
+
+/* Reemplazar amarillo por acento suave */
+.tw-bg-yellow-100 {
+    background-color: var(--c-accent-soft) !important;
+}
+.tw-text-yellow-500 {
+    color: var(--c-accent) !important;
+}
+
+.tw-bg-violet-100 {
+    background-color: var(--c-accent-light) !important;
+}
+.tw-text-violet-500 {
+    color: var(--c-accent) !important;
+}
+
+/* ============================================
+   CHART CONTAINERS
+   ============================================ */
+.tw-border-dashed.tw-rounded-xl.tw-bg-gray-50 {
+    border: none !important;
+    background: var(--c-card) !important;
+    border-radius: var(--radius-sm) !important;
+}
+
+.tw-font-bold.tw-text-base.lg\:tw-text-xl {
+    color: var(--c-text) !important;
+}
+
+/* ============================================
+   TABLES
+   ============================================ */
+.table > thead > tr > th {
+    background: var(--c-bg) !important;
+    border-bottom: 2px solid var(--c-border) !important;
+    color: var(--c-text-mid) !important;
+    font-weight: 600 !important;
+    font-size: 0.8rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    padding: 12px 16px !important;
+}
+
+.table > tbody > tr > td {
+    padding: 12px 16px !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+}
+
+.table > tbody > tr:hover > td {
+    background: var(--c-bg) !important;
+}
+
+/* ============================================
+   DATATABLES
+   ============================================ */
+.dataTables_wrapper .dataTables_length select,
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid var(--c-border) !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 6px 12px !important;
+}
+
+.dataTables_wrapper .dataTables_filter input:focus {
+    border-color: var(--c-accent) !important;
+    box-shadow: 0 0 0 3px rgb(79 70 229 / 0.1) !important;
+    outline: none !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: var(--c-accent) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: var(--c-accent-light) !important;
+    color: var(--c-accent) !important;
+    border: none !important;
+    border-radius: 8px !important;
+}
+
+/* ============================================
+   BUTTONS — Solo 4 colores
+   ============================================ */
+.btn {
+    border-radius: var(--radius-sm) !important;
+    font-weight: 500 !important;
+    transition: all 0.2s !important;
+}
+
+.btn-primary, .btn-info {
+    background: var(--c-accent) !important;
+    border-color: var(--c-accent) !important;
+    color: white !important;
+}
+.btn-primary:hover, .btn-info:hover {
+    background: var(--c-accent-hover) !important;
+    box-shadow: 0 4px 12px rgb(79 70 229 / 0.25) !important;
+}
+
+.btn-success {
+    background: var(--c-success) !important;
+    border-color: var(--c-success) !important;
+}
+.btn-success:hover {
+    background: #047857 !important;
+    box-shadow: 0 4px 12px rgb(5 150 105 / 0.25) !important;
+}
+
+.btn-danger {
+    background: var(--c-error) !important;
+    border-color: var(--c-error) !important;
+}
+.btn-danger:hover {
+    background: #b91c1c !important;
+    box-shadow: 0 4px 12px rgb(220 38 38 / 0.25) !important;
+}
+
+.btn-default {
+    background: var(--c-card) !important;
+    border: 1px solid var(--c-border) !important;
+    color: var(--c-text-mid) !important;
+}
+.btn-default:hover {
+    background: var(--c-bg) !important;
+}
+
+.btn-warning {
+    background: #d97706 !important;
+    border-color: #d97706 !important;
+    color: white !important;
+}
+
+.btn-xs {
+    border-radius: 6px !important;
+    font-size: 0.75rem !important;
+    padding: 4px 10px !important;
+}
+
+/* ============================================
+   FORMS
+   ============================================ */
+.form-control {
+    border-radius: var(--radius-sm) !important;
+    border: 1px solid var(--c-border) !important;
+    transition: all 0.2s !important;
+    color: var(--c-text) !important;
+}
+
+.form-control:focus {
+    border-color: var(--c-accent) !important;
+    box-shadow: 0 0 0 3px rgb(79 70 229 / 0.1) !important;
+}
+
+.input-group-addon {
+    background: var(--c-bg) !important;
+    border: 1px solid var(--c-border) !important;
+    color: var(--c-text-soft) !important;
+    min-width: 40px !important;
+    text-align: center !important;
+}
+
+.input-group-addon i {
+    display: inline-block !important;
+    visibility: visible !important;
+    font-size: 14px !important;
+}
+
+.input-group .input-group-addon:first-child {
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm) !important;
+    border-right: none !important;
+}
+
+.input-group .form-control {
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
+}
+
+/* ============================================
+   SELECT2
+   ============================================ */
+.select2-container--default .select2-selection--single {
+    border-radius: var(--radius-sm) !important;
+    border: 1px solid var(--c-border) !important;
+    height: 38px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 36px !important;
+    color: var(--c-text) !important;
+}
+
+.select2-dropdown {
+    border-radius: var(--radius-sm) !important;
+    border: 1px solid var(--c-border) !important;
+    box-shadow: var(--shadow-lg) !important;
+}
+
+/* ============================================
+   TABS (Settings)
+   ============================================ */
+.nav-tabs {
+    border-bottom: 2px solid var(--c-border) !important;
+}
+
+.nav-tabs > li > a {
+    border: none !important;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
+    color: var(--c-text-mid) !important;
+    font-weight: 500 !important;
+    padding: 10px 20px !important;
+    transition: all 0.2s !important;
+}
+
+.nav-tabs > li > a:hover {
+    background: var(--c-bg) !important;
+    color: var(--c-accent) !important;
+    border: none !important;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+    background: var(--c-accent) !important;
+    color: white !important;
+    border: none !important;
+    font-weight: 600 !important;
+}
+
+/* Vertical tabs */
+.nav-stacked > li > a {
+    border-radius: var(--radius-sm) !important;
+    margin-bottom: 4px !important;
+    color: var(--c-text-mid) !important;
+    font-weight: 500 !important;
+    padding: 10px 16px !important;
+    border: none !important;
+}
+
+.nav-stacked > li > a:hover {
+    background: var(--c-bg) !important;
+    color: var(--c-accent) !important;
+}
+
+.nav-stacked > li.active > a,
+.nav-stacked > li.active > a:hover,
+.nav-stacked > li.active > a:focus {
+    background: var(--c-accent) !important;
+    color: white !important;
+    border: none !important;
+    font-weight: 600 !important;
+}
+
+.tab-content {
+    padding: 20px !important;
+    background: var(--c-card) !important;
+}
+
+/* ============================================
+   BOXES (AdminLTE legacy)
+   ============================================ */
+.box {
+    border-radius: var(--radius) !important;
+    border: none !important;
+    box-shadow: var(--shadow) !important;
+}
+
+.box.box-primary,
+.box.box-info,
+.box.box-success,
+.box.box-warning,
+.box.box-danger,
+.box.box-solid {
+    border-top: none !important;
+    border: none !important;
+}
+
+.box .box-header {
+    border-bottom: 1px solid #f1f5f9 !important;
+    padding: 16px 20px !important;
+}
+
+.box .box-header .box-title {
+    font-weight: 700 !important;
+    color: var(--c-text) !important;
+}
+
+.box .box-body {
+    padding: 16px 20px !important;
+}
+
+/* ============================================
+   MODALS
+   ============================================ */
+.modal-content {
+    border: none !important;
+    border-radius: var(--radius) !important;
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25) !important;
+}
+
+.modal-header {
+    border-bottom: 1px solid #f1f5f9 !important;
+    padding: 20px 24px !important;
+}
+
+.modal-header .modal-title {
+    font-weight: 700 !important;
+    color: var(--c-text) !important;
+}
+
+.modal-footer {
+    border-top: 1px solid #f1f5f9 !important;
+}
+
+/* ============================================
+   DROPDOWNS
+   ============================================ */
+.dropdown-menu {
+    border: 1px solid var(--c-border) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--shadow-lg) !important;
+    padding: 6px !important;
+}
+
+.dropdown-menu > li > a {
+    border-radius: 8px !important;
+    padding: 8px 14px !important;
+    color: var(--c-text-mid) !important;
+}
+
+.dropdown-menu > li > a:hover {
+    background: var(--c-bg) !important;
+    color: var(--c-accent) !important;
+}
+
+/* ============================================
+   SIDEBAR
+   ============================================ */
+.side-bar {
+    border-right: 1px solid #f1f5f9 !important;
+}
+
+.side-bar .active > a,
+.side-bar .active > a:hover {
+    background: var(--c-accent-light) !important;
+    color: var(--c-accent) !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+}
+
+/* ============================================
+   BADGES & LABELS
+   ============================================ */
+.label-success, .badge-success { background-color: var(--c-success) !important; }
+.label-danger, .badge-danger { background-color: var(--c-error) !important; }
+.label-warning, .badge-warning { background-color: #d97706 !important; }
+.label-info, .badge-info { background-color: var(--c-accent) !important; }
+
+/* ============================================
+   ALERTS
+   ============================================ */
+.alert {
+    border: none !important;
+    border-radius: 12px !important;
+    font-weight: 500 !important;
+}
+
+.alert-success { background: var(--c-success-light) !important; color: #065f46 !important; }
+.alert-danger { background: var(--c-error-light) !important; color: #991b1b !important; }
+.alert-warning { background: #fef3c7 !important; color: #854d0e !important; }
+.alert-info { background: var(--c-accent-light) !important; color: #3730a3 !important; }
+
+/* ============================================
+   PROGRESS BARS
+   ============================================ */
+.progress {
+    border-radius: 8px !important;
+    height: 8px !important;
+    background: var(--c-bg) !important;
+}
+
+.progress-bar { border-radius: 8px !important; }
+.progress-bar-primary, .progress-bar-info { background: var(--c-accent) !important; }
+
+/* ============================================
+   PANELS
+   ============================================ */
+.panel {
+    border: none !important;
+    border-radius: var(--radius) !important;
+    box-shadow: var(--shadow) !important;
+}
+
+.panel-default > .panel-heading {
+    background: var(--c-bg) !important;
+    color: var(--c-text) !important;
+    border-radius: var(--radius) var(--radius) 0 0 !important;
+}
+
+/* ============================================
+   GENERAL
+   ============================================ */
+.content-wrapper, .right-side {
+    background: var(--c-bg) !important;
+}
+
+.callout {
+    border-radius: 12px !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--c-bg); }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--c-text-soft); }
+
+/* Loading shimmer */
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.tw-font-mono.tw-font-semibold:empty::after {
+    content: '...';
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+    display: inline-block;
+    width: 80px;
+    height: 1.2em;
+}
+
+
+/* ============================================
+   FONT AWESOME 4 → 5 COMPATIBILITY
+   Mapea clases FA4 a FA5 para íconos rotos
+   ============================================ */
+.fa.fa-suitcase:before { content: "\f0b1"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+.fa.fa-envelope:before { content: "\f0e0"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+.fa.fa-money:before { content: "\f0d6"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+.fa.fa-globe:before { content: "\f0ac"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+.fa.fa-map-marker:before { content: "\f3c5"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+.fa.fa-building:before { content: "\f1ad"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+.fa.fa-phone:before { content: "\f095"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+.fa.fa-calendar:before { content: "\f073"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+.fa.fa-clock-o:before { content: "\f017"; font-family: "Font Awesome 5 Free"; font-weight: 400; }
+.fa.fa-cog:before { content: "\f013"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+.fa.fa-cogs:before { content: "\f085"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+.fa.fa-flag:before { content: "\f024"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+.fa.fa-pencil:before { content: "\f303"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+.fa.fa-file-text:before { content: "\f15c"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+.fa.fa-credit-card:before { content: "\f09d"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+.fa.fa-bell:before { content: "\f0f3"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+
+/* Asegurar que los íconos FA se muestren */
+.input-group-addon .fa,
+.input-group-addon .fas,
+.input-group-addon .far,
+.input-group-addon .fab {
+    display: inline-block !important;
+    font-style: normal !important;
+    font-variant: normal !important;
+    text-rendering: auto !important;
+    -webkit-font-smoothing: antialiased !important;
+}

@@ -78,6 +78,7 @@ class InitialBusinessSeeder extends Seeder
                 'sell_price_tax'        => 'includes',
                 'enable_tooltip'        => 1,
                 'currency_symbol_placement' => 'before',
+                'theme_color'           => 'indigo',
                 'enabled_modules'       => [
                     'purchases', 'add_sale', 'pos_sale',
                     'stock_transfers', 'stock_adjustment', 'expenses', 'account',
@@ -131,6 +132,11 @@ class InitialBusinessSeeder extends Seeder
             // 5. Crear recursos por defecto del negocio
             // ============================================================
             $this->createDefaultResources($business_id, $adminUser->id);
+
+            // ============================================================
+            // 6. Crear paquetes de suscripción y suscripción activa
+            // ============================================================
+            $this->createPackagesAndSubscription($business_id);
 
             DB::commit();
 
@@ -457,5 +463,104 @@ class InitialBusinessSeeder extends Seeder
         foreach ($templates as $template) {
             NotificationTemplate::create($template);
         }
+    }
+
+    /**
+     * Crear paquetes de suscripción y asignar suscripción activa al negocio.
+     */
+    private function createPackagesAndSubscription(int $business_id): void
+    {
+        $packages = [
+            [
+                'name' => 'Básico',
+                'description' => 'Ideal para emprendedores y pequeños negocios que inician. Incluye las funciones esenciales del punto de venta.',
+                'location_count' => 1,
+                'user_count' => 3,
+                'product_count' => 500,
+                'bookings' => 0, 'kitchen' => 0, 'order_screen' => 0, 'tables' => 0,
+                'invoice_count' => 0,
+                'interval' => 'months',
+                'interval_count' => 1,
+                'trial_days' => 14,
+                'price' => 9.99,
+                'custom_permissions' => json_encode([]),
+                'created_by' => 1,
+                'sort_order' => 1,
+                'is_active' => 1,
+                'mark_package_as_popular' => 0,
+                'is_private' => 0, 'is_one_time' => 0,
+                'enable_custom_link' => 0,
+                'created_at' => now(), 'updated_at' => now(),
+            ],
+            [
+                'name' => 'Profesional',
+                'description' => 'Para negocios en crecimiento. Múltiples usuarios, sucursales y módulos avanzados.',
+                'location_count' => 3,
+                'user_count' => 10,
+                'product_count' => 5000,
+                'bookings' => 1, 'kitchen' => 0, 'order_screen' => 0, 'tables' => 0,
+                'invoice_count' => 0,
+                'interval' => 'months',
+                'interval_count' => 1,
+                'trial_days' => 14,
+                'price' => 29.99,
+                'custom_permissions' => json_encode(['essentials_module' => 1, 'crm_module' => 1]),
+                'created_by' => 1,
+                'sort_order' => 2,
+                'is_active' => 1,
+                'mark_package_as_popular' => 1,
+                'is_private' => 0, 'is_one_time' => 0,
+                'enable_custom_link' => 0,
+                'created_at' => now(), 'updated_at' => now(),
+            ],
+            [
+                'name' => 'Empresarial',
+                'description' => 'Solución completa. Sucursales ilimitadas, todos los módulos y soporte prioritario.',
+                'location_count' => 0,
+                'user_count' => 0,
+                'product_count' => 0,
+                'bookings' => 1, 'kitchen' => 1, 'order_screen' => 1, 'tables' => 1,
+                'invoice_count' => 0,
+                'interval' => 'months',
+                'interval_count' => 1,
+                'trial_days' => 14,
+                'price' => 79.99,
+                'custom_permissions' => json_encode(['essentials_module' => 1, 'manufacturing_module' => 1, 'crm_module' => 1, 'project_module' => 1]),
+                'created_by' => 1,
+                'sort_order' => 3,
+                'is_active' => 1,
+                'mark_package_as_popular' => 0,
+                'is_private' => 0, 'is_one_time' => 0,
+                'enable_custom_link' => 0,
+                'created_at' => now(), 'updated_at' => now(),
+            ],
+        ];
+
+        DB::table('packages')->insert($packages);
+
+        // Suscripción Empresarial activa para el negocio
+        $empresarial = DB::table('packages')->where('name', 'Empresarial')->first();
+
+        DB::table('subscriptions')->insert([
+            'business_id'    => $business_id,
+            'package_id'     => $empresarial->id,
+            'start_date'     => Carbon::today()->toDateString(),
+            'trial_end_date' => Carbon::today()->addDays(14)->toDateString(),
+            'end_date'       => Carbon::today()->addYear()->toDateString(),
+            'package_price'  => $empresarial->price,
+            'original_price' => $empresarial->price,
+            'package_details' => json_encode([
+                'name' => $empresarial->name,
+                'location_count' => $empresarial->location_count,
+                'user_count' => $empresarial->user_count,
+                'product_count' => $empresarial->product_count,
+                'invoice_count' => $empresarial->invoice_count,
+            ]),
+            'created_id'     => 1,
+            'paid_via'       => 'offline',
+            'status'         => 'approved',
+            'created_at'     => now(),
+            'updated_at'     => now(),
+        ]);
     }
 }

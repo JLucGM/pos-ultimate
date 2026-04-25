@@ -54,6 +54,7 @@ class BusinessController extends Controller
         $this->moduleUtil = $moduleUtil;
 
         $this->theme_colors = [
+            'indigo' => 'Indigo (Audaz)',
             'primary' => 'Blue',
             // 'black' => 'Black',
             'purple' => 'Purple',
@@ -218,14 +219,52 @@ class BusinessController extends Controller
                 $this->moduleUtil->getModuleData('after_business_created', ['business' => $business]);
             }
 
-            //Process payment information if superadmin is installed & package information is present
+            //Process payment information if superadmin is installed
             $is_installed_superadmin = $this->moduleUtil->isSuperadminInstalled();
             $package_id = $request->get('package_id', null);
-            if ($is_installed_superadmin && ! empty($package_id) && (config('app.env') != 'demo')) {
-                $package = \Modules\Superadmin\Entities\Package::find($package_id);
-                if (! empty($package)) {
-                    Auth::login($user);
-                    return redirect()->route('register-pay', ['package_id' => $package_id]);
+
+            if ($is_installed_superadmin && (config('app.env') != 'demo')) {
+                // Determinar qué paquete usar para el trial
+                $trial_package = null;
+
+                if (! empty($package_id)) {
+                    // Cliente seleccionó un plan específico → trial con ese plan
+                    $trial_package = \Modules\Superadmin\Entities\Package::active()->find($package_id);
+                }
+
+                if (empty($trial_package)) {
+                    // No seleccionó plan o no se encontró → trial con el más barato
+                    $trial_package = \Modules\Superadmin\Entities\Package::active()
+                        ->notPrivate()
+                        ->where('trial_days', '>', 0)
+                        ->orderBy('price', 'asc')
+                        ->first();
+                }
+
+                if ($trial_package) {
+                    $start_date = \Carbon\Carbon::today();
+                    $trial_days = $trial_package->trial_days > 0 ? $trial_package->trial_days : 14;
+                    $trial_end = $start_date->copy()->addDays($trial_days);
+
+                    \Modules\Superadmin\Entities\Subscription::create([
+                        'business_id'    => $business->id,
+                        'package_id'     => $trial_package->id,
+                        'start_date'     => $start_date->toDateString(),
+                        'trial_end_date' => $trial_end->toDateString(),
+                        'end_date'       => $trial_end->toDateString(),
+                        'package_price'  => 0,
+                        'original_price' => $trial_package->price,
+                        'package_details' => [
+                            'location_count' => $trial_package->location_count,
+                            'user_count'     => $trial_package->user_count,
+                            'product_count'  => $trial_package->product_count,
+                            'invoice_count'  => $trial_package->invoice_count,
+                            'name'           => $trial_package->name . ' (Prueba ' . $trial_days . ' días)',
+                        ],
+                        'created_id'     => $user->id,
+                        'paid_via'       => 'trial',
+                        'status'         => 'approved',
+                    ]);
                 }
             }
 

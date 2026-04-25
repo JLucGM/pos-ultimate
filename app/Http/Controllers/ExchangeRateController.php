@@ -236,14 +236,6 @@ class ExchangeRateController extends Controller
                 ], 400);
             }
             
-            // Log para debug
-            \Log::info('Getting exchange rate', [
-                'business_id' => $business_id,
-                'from' => $request->from_currency_id,
-                'to' => $request->to_currency_id,
-                'date' => $request->date
-            ]);
-            
             $rate = ExchangeRate::getRate(
                 $business_id,
                 $request->from_currency_id,
@@ -269,5 +261,51 @@ class ExchangeRateController extends Controller
                 'message' => 'Error al obtener la tasa: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Actualizar tasa desde DolarApi.com (botón manual)
+     */
+    public function syncFromApi(Request $request)
+    {
+        $business_id = $request->session()->get('user.business_id');
+        $source = $request->input('source', 'oficial');
+
+        $service = new \App\Services\ExchangeRateService();
+        $result = $service->updateRate($business_id, $source, auth()->id());
+
+        if ($request->ajax()) {
+            return response()->json($result);
+        }
+
+        $output = [
+            'success' => $result['success'],
+            'msg' => $result['message'],
+        ];
+
+        return redirect()->route('exchange-rates.index')->with('status', $output);
+    }
+
+    /**
+     * Obtener tasa actual desde la API sin guardar (preview)
+     */
+    public function previewApiRate()
+    {
+        $service = new \App\Services\ExchangeRateService();
+        $data = $service->fetchFromApi();
+
+        if (!$data) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se pudo consultar DolarApi.com',
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'oficial' => $data['oficial'],
+            'paralelo' => $data['paralelo'],
+            'fecha' => $data['fecha'],
+        ]);
     }
 }

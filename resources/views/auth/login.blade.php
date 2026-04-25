@@ -147,7 +147,7 @@
                                         class="tw-text-xs md:tw-text-sm tw-font-medium tw-text-black">@lang('lang_v1.password')</span>
                                     @if (config('app.env') != 'demo')
                                         <a href="{{ route('password.request') }}"
-                                            class="tw-text-xs md:tw-text-sm tw-font-medium tw-bg-gradient-to-r tw-from-indigo-500 tw-to-blue-500 tw-inline-block tw-text-transparent tw-bg-clip-text hover:tw-text-[#467BF5]"
+                                            class="tw-text-xs md:tw-text-sm tw-font-medium tw-bg-gradient-to-r tw-from-indigo-400 tw-to-violet-400 tw-inline-block tw-text-transparent tw-bg-clip-text hover:tw-from-indigo-500 hover:tw-to-violet-500"
                                             tabindex="-1">@lang('lang_v1.forgot_your_password')</a>
                                     @endif
                                 </div>
@@ -194,7 +194,7 @@
                         </div>
                         @endif
                         <button type="submit"
-                            class="tw-bg-gradient-to-r tw-from-indigo-500 tw-to-blue-500 tw-h-12 tw-rounded-xl tw-text-sm md:tw-text-base tw-text-white tw-font-semibold tw-w-full tw-max-w-full mt-2 hover:tw-from-indigo-600 hover:tw-to-blue-600 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-ring-offset-2 active:tw-from-indigo-700 active:tw-to-blue-700">
+                            class="tw-bg-gradient-to-r tw-from-indigo-600 tw-to-violet-600 tw-h-12 tw-rounded-xl tw-text-sm md:tw-text-base tw-text-white tw-font-semibold tw-w-full tw-max-w-full mt-2 hover:tw-from-indigo-700 hover:tw-to-violet-700 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-ring-offset-2 active:tw-from-indigo-800 active:tw-to-violet-800 tw-transition-all tw-duration-200 tw-shadow-lg tw-shadow-indigo-500/25">
                             @lang('lang_v1.login')
                         </button>
                     </form>
@@ -208,7 +208,7 @@
                                 <a href="{{ route('business.getRegister') }}@if (!empty(request()->lang)) {{ '?lang=' . request()->lang }} @endif"
                                     class="tw-text-sm tw-font-medium tw-text-gray-500 hover:tw-text-gray-500 tw-mt-2">{{ __('business.not_yet_registered') }}
                                     <span
-                                        class="tw-text-sm tw-font-medium tw-bg-gradient-to-r tw-from-indigo-500 tw-to-blue-500 tw-inline-block tw-text-transparent tw-bg-clip-text hover:tw-text-[#467BF5] hover:tw-underline">{{ __('business.register_now') }}</span></a>
+                                        class="tw-text-sm tw-font-medium tw-bg-gradient-to-r tw-from-indigo-400 tw-to-violet-400 tw-inline-block tw-text-transparent tw-bg-clip-text hover:tw-from-indigo-500 hover:tw-to-violet-500 hover:tw-underline">{{ __('business.register_now') }}</span></a>
                             @endif
                         @endif
                     </div>

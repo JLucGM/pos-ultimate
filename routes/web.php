@@ -122,6 +122,8 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     // Exchange Rates - Las rutas específicas deben ir ANTES del resource
     Route::get('/get-exchange-rate', [App\Http\Controllers\ExchangeRateController::class, 'getCurrentRate'])->name('get-exchange-rate');
     Route::get('/exchange-rates-data', [App\Http\Controllers\ExchangeRateController::class, 'getData'])->name('exchange-rates.getData');
+    Route::post('/exchange-rates/sync-api', [App\Http\Controllers\ExchangeRateController::class, 'syncFromApi'])->name('exchange-rates.sync-api');
+    Route::get('/exchange-rates/preview-api', [App\Http\Controllers\ExchangeRateController::class, 'previewApiRate'])->name('exchange-rates.preview-api');
     Route::resource('exchange-rates', App\Http\Controllers\ExchangeRateController::class);
 
     Route::post('/test-email', [BusinessController::class, 'testEmailConfiguration']);

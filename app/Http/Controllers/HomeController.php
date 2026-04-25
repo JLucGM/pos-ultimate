@@ -274,42 +274,36 @@ class HomeController extends Controller
             ];
         }
         
-        // Tasa de cambio actual (USD a moneda base)
-        $usd_currency = $currencies->firstWhere('code', 'USD');
-        if ($usd_currency && $usd_currency->id != $base_currency->id) {
-            $exchange_rate = \App\Models\ExchangeRate::where('from_currency_id', $usd_currency->id)
-                ->where('to_currency_id', $base_currency->id)
+        // Tasa de cambio actual (USD → Bs)
+        $base_code = config('constants.base_currency_code', 'USD');
+        $local_code = config('constants.local_currency_code', 'VEF');
+
+        $usd_currency = $currencies->firstWhere('code', $base_code);
+        $local_currency = $currencies->firstWhere('code', $local_code)
+            ?? $currencies->firstWhere('code', 'VES')
+            ?? $currencies->firstWhere('code', 'Bs');
+
+        $data['tasa_cambio'] = null;
+
+        if ($usd_currency && $local_currency) {
+            $exchange_rate = \App\Models\ExchangeRate::where('business_id', $business_id)
+                ->where('from_currency_id', $usd_currency->id)
+                ->where('to_currency_id', $local_currency->id)
+                ->orderBy('effective_date', 'desc')
                 ->orderBy('created_at', 'desc')
                 ->first();
-            
-            if (!$exchange_rate) {
-                // Intentar buscar en dirección inversa
-                $exchange_rate = \App\Models\ExchangeRate::where('from_currency_id', $base_currency->id)
-                    ->where('to_currency_id', $usd_currency->id)
-                    ->orderBy('created_at', 'desc')
-                    ->first();
-                
-                if ($exchange_rate) {
-                    // Invertir la tasa
-                    $data['tasa_cambio'] = [
-                        'from' => $usd_currency->code,
-                        'to' => $base_currency->code,
-                        'rate' => 1 / $exchange_rate->rate,
-                        'updated_at' => $exchange_rate->updated_at->diffForHumans()
-                    ];
-                } else {
-                    $data['tasa_cambio'] = null;
-                }
-            } else {
+
+            if ($exchange_rate) {
                 $data['tasa_cambio'] = [
-                    'from' => $usd_currency->code,
-                    'to' => $base_currency->code,
+                    'from' => config('constants.base_currency_label', 'USD'),
+                    'to' => config('constants.local_currency_label', 'Bs'),
+                    'from_code' => $base_code,
+                    'to_code' => $local_currency->code,
                     'rate' => $exchange_rate->rate,
-                    'updated_at' => $exchange_rate->updated_at->diffForHumans()
+                    'updated_at' => $exchange_rate->updated_at->diffForHumans(),
+                    'date' => $exchange_rate->effective_date->format('d/m/Y'),
                 ];
             }
-        } else {
-            $data['tasa_cambio'] = null;
         }
         
         $data['base_currency'] = $base_currency;

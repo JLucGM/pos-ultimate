@@ -16,8 +16,36 @@
 				</span>
 				{!! Form::text("payment[$row_index][amount]", @num_format($payment_line['amount']), ['class' => 'form-control payment-amount input_number', 'required', 'id' => "amount_$row_index", 'placeholder' => __('sale.amount'), 'readonly' => $readonly]); !!}
 			</div>
+			<small class="payment-currency-equivalent text-muted" id="currency_equiv_{{ $row_index }}" style="display:none;">
+				<i class="fas fa-exchange-alt"></i> <span class="equiv-text"></span>
+			</small>
 		</div>
 	</div>
+
+	{{-- Selector de moneda del pago --}}
+	@if(config('constants.enable_sell_in_diff_currency'))
+	<div class="col-md-3">
+		<div class="form-group">
+			{!! Form::label("payment_currency_$row_index", __('lang_v1.currency') . ':') !!}
+			<div class="input-group">
+				<span class="input-group-addon">
+					<i class="fas fa-coins"></i>
+				</span>
+				@php
+					$business_currency_id = session('business.currency_id');
+					$payment_currencies = \DB::table('currencies')
+						->whereIn('code', ['USD', 'VES', 'VEF'])
+						->orWhere('id', $business_currency_id)
+						->pluck('currency', 'id')
+						->toArray();
+					$selected_currency = $payment_line['payment_currency_id'] ?? $business_currency_id;
+				@endphp
+				{!! Form::select("payment[$row_index][payment_currency_id]", $payment_currencies, $selected_currency, ['class' => 'form-control payment-currency-select', 'id' => "payment_currency_$row_index", 'style' => 'width:100%;', 'data-row' => $row_index]); !!}
+				{!! Form::hidden("payment[$row_index][payment_exchange_rate]", 1, ['class' => 'payment-exchange-rate', 'id' => "payment_exchange_rate_$row_index"]) !!}
+			</div>
+		</div>
+	</div>
+	@endif
 	@if(!empty($show_date))
 	<div class="{{$col_class}}">
 		<div class="form-group">

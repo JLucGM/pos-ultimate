@@ -16,6 +16,30 @@ class Package extends Model
     ];
 
     /**
+     * Accessor: is_popular (alias de mark_package_as_popular)
+     */
+    public function getIsPopularAttribute()
+    {
+        return (bool) $this->mark_package_as_popular;
+    }
+
+    /**
+     * Accessor: símbolo de moneda (USD por defecto)
+     */
+    public function getCurrencyAttribute()
+    {
+        return '$';
+    }
+
+    /**
+     * Accessor: precio anual con 20% de descuento
+     */
+    public function getAnnualPriceAttribute()
+    {
+        return round($this->price * 12 * 0.8, 2);
+    }
+
+    /**
      * Scope a query to only include active packages.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query

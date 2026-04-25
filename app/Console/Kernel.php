@@ -33,6 +33,14 @@ class Kernel extends ConsoleKernel
 
         }
 
+        // Actualizar tasa de cambio USD/Bs cada hora (todos los entornos excepto demo)
+        if ($env !== 'demo') {
+            $schedule->command('exchange:update --source=oficial')
+                ->hourly()
+                ->between('6:00', '22:00')
+                ->withoutOverlapping();
+        }
+
         if ($env === 'demo') {
             //IMPORTANT NOTE: This command will delete all business details and create dummy business, run only in demo server.
             $schedule->command('pos:dummyBusiness')
