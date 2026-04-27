@@ -13,6 +13,10 @@
 
     <title>@yield('title') - {{ config('app.name', 'POS') }}</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+
     @include('layouts.partials.css')
 
     @include('layouts.partials.extracss_auth')

@@ -29,6 +29,10 @@
     
     <title>@yield('title') - {{ Session::get('business.name') }}</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+
     @include('layouts.partials.css')
     
 
