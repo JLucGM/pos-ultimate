@@ -289,59 +289,53 @@
 <!-- How to Start Section -->
 <section id="como-empezar" class="how-to-start-modern">
     <div class="container">
-        <div class="how-to-start-card">
-            <div class="section-header-modern" data-aos="fade-up">
-                <h2 class="section-title-white">¿Cómo empezar con Audaz POS?</h2>
+        <div class="how-to-start-card" style="background: #ffffff; border-radius: 20px; padding: 60px 48px; box-shadow: 0 4px 24px rgba(0,0,0,0.06); border: 1px solid #e2e8f0;">
+            <div class="section-header-modern" data-aos="fade-up" style="text-align: center; margin-bottom: 48px;">
+                <h2 style="font-size: 36px; font-weight: 800; color: #1E293B;">¿Cómo empezar con Audaz POS?</h2>
             </div>
 
-            <div class="steps-container">
+            <div class="steps-container" style="display: flex; flex-direction: column; gap: 0; max-width: 640px; margin: 0 auto;">
                 <div class="step-item" data-aos="fade-up" data-aos-delay="0">
-                    <div class="step-content">
-                        <div class="step-icon-wrapper">
-                            <div class="step-icon">
-                                <i class="fas fa-user-plus"></i>
-                            </div>
+                    <div style="display: flex; align-items: flex-start; gap: 20px;">
+                        <div style="width: 56px; height: 56px; min-width: 56px; border-radius: 14px; background: #1D4ED8; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user-plus" style="color: #fff; font-size: 20px;"></i>
                         </div>
-                        <div class="step-text">
-                            <h3>1. Regístrate para empezar</h3>
-                            <p>Cuéntanos sobre tu negocio para ayudarte a aprovechar Audaz POS desde el primer día.</p>
+                        <div>
+                            <h3 style="font-size: 18px; font-weight: 700; color: #1E293B; margin-bottom: 6px;">1. Regístrate para empezar</h3>
+                            <p style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0;">Cuéntanos sobre tu negocio para ayudarte a aprovechar Audaz POS desde el primer día.</p>
                         </div>
                     </div>
-                    <div class="step-divider"></div>
+                    <div style="width: 2px; height: 32px; background: #e2e8f0; margin-left: 27px;"></div>
                 </div>
 
                 <div class="step-item" data-aos="fade-up" data-aos-delay="100">
-                    <div class="step-content reverse">
-                        <div class="step-text text-right">
-                            <h3>2. Configuración inicial con expertos</h3>
-                            <p>Recibirás apoyo para configurar el sistema según las necesidades específicas de tu negocio, sin costos adicionales.</p>
+                    <div style="display: flex; align-items: flex-start; gap: 20px;">
+                        <div style="width: 56px; height: 56px; min-width: 56px; border-radius: 14px; background: #1D4ED8; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-cogs" style="color: #fff; font-size: 20px;"></i>
                         </div>
-                        <div class="step-icon-wrapper">
-                            <div class="step-icon">
-                                <i class="fas fa-cogs"></i>
-                            </div>
+                        <div>
+                            <h3 style="font-size: 18px; font-weight: 700; color: #1E293B; margin-bottom: 6px;">2. Configuración inicial con expertos</h3>
+                            <p style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0;">Recibirás apoyo para configurar el sistema según las necesidades específicas de tu negocio, sin costos adicionales.</p>
                         </div>
                     </div>
-                    <div class="step-divider"></div>
+                    <div style="width: 2px; height: 32px; background: #e2e8f0; margin-left: 27px;"></div>
                 </div>
 
                 <div class="step-item" data-aos="fade-up" data-aos-delay="200">
-                    <div class="step-content">
-                        <div class="step-icon-wrapper">
-                            <div class="step-icon">
-                                <i class="fas fa-rocket"></i>
-                            </div>
+                    <div style="display: flex; align-items: flex-start; gap: 20px;">
+                        <div style="width: 56px; height: 56px; min-width: 56px; border-radius: 14px; background: #1D4ED8; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-rocket" style="color: #fff; font-size: 20px;"></i>
                         </div>
-                        <div class="step-text">
-                            <h3>3. Personaliza y comienza</h3>
-                            <p>Configura Audaz POS en pocos minutos según las necesidades de tu negocio. Podrás registrar tus productos, organizar tu inventario y automatizar tareas clave desde el primer día, sin complicaciones.</p>
+                        <div>
+                            <h3 style="font-size: 18px; font-weight: 700; color: #1E293B; margin-bottom: 6px;">3. Personaliza y comienza</h3>
+                            <p style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0;">Configura Audaz POS en pocos minutos. Registra tus productos, organiza tu inventario y automatiza tareas clave desde el primer día.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="how-to-cta" data-aos="fade-up" data-aos-delay="300">
-                <a href="{{ route('business.getRegister') }}" class="btn-modern btn-gradient-modern btn-lg">
+            <div style="text-align: center; margin-top: 40px;" data-aos="fade-up" data-aos-delay="300">
+                <a href="{{ route('business.getRegister') }}" class="btn-modern btn-primary-modern btn-lg" style="background: #1D4ED8; color: #fff; padding: 14px 32px; border-radius: 12px; font-weight: 600; font-size: 16px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
                     <span>Crea tu cuenta hoy</span>
                     <i class="fas fa-arrow-right"></i>
                 </a>

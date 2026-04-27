@@ -1,18 +1,18 @@
 /* ===== Variables ===== */
 :root {
-    --primary: #4f46e5;
-    --primary-dark: #4338ca;
-    --primary-light: #6366f1;
+    --primary: #1D4ED8;
+    --primary-dark: #1E40AF;
+    --primary-light: #3B82F6;
     --secondary: #10b981;
-    --accent: #fb4c09;
-    --dark: #1e293b;
-    --light: #f8fafc;
+    --accent: #1D4ED8;
+    --dark: #1E293B;
+    --light: #F8FAFC;
     --gray: #64748b;
     --white: #ffffff;
-    --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.15);
+    --gradient: linear-gradient(135deg, #1D4ED8 0%, #3B82F6 100%);
+    --gradient-2: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.12);
 }
 
 /* ===== Reset & Base ===== */
@@ -23,10 +23,10 @@
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     line-height: 1.6;
     color: var(--dark);
-    background: var(--white);
+    background: var(--light);
     overflow-x: hidden;
 }
 

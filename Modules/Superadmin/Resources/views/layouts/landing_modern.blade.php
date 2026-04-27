@@ -50,7 +50,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -60,14 +60,14 @@
     
     <style>
         :root {
-            --primary: #7c3aed;
-            --primary-dark: #6d28d9;
-            --primary-light: #8b5cf6;
-            --dark: #1e0a3c;
-            --dark-2: #2d1b4e;
-            --dark-3: #4a2c7c;
+            --primary: #1D4ED8;
+            --primary-dark: #1E40AF;
+            --primary-light: #3B82F6;
+            --dark: #1E293B;
+            --dark-2: #334155;
+            --dark-3: #475569;
             --white: #ffffff;
-            --gray-50: #f9fafb;
+            --gray-50: #F8FAFC;
             --gray-100: #f3f4f6;
             --gray-200: #e5e7eb;
             --gray-300: #d1d5db;
@@ -75,8 +75,8 @@
             --gray-500: #6b7280;
             --gray-600: #4b5563;
             --gray-700: #374151;
-            --gray-800: #1f2937;
-            --gray-900: #111827;
+            --gray-800: #1E293B;
+            --gray-900: #1E293B;
         }
 
         * {
@@ -86,10 +86,10 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             line-height: 1.6;
             color: var(--gray-900);
-            background: var(--white);
+            background: var(--gray-50);
             overflow-x: hidden;
         }
 
@@ -148,12 +148,10 @@
             height: 55px;
             width: auto;
             transition: all 0.3s ease;
-            filter: brightness(0) invert(1);
         }
 
         .navbar-modern.scrolled .logo-modern img {
             height: 48px;
-            filter: none;
         }
 
         .nav-menu-modern {
@@ -179,11 +177,11 @@
         }
 
         .navbar-modern .nav-link-modern {
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--gray-800);
         }
 
         .navbar-modern.scrolled .nav-link-modern {
-            color: var(--gray-700);
+            color: var(--gray-800);
         }
 
         .mobile-menu-btn {
@@ -196,11 +194,11 @@
         }
 
         .navbar-modern .mobile-menu-btn {
-            color: var(--white);
+            color: var(--gray-800);
         }
 
         .navbar-modern.scrolled .mobile-menu-btn {
-            color: var(--gray-700);
+            color: var(--gray-800);
         }
 
         /* Hero Section */
@@ -211,7 +209,7 @@
             align-items: center;
             padding: 120px 0 80px;
             overflow: hidden;
-            background: linear-gradient(135deg, #1e0a3c 0%, #2d1b4e 50%, #4a2c7c 100%);
+            background: var(--gray-50);
             width: 100%;
         }
 
@@ -228,14 +226,14 @@
             position: absolute;
             border-radius: 50%;
             filter: blur(80px);
-            opacity: 0.3;
+            opacity: 0.08;
             animation: float 20s ease-in-out infinite;
         }
 
         .orb-1 {
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle, #7c3aed 0%, transparent 70%);
+            background: radial-gradient(circle, #1D4ED8 0%, transparent 70%);
             top: -200px;
             left: -200px;
         }
@@ -243,7 +241,7 @@
         .orb-2 {
             width: 400px;
             height: 400px;
-            background: radial-gradient(circle, #8b5cf6 0%, transparent 70%);
+            background: radial-gradient(circle, #3B82F6 0%, transparent 70%);
             bottom: -150px;
             right: -150px;
             animation-delay: -10s;
@@ -252,7 +250,7 @@
         .orb-3 {
             width: 300px;
             height: 300px;
-            background: radial-gradient(circle, #a78bfa 0%, transparent 70%);
+            background: radial-gradient(circle, #60A5FA 0%, transparent 70%);
             top: 50%;
             left: 50%;
             animation-delay: -5s;
@@ -278,11 +276,10 @@
             align-items: center;
             gap: 8px;
             padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(29, 78, 216, 0.1);
+            border: 1px solid rgba(29, 78, 216, 0.2);
             border-radius: 50px;
-            color: var(--white);
+            color: var(--primary);
             font-size: 14px;
             font-weight: 600;
             margin-bottom: 24px;
@@ -292,12 +289,12 @@
             font-size: 56px;
             font-weight: 900;
             line-height: 1.1;
-            color: var(--white);
+            color: var(--dark);
             margin-bottom: 24px;
         }
 
         .gradient-text {
-            background: linear-gradient(135deg, #a78bfa 0%, #ec4899 100%);
+            background: linear-gradient(135deg, #1D4ED8 0%, #3B82F6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -306,7 +303,7 @@
         .hero-description {
             font-size: 18px;
             line-height: 1.7;
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--dark);
             margin-bottom: 32px;
         }
 
@@ -332,13 +329,13 @@
         }
 
         .btn-primary-modern {
-            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            background: #1D4ED8;
             color: var(--white);
         }
 
         .btn-primary-modern:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
+            box-shadow: 0 10px 25px rgba(29, 78, 216, 0.35);
         }
 
         .btn-outline-modern {
@@ -361,13 +358,13 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--dark);
             font-size: 14px;
             font-weight: 500;
         }
 
         .trust-item i {
-            color: #a78bfa;
+            color: var(--primary);
             font-size: 18px;
         }
 
@@ -382,7 +379,7 @@
             background: var(--white);
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
         }
 
         .window-header {
@@ -439,7 +436,7 @@
 
         .bg-gradient-blue { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
         .bg-gradient-green { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-        .bg-gradient-purple { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
+        .bg-gradient-purple { background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%); }
         .bg-gradient-orange { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
         .bg-gradient-red { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
         .bg-gradient-teal { background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); }
@@ -629,7 +626,7 @@
             top: -12px;
             left: 50%;
             transform: translateX(-50%);
-            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%);
             color: var(--white);
             padding: 6px 20px;
             border-radius: 50px;
@@ -711,32 +708,26 @@
         }
 
         .pricing-card-modern .btn-primary-modern {
-            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            background: #1D4ED8;
             color: var(--white);
             border: 2px solid transparent;
         }
 
         .pricing-card-modern .btn-primary-modern:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
+            box-shadow: 0 10px 25px rgba(29, 78, 216, 0.35);
         }
 
         /* How to Start Section */
         .how-to-start-modern {
-            padding: 100px 0;
-            background: linear-gradient(135deg, #1e0a3c 0%, #2d1b4e 50%, #4a2c7c 100%);
+            padding: 80px 0;
+            background: var(--gray-50);
             width: 100%;
             position: relative;
-            overflow: hidden;
         }
 
         .how-to-start-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px;
-            padding: 60px 40px;
-            max-width: 1000px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
@@ -782,7 +773,7 @@
         .step-icon {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, #ec4899 0%, #3B82F6 100%);
             border-radius: 20px;
             display: flex;
             align-items: center;
@@ -836,7 +827,7 @@
         }
 
         .btn-gradient-modern {
-            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, #ec4899 0%, #3B82F6 100%);
             color: var(--white);
             border: none;
             box-shadow: 0 10px 30px rgba(236, 72, 153, 0.3);
