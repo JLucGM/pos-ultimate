@@ -9,6 +9,7 @@ Route::get('/', [Modules\Superadmin\Http\Controllers\LandingController::class, '
 Route::get('/pricing', [Modules\Superadmin\Http\Controllers\LandingController::class, 'pricing'])->name('pricing');
 Route::get('/features', [Modules\Superadmin\Http\Controllers\LandingController::class, 'features'])->name('features');
 Route::get('/about', [Modules\Superadmin\Http\Controllers\LandingController::class, 'about'])->name('about');
+Route::get('/contacto', [Modules\Superadmin\Http\Controllers\LandingController::class, 'contactPage'])->name('contact.page');
 Route::post('/contact', [Modules\Superadmin\Http\Controllers\LandingController::class, 'contact'])->name('contact');
 
 // Payment requests (public)

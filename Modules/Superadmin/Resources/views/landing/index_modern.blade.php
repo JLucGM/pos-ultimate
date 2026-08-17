@@ -359,6 +359,10 @@
                     <i class="fab fa-whatsapp"></i>
                     <span>Contactar por WhatsApp</span>
                 </a>
+                <a href="{{ route('contact.page') }}" class="btn-modern btn-outline-white-modern btn-lg">
+                    <i class="fas fa-envelope"></i>
+                    <span>Formulario de Contacto</span>
+                </a>
             </div>
         </div>
     </div>

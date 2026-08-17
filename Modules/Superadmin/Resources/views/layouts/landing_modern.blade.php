@@ -1146,7 +1146,7 @@
                     <a href="/#features" class="nav-link-modern">Características</a>
                     <a href="/#pricing" class="nav-link-modern">Precios</a>
                     <a href="/#como-empezar" class="nav-link-modern">Cómo Empezar</a>
-                    <a href="/#stats" class="nav-link-modern">Estadísticas</a>
+                    <a href="{{ route('contact.page') }}" class="nav-link-modern">Contacto</a>
                     @guest
                         <a href="{{ route('login') }}" class="nav-link-modern">Iniciar Sesión</a>
                         <a href="{{ route('business.getRegister') }}" class="btn-modern btn-primary-modern">

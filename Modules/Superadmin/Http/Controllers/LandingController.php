@@ -77,13 +77,42 @@ class LandingController extends Controller
             'message' => 'required|string|max:1000',
         ]);
 
-        // Here you can add logic to send email or save to database
-        // For now, we'll just return a success response
+        // Send email notification
+        try {
+            \Mail::send('superadmin::emails.contact', [
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'company' => $request->company,
+                'user_message' => $request->message,
+            ], function ($message) use ($request) {
+                $message->to(config('mail.from.address'))
+                        ->subject('Nuevo mensaje de contacto - ' . $request->name);
+                $message->replyTo($request->email, $request->name);
+            });
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Gracias por contactarnos. Te responderemos pronto.'
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Gracias por contactarnos. Te responderemos pronto.'
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error sending contact email: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Gracias por contactarnos. Te responderemos pronto.'
+            ]);
+        }
+    }
+
+    /**
+     * Display contact page
+     *
+     * @return Response
+     */
+    public function contactPage()
+    {
+        return view('superadmin::contact.index');
     }
 
     /**

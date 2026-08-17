@@ -283,8 +283,11 @@
                 <p>Si tienes necesidades específicas o múltiples ubicaciones, contáctanos para crear un plan a tu medida.</p>
             </div>
             <div class="cta-action">
-                <a href="#contact" class="btn btn-white btn-lg">
-                    <i class="fas fa-phone"></i> Contactar Ventas
+                <a href="{{ route('contact.page') }}" class="btn btn-white btn-lg">
+                    <i class="fas fa-envelope"></i> Formulario de Contacto
+                </a>
+                <a href="https://wa.me/584242909870" class="btn btn-outline-white btn-lg" style="margin-left: 16px;">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
                 </a>
             </div>
         </div>
