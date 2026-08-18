@@ -705,11 +705,22 @@
 }
 
 /* ==========================================================================
-   7. Responsive Refinements
+   7. Responsive Refinements & Anti-Overflow Protections
    ========================================================================== */
+html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    background-color: #F8FAFC !important;
+}
+
+.thetop, main, #scrollable-container, .audaz-dashboard-wrapper {
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+}
+
 @media (max-width: 1024px) {
     .audaz-topbar-center {
-        display: none;
+        display: none !important;
     }
     .audaz-dashboard-wrapper {
         padding: 16px;
@@ -722,11 +733,127 @@
     }
 }
 
-@media (max-width: 640px) {
-    .audaz-kpi-grid {
-        grid-template-columns: 1fr;
+@media (max-width: 768px) {
+    .audaz-topbar {
+        padding: 0 12px !important;
+        height: 58px !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        box-sizing: border-box !important;
     }
+    
+    .audaz-topbar-left {
+        gap: 8px !important;
+    }
+
+    .audaz-topbar-right {
+        gap: 6px !important;
+    }
+
+    .btn-audaz-pos {
+        padding: 6px 10px !important;
+        font-size: 12px !important;
+        gap: 4px !important;
+    }
+
+    .btn-audaz-pos span {
+        display: none !important;
+    }
+
+    .audaz-top-btn {
+        width: 34px !important;
+        height: 34px !important;
+        font-size: 13px !important;
+    }
+
+    .audaz-user-profile-btn {
+        padding: 3px 5px !important;
+        gap: 0 !important;
+    }
+
     .audaz-user-info-text {
-        display: none;
+        display: none !important;
+    }
+
+    .audaz-dashboard-wrapper {
+        padding: 12px 10px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+    }
+
+    .audaz-dashboard-header {
+        padding: 16px 14px !important;
+        border-radius: 16px !important;
+        margin-bottom: 14px !important;
+    }
+
+    .audaz-welcome-title {
+        font-size: 19px !important;
+        line-height: 1.3 !important;
+        margin-bottom: 4px !important;
+    }
+
+    .audaz-welcome-sub {
+        font-size: 12px !important;
+    }
+
+    .audaz-header-controls {
+        width: 100% !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+        margin-top: 10px !important;
+    }
+
+    .audaz-header-controls > div {
+        width: 100% !important;
+    }
+
+    .audaz-filter-pill-btn {
+        width: 100% !important;
+        justify-content: space-between !important;
+        padding: 8px 12px !important;
+    }
+
+    .audaz-kpi-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+        margin-bottom: 14px !important;
+    }
+
+    .audaz-kpi-card {
+        padding: 16px 14px !important;
+        border-radius: 16px !important;
+    }
+
+    .audaz-kpi-value {
+        font-size: 22px !important;
+    }
+
+    .audaz-card-header {
+        padding: 12px 14px !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+    }
+
+    .audaz-card-header-actions {
+        width: 100% !important;
+        justify-content: space-between !important;
+    }
+
+    .table-responsive, .dataTables_wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .box, .nav-tabs-custom, .card {
+        border-radius: 16px !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+        margin-bottom: 14px !important;
     }
 }
