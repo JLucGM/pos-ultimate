@@ -42,12 +42,19 @@
     const navMenu = document.getElementById('navMenu');
     
     if (mobileMenuBtn && navMenu) {
-        mobileMenuBtn.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
+        mobileMenuBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const isOpen = navMenu.classList.toggle('active');
             const icon = mobileMenuBtn.querySelector('i');
             if (icon) {
-                icon.classList.toggle('fa-bars');
-                icon.classList.toggle('fa-times');
+                if (isOpen) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
             }
         });
 
@@ -57,10 +64,24 @@
                 navMenu.classList.remove('active');
                 const icon = mobileMenuBtn.querySelector('i');
                 if (icon) {
-                    icon.classList.add('fa-bars');
                     icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
                 }
             });
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                if (navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    if (icon) {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                }
+            }
         });
     }
 
