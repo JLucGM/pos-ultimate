@@ -1,5 +1,8 @@
 <?php
 
+// Suppress PHP 8.4 deprecation notices from third-party vendor packages
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 
