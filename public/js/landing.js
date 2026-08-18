@@ -335,46 +335,69 @@
                 const originalText = this.textContent;
                 this.textContent = 'Procesando...';
                 
-                // Remove loading state after 3 seconds (adjust based on your needs)
+                setTimeout(() => {
+                    this.classList.remove('loading');
+                    this.disabled = false;
+                    this.textContent = originalText;
+                }, 3000);
+            }
+        });
+    });
+
     // Solutions Tabs Switcher
-    const solutionTabBtns = document.querySelectorAll('.solution-tab-btn');
-    const solutionTabPanes = document.querySelectorAll('.solution-tab-pane');
+    function initSolutionTabs() {
+        const tabBtns = document.querySelectorAll('.solution-tab-btn');
+        const tabPanes = document.querySelectorAll('.solution-tab-pane');
 
-    if (solutionTabBtns.length > 0 && solutionTabPanes.length > 0) {
-        solutionTabBtns.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetSelector = this.getAttribute('data-target');
-                const targetPane = document.querySelector(targetSelector);
+        if (tabBtns.length > 0) {
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const targetSelector = this.getAttribute('data-target');
+                    const targetPane = document.querySelector(targetSelector);
 
-                if (targetPane) {
-                    // Update active button
-                    solutionTabBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
+                    if (targetPane) {
+                        tabBtns.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
 
-                    // Update active pane
-                    solutionTabPanes.forEach(p => p.classList.remove('active'));
-                    targetPane.classList.add('active');
+                        tabPanes.forEach(p => p.classList.remove('active'));
+                        targetPane.classList.add('active');
+                    }
+                });
+            });
+        }
+    }
+
+    // Mobile Navigation Dropdown Toggle
+    function initDropdownToggle() {
+        const dropdownTriggers = document.querySelectorAll('.nav-dropdown-trigger');
+        dropdownTriggers.forEach(trigger => {
+            trigger.addEventListener('click', function(e) {
+                if (window.innerWidth <= 1024) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const parent = this.closest('.nav-item-dropdown');
+                    if (parent) {
+                        parent.classList.toggle('active');
+                    }
                 }
             });
         });
     }
 
-    // Mobile Navigation Dropdown Toggle
-    const dropdownTriggers = document.querySelectorAll('.nav-dropdown-trigger');
-    dropdownTriggers.forEach(trigger => {
-        trigger.addEventListener('click', function(e) {
-            if (window.innerWidth <= 1024) {
-                e.preventDefault();
-                e.stopPropagation();
-                const parent = this.closest('.nav-item-dropdown');
-                if (parent) {
-                    parent.classList.toggle('active');
-                }
-            }
+    // Initialize on DOM ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            initSolutionTabs();
+            initDropdownToggle();
         });
-    });
+    } else {
+        initSolutionTabs();
+        initDropdownToggle();
+    }
 
     console.log('Landing page initialized successfully');
 })();
+
 

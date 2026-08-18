@@ -687,7 +687,29 @@ window.addEventListener('load', function() {
         });
     });
     
-    console.log('=== FAQ inicializado correctamente ===');
+    // Soluciones Tabs Switcher
+    var solutionBtns = document.querySelectorAll('.solution-tab-btn');
+    var solutionPanes = document.querySelectorAll('.solution-tab-pane');
+    
+    solutionBtns.forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            var targetId = this.getAttribute('data-target');
+            var targetPane = document.querySelector(targetId);
+            
+            if (targetPane) {
+                solutionBtns.forEach(function(b) { b.classList.remove('active'); });
+                this.classList.add('active');
+                
+                solutionPanes.forEach(function(p) { p.classList.remove('active'); });
+                targetPane.classList.add('active');
+            }
+        });
+    });
+    
+    console.log('=== FAQ y Soluciones inicializados correctamente ===');
 });
 </script>
 @endsection
