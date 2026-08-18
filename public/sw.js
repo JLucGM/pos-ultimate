@@ -1,16 +1,17 @@
 /**
- * Audaz POS - Progressive Web App Service Worker
- * Version: 1.0.1 - Fix: Never intercept HTML navigation requests to prevent stale CSRF tokens
+ * Kubre - Progressive Web App Service Worker
+ * Version: 2.0.0
  */
 
-const CACHE_NAME = 'audaz-pos-v2';
+const CACHE_NAME = 'kubre-v1';
 const STATIC_ASSETS = [
     '/manifest.json',
     '/favicon.ico',
+    '/images/favicon.png',
+    '/images/logo.svg',
     '/img/icons/icon-192x192.png',
     '/img/icons/icon-512x512.png',
-    '/img/logo-small.png',
-    '/img/logo-audaz.png'
+    '/img/logo.svg'
 ];
 
 // Install Event - Pre-cache core static assets
@@ -54,6 +55,7 @@ self.addEventListener('fetch', (event) => {
     // Only cache static files (images, icons, fonts)
     if (
         url.pathname.startsWith('/img/') ||
+        url.pathname.startsWith('/images/') ||
         url.pathname.startsWith('/fonts/') ||
         url.pathname.endsWith('.png') ||
         url.pathname.endsWith('.jpg') ||

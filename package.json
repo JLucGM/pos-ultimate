@@ -1,7 +1,7 @@
 {
-  "name": "audazpos",
+  "name": "kubre",
   "version": "1.0.0",
-  "description": "Audaz POS - Sistema de Punto de Venta",
+  "description": "Kubre - Sistema de Gestión Comercial y Punto de Venta",
   "main": "index.js",
   "directories": {
     "test": "tests"

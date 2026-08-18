@@ -30,7 +30,7 @@
     <title>@yield('title') - {{ Session::get('business.name') }}</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 
     <!-- PWA Manifest & Mobile Meta Tags -->
@@ -39,7 +39,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Audaz POS">
+    <meta name="apple-mobile-web-app-title" content="Kubre">
     <link rel="apple-touch-icon" href="{{ asset('img/icons/icon-192x192.png') }}">
 
     @include('layouts.partials.css')

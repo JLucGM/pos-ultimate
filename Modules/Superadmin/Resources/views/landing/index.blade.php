@@ -1,5 +1,5 @@
 @extends('superadmin::layouts.landing')
-@section('title', 'Sistema POS para Pequeñas Empresas')
+@section('title', 'Kubre | Sistema de Gestión Comercial y Punto de Venta en la Nube')
 
 @section('content')
 <!-- Hero Section -->
@@ -13,10 +13,10 @@
             </div>
 
             <h1 class="hero-title" data-aos="fade-up">
-                Impulsa tu Negocio con el <span class="text-gradient">POS Inteligente</span> Más Completo
+                Impulsa tu Negocio con <span class="text-gradient">Kubre</span>: Todo en Uno
             </h1>
             <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="100">
-                Controla ventas en segundos, inventario multialmacén, tasas de cambio dinámicas y finanzas desde cualquier dispositivo. La suite definitiva para comercios, restaurantes y empresas.
+                Controla ventas en segundos, inventario multialmacén, tasas de cambio dinámicas y finanzas desde cualquier dispositivo. La suite definitiva para comercios, restaurantes, mayoristas y empresas.
             </p>
             <div class="hero-buttons" data-aos="fade-up" data-aos-delay="200">
                 <a href="{{ route('pricing') }}" class="btn btn-primary btn-lg">
@@ -69,7 +69,7 @@
         <div class="section-header text-center" data-aos="fade-up">
             <span class="section-badge" style="background: rgba(251, 76, 10, 0.15); color: #FB4C0A; border-color: rgba(251, 76, 10, 0.3);">Organizaciones & Nichos</span>
             <h2 class="section-title">Soluciones Especializadas para Tu Tipo de Negocio</h2>
-            <p class="section-subtitle">No importa si vendes comida, ropa, al mayor, fabricas productos o agendas citas. Audaz se adapta a tu modelo operativo.</p>
+            <p class="section-subtitle">No importa si vendes comida, ropa, al mayor, fabricas productos o agendas citas. Kubre se adapta a tu modelo operativo.</p>
         </div>
 
         <!-- Solutions Tabs Buttons -->

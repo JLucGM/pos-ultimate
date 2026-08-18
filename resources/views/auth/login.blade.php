@@ -36,9 +36,8 @@
         <div class="auth-brand-header">
             <a href="{{ url('/') }}" class="auth-brand-logo-wrap">
                 <div class="auth-brand-logo-icon">
-                    <img src="{{ asset('images/landing/logo_full.png') }}" alt="{{ config('app.name', 'AudazPOS') }}" />
+                    <img src="{{ asset('images/logo.svg') }}" alt="{{ config('app.name', 'Kubre') }}" />
                 </div>
-                <span class="auth-brand-name">{{ config('app.name', 'AudazPOS') }}</span>
             </a>
             
             <div style="font-size: 12px; font-weight: 700; color: #FB4C0A; background: rgba(251, 76, 10, 0.12); border: 1px solid rgba(251, 76, 10, 0.25); padding: 4px 12px; border-radius: 999px; font-family: monospace;">

@@ -7,11 +7,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Primary Meta Tags -->
-    <title>@yield('title', 'Sistema POS para Pequeñas Empresas | Audaz POS') - {{ config('app.name') }}</title>
-    <meta name="title" content="@yield('meta_title', 'Sistema POS para Pequeñas Empresas | Audaz POS - Software de Punto de Venta en la Nube')">
-    <meta name="description" content="@yield('meta_description', 'Sistema POS completo en la nube para restaurantes, tiendas, consultorios y pequeñas empresas. Control de ventas, inventario, citas y reportes desde cualquier lugar. Prueba gratis.')">
-    <meta name="keywords" content="sistema pos, punto de venta, software pos, pos en la nube, sistema de ventas, control de inventario, pos para restaurantes, pos para tiendas, pos venezuela, software facturación, sistema citas, pos consultorio, audaz pos">
-    <meta name="author" content="Audaz POS">
+    <title>@yield('title', 'Kubre | Sistema de Gestión Comercial y POS') - {{ config('app.name') }}</title>
+    <meta name="title" content="@yield('meta_title', 'Kubre | Sistema de Gestión Comercial y Software POS en la Nube')">
+    <meta name="description" content="@yield('meta_description', 'Kubre es la plataforma todo-en-uno en la nube para gestionar ventas, inventario multialmacén, compras, facturación multimoneda y finanzas desde cualquier lugar.')">
+    <meta name="keywords" content="sistema pos, punto de venta, software pos, pos en la nube, sistema de ventas, control de inventario, pos para restaurantes, pos para tiendas, pos venezuela, software facturación, sistema citas, kubre, kubre pos">
+    <meta name="author" content="Kubre">
     <meta name="robots" content="index, follow">
     <meta name="language" content="Spanish">
     <meta name="revisit-after" content="7 days">
@@ -22,23 +22,23 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:title" content="@yield('og_title', 'Sistema POS para Pequeñas Empresas | Audaz POS')">
-    <meta property="og:description" content="@yield('og_description', 'Sistema POS completo en la nube. Control de ventas, inventario, clientes y reportes desde cualquier lugar. Perfecto para restaurantes, tiendas y consultorios.')">
-    <meta property="og:image" content="{{ asset('images/landing/og-image.jpg') }}">
+    <meta property="og:title" content="@yield('og_title', 'Kubre | Sistema de Gestión Comercial y POS')">
+    <meta property="og:description" content="@yield('og_description', 'Kubre es la plataforma todo-en-uno en la nube para gestionar ventas, inventario multialmacén, compras y facturación.')">
+    <meta property="og:image" content="{{ asset('images/favicon.png') }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:site_name" content="Audaz POS">
+    <meta property="og:site_name" content="Kubre">
     <meta property="og:locale" content="es_ES">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ url()->current() }}">
-    <meta property="twitter:title" content="@yield('twitter_title', 'Sistema POS para Pequeñas Empresas | Audaz POS')">
-    <meta property="twitter:description" content="@yield('twitter_description', 'Sistema POS completo en la nube para gestionar tu negocio desde cualquier lugar.')">
-    <meta property="twitter:image" content="{{ asset('images/landing/twitter-image.jpg') }}">
+    <meta property="twitter:title" content="@yield('twitter_title', 'Kubre | Sistema de Gestión Comercial y POS')">
+    <meta property="twitter:description" content="@yield('twitter_description', 'Kubre: Sistema de gestión comercial y POS en la nube.')">
+    <meta property="twitter:image" content="{{ asset('images/favicon.png') }}">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">

@@ -69,7 +69,7 @@ class PaymentRequestController extends Controller
                 ],
                 'otro' => [
                     'name' => 'Otro Método',
-                    'info' => '<strong>Contáctanos:</strong><br>WhatsApp: +584242909870<br>Email: edduar@audaz.site<br>Telegram: @evill_etherven'
+                    'info' => '<strong>Contáctanos:</strong><br>WhatsApp: +584242909870<br>Email: edduar@kubre.site<br>Telegram: @evill_etherven'
                 ]
             ]
         ]);

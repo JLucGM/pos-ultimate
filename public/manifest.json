@@ -1,7 +1,7 @@
 {
-  "name": "Audaz POS - Sistema de Gestión y Punto de Venta",
-  "short_name": "Audaz POS",
-  "description": "Sistema de gestión empresarial, facturación y punto de venta inteligente",
+  "name": "Kubre - Sistema de Gestión Comercial y POS",
+  "short_name": "Kubre",
+  "description": "Plataforma de gestión comercial, ventas, inventario y facturación multimoneda",
   "start_url": "/home",
   "scope": "/",
   "display": "standalone",

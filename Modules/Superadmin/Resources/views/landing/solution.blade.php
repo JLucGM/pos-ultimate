@@ -1,5 +1,5 @@
 @extends('superadmin::layouts.landing')
-@section('title', $solution['hero_title'] . ' | Audaz')
+@section('title', $solution['hero_title'] . ' | Kubre')
 
 @section('content')
 <!-- Vertical Solution Hero Section -->
@@ -48,7 +48,7 @@
                     </div>
                     <div>
                         <div class="solution-visual-title">{{ $solution['name'] }}</div>
-                        <div class="solution-visual-sub">Audaz Suite Optimizada</div>
+                        <div class="solution-visual-sub">Kubre Suite Optimizada</div>
                     </div>
                 </div>
 
@@ -108,7 +108,7 @@
     <div class="container">
         <div class="section-header text-center" data-aos="fade-up">
             <h2 class="section-title">Explora Soluciones para Otras Industrias</h2>
-            <p class="section-subtitle">Audaz se adapta perfectamente a diferentes modelos de negocio.</p>
+            <p class="section-subtitle">Kubre se adapta perfectamente a diferentes modelos de negocio.</p>
         </div>
 
         <div class="other-solutions-grid">
@@ -136,7 +136,7 @@
 <section class="solution-final-cta" style="background: linear-gradient(135deg, #0B0F1D 0%, #171E38 100%); border-top: 1px solid rgba(255, 255, 255, 0.1); padding: 80px 0;">
     <div class="container text-center" data-aos="zoom-in">
         <h2 style="font-size: 32px; font-weight: 800; color: #FFFFFF; margin-bottom: 12px;">
-            Impulsa tu {{ $solution['name'] }} con Audaz Hoy
+            Impulsa tu {{ $solution['name'] }} con Kubre Hoy
         </h2>
         <p style="font-size: 16px; color: #94A3B8; max-width: 600px; margin: 0 auto 28px auto;">
             Únete a cientos de empresas que ya automatizan ventas, inventario y finanzas en una sola plataforma.

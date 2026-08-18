@@ -33,7 +33,7 @@ return [
     'document_size_limit' => '5000000', //in Bytes,
     'image_size_limit' => '5000000', //in Bytes
 
-    'asset_version' => 684,
+    'asset_version' => 685,
 
     'disable_purchase_in_other_currency' => true,
 
@@ -46,7 +46,7 @@ return [
     'enable_sell_in_diff_currency' => true,
     'currency_exchange_rate' => 1,
 
-    // ── Configuración de monedas Audaz POS ──
+    // ── Configuración de monedas Kubre ──
     // Moneda base: en la que se registran precios y se almacenan transacciones
     // Moneda local: en la que el cliente puede pagar (se convierte con la tasa del día)
     'base_currency_code' => 'USD',

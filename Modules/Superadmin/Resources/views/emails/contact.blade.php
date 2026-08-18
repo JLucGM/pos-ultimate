@@ -74,7 +74,7 @@
         </div>
         
         <div class="content">
-            <p>Has recibido un nuevo mensaje desde el formulario de contacto de Audaz POS:</p>
+            <p>Has recibido un nuevo mensaje desde el formulario de contacto de Kubre:</p>
             
             <div class="info-row">
                 <div class="label">Nombre:</div>
@@ -114,7 +114,7 @@
         </div>
         
         <div class="footer">
-            <p>Este mensaje fue enviado desde el formulario de contacto de <strong>Audaz POS</strong></p>
+            <p>Este mensaje fue enviado desde el formulario de contacto de <strong>Kubre</strong></p>
             <p>Para responder, simplemente responde a este email o contacta directamente a: {{ $email }}</p>
         </div>
     </div>

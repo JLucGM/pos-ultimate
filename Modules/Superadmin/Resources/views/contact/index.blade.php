@@ -33,8 +33,8 @@
                         </div>
                         <div class="contact-info-content">
                             <h4>Email</h4>
-                            <a href="mailto:{{ config('app.contact_email', 'contacto@audaz.site') }}">
-                                {{ config('app.contact_email', 'contacto@audaz.site') }}
+                            <a href="mailto:{{ config('app.contact_email', 'contacto@kubre.site') }}">
+                                {{ config('app.contact_email', 'contacto@kubre.site') }}
                             </a>
                         </div>
                     </div>

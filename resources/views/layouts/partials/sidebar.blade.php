@@ -8,7 +8,7 @@
 	</a> --}}
 
     <a href="{{route('home')}}" class="audaz-sidebar-header">
-        <img src="{{ asset('images/landing/logo_full.png') }}" alt="{{ Session::get('business.name', 'AudazPOS') }}" class="audaz-sidebar-logo" />
+        <img src="{{ asset('images/logo.svg') }}" alt="{{ Session::get('business.name', 'Kubre') }}" class="audaz-sidebar-logo" />
         <span class="tw-ml-auto tw-inline-flex tw-items-center tw-gap-1.5 tw-px-2 tw-py-0.5 tw-rounded-full tw-text-[10px] tw-font-semibold tw-bg-emerald-500/10 tw-text-emerald-400 tw-border tw-border-emerald-500/20">
             <span class="tw-w-1.5 tw-h-1.5 tw-rounded-full tw-bg-emerald-400 tw-animate-pulse"></span>
             PRO

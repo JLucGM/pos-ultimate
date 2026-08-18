@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Sistema POS para Pequeñas Empresas')</title>
+    <title>@yield('title', 'Kubre | Sistema de Gestión Comercial y POS')</title>
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
@@ -25,7 +29,7 @@
     <nav class="navbar" id="navbar">
         <div class="container nav-container">
             <a href="/" class="logo logo-only">
-                <img src="{{ asset('images/landing/logo_full.png') }}" alt="{{ config('app.name', 'POS System') }}" class="logo-img">
+                <img src="{{ asset('images/logo.svg') }}" alt="{{ config('app.name', 'Kubre') }}" class="logo-img" style="height: 38px; width: auto;">
             </a>
             
             <div class="nav-menu" id="navMenu">
@@ -115,7 +119,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <div class="footer-logo">
-                        <img src="{{ asset('images/landing/logo_full.png') }}" alt="{{ config('app.name', 'POS System') }}" class="logo-img">
+                        <img src="{{ asset('images/logo.svg') }}" alt="{{ config('app.name', 'Kubre') }}" class="logo-img" style="height: 38px; width: auto;">
                     </div>
                     <p>Plataforma de gestión comercial y punto de venta para todo tipo de organizaciones y negocios en crecimiento.</p>
                     <div class="social-links">

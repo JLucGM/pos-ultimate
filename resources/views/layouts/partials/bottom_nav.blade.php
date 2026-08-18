@@ -6,7 +6,7 @@
 @endphp
 
 @if (!$is_pos_page && request()->segment(1) != 'customer-display')
-    <!-- Audaz POS Mobile Bottom Navigation Bar -->
+    <!-- Kubre Mobile Bottom Navigation Bar -->
     <nav class="audaz-bottom-nav no-print" aria-label="Navegación Móvil">
         <!-- 1. Inicio -->
         <a href="{{ action([\App\Http\Controllers\HomeController::class, 'index']) }}" 

@@ -1,4 +1,4 @@
-# AudazPOS - Sistema POS & Gestión Empresarial Multimoneda
+# Kubre - Plataforma de Gestión Comercial & POS Todo en Uno (`kubre.site`)
 
 Sistema de Punto de Venta (POS), Facturación, Inventario, Manufactura y Gestión Empresarial Multimoneda con arquitectura SaaS multiempresa.
 
