@@ -108,13 +108,13 @@ body {
 /* Logo solo (sin texto) */
 .logo.logo-only img {
     width: auto;
-    height: 46px;
+    height: 48px;
     border-radius: 0;
     background: transparent;
 }
 
 .navbar.scrolled .logo.logo-only img {
-    height: 40px;
+    height: 42px;
 }
 
 .logo:hover img {
@@ -938,7 +938,7 @@ section {
 
 .footer-logo img {
     width: auto;
-    height: 54px;
+    height: 72px;
     border-radius: 0;
     transition: all 0.3s ease;
     background: transparent;

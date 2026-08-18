@@ -29,7 +29,7 @@
     <nav class="navbar" id="navbar">
         <div class="container nav-container">
             <a href="/" class="logo logo-only">
-                <img src="{{ asset('images/logo.svg') }}" alt="{{ config('app.name', 'Kubre') }}" class="logo-img" style="height: 38px; width: auto;">
+                <img src="{{ asset('images/logo.svg') }}" alt="{{ config('app.name', 'Kubre') }}" class="logo-img" style="height: 48px; width: auto;">
             </a>
             
             <div class="nav-menu" id="navMenu">
@@ -119,7 +119,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <div class="footer-logo">
-                        <img src="{{ asset('images/logo.svg') }}" alt="{{ config('app.name', 'Kubre') }}" class="logo-img" style="height: 38px; width: auto;">
+                        <img src="{{ asset('images/logo.svg') }}" alt="{{ config('app.name', 'Kubre') }}" class="logo-img" style="height: 70px; width: auto;">
                     </div>
                     <p>Plataforma de gestión comercial y punto de venta para todo tipo de organizaciones y negocios en crecimiento.</p>
                     <div class="social-links">
