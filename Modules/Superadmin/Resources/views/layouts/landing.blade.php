@@ -159,7 +159,7 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; {{ date('Y') }} {{ config('app.name') }}. Todos los derechos reservados.</p>
+                <p>&copy; {{ date('Y') }} {{ config('app.name') }} &bull; <span style="font-family: monospace; font-size: 11px; opacity: 0.75;">v{{ config('author.app_version') }} (Build #{{ config('constants.asset_version') }})</span> &bull; Todos los derechos reservados.</p>
                 <div class="footer-links">
                     <a href="#">Términos</a>
                     <a href="#">Privacidad</a>

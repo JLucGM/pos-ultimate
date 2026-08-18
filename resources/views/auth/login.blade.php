@@ -41,8 +41,8 @@
                 <span class="auth-brand-name">{{ config('app.name', 'AudazPOS') }}</span>
             </a>
             
-            <div style="font-size: 13px; font-weight: 700; color: #FB4C0A; background: rgba(251, 76, 10, 0.12); border: 1px solid rgba(251, 76, 10, 0.25); padding: 5px 12px; border-radius: 999px;">
-                Suite v4.2 Pro
+            <div style="font-size: 12px; font-weight: 700; color: #FB4C0A; background: rgba(251, 76, 10, 0.12); border: 1px solid rgba(251, 76, 10, 0.25); padding: 4px 12px; border-radius: 999px; font-family: monospace;">
+                v{{ config('author.app_version') }} &bull; b{{ config('constants.asset_version') }}
             </div>
         </div>
 
@@ -97,7 +97,7 @@
         <!-- Footer Izquierdo -->
         <div class="auth-brand-bottom">
             <span><i class="fas fa-lock" style="color: #10B981; margin-right: 6px;"></i> Conexión Segura SSL 256-Bit</span>
-            <span>&copy; {{ date('Y') }} {{ config('app.name') }}</span>
+            <span>&copy; {{ date('Y') }} {{ config('app.name') }} &bull; <span style="font-family: monospace; opacity: 0.75;">v{{ config('author.app_version') }} (Build #{{ config('constants.asset_version') }})</span></span>
         </div>
     </div>
 
