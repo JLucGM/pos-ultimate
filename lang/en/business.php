@@ -90,7 +90,7 @@ return [
     'system' => 'Sistema',
     'show_help_text' => 'Mostrar texto de ayuda',
     'mobile' => 'Móvil',
-    'alternate_number' => 'Número de contacto alternativo',
+    'alternate_number' => 'Contacto alternativo',
     'email' => 'Email',
     'settings' => 'Configuraciones',
     'transaction_edit_days' => 'Días de edición de transacción',
