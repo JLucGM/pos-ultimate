@@ -187,6 +187,31 @@
                                     </a>
                                     <br><br>
                                 @endcan
+
+                                <!-- Audaz Quick Status Filter Pills for Products -->
+                                <div class="audaz-status-pills-wrapper">
+                                    <div class="audaz-status-pills" id="product_status_pills">
+                                        <button type="button" class="audaz-status-pill active" data-filter="type" data-value="" data-status="all">
+                                            <i class="fas fa-bolt"></i> Todos los Productos
+                                        </button>
+                                        <button type="button" class="audaz-status-pill" data-filter="type" data-value="single" data-status="single">
+                                            <i class="fas fa-cube tw-text-emerald-500"></i> Producto Único
+                                        </button>
+                                        <button type="button" class="audaz-status-pill" data-filter="type" data-value="variable" data-status="variable">
+                                            <i class="fas fa-layer-group tw-text-purple-500"></i> Con Variantes
+                                        </button>
+                                        <button type="button" class="audaz-status-pill" data-filter="type" data-value="combo" data-status="combo">
+                                            <i class="fas fa-boxes tw-text-sky-500"></i> Combos
+                                        </button>
+                                        <button type="button" class="audaz-status-pill" data-filter="active_state" data-value="active" data-status="active">
+                                            <i class="fas fa-check-circle tw-text-emerald-500"></i> Activos
+                                        </button>
+                                        <button type="button" class="audaz-status-pill" data-filter="active_state" data-value="inactive" data-status="inactive">
+                                            <i class="fas fa-ban tw-text-rose-500"></i> Inactivos
+                                        </button>
+                                    </div>
+                                </div>
+
                                 @include('product.partials.product_list')
                             </div>
                             @can('stock_report.view')
@@ -548,6 +573,28 @@
 
                 if ($("#product_stock_report").hasClass('active')) {
                     stock_report_table.ajax.reload();
+                }
+            });
+
+            // Audaz Status Pill Quick Filter for Products
+            $(document).on('click', '#product_status_pills .audaz-status-pill', function(e) {
+                e.preventDefault();
+                $('#product_status_pills .audaz-status-pill').removeClass('active');
+                $(this).addClass('active');
+
+                var filterType = $(this).data('filter');
+                var filterVal = $(this).data('value');
+
+                if (filterType === 'type') {
+                    $('#product_list_filter_type').val(filterVal).trigger('change');
+                    if (filterVal) {
+                        $('#active_state').val('').trigger('change.select2');
+                    }
+                } else if (filterType === 'active_state') {
+                    $('#active_state').val(filterVal).trigger('change');
+                    if (filterVal) {
+                        $('#product_list_filter_type').val('').trigger('change.select2');
+                    }
                 }
             });
 

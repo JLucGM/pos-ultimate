@@ -63,6 +63,31 @@
                 @php
                     $custom_labels = json_decode(session('business.custom_labels'), true);
                 @endphp
+
+                <!-- Audaz Quick Status Filter Pills -->
+                <div class="audaz-status-pills-wrapper">
+                    <div class="audaz-status-pills" id="sell_status_pills">
+                        <button type="button" class="audaz-status-pill active" data-filter="payment_status" data-value="" data-status="all">
+                            <i class="fas fa-bolt"></i> Todas las Ventas
+                        </button>
+                        <button type="button" class="audaz-status-pill" data-filter="payment_status" data-value="paid" data-status="paid">
+                            <i class="fas fa-check-circle tw-text-emerald-500"></i> Pagadas
+                        </button>
+                        <button type="button" class="audaz-status-pill" data-filter="payment_status" data-value="due" data-status="due">
+                            <i class="fas fa-exclamation-circle tw-text-rose-500"></i> Por Cobrar
+                        </button>
+                        <button type="button" class="audaz-status-pill" data-filter="payment_status" data-value="partial" data-status="partial">
+                            <i class="fas fa-hourglass-half tw-text-amber-500"></i> Parciales
+                        </button>
+                        <button type="button" class="audaz-status-pill" data-filter="payment_status" data-value="overdue" data-status="overdue">
+                            <i class="fas fa-clock tw-text-red-500"></i> Vencidas
+                        </button>
+                        <button type="button" class="audaz-status-pill" data-filter="shipping_status" data-value="delivered" data-status="delivered">
+                            <i class="fas fa-shipping-fast tw-text-sky-500"></i> Entregadas
+                        </button>
+                    </div>
+                </div>
+
                 <table class="table table-bordered table-striped ajax_view" id="sell_table">
                     <thead>
                         <tr>
@@ -371,6 +396,28 @@
 
             $('#only_subscriptions').on('ifChanged', function(event) {
                 sell_table.ajax.reload();
+            });
+
+            // Audaz Status Pill Quick Filter Handling
+            $(document).on('click', '#sell_status_pills .audaz-status-pill', function(e) {
+                e.preventDefault();
+                $('#sell_status_pills .audaz-status-pill').removeClass('active');
+                $(this).addClass('active');
+
+                var filterType = $(this).data('filter');
+                var filterVal = $(this).data('value');
+
+                if (filterType === 'payment_status') {
+                    $('#sell_list_filter_payment_status').val(filterVal).trigger('change');
+                    if (filterVal) {
+                        $('#shipping_status').val('').trigger('change.select2');
+                    }
+                } else if (filterType === 'shipping_status') {
+                    $('#shipping_status').val(filterVal).trigger('change');
+                    if (filterVal) {
+                        $('#sell_list_filter_payment_status').val('').trigger('change.select2');
+                    }
+                }
             });
         });
     </script>

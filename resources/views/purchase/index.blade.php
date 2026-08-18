@@ -94,6 +94,31 @@
                     </div>
                 @endslot
             @endcan
+
+            <!-- Audaz Quick Status Filter Pills for Purchases -->
+            <div class="audaz-status-pills-wrapper">
+                <div class="audaz-status-pills" id="purchase_status_pills">
+                    <button type="button" class="audaz-status-pill active" data-filter="status" data-value="" data-status="all">
+                        <i class="fas fa-bolt"></i> Todas las Compras
+                    </button>
+                    <button type="button" class="audaz-status-pill" data-filter="status" data-value="received" data-status="received">
+                        <i class="fas fa-check-double tw-text-emerald-500"></i> Recibidas
+                    </button>
+                    <button type="button" class="audaz-status-pill" data-filter="status" data-value="pending" data-status="pending">
+                        <i class="fas fa-hourglass-half tw-text-amber-500"></i> Pendientes
+                    </button>
+                    <button type="button" class="audaz-status-pill" data-filter="status" data-value="ordered" data-status="ordered">
+                        <i class="fas fa-shopping-bag tw-text-sky-500"></i> Ordenadas
+                    </button>
+                    <button type="button" class="audaz-status-pill" data-filter="payment_status" data-value="paid" data-status="paid">
+                        <i class="fas fa-badge-check tw-text-emerald-500"></i> Pagadas
+                    </button>
+                    <button type="button" class="audaz-status-pill" data-filter="payment_status" data-value="due" data-status="due">
+                        <i class="fas fa-exclamation-circle tw-text-rose-500"></i> Por Pagar
+                    </button>
+                </div>
+            </div>
+
             @include('purchase.partials.purchase_table')
         @endcomponent
 
@@ -165,6 +190,28 @@
                     }
                 },
             });
+        });
+
+        // Audaz Status Pill Quick Filter for Purchases
+        $(document).on('click', '#purchase_status_pills .audaz-status-pill', function(e) {
+            e.preventDefault();
+            $('#purchase_status_pills .audaz-status-pill').removeClass('active');
+            $(this).addClass('active');
+
+            var filterType = $(this).data('filter');
+            var filterVal = $(this).data('value');
+
+            if (filterType === 'status') {
+                $('#purchase_list_filter_status').val(filterVal).trigger('change');
+                if (filterVal) {
+                    $('#purchase_list_filter_payment_status').val('').trigger('change.select2');
+                }
+            } else if (filterType === 'payment_status') {
+                $('#purchase_list_filter_payment_status').val(filterVal).trigger('change');
+                if (filterVal) {
+                    $('#purchase_list_filter_status').val('').trigger('change.select2');
+                }
+            }
         });
     </script>
 
