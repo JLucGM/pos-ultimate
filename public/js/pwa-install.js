@@ -7,12 +7,13 @@
 
     let deferredPrompt = null;
 
-    // Register Service Worker
+    // Register & Update Service Worker
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function () {
             navigator.serviceWorker.register('/sw.js')
                 .then(function (registration) {
-                    console.log('Audaz PWA ServiceWorker registrado con éxito:', registration.scope);
+                    registration.update();
+                    console.log('Audaz PWA ServiceWorker registrado y actualizado:', registration.scope);
                 })
                 .catch(function (error) {
                     console.warn('Error al registrar ServiceWorker:', error);

@@ -1,9 +1,9 @@
 /**
  * Audaz POS - Progressive Web App Service Worker
- * Version: 1.0.0
+ * Version: 1.0.1 - Fix: Never intercept HTML navigation requests to prevent stale CSRF tokens
  */
 
-const CACHE_NAME = 'audaz-pos-v1';
+const CACHE_NAME = 'audaz-pos-v2';
 const STATIC_ASSETS = [
     '/manifest.json',
     '/favicon.ico',
@@ -13,7 +13,7 @@ const STATIC_ASSETS = [
     '/img/logo-audaz.png'
 ];
 
-// Install Event - Pre-cache core static shell
+// Install Event - Pre-cache core static assets
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
@@ -22,7 +22,7 @@ self.addEventListener('install', (event) => {
     );
 });
 
-// Activate Event - Clean up stale caches
+// Activate Event - Clean up stale caches & take control immediately
 self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches.keys().then((cacheNames) => {
@@ -37,21 +37,27 @@ self.addEventListener('activate', (event) => {
     );
 });
 
-// Fetch Event - Network First with Cache Fallback for dynamic requests, Cache First for static images/fonts
+// Fetch Event - ONLY cache static assets (images, icons, fonts). NEVER intercept HTML/navigation requests!
 self.addEventListener('fetch', (event) => {
     // Only handle GET requests
     if (event.request.method !== 'GET') {
         return;
     }
 
+    // NEVER intercept HTML page navigation requests (login, dashboard, etc.) to ensure CSRF tokens and sessions are always fresh
+    if (event.request.mode === 'navigate' || event.request.destination === 'document') {
+        return;
+    }
+
     const url = new URL(event.request.url);
 
-    // Static assets (icons, images, fonts) -> Cache First
+    // Only cache static files (images, icons, fonts)
     if (
         url.pathname.startsWith('/img/') ||
         url.pathname.startsWith('/fonts/') ||
         url.pathname.endsWith('.png') ||
         url.pathname.endsWith('.jpg') ||
+        url.pathname.endsWith('.jpeg') ||
         url.pathname.endsWith('.svg') ||
         url.pathname.endsWith('.woff2')
     ) {
@@ -73,17 +79,5 @@ self.addEventListener('fetch', (event) => {
                 });
             })
         );
-        return;
     }
-
-    // Dynamic routes -> Network first
-    event.respondWith(
-        fetch(event.request)
-            .then((networkResponse) => {
-                return networkResponse;
-            })
-            .catch(() => {
-                return caches.match(event.request);
-            })
-    );
 });
