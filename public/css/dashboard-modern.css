@@ -856,4 +856,251 @@ html, body {
         overflow: hidden !important;
         margin-bottom: 14px !important;
     }
+
+    /* Padding bottom compensation for fixed mobile bottom nav */
+    #scrollable-container,
+    .audaz-dashboard-wrapper,
+    .content,
+    .content-wrapper {
+        padding-bottom: 84px !important;
+    }
 }
+
+/* ==========================================================================
+   8. Audaz POS Mobile Bottom Navigation Bar (App-Like)
+   ========================================================================== */
+.audaz-bottom-nav {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: 64px !important;
+    background: rgba(11, 15, 29, 0.96) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    z-index: 9999 !important;
+    padding: 0 4px !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.35) !important;
+}
+
+@media (min-width: 769px) {
+    .audaz-bottom-nav {
+        display: none !important;
+    }
+}
+
+.audaz-bottom-nav-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 1 !important;
+    height: 100% !important;
+    color: #94A3B8 !important;
+    text-decoration: none !important;
+    padding: 6px 2px !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative !important;
+    cursor: pointer !important;
+}
+
+.audaz-bottom-nav-item .nav-icon-wrapper {
+    width: 28px !important;
+    height: 24px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 17px !important;
+    transition: all 0.2s ease !important;
+}
+
+.audaz-bottom-nav-item .nav-label {
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em !important;
+    margin-top: 2px !important;
+    transition: all 0.2s ease !important;
+}
+
+.audaz-bottom-nav-item:hover,
+.audaz-bottom-nav-item:focus {
+    color: #E2E8F0 !important;
+    text-decoration: none !important;
+}
+
+.audaz-bottom-nav-item.active {
+    color: #FB4C0A !important;
+}
+
+.audaz-bottom-nav-item.active .nav-icon-wrapper {
+    transform: translateY(-2px) scale(1.1) !important;
+}
+
+.audaz-bottom-nav-item.active .nav-label {
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+}
+
+/* POS Central Elevated FAB */
+.audaz-nav-fab-item {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+.audaz-nav-fab {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #FB4C0A 0%, #E03E00 100%) !important;
+    color: #FFFFFF !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 20px !important;
+    box-shadow: 0 6px 20px rgba(251, 76, 10, 0.5), 0 0 0 4px #0B0F1D !important;
+    margin-top: -24px !important;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.audaz-nav-fab-item:hover .audaz-nav-fab,
+.audaz-nav-fab-item:active .audaz-nav-fab {
+    transform: scale(1.08) !important;
+    box-shadow: 0 8px 26px rgba(251, 76, 10, 0.7), 0 0 0 4px #0B0F1D !important;
+}
+
+/* ==========================================================================
+   9. Audaz PWA Floating Installation Banner
+   ========================================================================== */
+.audaz-pwa-banner {
+    position: fixed !important;
+    bottom: 76px !important;
+    left: 14px !important;
+    right: 14px !important;
+    max-width: 480px !important;
+    margin: 0 auto !important;
+    background: rgba(11, 15, 29, 0.96) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 18px !important;
+    padding: 12px 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    z-index: 10000 !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45) !important;
+    animation: audazSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@media (min-width: 769px) {
+    .audaz-pwa-banner {
+        bottom: 24px !important;
+        right: 24px !important;
+        left: auto !important;
+        width: 380px !important;
+    }
+}
+
+@keyframes audazSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.audaz-pwa-banner-content {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    min-width: 0 !important;
+}
+
+.audaz-pwa-banner-icon {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 10px !important;
+    object-fit: cover !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+    flex-shrink: 0 !important;
+}
+
+.audaz-pwa-banner-text {
+    min-width: 0 !important;
+}
+
+.audaz-pwa-banner-title {
+    font-size: 13.5px !important;
+    font-weight: 800 !important;
+    color: #FFFFFF !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.audaz-pwa-banner-sub {
+    font-size: 11.5px !important;
+    color: #94A3B8 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.audaz-pwa-banner-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-shrink: 0 !important;
+}
+
+.audaz-pwa-btn-install {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: linear-gradient(135deg, #FB4C0A 0%, #E03E00 100%) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 7px 14px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    box-shadow: 0 3px 10px rgba(251, 76, 10, 0.4) !important;
+    transition: all 0.2s ease !important;
+}
+
+.audaz-pwa-btn-install:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 5px 14px rgba(251, 76, 10, 0.6) !important;
+}
+
+.audaz-pwa-btn-dismiss {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #94A3B8 !important;
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    font-size: 11px !important;
+    transition: all 0.2s ease !important;
+}
+
+.audaz-pwa-btn-dismiss:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #FFFFFF !important;
+}
+

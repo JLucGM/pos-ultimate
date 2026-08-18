@@ -33,6 +33,15 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 
+    <!-- PWA Manifest & Mobile Meta Tags -->
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#0B0F1D">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Audaz POS">
+    <link rel="apple-touch-icon" href="{{ asset('img/icons/icon-192x192.png') }}">
+
     @include('layouts.partials.css')
     
 
@@ -140,9 +149,11 @@
                 @includeIf($additional_view)
             @endforeach
         @endif
-        <div>
 
-            <div class="overlay tw-hidden"></div>
+        @include('layouts.partials.bottom_nav')
+        <script src="{{ asset('js/pwa-install.js?v=' . $asset_v) }}"></script>
+
+        <div class="overlay tw-hidden"></div>
 </body>
 <style>
     @media print {

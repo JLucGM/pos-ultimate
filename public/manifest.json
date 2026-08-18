@@ -1,0 +1,60 @@
+{
+  "name": "Audaz POS - Sistema de Gestión y Punto de Venta",
+  "short_name": "Audaz POS",
+  "description": "Sistema de gestión empresarial, facturación y punto de venta inteligente",
+  "start_url": "/home",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0B0F1D",
+  "theme_color": "#0B0F1D",
+  "icons": [
+    {
+      "src": "/img/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/img/icons/icon-maskable-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/img/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/img/icons/icon-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Punto de Venta (POS)",
+      "short_name": "POS",
+      "description": "Abrir caja y registrar ventas rápidamente",
+      "url": "/pos/create",
+      "icons": [{ "src": "/img/icons/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Ventas",
+      "short_name": "Ventas",
+      "description": "Listado de ventas y facturas",
+      "url": "/sells",
+      "icons": [{ "src": "/img/icons/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Inventario",
+      "short_name": "Inventario",
+      "description": "Catálogo de productos y existencias",
+      "url": "/products",
+      "icons": [{ "src": "/img/icons/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}
