@@ -1,0 +1,760 @@
+/* ==========================================================================
+   AUDAZPOS - PUNTO DE VENTA (POS) MODERN DESIGN SYSTEM
+   Theme: Luxury Dark / High-Contrast Fast-Paced Cashier UX
+   Primary Brand Accent: #FB4C0A (Audaz Orange)
+   ========================================================================== */
+
+:root {
+    --pos-primary: #FB4C0A;
+    --pos-primary-hover: #FF6A38;
+    --pos-primary-dark: #E03E00;
+    --pos-primary-glow: rgba(251, 76, 10, 0.4);
+    --pos-bg-dark: #0B0F1D;
+    --pos-bg-card: #FFFFFF;
+    --pos-text-main: #0F172A;
+    --pos-text-muted: #64748B;
+    --pos-border: #E2E8F0;
+    --pos-radius-sm: 10px;
+    --pos-radius-md: 14px;
+    --pos-radius-lg: 20px;
+    --pos-shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+    --pos-shadow-floating: 0 20px 40px -5px rgba(11, 15, 29, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   1. POS Wrapper & Layout Grid
+   ========================================================================== */
+.audaz-pos-wrapper {
+    width: 100%;
+    margin: 0 auto;
+    padding-bottom: 90px; /* Space for floating bottom action bar */
+}
+
+/* Layout Grid Proportions: 60% Cart / 40% Catalog */
+.audaz-pos-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 18px !important;
+    align-items: flex-start !important;
+    width: 100% !important;
+}
+
+.audaz-pos-col-cart {
+    width: 100% !important;
+}
+
+.audaz-pos-col-catalog {
+    width: 100% !important;
+}
+
+@media (min-width: 992px) {
+    .audaz-pos-layout {
+        flex-direction: row !important;
+    }
+
+    .audaz-pos-col-cart {
+        width: calc(60% - 9px) !important;
+        flex: 0 0 calc(60% - 9px) !important;
+        max-width: calc(60% - 9px) !important;
+    }
+
+    .audaz-pos-col-catalog {
+        width: calc(40% - 9px) !important;
+        flex: 0 0 calc(40% - 9px) !important;
+        max-width: calc(40% - 9px) !important;
+    }
+
+    .audaz-pos-col-cart-full {
+        width: 100% !important;
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* Left Cart Panel Box */
+.audaz-pos-cart-panel {
+    background: #FFFFFF !important;
+    border-radius: var(--pos-radius-lg) !important;
+    box-shadow: var(--pos-shadow-card) !important;
+    border: 1px solid var(--pos-border) !important;
+    padding: 18px 20px !important;
+    margin-bottom: 20px !important;
+    width: 100% !important;
+}
+
+/* Right Catalog Panel Box */
+.audaz-pos-catalog-panel {
+    background: #FFFFFF !important;
+    border-radius: var(--pos-radius-lg) !important;
+    box-shadow: var(--pos-shadow-card) !important;
+    border: 1px solid var(--pos-border) !important;
+    padding: 18px !important;
+    min-height: 580px !important;
+    width: 100% !important;
+}
+
+/* ==========================================================================
+   2. Customer & Product Search Inputs
+   ========================================================================== */
+.audaz-pos-input-group {
+    display: flex !important;
+    align-items: center !important;
+    background: #F8FAFC !important;
+    border: 1.5px solid #E2E8F0 !important;
+    border-radius: var(--pos-radius-md) !important;
+    overflow: hidden !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    margin-bottom: 12px !important;
+}
+
+.audaz-pos-input-group:focus-within {
+    border-color: var(--pos-primary) !important;
+    box-shadow: 0 0 0 4px rgba(251, 76, 10, 0.15) !important;
+    background: #FFFFFF !important;
+}
+
+.audaz-pos-input-group .input-group-addon {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 14px !important;
+    color: var(--pos-primary) !important;
+    font-size: 16px !important;
+}
+
+.audaz-pos-input-group input.form-control,
+.audaz-pos-input-group select.form-control {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    height: 44px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: var(--pos-text-main) !important;
+    padding: 0 10px !important;
+}
+
+.audaz-pos-input-group .input-group-btn .btn {
+    border: none !important;
+    background: transparent !important;
+    height: 44px !important;
+    padding: 0 14px !important;
+    color: #64748B !important;
+    transition: all 0.2s ease !important;
+}
+
+.audaz-pos-input-group .input-group-btn .btn:hover {
+    color: var(--pos-primary) !important;
+    background: rgba(251, 76, 10, 0.08) !important;
+}
+
+/* ==========================================================================
+   3. POS Shopping Cart Table (#pos_table)
+   ========================================================================== */
+#pos_table {
+    width: 100% !important;
+    border-collapse: separate !important;
+    border-spacing: 0 4px !important;
+    margin-top: 6px !important;
+}
+
+#pos_table thead th {
+    background: #F8FAFC !important;
+    color: #64748B !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    padding: 7px 10px !important;
+    border: none !important;
+}
+
+#pos_table thead th:first-child {
+    border-radius: 8px 0 0 8px !important;
+}
+
+#pos_table thead th:last-child {
+    border-radius: 0 8px 8px 0 !important;
+}
+
+#pos_table tbody tr.product_row {
+    background: #FFFFFF !important;
+    border-radius: 10px !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03) !important;
+    border: 1px solid #E2E8F0 !important;
+    transition: all 0.15s ease !important;
+}
+
+#pos_table tbody tr.product_row:hover {
+    border-color: rgba(251, 76, 10, 0.35) !important;
+    background: #FFFAF8 !important;
+}
+
+#pos_table tbody tr.product_row td {
+    padding: 6px 10px !important;
+    vertical-align: middle !important;
+    border: none !important;
+    font-size: 12.5px !important;
+}
+
+/* Product Item Details in Cart */
+.pos-cart-item-title {
+    font-weight: 700 !important;
+    color: #0F172A !important;
+    font-size: 13.5px !important;
+    line-height: 1.3 !important;
+}
+
+.pos-cart-item-sku {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #94A3B8 !important;
+    background: #F1F5F9 !important;
+    padding: 2px 6px !important;
+    border-radius: 6px !important;
+    display: inline-block !important;
+    margin-top: 3px !important;
+}
+
+/* Stepper Quantity Buttons */
+.input-number-group {
+    display: inline-flex !important;
+    align-items: center !important;
+    background: #F8FAFC !important;
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+}
+
+.input-number-group .btn-number {
+    width: 32px !important;
+    height: 34px !important;
+    background: #FFFFFF !important;
+    border: none !important;
+    color: #334155 !important;
+    font-weight: 800 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+}
+
+.input-number-group .btn-number:hover {
+    background: var(--pos-primary) !important;
+    color: #FFFFFF !important;
+}
+
+.input-number-group input.pos_quantity {
+    width: 48px !important;
+    height: 34px !important;
+    text-align: center !important;
+    border: none !important;
+    background: transparent !important;
+    font-weight: 800 !important;
+    font-size: 14px !important;
+    color: #0F172A !important;
+}
+
+/* Subtotal & Delete Action */
+.pos-line-total-badge {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+    font-weight: 800 !important;
+    font-size: 15px !important;
+    color: #0F172A !important;
+}
+
+.pos_remove_row {
+    color: #94A3B8 !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+.pos_remove_row:hover {
+    background: rgba(239, 68, 68, 0.12) !important;
+    color: #EF4444 !important;
+    transform: scale(1.1) !important;
+}
+
+/* ==========================================================================
+   4. Dual-Currency Live Totals Panel
+   ========================================================================== */
+.audaz-pos-totals-container {
+    background: #F8FAFC !important;
+    border: 1px solid #E2E8F0 !important;
+    border-radius: var(--pos-radius-md) !important;
+    padding: 14px 18px !important;
+    margin-top: 15px !important;
+}
+
+.pos-totals-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 6px !important;
+    font-size: 13px !important;
+    color: #64748B !important;
+    font-weight: 600 !important;
+}
+
+.pos-totals-row.main-total {
+    border-top: 1px dashed #CBD5E1 !important;
+    padding-top: 10px !important;
+    margin-top: 8px !important;
+    margin-bottom: 0 !important;
+    color: #0F172A !important;
+    font-size: 16px !important;
+    font-weight: 800 !important;
+}
+
+.pos-totals-row .val {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
+
+/* Dual Currency Pill */
+.audaz-pos-dual-currency-badge {
+    background: linear-gradient(135deg, rgba(251, 76, 10, 0.1) 0%, rgba(251, 76, 10, 0.04) 100%) !important;
+    border: 1px solid rgba(251, 76, 10, 0.25) !important;
+    border-radius: 12px !important;
+    padding: 8px 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-top: 10px !important;
+}
+
+.audaz-pos-dual-currency-badge .rate-label {
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    color: var(--pos-primary) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+.audaz-pos-dual-currency-badge .rate-value {
+    font-family: ui-monospace, SFMono-Regular, monospace !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+}
+
+/* ==========================================================================
+   5. Product Catalog & Touch Cards
+   ========================================================================== */
+.audaz-pos-category-scroller {
+    display: flex !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    padding-bottom: 8px !important;
+    margin-bottom: 14px !important;
+    scrollbar-width: thin !important;
+}
+
+.audaz-pos-cat-pill {
+    padding: 8px 16px !important;
+    border-radius: 20px !important;
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    color: #475569 !important;
+    background: #F1F5F9 !important;
+    border: 1px solid #E2E8F0 !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    transition: all 0.2s ease !important;
+}
+
+.audaz-pos-cat-pill:hover,
+.audaz-pos-cat-pill.active {
+    background: var(--pos-primary) !important;
+    color: #FFFFFF !important;
+    border-color: var(--pos-primary) !important;
+    box-shadow: 0 4px 12px rgba(251, 76, 10, 0.3) !important;
+}
+
+/* Touch Product Card Grid */
+.product_list {
+    padding: 6px !important;
+}
+
+.product_box {
+    background: #FFFFFF !important;
+    border: 1.5px solid #F1F5F9 !important;
+    border-radius: var(--pos-radius-md) !important;
+    padding: 10px !important;
+    cursor: pointer !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    height: 175px !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.product_box:hover {
+    transform: translateY(-3px) !important;
+    border-color: var(--pos-primary) !important;
+    box-shadow: 0 8px 24px rgba(251, 76, 10, 0.15) !important;
+}
+
+.product_box .image-container {
+    height: 85px !important;
+    width: 100% !important;
+    border-radius: 8px !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    margin-bottom: 6px !important;
+    transition: transform 0.2s ease !important;
+}
+
+.product_box:hover .image-container {
+    transform: scale(1.05) !important;
+}
+
+.product_box .text_div {
+    text-align: left !important;
+    line-height: 1.2 !important;
+}
+
+.product_box .text_div .text {
+    font-weight: 700 !important;
+    font-size: 12.5px !important;
+    color: #0F172A !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    margin-bottom: 4px !important;
+}
+
+.product_box .pos-card-price-badge {
+    display: inline-block !important;
+    font-family: ui-monospace, SFMono-Regular, monospace !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    color: var(--pos-primary) !important;
+    background: rgba(251, 76, 10, 0.08) !important;
+    padding: 2px 8px !important;
+    border-radius: 6px !important;
+    border: 1px solid rgba(251, 76, 10, 0.2) !important;
+}
+
+.product_box .pos-stock-indicator {
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    color: #10B981 !important;
+    float: right !important;
+    margin-top: 3px !important;
+}
+
+.product_box .pos-stock-indicator.out-of-stock {
+    color: #EF4444 !important;
+}
+
+/* ==========================================================================
+   6. Floating Bottom Action Island (.pos-form-actions)
+   ========================================================================== */
+.pos-form-actions {
+    position: fixed !important;
+    bottom: 16px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 32px) !important;
+    max-width: 1540px !important;
+    z-index: 1040 !important;
+    background: #0B0F1D !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 18px !important;
+    padding: 10px 18px !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    box-sizing: border-box !important;
+}
+
+.pos-form-actions .dropup .dropdown-menu {
+    bottom: 100% !important;
+    top: auto !important;
+    margin-bottom: 12px !important;
+    z-index: 99999 !important;
+}
+
+/* Quick Pay Direct Buttons */
+.audaz-quick-pay-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 8px 14px !important;
+    border-radius: 11px !important;
+    font-size: 12.5px !important;
+    font-weight: 800 !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    user-select: none !important;
+    white-space: nowrap !important;
+}
+
+.audaz-quick-pay-btn:hover {
+    transform: translateY(-2px) !important;
+}
+
+.audaz-quick-pay-btn:active {
+    transform: translateY(0) !important;
+}
+
+.audaz-quick-pay-cash {
+    background: #10B981 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35) !important;
+}
+
+.audaz-quick-pay-card {
+    background: #3B82F6 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35) !important;
+}
+
+.audaz-quick-pay-mobile {
+    background: #8B5CF6 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.35) !important;
+}
+
+.audaz-quick-pay-bio {
+    background: #06B6D4 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.35) !important;
+}
+
+/* Big Payable Display in Bottom Bar */
+.audaz-pos-bottom-total {
+    display: flex !important;
+    align-items: baseline !important;
+    gap: 8px !important;
+    color: #FFFFFF !important;
+}
+
+.audaz-pos-bottom-total .label {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    color: #94A3B8 !important;
+    letter-spacing: 0.05em !important;
+}
+
+.audaz-pos-bottom-total .amount {
+    font-family: ui-monospace, SFMono-Regular, monospace !important;
+    font-size: 24px !important;
+    font-weight: 900 !important;
+    color: #10B981 !important;
+}
+
+/* Cobro / Multi-Pay Checkout Main Button */
+#pos-finalize {
+    background: linear-gradient(135deg, #FB4C0A 0%, #E03E00 100%) !important;
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+    font-size: 14.5px !important;
+    padding: 10px 24px !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 0 4px 18px rgba(251, 76, 10, 0.5) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    cursor: pointer !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+#pos-finalize:hover {
+    background: linear-gradient(135deg, #FF6A38 0%, #FB4C0A 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(251, 76, 10, 0.6) !important;
+}
+
+/* Express Cash Button */
+.pos-express-finalize[data-pay_method="cash"] {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    font-size: 13.5px !important;
+    padding: 10px 20px !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35) !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+.pos-express-finalize[data-pay_method="cash"]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5) !important;
+}
+
+/* Sub-action Icon Buttons in Bar (Draft, Suspend, Quotation, Credit) */
+.audaz-pos-sub-action-btn {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    padding: 8px 14px !important;
+    color: #E2E8F0 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+.audaz-pos-sub-action-btn:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #FFFFFF !important;
+    transform: translateY(-1px) !important;
+}
+
+/* ==========================================================================
+   7. Modern Payment Modal (#modal_payment)
+   ========================================================================== */
+#modal_payment .modal-content {
+    background: #0B0F1D !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 20px !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8) !important;
+    overflow: hidden !important;
+}
+
+#modal_payment .modal-header {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 16px 24px !important;
+}
+
+#modal_payment .modal-title {
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    color: #FFFFFF !important;
+}
+
+#modal_payment .modal-header .close {
+    color: #FFFFFF !important;
+    opacity: 0.7 !important;
+    font-size: 24px !important;
+}
+
+#modal_payment .modal-header .close:hover {
+    opacity: 1 !important;
+    color: var(--pos-primary) !important;
+}
+
+#modal_payment .modal-body {
+    padding: 24px !important;
+}
+
+#modal_payment .payment_row {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 14px !important;
+    padding: 16px !important;
+    margin-bottom: 14px !important;
+}
+
+#modal_payment .form-control {
+    background: rgba(7, 10, 22, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: #FFFFFF !important;
+    border-radius: 10px !important;
+    height: 42px !important;
+    font-weight: 600 !important;
+}
+
+#modal_payment .form-control:focus {
+    border-color: var(--pos-primary) !important;
+    box-shadow: 0 0 0 3px rgba(251, 76, 10, 0.2) !important;
+}
+
+#modal_payment .input-group-addon {
+    background: rgba(26, 35, 60, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: var(--pos-primary) !important;
+    border-radius: 10px 0 0 10px !important;
+}
+
+#modal_payment label {
+    color: #CBD5E1 !important;
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+}
+
+#modal_payment .modal-footer {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    padding: 16px 24px !important;
+}
+
+/* ==========================================================================
+   8. High-SKU Smart Search Panel (+1000 SKUs)
+   ========================================================================== */
+.pos-mode-btn {
+    cursor: pointer;
+    user-select: none;
+}
+
+.pos-mode-btn.active {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+}
+
+.high-sku-results-wrapper::-webkit-scrollbar {
+    width: 6px;
+}
+
+.high-sku-results-wrapper::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 4px;
+}
+
+.high-sku-results-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.high-sku-item {
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.high-sku-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.high-sku-cat-chip {
+    cursor: pointer;
+    user-select: none;
+    border: none;
+    outline: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+

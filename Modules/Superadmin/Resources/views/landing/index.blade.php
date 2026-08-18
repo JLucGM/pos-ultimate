@@ -7,19 +7,23 @@
     <div class="hero-overlay"></div>
     <div class="container hero-content">
         <div class="hero-text">
+            <div class="auth-pill-badge" data-aos="fade-down" style="margin-bottom: 20px;">
+                <span class="auth-pill-dot"></span>
+                <span>Nuevo: Facturación & Gestión Multimoneda en Vivo</span>
+            </div>
+
             <h1 class="hero-title" data-aos="fade-up">
-                Gestiona tu Negocio con el <span class="text-gradient">Sistema POS</span> Más Completo
+                Impulsa tu Negocio con el <span class="text-gradient">POS Inteligente</span> Más Completo
             </h1>
             <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="100">
-                Controla ventas, inventario, clientes y reportes desde cualquier lugar. 
-                Perfecto para restaurantes, tiendas y pequeñas empresas.
+                Controla ventas en segundos, inventario multialmacén, tasas de cambio dinámicas y finanzas desde cualquier dispositivo. La suite definitiva para comercios, restaurantes y empresas.
             </p>
             <div class="hero-buttons" data-aos="fade-up" data-aos-delay="200">
                 <a href="{{ route('pricing') }}" class="btn btn-primary btn-lg">
                     <i class="fas fa-rocket"></i> Ver Planes y Precios
                 </a>
                 <a href="#features" class="btn btn-outline-white btn-lg">
-                    <i class="fas fa-play-circle"></i> Ver Demo
+                    <i class="fas fa-sparkles"></i> Descubrir Módulos
                 </a>
             </div>
             <div class="hero-stats" data-aos="fade-up" data-aos-delay="300">
@@ -29,31 +33,31 @@
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">50K+</div>
-                    <div class="stat-label">Transacciones/Mes</div>
+                    <div class="stat-label">Ventas / Mes</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">99.9%</div>
-                    <div class="stat-label">Uptime</div>
+                    <div class="stat-label">Uptime Garantizado</div>
                 </div>
             </div>
         </div>
         <div class="hero-image" data-aos="fade-left" data-aos-delay="400">
-            <img src="{{ asset('images/landing/dashboard-preview.png') }}" alt="Dashboard Preview" class="dashboard-img">
+            <img src="{{ asset('images/landing/dashboard-preview.png') }}" alt="Dashboard Preview" class="dashboard-img" onerror="this.style.display='none'">
             <div class="floating-card card-1">
-                <i class="fas fa-calendar-check"></i>
-                <span>Ventas en tiempo real</span>
+                <i class="fas fa-coins" style="color: #10B981;"></i>
+                <span>Tasa Multimoneda en Vivo</span>
             </div>
             <div class="floating-card card-2">
-                <i class="fas fa-box"></i>
-                <span>Control de inventario</span>
+                <i class="fas fa-bolt" style="color: #6366F1;"></i>
+                <span>Punto de Venta Rápido</span>
             </div>
             <div class="floating-card card-3">
-                <i class="fas fa-box"></i>
-                <span>Control de citas</span>
+                <i class="fas fa-boxes" style="color: #F59E0B;"></i>
+                <span>Inventario en Tiempo Real</span>
             </div>
             <div class="floating-card card-4">
-                <i class="fas fa-cash-register"></i>
-                <span>Control de gastos</span>
+                <i class="fas fa-chart-line" style="color: #EC4899;"></i>
+                <span>Reportes de Ganancias</span>
             </div>
         </div>
     </div>
@@ -178,65 +182,76 @@
         </div>
 
         <div class="pricing-cards">
-            <div class="pricing-card" data-aos="fade-up" data-aos-delay="0">
+            @forelse($packages as $package)
+            <div class="pricing-card {{ $package->is_popular ? 'featured' : '' }}" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                @if($package->is_popular)
+                <div class="popular-badge"><i class="fas fa-star"></i> Más Popular</div>
+                @endif
                 <div class="pricing-header">
-                    <h3>Basic</h3>
+                    <h3>{{ $package->name }}</h3>
                     <div class="price">
-                        <span class="currency">$</span>
-                        <span class="amount">8</span>
-                        <span class="period">/mes</span>
+                        <span class="currency">{{ $package->currency }}</span>
+                        <span class="amount">{{ number_format($package->price, 2) }}</span>
+                        <span class="period">/{{ $package->interval == 'months' ? 'mes' : ($package->interval == 'years' ? 'año' : ($package->interval == 'days' ? 'días' : $package->interval)) }}</span>
                     </div>
                 </div>
                 <ul class="pricing-features">
-                    <li><i class="fas fa-check"></i> 1 Sucursal</li>
-                    <li><i class="fas fa-check"></i> 2 Usuarios</li>
-                    <li><i class="fas fa-check"></i> 100 Productos</li>
-                    <li><i class="fas fa-check"></i> Reportes Básicos</li>
-                    <li><i class="fas fa-check"></i> Soporte por Email</li>
-                </ul>
-                <a href="{{ route('pricing') }}" class="btn btn-outline">Seleccionar Plan</a>
-            </div>
+                    @if($package->location_count == 0)
+                        <li><i class="fas fa-check"></i> <strong>Sucursales Ilimitadas</strong></li>
+                    @else
+                        <li><i class="fas fa-check"></i> <strong>{{ $package->location_count }}</strong> {{ $package->location_count == 1 ? 'Sucursal' : 'Sucursales' }}</li>
+                    @endif
 
-            <div class="pricing-card featured" data-aos="fade-up" data-aos-delay="100">
-                <div class="popular-badge">Más Popular</div>
-                <div class="pricing-header">
-                    <h3>Pymes</h3>
-                    <div class="price">
-                        <span class="currency">$</span>
-                        <span class="amount">15</span>
-                        <span class="period">/mes</span>
-                    </div>
-                </div>
-                <ul class="pricing-features">
-                    <li><i class="fas fa-check"></i> 1 Sucursales</li>
-                    <li><i class="fas fa-check"></i> 3 Usuarios</li>
-                    <li><i class="fas fa-check"></i> Productos Ilimitados</li>
-                    <li><i class="fas fa-check"></i> Reportes Avanzados</li>
-                    <li><i class="fas fa-check"></i> Módulo citas</li>
-                    <li><i class="fas fa-check"></i> Soporte Prioritario</li>
-                </ul>
-                <a href="{{ route('pricing') }}" class="btn btn-primary">Seleccionar Plan</a>
-            </div>
+                    @if($package->user_count == 0)
+                        <li><i class="fas fa-check"></i> <strong>Usuarios Ilimitados</strong></li>
+                    @else
+                        <li><i class="fas fa-check"></i> <strong>{{ $package->user_count }}</strong> {{ $package->user_count == 1 ? 'Usuario' : 'Usuarios' }}</li>
+                    @endif
 
-            <div class="pricing-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="pricing-header">
-                    <h3>Business</h3>
-                    <div class="price">
-                        <span class="currency">$</span>
-                        <span class="amount">28</span>
-                        <span class="period">/mes</span>
-                    </div>
-                </div>
-                <ul class="pricing-features">
-                    <li><i class="fas fa-check"></i> Sucursales Ilimitadas</li>
-                    <li><i class="fas fa-check"></i> Usuarios Ilimitados</li>
-                    <li><i class="fas fa-check"></i> Productos Ilimitados</li>
-                    <li><i class="fas fa-check"></i> Todas las Funciones</li>
-                    <li><i class="fas fa-check"></i> API Personalizada</li>
-                    <li><i class="fas fa-check"></i> Soporte 24/7</li>
+                    @if($package->product_count == 0)
+                        <li><i class="fas fa-check"></i> <strong>Productos Ilimitados</strong></li>
+                    @else
+                        <li><i class="fas fa-check"></i> Hasta <strong>{{ number_format($package->product_count) }}</strong> Productos</li>
+                    @endif
+
+                    @if($package->invoice_count == 0)
+                        <li><i class="fas fa-check"></i> <strong>Facturas Ilimitadas</strong></li>
+                    @else
+                        <li><i class="fas fa-check"></i> Hasta <strong>{{ number_format($package->invoice_count) }}</strong> Facturas/mes</li>
+                    @endif
+
+                    @if(!empty($package->bookings))
+                        <li><i class="fas fa-check"></i> Módulo Citas / Reservas</li>
+                    @endif
+
+                    @if(!empty($package->kitchen))
+                        <li><i class="fas fa-check"></i> Pantalla de Cocina (KDS)</li>
+                    @endif
+
+                    @if(!empty($package->tables))
+                        <li><i class="fas fa-check"></i> Gestión de Mesas</li>
+                    @endif
+
+                    @if(!empty($package->custom_permissions))
+                        @php $perm_count = 0; @endphp
+                        @foreach($package->custom_permissions as $permission => $value)
+                            @if($value == 1 && isset($permission_formatted[$permission]) && $perm_count < 2)
+                                <li><i class="fas fa-check"></i> {{ $permission_formatted[$permission] }}</li>
+                                @php $perm_count++; @endphp
+                            @endif
+                        @endforeach
+                    @endif
                 </ul>
-                <a href="{{ route('pricing') }}" class="btn btn-outline">Seleccionar Plan</a>
+                <a href="{{ route('pricing') }}" class="btn {{ $package->is_popular ? 'btn-primary' : 'btn-outline' }}">
+                    <span>{{ $package->is_popular ? 'Comenzar Ahora' : 'Seleccionar Plan' }}</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
             </div>
+            @empty
+            <div class="tw-col-span-3 tw-text-center tw-py-12 tw-text-slate-400">
+                <p>No hay planes públicos configurados en el sistema.</p>
+            </div>
+            @endforelse
         </div>
     </div>
 </section>

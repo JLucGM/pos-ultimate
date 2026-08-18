@@ -1,15 +1,32 @@
-## About Audaz POS
+# AudazPOS - Sistema POS & Gestión Empresarial Multimoneda
 
-Audaz POS is a POS application by [Audaz Developer](http://audaz.site), a brand of [Softandnet DR](http://softandnet.com).
+Sistema de Punto de Venta (POS), Facturación, Inventario, Manufactura y Gestión Empresarial Multimoneda con arquitectura SaaS multiempresa.
 
-## Installation & Documentation
-You will find installation guide and documentation in the downloaded zip file.
-Also, For complete updated documentation of the ultimate pos please visit online [documentation guide](http://audaz.site/audaz-pos).
+## 🚀 Requisitos del Sistema
+- PHP 8.1 / 8.2 / 8.3 / 8.4
+- MySQL 8.0+ / MariaDB 10.4+
+- Composer 2.x
+- Extensiones PHP: `bcmath`, `ctype`, `fileinfo`, `json`, `mbstring`, `openssl`, `pdo_mysql`, `tokenizer`, `xml`, `gd`, `zip`, `curl`
 
-## Security Vulnerabilities
+## 🛠️ Instalación Rápida en Local
+```bash
+# 1. Instalar dependencias
+composer install --ignore-platform-reqs
 
-If you discover a security vulnerability within ultimate POS, please send an e-mail to support at soporte@audaz.site All security vulnerabilities will be promptly addressed.
+# 2. Configurar entorno
+cp .env.example .env
+php artisan key:generate
 
-## License
+# 3. Migraciones y Seeders iniciales
+php artisan migrate
+php artisan db:seed
 
-The Ultimate POS software is licensed under the [Codecanyon license](https://codecanyon.net/licenses/standard).
+# 4. Iniciar servidor local
+php artisan serve
+```
+
+## 👥 Credenciales por Defecto
+- **Super Administrador**: `superadmin` / `superadmin123`
+- **Administrador de Negocio**: `admin` / `admin123`
+- **Cajero**: `cajero` / `cajero123`
+- **Compras**: `compras` / `compras123`

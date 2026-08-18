@@ -24,28 +24,25 @@
 			value="{{$so_line->id}}">
 		@endif
 		@php
-			$product_name = $product->product_name . '<br/>' . $product->sub_sku ;
-			if(!empty($product->brand)){ $product_name .= ' ' . $product->brand ;}
+			$brand_name = !empty($product->brand) ? ' (' . $product->brand . ')' : '';
 		@endphp
 
-		@if( ($edit_price || $edit_discount) && empty($is_direct_sell) )
-		<div title="@lang('lang_v1.pos_edit_product_price_help')" style="display: inline">
-		<span class="text-link text-info cursor-pointer" data-toggle="modal" data-target="#row_edit_product_price_modal_{{$row_count}}">
-			{!! $product_name !!}
-			&nbsp;<i class="fa fa-info-circle"></i>
-		</span>
-		</div>
-		@else
-			{!! $product_name !!}
-		@endif
-		<img src="@if(count($product->media) > 0)
-						{{$product->media->first()->display_url}}
-					@elseif(!empty($product->product_image))
-						{{asset('/uploads/img/' . rawurlencode($product->product_image))}}
-					@else
-						{{asset('/img/default.png')}}
-					@endif" alt="product-img" loading="lazy"style="height:50px;display: inline;margin-left: 3px; border: black;border-radius: 5px; margin-top: 5px; width: 50px;object-fit: cover;">
+		<div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+			@if( ($edit_price || $edit_discount) && empty($is_direct_sell) )
+				<span class="text-link text-info cursor-pointer" data-toggle="modal" data-target="#row_edit_product_price_modal_{{$row_count}}" style="font-weight: 700; font-size: 12.5px; color: #0F172A; line-height: 1.2;">
+					{{ $product->product_name }}{{ $brand_name }}
+					<i class="fa fa-pencil-alt" style="font-size: 9px; color: #94A3B8; margin-left: 2px;"></i>
+				</span>
+			@else
+				<span style="font-weight: 700; font-size: 12.5px; color: #0F172A; line-height: 1.2;">{{ $product->product_name }}{{ $brand_name }}</span>
+			@endif
 
+			<span style="font-size: 10px; font-family: ui-monospace, monospace; font-weight: 600; background: #F1F5F9; color: #64748B; padding: 1px 5px; border-radius: 4px;">{{ $product->sub_sku }}</span>
+
+			@if($product->enable_stock)
+				<span style="font-size: 10px; font-weight: 700; color: #10B981; background: #ECFDF5; padding: 1px 5px; border-radius: 4px;">{{ @num_format($product->qty_available) }} {{$product->unit}}</span>
+			@endif
+		</div>
 
 		<input type="hidden" class="enable_sr_no" value="{{$product->enable_sr_no}}">
 		<input type="hidden" 
@@ -113,14 +110,6 @@
 			@include('sale_pos.partials.row_edit_product_price_modal')
 		</div> 
 		@endif
-<br>
-		<small class="text-muted p-1">
-			@if($product->enable_stock)
-			{{ @num_format($product->qty_available) }} {{$product->unit}} @lang('lang_v1.in_stock')
-			@else
-				--
-			@endif
-		</small>
 
 		<!-- Description modal end -->
 		@if(in_array('modifiers' , $enabled_modules))
@@ -177,7 +166,7 @@
 
 						$expiry_text = '';
 						if($exp_enabled == 1 && !empty($lot_number->exp_date)){
-							if( \Carbon::now()->gt(\Carbon::createFromFormat('Y-m-d', $lot_number->exp_date)) ){
+							if( \Carbon::now()->gt(\Carbon::parse($lot_number->exp_date)) ){
 								$expiry_text = '(' . __('report.expired') . ')';
 							}
 						}
@@ -245,41 +234,45 @@
         		@endphp
         	@endif
         @endforeach
-		<div class="input-group input-number">
-			<span class="input-group-btn"><button type="button" class="btn btn-default btn-flat quantity-down"><i class="fa fa-minus text-danger"></i></button></span>
-		<input type="text" data-min="1" style="width: auto"
-			class="form-control pos_quantity input_number mousetrap input_quantity" 
-			value="{{@format_quantity($product->quantity_ordered)}}" name="products[{{$row_count}}][quantity]" data-allow-overselling="@if(empty($pos_settings['allow_overselling'])){{'false'}}@else{{'true'}}@endif" 
-			@if($allow_decimal) 
-				data-decimal=1 
-			@else 
-				data-decimal=0 
-				data-rule-abs_digit="true" 
-				data-msg-abs_digit="@lang('lang_v1.decimal_value_not_allowed')" 
+		<div style="display: inline-flex; align-items: center; gap: 4px;">
+			<div class="input-number" style="display: inline-flex; align-items: center; border: 1.5px solid #CBD5E1; border-radius: 8px; background: #FFFFFF; height: 28px; width: 105px; box-sizing: border-box; overflow: hidden;">
+				<button type="button" class="quantity-down" style="height: 26px; width: 28px; padding: 0; margin: 0; display: inline-flex; align-items: center; justify-content: center; border: none; background: #F8FAFC; border-right: 1px solid #E2E8F0; cursor: pointer; flex-shrink: 0;">
+					<i class="fa fa-minus text-danger" style="font-size: 10px;"></i>
+				</button>
+				<input type="text" data-min="1" style="height: 26px; border: none; text-align: center; font-weight: 800; font-size: 12.5px; padding: 0 4px; width: 45px; background: transparent; box-shadow: none; outline: none; flex: 1; min-width: 0;"
+					class="form-control pos_quantity input_number mousetrap input_quantity" 
+					value="{{@format_quantity($product->quantity_ordered)}}" name="products[{{$row_count}}][quantity]" data-allow-overselling="@if(empty($pos_settings['allow_overselling'])){{'false'}}@else{{'true'}}@endif" 
+					@if($allow_decimal) 
+						data-decimal=1 
+					@else 
+						data-decimal=0 
+						data-rule-abs_digit="true" 
+						data-msg-abs_digit="@lang('lang_v1.decimal_value_not_allowed')" 
+					@endif
+					data-rule-required="true" 
+					data-msg-required="@lang('validation.custom-messages.this_field_is_required')" 
+					@if($product->enable_stock && empty($pos_settings['allow_overselling']) && empty($is_sales_order) )
+						data-rule-max-value="{{$max_qty_rule}}" data-qty_available="{{$product->qty_available}}" data-msg-max-value="{{$max_qty_msg}}" 
+						data-msg_max_default="@lang('validation.custom-messages.quantity_not_available', ['qty'=> $product->formatted_qty_available, 'unit' => $product->unit  ])" 
+					@endif 
+				>
+				<button type="button" class="quantity-up" style="height: 26px; width: 28px; padding: 0; margin: 0; display: inline-flex; align-items: center; justify-content: center; border: none; background: #F8FAFC; border-left: 1px solid #E2E8F0; cursor: pointer; flex-shrink: 0;">
+					<i class="fa fa-plus text-success" style="font-size: 10px;"></i>
+				</button>
+			</div>
+
+			<input type="hidden" name="products[{{$row_count}}][product_unit_id]" value="{{$product->unit_id}}">
+			@if(count($sub_units) > 0)
+				@php
+					$selected_sub_unit = !empty($product->sub_unit_id) && isset($sub_units[$product->sub_unit_id]) ? $sub_units[$product->sub_unit_id]['name'] : $product->unit;
+					$selected_sub_unit_id = !empty($product->sub_unit_id) ? $product->sub_unit_id : key($sub_units);
+				@endphp
+				<input type="hidden" name="products[{{$row_count}}][sub_unit_id]" class="sub_unit" value="{{$selected_sub_unit_id}}">
+				<span style="font-size: 11px; font-weight: 800; color: #64748B; margin-left: 4px;">{{ $selected_sub_unit }}</span>
+			@else
+				<span style="font-size: 11px; font-weight: 800; color: #64748B; margin-left: 4px;">{{$product->unit}}</span>
 			@endif
-			data-rule-required="true" 
-			data-msg-required="@lang('validation.custom-messages.this_field_is_required')" 
-			@if($product->enable_stock && empty($pos_settings['allow_overselling']) && empty($is_sales_order) )
-				data-rule-max-value="{{$max_qty_rule}}" data-qty_available="{{$product->qty_available}}" data-msg-max-value="{{$max_qty_msg}}" 
-				data-msg_max_default="@lang('validation.custom-messages.quantity_not_available', ['qty'=> $product->formatted_qty_available, 'unit' => $product->unit  ])" 
-			@endif 
-		>
-		<span class="input-group-btn"><button type="button" class="btn btn-default btn-flat quantity-up"><i class="fa fa-plus text-success"></i></button></span>
 		</div>
-		
-		<input type="hidden" name="products[{{$row_count}}][product_unit_id]" value="{{$product->unit_id}}">
-		@if(count($sub_units) > 0)
-			<br>
-			<select name="products[{{$row_count}}][sub_unit_id]" class="form-control input-sm sub_unit">
-                @foreach($sub_units as $key => $value)
-                    <option value="{{$key}}" data-multiplier="{{$value['multiplier']}}" data-unit_name="{{$value['name']}}" data-allow_decimal="{{$value['allow_decimal']}}" @if(!empty($product->sub_unit_id) && $product->sub_unit_id == $key) selected @endif>
-                        {{$value['name']}}
-                    </option>
-                @endforeach
-           </select>
-		@else
-			{{$product->unit}}
-		@endif
 
 		@if(!empty($product->second_unit))
             <br>
@@ -398,22 +391,23 @@
 		@endif
 	@endif
 	<td class="{{$hide_tax}}">
-		<input type="text" style="width: auto" name="products[{{$row_count}}][unit_price_inc_tax]" class="form-control pos_unit_price_inc_tax input_number" value="{{@num_format($unit_price_inc_tax)}}" @if(!$edit_price) readonly @endif @if(!empty($pos_settings['enable_msp'])) data-rule-min-value="{{$unit_price_inc_tax}}" data-msg-min-value="{{__('lang_v1.minimum_selling_price_error_msg', ['price' => @num_format($unit_price_inc_tax)])}}" @endif>
+		<input type="text" style="width: 85px; height: 28px; font-size: 12.5px; font-weight: 800; border-radius: 8px; text-align: right; border: 1px solid #CBD5E1; padding: 2px 6px; background: #FFFFFF;" name="products[{{$row_count}}][unit_price_inc_tax]" class="form-control pos_unit_price_inc_tax input_number" value="{{@num_format($unit_price_inc_tax)}}" @if(!$edit_price) readonly @endif @if(!empty($pos_settings['enable_msp'])) data-rule-min-value="{{$unit_price_inc_tax}}" data-msg-min-value="{{__('lang_v1.minimum_selling_price_error_msg', ['price' => @num_format($unit_price_inc_tax)])}}" @endif>
 	</td>
 	@if(!empty($common_settings['enable_product_warranty']) && !empty($is_direct_sell))
 		<td>
-			{!! Form::select("products[$row_count][warranty_id]", $warranties, $warranty_id, ['placeholder' => __('messages.please_select'), 'class' => 'form-control']); !!}
+			{!! Form::select("products[$row_count][warranty_id]", $warranties, $warranty_id, ['placeholder' => __('messages.please_select'), 'class' => 'form-control', 'style' => 'height: 28px; font-size: 11px;']); !!}
 		</td>
 	@endif
-	<td class="text-center">
+	<td class="text-right" style="white-space: nowrap;">
 		@php
 			$subtotal_type = !empty($pos_settings['is_pos_subtotal_editable']) ? 'text' : 'hidden';
-
 		@endphp
-		<input style="width: auto" type="{{$subtotal_type}}" class="form-control pos_line_total @if(!empty($pos_settings['is_pos_subtotal_editable'])) input_number @endif" value="{{@num_format($product->quantity_ordered*$unit_price_inc_tax )}}">
-		<span class="display_currency pos_line_total_text @if(!empty($pos_settings['is_pos_subtotal_editable'])) hide @endif" data-currency_symbol="true">{{$product->quantity_ordered*$unit_price_inc_tax}}</span>
+		<input style="width: 80px; height: 28px; text-align: right; font-weight: 800;" type="{{$subtotal_type}}" class="form-control pos_line_total @if(!empty($pos_settings['is_pos_subtotal_editable'])) input_number @endif" value="{{@num_format($product->quantity_ordered*$unit_price_inc_tax )}}">
+		<span class="display_currency pos_line_total_text @if(!empty($pos_settings['is_pos_subtotal_editable'])) hide @endif" data-currency_symbol="true" style="font-family: ui-monospace, monospace; font-size: 13.5px; font-weight: 900; color: #0F172A;">{{$product->quantity_ordered*$unit_price_inc_tax}}</span>
 	</td>
-	<td class="text-center v-center">
-		<i class="fa fa-times text-danger pos_remove_row cursor-pointer" aria-hidden="true"></i>
+	<td class="text-center v-center" style="width: 32px; padding: 4px 6px !important;">
+		<button type="button" class="pos_remove_row cursor-pointer" style="border: none; background: #FEE2E2; color: #EF4444; width: 24px; height: 24px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s ease;" title="Eliminar de la venta">
+			<i class="fa fa-times" style="font-size: 10px;"></i>
+		</button>
 	</td>
 </tr>

@@ -1,0 +1,643 @@
+/* ==========================================================================
+   AUDAZPOS - MODERN ULTRA-SLIM TABLE & DATATABLES DESIGN SYSTEM (PRO)
+   Theme: Luxury SaaS / Fintech High-Contrast UI
+   Typography: Clean, refined, lightweight proportions
+   Primary Accent: #FB4C0A (Audaz Orange)
+   ========================================================================== */
+
+:root {
+    --adm-primary: #FB4C0A;
+    --adm-primary-hover: #FF6A38;
+    --adm-primary-dark: #E03E00;
+    --adm-primary-glow: rgba(251, 76, 10, 0.2);
+    --adm-bg-main: #F8FAFC;
+    --adm-bg-card: #FFFFFF;
+    --adm-text-main: #0F172A;
+    --adm-text-muted: #64748B;
+    --adm-border: #E2E8F0;
+    --adm-border-subtle: #F1F5F9;
+    --adm-radius-sm: 6px;
+    --adm-radius-md: 10px;
+    --adm-radius-lg: 16px;
+}
+
+/* ==========================================================================
+   1. Page Header & Action Bar
+   ========================================================================== */
+.content-header {
+    padding: 16px 20px 8px 20px !important;
+}
+
+.content-header h1 {
+    font-size: 22px !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+    display: flex !important;
+    align-items: baseline !important;
+    gap: 10px !important;
+    margin: 0 !important;
+    letter-spacing: -0.02em !important;
+}
+
+.content-header h1 small {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #64748B !important;
+}
+
+/* ==========================================================================
+   2. Modern Cards & Widgets (.box, .box-solid, components.widget)
+   ========================================================================== */
+.box,
+.box.box-solid,
+.box.box-primary {
+    background: #FFFFFF !important;
+    border: 1px solid var(--adm-border) !important;
+    border-radius: var(--adm-radius-lg) !important;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04) !important;
+    margin-bottom: 20px !important;
+    overflow: visible !important;
+}
+
+.box-header {
+    padding: 14px 18px !important;
+    border-bottom: 1px solid #F1F5F9 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+.box-header .box-title {
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.box-header .box-title i,
+.box-header .box-title svg {
+    color: var(--adm-primary) !important;
+}
+
+.box-body {
+    padding: 18px !important;
+}
+
+/* Filter Accordion */
+#collapseFilter .box-body {
+    background: #F8FAFC !important;
+    border-radius: var(--adm-radius-md) !important;
+    border: 1px solid #E2E8F0 !important;
+    margin-top: 8px !important;
+    padding: 14px !important;
+}
+
+/* ==========================================================================
+   3. UNIVERSAL TABLE & DATATABLES SLIM DESIGN SYSTEM
+   ========================================================================== */
+
+/* Outer Container */
+.table-responsive {
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 12px !important;
+    background: #FFFFFF !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+    overflow-x: auto !important;
+    margin-bottom: 14px !important;
+}
+
+/* Base Table Overrides */
+table,
+.table,
+table.dataTable,
+table.table-striped,
+table.table-bordered,
+table.table-hover {
+    width: 100% !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: #FFFFFF !important;
+    font-size: 12.5px !important;
+    line-height: 1.45 !important;
+}
+
+/* Table Headers (Clean, compact, non-bulky) */
+.table > thead > tr > th,
+table.dataTable thead th,
+table thead th,
+.table thead th {
+    background: #F8FAFC !important;
+    color: #64748B !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    padding: 10px 14px !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: 1.5px solid #E2E8F0 !important;
+    vertical-align: middle !important;
+    white-space: nowrap !important;
+}
+
+/* Table Body Cells (Lightweight, elegant) */
+.table > tbody > tr > td,
+table.dataTable tbody td,
+table tbody td,
+.table tbody td {
+    padding: 9px 14px !important;
+    vertical-align: middle !important;
+    border-top: 1px solid #F1F5F9 !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    color: #1E293B !important;
+    font-size: 12.5px !important;
+    font-weight: 500 !important;
+}
+
+/* Table Striping & Subtle Hover */
+.table-striped > tbody > tr:nth-of-type(odd),
+table.dataTable tbody tr.odd {
+    background-color: #FFFFFF !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(even),
+table.dataTable tbody tr.even {
+    background-color: #FBFDFE !important;
+}
+
+.table-hover > tbody > tr:hover,
+table.dataTable tbody tr:hover,
+.table > tbody > tr:hover {
+    background-color: #F1F5F9 !important;
+    transition: background-color 0.12s ease !important;
+}
+
+/* Table Footers (Summary rows) */
+.table > tfoot > tr > th,
+.table > tfoot > tr > td,
+table.dataTable tfoot th,
+table.dataTable tfoot td {
+    background: #F8FAFC !important;
+    color: #0F172A !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    padding: 10px 14px !important;
+    border-top: 2px solid #E2E8F0 !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    vertical-align: middle !important;
+}
+
+/* Numeric & Currency Spans in Tables */
+.table .display_currency,
+table.dataTable .display_currency,
+.table .number_format {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    color: #0F172A !important;
+}
+
+/* Product & Item Thumbnails inside Tables */
+.table img,
+table.dataTable img {
+    border-radius: 6px !important;
+    border: 1px solid #E2E8F0 !important;
+    object-fit: cover !important;
+}
+
+/* ==========================================================================
+   4. DataTables Controls (Search, Per-Page, Pagination & Buttons)
+   ========================================================================== */
+
+.dataTables_wrapper {
+    padding: 4px 0 !important;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter {
+    margin-bottom: 12px !important;
+}
+
+.dataTables_wrapper .dataTables_length label,
+.dataTables_wrapper .dataTables_filter label {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #64748B !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    background: #F8FAFC !important;
+    border: 1px solid #CBD5E1 !important;
+    border-radius: 6px !important;
+    padding: 4px 8px !important;
+    height: 32px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+    outline: none !important;
+    transition: all 0.15s ease !important;
+}
+
+.dataTables_wrapper .dataTables_filter input[type="search"],
+.dataTables_wrapper .dataTables_filter input {
+    background: #F8FAFC !important;
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 8px !important;
+    padding: 5px 12px !important;
+    height: 34px !important;
+    font-size: 12.5px !important;
+    font-weight: 500 !important;
+    color: #0F172A !important;
+    outline: none !important;
+    transition: all 0.15s ease !important;
+    min-width: 200px !important;
+}
+
+.dataTables_wrapper .dataTables_filter input:focus {
+    border-color: var(--adm-primary) !important;
+    box-shadow: 0 0 0 3px var(--adm-primary-glow) !important;
+    background: #FFFFFF !important;
+}
+
+/* DataTables Buttons (Export, CSV, Excel, Print) */
+.dt-buttons,
+div.dt-buttons {
+    margin-bottom: 12px !important;
+    display: inline-flex !important;
+    gap: 4px !important;
+}
+
+.dt-buttons .dt-button,
+div.dt-buttons .btn {
+    background: #FFFFFF !important;
+    border: 1px solid #CBD5E1 !important;
+    border-radius: 6px !important;
+    padding: 5px 11px !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    color: #334155 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+    transition: all 0.15s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+}
+
+.dt-buttons .dt-button:hover,
+div.dt-buttons .btn:hover {
+    background: #F8FAFC !important;
+    border-color: var(--adm-primary) !important;
+    color: var(--adm-primary) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* DataTables Pagination */
+.dataTables_paginate {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 3px !important;
+    margin-top: 12px !important;
+}
+
+.dataTables_paginate .paginate_button {
+    padding: 4px 10px !important;
+    border-radius: 6px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: #475569 !important;
+    border: 1px solid #E2E8F0 !important;
+    background: #FFFFFF !important;
+    cursor: pointer !important;
+    transition: all 0.12s ease !important;
+}
+
+.dataTables_paginate .paginate_button:hover {
+    background: #F1F5F9 !important;
+    border-color: #CBD5E1 !important;
+    color: #0F172A !important;
+}
+
+.dataTables_paginate .paginate_button.current,
+.dataTables_paginate .paginate_button.current:hover {
+    background: var(--adm-primary) !important;
+    border-color: var(--adm-primary) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 2px 8px var(--adm-primary-glow) !important;
+}
+
+.dataTables_paginate .paginate_button.disabled,
+.dataTables_paginate .paginate_button.disabled:hover {
+    opacity: 0.4 !important;
+    cursor: not-allowed !important;
+}
+
+.dataTables_info {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #64748B !important;
+    padding-top: 12px !important;
+}
+
+/* ==========================================================================
+   5. Ultra-Refined Status Badges & Pills
+   ========================================================================== */
+.label,
+.badge {
+    padding: 3px 8px !important;
+    border-radius: 12px !important;
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    letter-spacing: 0.02em !important;
+    line-height: 1.2 !important;
+}
+
+/* Success / Paid / In Stock */
+.label-success,
+.badge-success,
+.payment-status-paid,
+.status-paid {
+    background: #ECFDF5 !important;
+    color: #059669 !important;
+    border: 1px solid #A7F3D0 !important;
+}
+
+/* Warning / Partial / Low Stock */
+.label-warning,
+.badge-warning,
+.payment-status-partial,
+.status-partial {
+    background: #FFFBEB !important;
+    color: #D97706 !important;
+    border: 1px solid #FDE68A !important;
+}
+
+/* Danger / Due / Out of Stock */
+.label-danger,
+.badge-danger,
+.payment-status-due,
+.status-due {
+    background: #FEF2F2 !important;
+    color: #DC2626 !important;
+    border: 1px solid #FECACA !important;
+}
+
+/* Info / Processing */
+.label-info,
+.badge-info {
+    background: #F0F9FF !important;
+    color: #0284C7 !important;
+    border: 1px solid #BAE6FD !important;
+}
+
+/* Primary / Audaz */
+.label-primary,
+.badge-primary {
+    background: rgba(251, 76, 10, 0.1) !important;
+    color: #EA580C !important;
+    border: 1px solid rgba(251, 76, 10, 0.25) !important;
+}
+
+/* ==========================================================================
+   6. Action Dropdown Buttons in Tables
+   ========================================================================== */
+.btn-group .dropdown-toggle,
+.table .btn-group .dropdown-toggle,
+.table .btn-xs {
+    border-radius: 6px !important;
+    padding: 4px 10px !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    background: #F8FAFC !important;
+    border: 1px solid #CBD5E1 !important;
+    color: #334155 !important;
+    transition: all 0.15s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+.btn-group.open .dropdown-toggle,
+.btn-group .dropdown-toggle:hover,
+.table .btn-xs:hover {
+    background: #0B0F1D !important;
+    color: #FFFFFF !important;
+    border-color: #0B0F1D !important;
+}
+
+.dropdown-menu {
+    background: #0B0F1D !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 12px !important;
+    padding: 6px !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4) !important;
+    min-width: 170px !important;
+    z-index: 9999 !important;
+}
+
+.dropdown-menu > li > a {
+    color: #E2E8F0 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    padding: 7px 10px !important;
+    border-radius: 6px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    transition: all 0.12s ease !important;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+    background: rgba(251, 76, 10, 0.15) !important;
+    color: #FB4C0A !important;
+}
+
+.dropdown-menu > li > a i {
+    width: 14px !important;
+    text-align: center !important;
+    font-size: 12px !important;
+}
+
+/* ==========================================================================
+   7. Global Button Upgrades
+   ========================================================================== */
+.btn-primary {
+    background: linear-gradient(135deg, #FB4C0A 0%, #E03E00 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 8px !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    padding: 7px 16px !important;
+    font-size: 13px !important;
+    box-shadow: 0 3px 12px rgba(251, 76, 10, 0.3) !important;
+    transition: all 0.15s ease !important;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #FF6A38 0%, #FB4C0A 100%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 5px 15px rgba(251, 76, 10, 0.45) !important;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    padding: 7px 16px !important;
+    font-size: 13px !important;
+    box-shadow: 0 3px 12px rgba(16, 185, 129, 0.25) !important;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    padding: 7px 16px !important;
+    font-size: 13px !important;
+    box-shadow: 0 3px 12px rgba(239, 68, 68, 0.25) !important;
+}
+
+.btn-default {
+    background: #FFFFFF !important;
+    border: 1px solid #CBD5E1 !important;
+    border-radius: 8px !important;
+    color: #334155 !important;
+    font-weight: 600 !important;
+    padding: 7px 16px !important;
+    font-size: 13px !important;
+    transition: all 0.15s ease !important;
+}
+
+.btn-default:hover {
+    background: #F8FAFC !important;
+    border-color: #94A3B8 !important;
+    color: #0F172A !important;
+}
+
+/* ==========================================================================
+   8. Form Inputs in Admin Area
+   ========================================================================== */
+.form-control {
+    border-radius: 8px !important;
+    border: 1.5px solid #CBD5E1 !important;
+    height: 38px !important;
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    transition: all 0.15s ease !important;
+}
+
+.form-control:focus {
+    border-color: var(--adm-primary) !important;
+    box-shadow: 0 0 0 3px var(--adm-primary-glow) !important;
+}
+
+.select2-container--default .select2-selection--single {
+    border-radius: 8px !important;
+    border: 1.5px solid #CBD5E1 !important;
+    height: 38px !important;
+    padding: 4px 8px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 26px !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    color: #0F172A !important;
+}
+
+/* ==========================================================================
+   9. Business Settings Tabs (.pos-tab-container & .pos-tab-menu)
+   ========================================================================== */
+.pos-tab-container {
+    background: #FFFFFF !important;
+    border-radius: var(--adm-radius-lg) !important;
+    border: 1px solid var(--adm-border) !important;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05) !important;
+    padding: 10px !important;
+}
+
+.pos-tab-menu .list-group {
+    border: none !important;
+    background: #F8FAFC !important;
+    border-radius: var(--adm-radius-md) !important;
+    padding: 6px !important;
+}
+
+.pos-tab-menu .list-group-item {
+    border: none !important;
+    border-radius: 8px !important;
+    margin-bottom: 3px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: #475569 !important;
+    padding: 9px 12px !important;
+    text-align: left !important;
+    background: transparent !important;
+    transition: all 0.15s ease !important;
+}
+
+.pos-tab-menu .list-group-item:hover {
+    background: #EDF2F7 !important;
+    color: #0F172A !important;
+}
+
+.pos-tab-menu .list-group-item.active {
+    background: var(--adm-primary) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 3px 12px var(--adm-primary-glow) !important;
+}
+
+.pos-tab {
+    padding: 10px 20px !important;
+}
+
+/* ==========================================================================
+   10. Global Legacy Indigo-Blue Button Replacement
+   ========================================================================== */
+.tw-from-indigo-600.tw-to-blue-500,
+.tw-dw-btn.tw-from-indigo-600,
+a.tw-dw-btn.tw-bg-gradient-to-r,
+button.tw-dw-btn.tw-bg-gradient-to-r {
+    background: linear-gradient(135deg, #FB4C0A 0%, #E03E00 100%) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 18px !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    padding: 7px 16px !important;
+    box-shadow: 0 3px 12px rgba(251, 76, 10, 0.3) !important;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+.tw-from-indigo-600.tw-to-blue-500:hover,
+.tw-dw-btn.tw-from-indigo-600:hover,
+a.tw-dw-btn.tw-bg-gradient-to-r:hover,
+button.tw-dw-btn.tw-bg-gradient-to-r:hover {
+    background: linear-gradient(135deg, #FF6A38 0%, #FB4C0A 100%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 5px 15px rgba(251, 76, 10, 0.45) !important;
+}

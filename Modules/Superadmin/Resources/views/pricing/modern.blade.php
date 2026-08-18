@@ -45,15 +45,15 @@
                     <div class="plan-price">
                         <div class="price-monthly months">
                             <span class="currency">{{ $package->currency }}</span>
-                            <span class="amount">{{ number_format($package->price, 0) }}</span>
+                            <span class="amount">{{ number_format($package->price, 2) }}</span>
                             <span class="period">/mes</span>
                         </div>
                         <div class="price-yearly years" style="display: none;">
                             <span class="currency">{{ $package->currency }}</span>
-                            <span class="amount">{{ number_format($package->annual_price, 0) }}</span>
+                            <span class="amount">{{ number_format($package->annual_price, 2) }}</span>
                             <span class="period">/año</span>
                             <div class="tw-text-sm tw-text-green-600 tw-font-semibold tw-mt-1">
-                                Ahorras ${{ number_format(($package->price * 12) - $package->annual_price, 0) }}/año
+                                Ahorras ${{ number_format(($package->price * 12) - $package->annual_price, 2) }}/año
                             </div>
                         </div>
                     </div>

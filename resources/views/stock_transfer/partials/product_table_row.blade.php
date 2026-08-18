@@ -38,7 +38,7 @@
 
                             $expiry_text = '';
                             if($exp_enabled == 1 && !empty($lot_number->exp_date)){
-                                if( \Carbon::now()->gt(\Carbon::createFromFormat('Y-m-d', $lot_number->exp_date)) ){
+                                if( \Carbon::now()->gt(\Carbon::parse($lot_number->exp_date)) ){
                                     $expiry_text = '(' . __('report.expired') . ')';
                                 }
                             }

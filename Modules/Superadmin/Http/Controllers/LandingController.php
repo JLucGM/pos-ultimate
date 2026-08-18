@@ -24,17 +24,22 @@ class LandingController extends Controller
      */
     public function index()
     {
-        // Get active packages for preview
+        // Get active packages for preview from backend
         $packages = Package::active()
             ->notPrivate()
             ->orderBy('sort_order')
-            ->take(3)
             ->get();
 
-        $theme = config('ui.landing_theme', 'modern');
-        $view = $theme === 'modern' ? 'superadmin::landing.index_modern' : 'superadmin::landing.index';
+        // Get all module permissions and convert them into name => label
+        $permissions = $this->moduleUtil->getModuleData('superadmin_package');
+        $permission_formatted = [];
+        foreach ($permissions as $permission) {
+            foreach ($permission as $details) {
+                $permission_formatted[$details['name']] = $details['label'];
+            }
+        }
 
-        return view($view, compact('packages'));
+        return view('superadmin::landing.index', compact('packages', 'permission_formatted'));
     }
 
     /**

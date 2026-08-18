@@ -1,56 +1,64 @@
 @extends('layouts.auth2')
-
 @section('title', __('lang_v1.reset_password'))
 
 @section('content')
-
-    <div class="col-md-4">
-    </div>
-    <div class="col-md-4 col-xs-12">
-        <div
-            class=" tw-p-2 sm:tw-p-3 tw-mb-4 tw-transition-all tw-duration-200  tw-bg-white tw-shadow-sm tw-rounded-xl tw-ring-1 tw-ring-gray-200">
-            <div class="tw-flex tw-flex-col tw-gap-4 tw-dw-rounded-box tw-dw-p-6 tw-dw-max-w-md">
-
-                <h3 class="tw-text-sm tw-font-medium tw-text-gray-500 tw-self-center">@lang('lang_v1.send_password_reset_link')</h3>
-
-                @if (session('status') && is_string(session('status')))
-                    <div class="alert alert-info" role="alert">{{ session('status') }}</div>
-                @endif
-
-
-                <form method="POST" action="{{ route('password.email') }}">
-                    {{ csrf_field() }}
-                    <div class="form-group has-feedback {{ $errors->has('email') ? ' has-error' : '' }}">
-                        <label class="tw-dw-form-control">
-                            <div class="tw-dw-label">
-                                <span class="tw-text-xs md:tw-text-sm tw-font-medium tw-text-black">@lang('Email')</span>
-                            </div>
-                                <input id="email" type="email" class="tw-border tw-border-[#D1D5DA] tw-outline-none tw-h-12 tw-bg-transparent tw-rounded-lg tw-px-3 tw-font-medium tw-text-black placeholder:tw-text-gray-500 placeholder:tw-font-medium" name="email" value="{{ old('email') }}" required autofocus placeholder="@lang('lang_v1.email_address')">
-
-                                @if ($errors->has('email'))
-                                <span class="help-block">
-                                    <strong>{{ $errors->first('email') }}</strong>
-                                </span>
-                            @endif
-                        </label>
-                    </div>
-
-                    <button type="submit" class="tw-bg-gradient-to-r tw-from-orange-500 tw-to-orange-500 tw-h-12 tw-rounded-xl tw-text-sm md:tw-text-base tw-text-white tw-font-semibold tw-w-full tw-max-w-full mt-2 hover:tw-from-orange-600 hover:tw-to-orange-600 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-orange-500 focus:tw-ring-offset-2 active:tw-from-orange-700 active:tw-to-orange-700">
-                        @lang('lang_v1.send_password_reset_link')
-                    </button>
-                </form>
+<div class="auth-fullscreen-layout" style="align-items: center; justify-content: center; padding: 40px 20px;">
+    <div style="width: 100%; max-width: 480px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 25px; padding: 40px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);">
+        
+        <div style="text-align: center; margin-bottom: 28px;">
+            <div style="width: 60px; height: 60px; border-radius: 25px; background: rgba(251, 76, 10, 0.15); border: 1px solid rgba(251, 76, 10, 0.35); display: inline-flex; align-items: center; justify-content: center; color: #FB4C0A; font-size: 24px; margin-bottom: 16px;">
+                <i class="fas fa-key"></i>
             </div>
+            <h2 class="auth-header-title" style="font-size: 24px;">@lang('lang_v1.reset_password')</h2>
+            <p class="auth-header-sub">@lang('lang_v1.send_password_reset_link')</p>
+        </div>
+
+        @if (session('status') && is_string(session('status')))
+            <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 25px; padding: 14px 18px; margin-bottom: 20px; color: #6EE7B7; font-size: 13px; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-check-circle" style="flex-shrink: 0;"></i>
+                <span>{{ session('status') }}</span>
+            </div>
+        @endif
+
+        <form method="POST" action="{{ route('password.email') }}">
+            @csrf
+            
+            <div class="auth-group">
+                <label for="email" class="auth-form-label">@lang('business.email')</label>
+                <div class="auth-field-wrapper">
+                    <input 
+                        id="email" 
+                        type="email" 
+                        class="auth-text-input" 
+                        name="email" 
+                        value="{{ old('email') }}" 
+                        required 
+                        autofocus 
+                        placeholder="@lang('lang_v1.email_address')"
+                    >
+                    <i class="fas fa-envelope auth-field-icon"></i>
+                </div>
+                @if ($errors->has('email'))
+                    <span style="color: #F87171; font-size: 12px; margin-top: 4px; display: block;">
+                        {{ $errors->first('email') }}
+                    </span>
+                @endif
+            </div>
+
+            <div style="margin-top: 24px;">
+                <button type="submit" class="auth-btn-primary">
+                    <span>@lang('lang_v1.send_password_reset_link')</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </form>
+
+        <div style="text-align: center; margin-top: 28px; font-size: 14px;">
+            <a href="{{ route('login') }}" class="auth-forgot-link" style="display: inline-flex; align-items: center; gap: 6px;">
+                <i class="fas fa-arrow-left"></i>
+                Volver a iniciar sesión
+            </a>
         </div>
     </div>
-    <div class="col-md-4">
-    </div>
-@endsection
-@section('javascript')
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('.change_lang').click(function() {
-                window.location = "{{ route('password.request') }}?lang=" + $(this).attr('value');
-            });
-        })
-    </script>
+</div>
 @endsection

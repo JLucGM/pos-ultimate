@@ -127,29 +127,29 @@ select {
    ======================================== */
 
 .table-responsive {
-    border-radius: 25px !important;
+    border-radius: 12px !important;
     overflow: hidden;
 }
 
 .table {
-    border-radius: 25px !important;
+    border-radius: 12px !important;
 }
 
 .table thead tr:first-child th:first-child {
-    border-top-left-radius: 25px !important;
+    border-top-left-radius: 12px !important;
 }
 
 .table thead tr:first-child th:last-child {
-    border-top-right-radius: 25px !important;
+    border-top-right-radius: 12px !important;
 }
 
 /* DataTables */
 .dataTables_wrapper .dataTables_filter input {
-    border-radius: 25px !important;
+    border-radius: 8px !important;
 }
 
 .dataTables_wrapper .dataTables_length select {
-    border-radius: 25px !important;
+    border-radius: 6px !important;
 }
 
 /* ========================================

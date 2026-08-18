@@ -11,8 +11,20 @@
 <!-- app css -->
 <link rel="stylesheet" href="{{ asset('css/app.css?v='.$asset_v) }}">
 
+<!-- Font Awesome 6.5.1 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
 <!-- Modern Rounded Borders -->
 <link rel="stylesheet" href="{{ asset('css/modern-rounded.css?v='.$asset_v) }}">
+
+<!-- AudazPOS Dashboard & Layout Pro -->
+<link rel="stylesheet" href="{{ asset('css/dashboard-modern.css?v='.$asset_v) }}">
+
+<!-- AudazPOS POS Modern Screen -->
+<link rel="stylesheet" href="{{ asset('css/pos-modern.css?v='.$asset_v) }}">
+
+<!-- AudazPOS DataTables & Admin Modules Pro -->
+<link rel="stylesheet" href="{{ asset('css/admin-datatables-modern.css?v='.$asset_v) }}">
 
 @if(isset($pos_layout) && $pos_layout)
 	<style type="text/css">

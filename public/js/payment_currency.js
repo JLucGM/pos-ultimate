@@ -1,52 +1,91 @@
 /**
- * Audaz POS - Pagos Multi-Moneda
- * Maneja la selección de moneda por cada línea de pago
- * y muestra la equivalencia en tiempo real.
+ * Audaz POS - Motor de Dualidad Multimoneda (Venezuela USD / Bs BCV)
+ * Sincroniza precios duales, conversiones en tiempo real y opciones de pago rápidas.
  */
-(function() {
+(function($) {
     'use strict';
 
-    // Cache de tasas para no hacer AJAX repetidos
     var rateCache = {};
     var baseCurrencyId = $('input#business_currency_id').val() || null;
+    var globalBcvRate = parseFloat($('#bcv_exchange_rate_val').val()) || 1;
 
     /**
-     * Obtener tasa de cambio (con caché)
+     * Formatear número a estilo moneda Bs venezolano (ej. 1.250,50)
      */
-    function getExchangeRate(fromCurrencyId, toCurrencyId, callback) {
-        if (fromCurrencyId == toCurrencyId) {
-            callback(1);
-            return;
-        }
+    function formatBs(amount) {
+        if (isNaN(amount) || amount === null || amount === undefined) return '0,00';
+        return parseFloat(amount).toLocaleString('es-VE', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
 
-        var cacheKey = fromCurrencyId + '_' + toCurrencyId;
-        if (rateCache[cacheKey]) {
-            callback(rateCache[cacheKey]);
+    /**
+     * Obtener tasa de cambio activa
+     */
+    function getActiveBcvRate(callback) {
+        if (globalBcvRate && globalBcvRate > 1) {
+            if (callback) callback(globalBcvRate);
             return;
         }
 
         $.ajax({
-            url: '/get-exchange-rate',
-            data: {
-                from_currency_id: fromCurrencyId,
-                to_currency_id: toCurrencyId
-            },
-            success: function(response) {
-                if (response.success && response.rate) {
-                    rateCache[cacheKey] = parseFloat(response.rate);
-                    callback(parseFloat(response.rate));
+            url: '/exchange-rates/preview-api-rate',
+            dataType: 'json',
+            success: function(res) {
+                if (res.success && res.oficial) {
+                    globalBcvRate = parseFloat(res.oficial);
+                    $('#bcv_exchange_rate_val').val(globalBcvRate);
+                    if (callback) callback(globalBcvRate);
                 } else {
-                    callback(null);
+                    if (callback) callback(1);
                 }
             },
             error: function() {
-                callback(null);
+                if (callback) callback(1);
             }
         });
     }
 
     /**
-     * Actualizar la equivalencia mostrada debajo del monto
+     * Actualizar visualización dual en barra inferior del POS
+     */
+    function updatePosDualPayable() {
+        var rawTotal = $('#final_total_input').val() || '0';
+        var totalUsd = parseFloat(rawTotal.replace(/,/g, '')) || 0;
+
+        getActiveBcvRate(function(rate) {
+            if (rate > 1) {
+                var totalBs = totalUsd * rate;
+                $('#total_payable_secondary').text('Bs. ' + formatBs(totalBs));
+                $('#pos_secondary_currency_box').show();
+            } else {
+                $('#pos_secondary_currency_box').hide();
+            }
+        });
+    }
+
+    /**
+     * Actualizar totales duales en modal de pago
+     */
+    function updatePaymentModalDualTotals() {
+        var totalPayable = __read_number($('#total_payable_input')) || 0;
+        var totalPaying = __read_number($('#total_paying_input')) || 0;
+        var changeReturn = __read_number($('#change_return')) || 0;
+        var balanceDue = __read_number($('#in_balance_due')) || 0;
+
+        getActiveBcvRate(function(rate) {
+            if (rate > 1) {
+                $('.pos_dual_total_bs').text('≈ Bs. ' + formatBs(totalPayable * rate));
+                $('.pos_dual_paying_bs').text('≈ Bs. ' + formatBs(totalPaying * rate));
+                $('.pos_dual_change_bs').text('≈ Bs. ' + formatBs(changeReturn * rate));
+                $('.pos_dual_balance_bs').text('≈ Bs. ' + formatBs(balanceDue * rate));
+            }
+        });
+    }
+
+    /**
+     * Actualizar equivalencia debajo de cada fila de pago
      */
     function updateEquivalent(rowIndex) {
         var $currencySelect = $('#payment_currency_' + rowIndex);
@@ -57,102 +96,128 @@
         if (!$currencySelect.length || !$amountInput.length) return;
 
         var selectedCurrencyId = $currencySelect.val();
-        var amount = __read_number($amountInput);
+        var selectedText = $currencySelect.find('option:selected').text();
+        var amount = __read_number($amountInput) || 0;
 
-        // Si es la moneda base, no mostrar equivalencia
-        if (!baseCurrencyId || selectedCurrencyId == baseCurrencyId) {
-            $equivDiv.hide();
-            $rateInput.val(1);
-            return;
-        }
+        getActiveBcvRate(function(rate) {
+            var isBs = selectedText.indexOf('VES') !== -1 || selectedText.indexOf('VEF') !== -1 || selectedText.indexOf('Bolívar') !== -1 || selectedText.indexOf('Bs') !== -1;
 
-        if (!amount || amount <= 0) {
-            $equivDiv.hide();
-            return;
-        }
-
-        // Obtener tasa: de la moneda seleccionada a la moneda base
-        // Si seleccionó Bs, necesitamos saber cuántos USD equivale
-        getExchangeRate(baseCurrencyId, selectedCurrencyId, function(rate) {
-            if (rate && rate > 0) {
-                var amountInBase = amount / rate;
+            if (isBs && rate > 1) {
                 $rateInput.val(rate);
-                $equivDiv.find('.equiv-text').text(
-                    'Equivale a $' + amountInBase.toFixed(2) + ' USD (Tasa: ' + rate.toFixed(2) + ')'
-                );
-                $equivDiv.show();
+                if (amount > 0) {
+                    var usdEquiv = amount / rate;
+                    $equivDiv.find('.equiv-text').html(
+                        'Equivale a <strong>$' + usdEquiv.toFixed(2) + ' USD</strong> (Tasa: ' + formatBs(rate) + ')'
+                    );
+                    $equivDiv.show();
+                } else {
+                    $equivDiv.hide();
+                }
             } else {
-                $equivDiv.find('.equiv-text').text('Sin tasa disponible');
-                $equivDiv.show();
                 $rateInput.val(1);
+                if (amount > 0 && rate > 1) {
+                    var bsEquiv = amount * rate;
+                    $equivDiv.find('.equiv-text').html(
+                        'Equivale a <strong>Bs. ' + formatBs(bsEquiv) + '</strong> (Tasa: ' + formatBs(rate) + ')'
+                    );
+                    $equivDiv.show();
+                } else {
+                    $equivDiv.hide();
+                }
             }
+
+            updatePaymentModalDualTotals();
         });
     }
 
-    /**
-     * Recalcular el balance pendiente considerando monedas
-     */
-    function recalculateMultiCurrencyBalance() {
-        var totalPayableBase = __read_number($('#total_payable_input'));
-        var totalPayingBase = 0;
+    // === EVENT LISTENERS ===
 
-        $('#payment_rows_div').find('.payment-amount').each(function() {
-            var $row = $(this).closest('.payment_row');
-            var amount = __read_number($(this));
-            var $currencySelect = $row.find('.payment-currency-select');
-            var $rateInput = $row.find('.payment-exchange-rate');
-
-            if (!amount || amount <= 0) return;
-
-            var selectedCurrencyId = $currencySelect.val();
-            var rate = parseFloat($rateInput.val()) || 1;
-
-            if (baseCurrencyId && selectedCurrencyId != baseCurrencyId && rate > 1) {
-                // Convertir a moneda base
-                totalPayingBase += amount / rate;
-            } else {
-                totalPayingBase += amount;
-            }
-        });
-
-        var balance = totalPayableBase - totalPayingBase;
-
-        // Actualizar el display de balance
-        var $balanceDue = $('#balance_due');
-        if ($balanceDue.length) {
-            __write_number($balanceDue, balance);
-            if (balance < 0) {
-                $balanceDue.closest('.form-group').find('.change_return_span').text(
-                    __currency_trans_from_en(Math.abs(balance), true)
-                );
-            }
-        }
-    }
-
-    // === Event Listeners ===
-
-    // Cuando cambia la moneda del pago
-    $(document).on('change', '.payment-currency-select', function() {
-        var rowIndex = $(this).data('row');
-        updateEquivalent(rowIndex);
+    // Observar cambios en el total a pagar del POS
+    var observer = new MutationObserver(function() {
+        updatePosDualPayable();
     });
 
-    // Cuando cambia el monto del pago
-    $(document).on('change keyup', '.payment-amount', function() {
-        var $row = $(this).closest('.payment_row');
-        var rowIndex = $row.find('.payment_row_index').val();
-        updateEquivalent(rowIndex);
-    });
-
-    // Detectar la moneda base al cargar
     $(document).ready(function() {
-        // Intentar obtener el currency_id del negocio
-        if (!baseCurrencyId) {
-            var $currencySelect = $('.payment-currency-select').first();
-            if ($currencySelect.length) {
-                baseCurrencyId = $currencySelect.val();
-            }
+        var target = document.getElementById('total_payable');
+        if (target) {
+            observer.observe(target, { childList: true, characterData: true, subtree: true });
         }
+
+        // Consulta inicial de tasa
+        getActiveBcvRate(function() {
+            updatePosDualPayable();
+        });
+
+        // Eventos en campos de pago
+        $(document).on('change', '.payment-currency-select', function() {
+            var rowIndex = $(this).data('row');
+            updateEquivalent(rowIndex);
+        });
+
+        $(document).on('input change keyup', '.payment-amount', function() {
+            var $row = $(this).closest('.payment_row');
+            var rowIndex = $row.find('.payment_row_index').val();
+            updateEquivalent(rowIndex);
+            setTimeout(updatePaymentModalDualTotals, 100);
+        });
+
+        // Botón Cobro Rápido en Dólares ($ USD)
+        $(document).on('click', '#quick_pay_usd_btn', function() {
+            var totalUsd = __read_number($('#total_payable_input')) || 0;
+            var $firstAmount = $('#amount_0');
+            var $firstCurrency = $('#payment_currency_0');
+
+            if ($firstCurrency.length) {
+                // Seleccionar USD si existe en el dropdown
+                $firstCurrency.find('option').each(function() {
+                    if ($(this).text().indexOf('USD') !== -1 || $(this).text().indexOf('Dólar') !== -1) {
+                        $firstCurrency.val($(this).val()).trigger('change');
+                        return false;
+                    }
+                });
+            }
+
+            if ($firstAmount.length) {
+                __write_number($firstAmount, totalUsd);
+                $firstAmount.trigger('change');
+            }
+        });
+
+        // Botón Cobro Rápido en Bolívares (Bs VES)
+        $(document).on('click', '#quick_pay_bs_btn', function() {
+            var totalUsd = __read_number($('#total_payable_input')) || 0;
+            var $firstAmount = $('#amount_0');
+            var $firstCurrency = $('#payment_currency_0');
+
+            getActiveBcvRate(function(rate) {
+                var totalBs = totalUsd * (rate > 1 ? rate : 1);
+
+                if ($firstCurrency.length) {
+                    // Seleccionar VES/Bs en el dropdown
+                    $firstCurrency.find('option').each(function() {
+                        if ($(this).text().indexOf('VES') !== -1 || $(this).text().indexOf('VEF') !== -1 || $(this).text().indexOf('Bolívar') !== -1 || $(this).text().indexOf('Bs') !== -1) {
+                            $firstCurrency.val($(this).val()).trigger('change');
+                            return false;
+                        }
+                    });
+                }
+
+                if ($firstAmount.length) {
+                    __write_number($firstAmount, totalBs);
+                    $firstAmount.trigger('change');
+                }
+            });
+        });
+
+        // Al abrir modal de pago, actualizar totales duales
+        $('#modal_payment').on('shown.bs.modal', function() {
+            updatePaymentModalDualTotals();
+            $('.payment-amount').each(function() {
+                var $row = $(this).closest('.payment_row');
+                var rowIndex = $row.find('.payment_row_index').val();
+                updateEquivalent(rowIndex);
+            });
+        });
     });
 
-})();
+})(jQuery);

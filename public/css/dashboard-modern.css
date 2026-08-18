@@ -1,581 +1,732 @@
-/**
- * Audaz POS - Dashboard Modern Theme
- * Paleta unificada: Slate (neutros) + Indigo (acento)
- *
- * PALETA:
- *   Fondo app:     #f1f5f9 (slate-100)
- *   Cards:         #ffffff
- *   Texto fuerte:  #0f172a (slate-900)
- *   Texto medio:   #475569 (slate-600)
- *   Texto suave:   #94a3b8 (slate-400)
- *   Bordes:        #e2e8f0 (slate-200)
- *   Acento:        #4f46e5 (indigo-600)
- *   Acento hover:  #4338ca (indigo-700)
- *   Acento light:  #e0e7ff (indigo-100)
- *   Éxito:         #059669 (emerald-600)
- *   Error:         #dc2626 (red-600)
- *   Header bg:     #1e293b (slate-800)
- */
+/* ==========================================================================
+   AudazPOS - Modern Dashboard & Master Layout Design System (2026 Pro Suite)
+   ========================================================================== */
 
 :root {
-    --c-bg: #f1f5f9;
-    --c-card: #ffffff;
-    --c-text: #0f172a;
-    --c-text-mid: #475569;
-    --c-text-soft: #94a3b8;
-    --c-border: #e2e8f0;
-    --c-accent: #4f46e5;
-    --c-accent-hover: #4338ca;
-    --c-accent-light: #e0e7ff;
-    --c-accent-soft: #eef2ff;
-    --c-success: #059669;
-    --c-success-light: #d1fae5;
-    --c-error: #dc2626;
-    --c-error-light: #fee2e2;
-    --c-header: #1e293b;
-    --c-header-deep: #0f172a;
-    --radius: 14px;
-    --radius-sm: 10px;
-    --shadow: 0 1px 3px rgb(0 0 0 / 0.06);
-    --shadow-md: 0 4px 12px rgb(0 0 0 / 0.08);
-    --shadow-lg: 0 8px 24px rgb(0 0 0 / 0.1);
+    --audaz-primary: #FB4C0A;
+    --audaz-primary-dark: #E03E00;
+    --audaz-primary-light: #FF6A38;
+    --audaz-primary-glow: rgba(251, 76, 10, 0.35);
+    --audaz-accent-green: #10B981;
+    --audaz-accent-blue: #3B82F6;
+    --audaz-accent-purple: #8B5CF6;
+    --audaz-accent-amber: #F59E0B;
+    
+    --audaz-bg-main: #F8FAFC;
+    --audaz-card-bg: #FFFFFF;
+    --audaz-border: #E2E8F0;
+    --audaz-border-focus: #FB4C0A;
+    
+    --audaz-text-dark: #0F172A;
+    --audaz-text-muted: #64748B;
+    --audaz-text-light: #94A3B8;
+    
+    --audaz-radius-sm: 10px;
+    --audaz-radius-md: 16px;
+    --audaz-radius-lg: 20px;
+    --audaz-radius-xl: 25px;
+    
+    --audaz-shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.04);
+    --audaz-shadow-md: 0 8px 24px -4px rgba(15, 23, 42, 0.07);
+    --audaz-shadow-lg: 0 16px 36px -6px rgba(15, 23, 42, 0.1);
+    --audaz-shadow-glow: 0 8px 25px rgba(251, 76, 10, 0.3);
 }
 
-/* ============================================
-   TYPOGRAPHY
-   ============================================ */
-body, .tw-font-sans {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+/* ==========================================================================
+   1. Modern Topbar & Navigation
+   ========================================================================== */
+.audaz-topbar {
+    background: #0B0F1D !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    height: 64px !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px !important;
+    position: relative;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
 }
 
-.tw-font-mono, .tw-font-mono.tw-font-semibold {
-    font-family: 'Inter', ui-monospace, monospace !important;
-    letter-spacing: -0.02em !important;
+.audaz-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
-/* ============================================
-   DASHBOARD HEADER — Slate oscuro, no azul
-   ============================================ */
-[class*="tw-from-primary-800"],
-[class*="tw-from-indigo-800"],
-.tw-bg-primary-800,
-.tw-bg-indigo-800 {
-    --tw-gradient-from: var(--c-header) !important;
-    background-color: var(--c-header) !important;
+.audaz-topbar-center {
+    flex: 1;
+    max-width: 480px;
+    margin: 0 24px;
 }
 
-[class*="tw-to-primary-900"],
-[class*="tw-to-indigo-900"],
-.tw-bg-primary-900,
-.tw-bg-indigo-900 {
-    --tw-gradient-to: var(--c-header-deep) !important;
-    background-color: var(--c-header-deep) !important;
+.audaz-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-/* ============================================
-   STAT CARDS
-   ============================================ */
-.tw-ring-1.tw-ring-gray-200 {
-    --tw-ring-color: var(--c-border) !important;
-    border-radius: var(--radius) !important;
-    box-shadow: var(--shadow) !important;
-    transition: all 0.25s ease !important;
+/* Global Quick Search Pill */
+.audaz-global-search {
+    position: relative;
+    width: 100%;
 }
 
-.tw-ring-1.tw-ring-gray-200:hover {
-    box-shadow: var(--shadow-md) !important;
-    transform: translateY(-1px) !important;
-    --tw-ring-color: var(--c-border) !important;
+.audaz-global-search-input {
+    width: 100%;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 0 40px 0 38px;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.2s ease;
 }
 
-/* Card icon circles — todos usan acento */
-.tw-bg-sky-100,
-.tw-bg-blue-100 {
-    background-color: var(--c-accent-light) !important;
-}
-.tw-text-sky-500,
-.tw-text-blue-500,
-.tw-text-blue-600 {
-    color: var(--c-accent) !important;
+.audaz-global-search-input:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--audaz-primary);
+    box-shadow: 0 0 0 3px rgba(251, 76, 10, 0.2);
 }
 
-.tw-bg-green-100 {
-    background-color: var(--c-success-light) !important;
-}
-.tw-text-green-500,
-.tw-text-green-600 {
-    color: var(--c-success) !important;
-}
-
-.tw-bg-red-100 {
-    background-color: var(--c-error-light) !important;
-}
-.tw-text-red-500 {
-    color: var(--c-error) !important;
+.audaz-global-search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--audaz-text-light);
+    font-size: 14px;
+    pointer-events: none;
 }
 
-/* Reemplazar amarillo por acento suave */
-.tw-bg-yellow-100 {
-    background-color: var(--c-accent-soft) !important;
-}
-.tw-text-yellow-500 {
-    color: var(--c-accent) !important;
-}
-
-.tw-bg-violet-100 {
-    background-color: var(--c-accent-light) !important;
-}
-.tw-text-violet-500 {
-    color: var(--c-accent) !important;
-}
-
-/* ============================================
-   CHART CONTAINERS
-   ============================================ */
-.tw-border-dashed.tw-rounded-xl.tw-bg-gray-50 {
-    border: none !important;
-    background: var(--c-card) !important;
-    border-radius: var(--radius-sm) !important;
+.audaz-search-kbd {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    color: var(--audaz-text-light);
+    pointer-events: none;
 }
 
-.tw-font-bold.tw-text-base.lg\:tw-text-xl {
-    color: var(--c-text) !important;
+/* Quick Action POS Button */
+.btn-audaz-pos {
+    background: linear-gradient(135deg, #FB4C0A 0%, #E03E00 100%) !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    padding: 8px 18px !important;
+    border-radius: 10px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: var(--audaz-shadow-glow) !important;
+    text-decoration: none !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer;
 }
 
-/* ============================================
-   TABLES
-   ============================================ */
-.table > thead > tr > th {
-    background: var(--c-bg) !important;
-    border-bottom: 2px solid var(--c-border) !important;
-    color: var(--c-text-mid) !important;
-    font-weight: 600 !important;
-    font-size: 0.8rem !important;
+.btn-audaz-pos:hover {
+    background: linear-gradient(135deg, #FF6A38 0%, #FB4C0A 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(251, 76, 10, 0.5), 0 0 15px rgba(251, 76, 10, 0.3) !important;
+    color: #FFFFFF !important;
+}
+
+/* Topbar Icon Button */
+.audaz-top-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #E2E8F0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    text-decoration: none !important;
+    position: relative;
+}
+
+.audaz-top-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.audaz-top-btn-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--audaz-primary);
+    color: #FFFFFF;
+    font-size: 10px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #0B0F1D;
+}
+
+/* Topbar User Profile */
+.audaz-user-profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 12px 5px 6px;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.audaz-user-profile-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.audaz-user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FB4C0A 0%, #E03E00 100%);
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.audaz-user-info-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    line-height: 1.2;
+}
+
+.audaz-user-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.audaz-user-role {
+    font-size: 11px;
+    color: var(--audaz-text-light);
+}
+
+/* Solid Modern Header Dropdowns */
+.audaz-dropdown-menu {
+    position: absolute !important;
+    top: calc(100% + 8px) !important;
+    right: 0 !important;
+    width: 240px !important;
+    background: #0B0F1D !important;
+    background-color: #0B0F1D !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 16px !important;
+    padding: 8px !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+    z-index: 999999 !important;
+    list-style: none !important;
+}
+
+.audaz-dropdown-header {
+    padding: 10px 14px 10px 14px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    margin-bottom: 6px !important;
+}
+
+.audaz-dropdown-header-subtitle {
+    font-size: 11px !important;
+    font-weight: 700 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.05em !important;
-    padding: 12px 16px !important;
+    color: #94A3B8 !important;
+    margin-bottom: 2px !important;
 }
 
-.table > tbody > tr > td {
-    padding: 12px 16px !important;
-    border-bottom: 1px solid #f1f5f9 !important;
-}
-
-.table > tbody > tr:hover > td {
-    background: var(--c-bg) !important;
-}
-
-/* ============================================
-   DATATABLES
-   ============================================ */
-.dataTables_wrapper .dataTables_length select,
-.dataTables_wrapper .dataTables_filter input {
-    border: 1px solid var(--c-border) !important;
-    border-radius: var(--radius-sm) !important;
-    padding: 6px 12px !important;
-}
-
-.dataTables_wrapper .dataTables_filter input:focus {
-    border-color: var(--c-accent) !important;
-    box-shadow: 0 0 0 3px rgb(79 70 229 / 0.1) !important;
-    outline: none !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.current {
-    background: var(--c-accent) !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 8px !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    background: var(--c-accent-light) !important;
-    color: var(--c-accent) !important;
-    border: none !important;
-    border-radius: 8px !important;
-}
-
-/* ============================================
-   BUTTONS — Solo 4 colores
-   ============================================ */
-.btn {
-    border-radius: var(--radius-sm) !important;
-    font-weight: 500 !important;
-    transition: all 0.2s !important;
-}
-
-.btn-primary, .btn-info {
-    background: var(--c-accent) !important;
-    border-color: var(--c-accent) !important;
-    color: white !important;
-}
-.btn-primary:hover, .btn-info:hover {
-    background: var(--c-accent-hover) !important;
-    box-shadow: 0 4px 12px rgb(79 70 229 / 0.25) !important;
-}
-
-.btn-success {
-    background: var(--c-success) !important;
-    border-color: var(--c-success) !important;
-}
-.btn-success:hover {
-    background: #047857 !important;
-    box-shadow: 0 4px 12px rgb(5 150 105 / 0.25) !important;
-}
-
-.btn-danger {
-    background: var(--c-error) !important;
-    border-color: var(--c-error) !important;
-}
-.btn-danger:hover {
-    background: #b91c1c !important;
-    box-shadow: 0 4px 12px rgb(220 38 38 / 0.25) !important;
-}
-
-.btn-default {
-    background: var(--c-card) !important;
-    border: 1px solid var(--c-border) !important;
-    color: var(--c-text-mid) !important;
-}
-.btn-default:hover {
-    background: var(--c-bg) !important;
-}
-
-.btn-warning {
-    background: #d97706 !important;
-    border-color: #d97706 !important;
-    color: white !important;
-}
-
-.btn-xs {
-    border-radius: 6px !important;
-    font-size: 0.75rem !important;
-    padding: 4px 10px !important;
-}
-
-/* ============================================
-   FORMS
-   ============================================ */
-.form-control {
-    border-radius: var(--radius-sm) !important;
-    border: 1px solid var(--c-border) !important;
-    transition: all 0.2s !important;
-    color: var(--c-text) !important;
-}
-
-.form-control:focus {
-    border-color: var(--c-accent) !important;
-    box-shadow: 0 0 0 3px rgb(79 70 229 / 0.1) !important;
-}
-
-.input-group-addon {
-    background: var(--c-bg) !important;
-    border: 1px solid var(--c-border) !important;
-    color: var(--c-text-soft) !important;
-    min-width: 40px !important;
-    text-align: center !important;
-}
-
-.input-group-addon i {
-    display: inline-block !important;
-    visibility: visible !important;
+.audaz-dropdown-header-title {
     font-size: 14px !important;
+    font-weight: 800 !important;
+    color: #FFFFFF !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
-.input-group .input-group-addon:first-child {
-    border-radius: var(--radius-sm) 0 0 var(--radius-sm) !important;
+.audaz-dropdown-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 10px 14px !important;
+    border-radius: 10px !important;
+    color: #E2E8F0 !important;
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+    background: transparent !important;
+    cursor: pointer !important;
+}
+
+.audaz-dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #FFFFFF !important;
+    transform: translateX(2px) !important;
+}
+
+.audaz-dropdown-item i {
+    font-size: 16px !important;
+    width: 20px !important;
+    text-align: center !important;
+    color: #FB4C0A !important;
+}
+
+.audaz-dropdown-item.danger {
+    color: #F87171 !important;
+    margin-top: 4px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    padding-top: 10px !important;
+}
+
+.audaz-dropdown-item.danger:hover {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #FCA5A5 !important;
+}
+
+.audaz-dropdown-item.danger i {
+    color: #F87171 !important;
+}
+.side-bar {
+    background: #0B0F1D !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2) !important;
+    z-index: 99;
+}
+
+/* Sidebar Brand Header */
+.audaz-sidebar-header {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    background: #070A14;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    text-decoration: none !important;
+}
+
+.audaz-sidebar-logo {
+    height: 36px;
+    width: auto;
+    max-width: 170px;
+    object-fit: contain;
+}
+
+/* Sidebar Menu Items */
+#side-bar {
+    padding: 16px 12px !important;
+    background: #0B0F1D !important;
     border-right: none !important;
 }
 
-.input-group .form-control {
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
-}
-
-/* ============================================
-   SELECT2
-   ============================================ */
-.select2-container--default .select2-selection--single {
-    border-radius: var(--radius-sm) !important;
-    border: 1px solid var(--c-border) !important;
-    height: 38px !important;
-}
-
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-    line-height: 36px !important;
-    color: var(--c-text) !important;
-}
-
-.select2-dropdown {
-    border-radius: var(--radius-sm) !important;
-    border: 1px solid var(--c-border) !important;
-    box-shadow: var(--shadow-lg) !important;
-}
-
-/* ============================================
-   TABS (Settings)
-   ============================================ */
-.nav-tabs {
-    border-bottom: 2px solid var(--c-border) !important;
-}
-
-.nav-tabs > li > a {
-    border: none !important;
-    border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
-    color: var(--c-text-mid) !important;
-    font-weight: 500 !important;
-    padding: 10px 20px !important;
-    transition: all 0.2s !important;
-}
-
-.nav-tabs > li > a:hover {
-    background: var(--c-bg) !important;
-    color: var(--c-accent) !important;
-    border: none !important;
-}
-
-.nav-tabs > li.active > a,
-.nav-tabs > li.active > a:hover,
-.nav-tabs > li.active > a:focus {
-    background: var(--c-accent) !important;
-    color: white !important;
-    border: none !important;
+#side-bar a {
+    color: #94A3B8 !important;
+    border-radius: 10px !important;
+    padding: 10px 14px !important;
     font-weight: 600 !important;
-}
-
-/* Vertical tabs */
-.nav-stacked > li > a {
-    border-radius: var(--radius-sm) !important;
+    font-size: 13.5px !important;
+    transition: all 0.2s ease !important;
     margin-bottom: 4px !important;
-    color: var(--c-text-mid) !important;
-    font-weight: 500 !important;
-    padding: 10px 16px !important;
-    border: none !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
 }
 
-.nav-stacked > li > a:hover {
-    background: var(--c-bg) !important;
-    color: var(--c-accent) !important;
+#side-bar a:hover {
+    color: #FFFFFF !important;
+    background: rgba(255, 255, 255, 0.07) !important;
+    transform: translateX(3px);
 }
 
-.nav-stacked > li.active > a,
-.nav-stacked > li.active > a:hover,
-.nav-stacked > li.active > a:focus {
-    background: var(--c-accent) !important;
-    color: white !important;
-    border: none !important;
-    font-weight: 600 !important;
+#side-bar a i,
+#side-bar a svg {
+    color: #94A3B8;
+    font-size: 16px;
+    transition: color 0.2s ease;
 }
 
-.tab-content {
-    padding: 20px !important;
-    background: var(--c-card) !important;
+#side-bar a:hover i,
+#side-bar a:hover svg {
+    color: #FB4C0A;
 }
 
-/* ============================================
-   BOXES (AdminLTE legacy)
-   ============================================ */
-.box {
-    border-radius: var(--radius) !important;
-    border: none !important;
-    box-shadow: var(--shadow) !important;
-}
-
-.box.box-primary,
-.box.box-info,
-.box.box-success,
-.box.box-warning,
-.box.box-danger,
-.box.box-solid {
-    border-top: none !important;
-    border: none !important;
-}
-
-.box .box-header {
-    border-bottom: 1px solid #f1f5f9 !important;
-    padding: 16px 20px !important;
-}
-
-.box .box-header .box-title {
+/* Active Menu Item */
+#side-bar a.tw-bg-gray-200,
+#side-bar a.active,
+#side-bar a[class*="primary"] {
+    background: linear-gradient(90deg, rgba(251, 76, 10, 0.15) 0%, rgba(251, 76, 10, 0.05) 100%) !important;
+    color: #FB4C0A !important;
+    border-left: 3px solid #FB4C0A !important;
     font-weight: 700 !important;
-    color: var(--c-text) !important;
 }
 
-.box .box-body {
-    padding: 16px 20px !important;
+#side-bar a.tw-bg-gray-200 i,
+#side-bar a.tw-bg-gray-200 svg {
+    color: #FB4C0A !important;
 }
 
-/* ============================================
-   MODALS
-   ============================================ */
-.modal-content {
-    border: none !important;
-    border-radius: var(--radius) !important;
-    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25) !important;
+/* Section Header in Sidebar */
+#side-bar .tw-text-xs {
+    color: #475569 !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.06em !important;
+    margin-top: 16px !important;
+    margin-bottom: 6px !important;
+    padding-left: 14px !important;
 }
 
-.modal-header {
-    border-bottom: 1px solid #f1f5f9 !important;
-    padding: 20px 24px !important;
+/* Submenu / Child Items */
+#side-bar .chiled {
+    margin-left: 12px !important;
+    padding-left: 14px !important;
+    border-left: 1px dashed rgba(255, 255, 255, 0.12) !important;
 }
 
-.modal-header .modal-title {
-    font-weight: 700 !important;
-    color: var(--c-text) !important;
+#side-bar .chiled a {
+    font-size: 12.5px !important;
+    padding: 7px 12px !important;
 }
 
-.modal-footer {
-    border-top: 1px solid #f1f5f9 !important;
+/* ==========================================================================
+   3. Modern Dashboard Container & Hero Section
+   ========================================================================== */
+.audaz-dashboard-wrapper {
+    padding: 24px 32px;
+    background: var(--audaz-bg-main);
+    min-height: calc(100vh - 64px);
 }
 
-/* ============================================
-   DROPDOWNS
-   ============================================ */
-.dropdown-menu {
-    border: 1px solid var(--c-border) !important;
-    border-radius: 12px !important;
-    box-shadow: var(--shadow-lg) !important;
-    padding: 6px !important;
+.audaz-dashboard-header {
+    background: linear-gradient(135deg, #0B0F1D 0%, #131B31 100%);
+    border-radius: var(--audaz-radius-xl);
+    padding: 28px 32px;
+    color: #FFFFFF;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 12px 36px rgba(11, 15, 29, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.dropdown-menu > li > a {
-    border-radius: 8px !important;
-    padding: 8px 14px !important;
-    color: var(--c-text-mid) !important;
+.audaz-dashboard-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(251, 76, 10, 0.2) 0%, transparent 65%);
+    border-radius: 50%;
+    pointer-events: none;
 }
 
-.dropdown-menu > li > a:hover {
-    background: var(--c-bg) !important;
-    color: var(--c-accent) !important;
+.audaz-welcome-title {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #FFFFFF;
+    margin-bottom: 6px;
 }
 
-/* ============================================
-   SIDEBAR
-   ============================================ */
-.side-bar {
-    border-right: 1px solid #f1f5f9 !important;
+.audaz-welcome-sub {
+    font-size: 14px;
+    color: #94A3B8;
+    margin: 0;
 }
 
-.side-bar .active > a,
-.side-bar .active > a:hover {
-    background: var(--c-accent-light) !important;
-    color: var(--c-accent) !important;
-    border-radius: 8px !important;
-    font-weight: 600 !important;
+.audaz-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
-/* ============================================
-   BADGES & LABELS
-   ============================================ */
-.label-success, .badge-success { background-color: var(--c-success) !important; }
-.label-danger, .badge-danger { background-color: var(--c-error) !important; }
-.label-warning, .badge-warning { background-color: #d97706 !important; }
-.label-info, .badge-info { background-color: var(--c-accent) !important; }
-
-/* ============================================
-   ALERTS
-   ============================================ */
-.alert {
-    border: none !important;
-    border-radius: 12px !important;
-    font-weight: 500 !important;
+.audaz-filter-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 8px 16px;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    cursor: pointer;
 }
 
-.alert-success { background: var(--c-success-light) !important; color: #065f46 !important; }
-.alert-danger { background: var(--c-error-light) !important; color: #991b1b !important; }
-.alert-warning { background: #fef3c7 !important; color: #854d0e !important; }
-.alert-info { background: var(--c-accent-light) !important; color: #3730a3 !important; }
-
-/* ============================================
-   PROGRESS BARS
-   ============================================ */
-.progress {
-    border-radius: 8px !important;
-    height: 8px !important;
-    background: var(--c-bg) !important;
+.audaz-filter-pill-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
-.progress-bar { border-radius: 8px !important; }
-.progress-bar-primary, .progress-bar-info { background: var(--c-accent) !important; }
-
-/* ============================================
-   PANELS
-   ============================================ */
-.panel {
-    border: none !important;
-    border-radius: var(--radius) !important;
-    box-shadow: var(--shadow) !important;
+/* ==========================================================================
+   4. High Impact KPI Metric Cards (Bordes 20px)
+   ========================================================================== */
+.audaz-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 28px;
 }
 
-.panel-default > .panel-heading {
-    background: var(--c-bg) !important;
-    color: var(--c-text) !important;
-    border-radius: var(--radius) var(--radius) 0 0 !important;
+.audaz-kpi-card {
+    background: var(--audaz-card-bg);
+    border: 1px solid var(--audaz-border);
+    border-radius: var(--audaz-radius-lg);
+    padding: 22px 24px;
+    box-shadow: var(--audaz-shadow-sm);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-/* ============================================
-   GENERAL
-   ============================================ */
-.content-wrapper, .right-side {
-    background: var(--c-bg) !important;
+.audaz-kpi-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--audaz-shadow-md);
+    border-color: #CBD5E1;
 }
 
-.callout {
-    border-radius: 12px !important;
+.audaz-kpi-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--c-bg); }
-::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--c-text-soft); }
-
-/* Loading shimmer */
-@keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+.audaz-kpi-icon-box {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
 }
 
-.tw-font-mono.tw-font-semibold:empty::after {
-    content: '...';
-    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-    border-radius: 4px;
-    display: inline-block;
-    width: 80px;
-    height: 1.2em;
+.audaz-kpi-icon-orange {
+    background: rgba(251, 76, 10, 0.12);
+    color: var(--audaz-primary);
 }
 
+.audaz-kpi-icon-green {
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--audaz-accent-green);
+}
 
-/* ============================================
-   FONT AWESOME 4 → 5 COMPATIBILITY
-   Mapea clases FA4 a FA5 para íconos rotos
-   ============================================ */
-.fa.fa-suitcase:before { content: "\f0b1"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
-.fa.fa-envelope:before { content: "\f0e0"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
-.fa.fa-money:before { content: "\f0d6"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
-.fa.fa-globe:before { content: "\f0ac"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
-.fa.fa-map-marker:before { content: "\f3c5"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
-.fa.fa-building:before { content: "\f1ad"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
-.fa.fa-phone:before { content: "\f095"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
-.fa.fa-calendar:before { content: "\f073"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
-.fa.fa-clock-o:before { content: "\f017"; font-family: "Font Awesome 5 Free"; font-weight: 400; }
-.fa.fa-cog:before { content: "\f013"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
-.fa.fa-cogs:before { content: "\f085"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
-.fa.fa-flag:before { content: "\f024"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
-.fa.fa-pencil:before { content: "\f303"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
-.fa.fa-file-text:before { content: "\f15c"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
-.fa.fa-credit-card:before { content: "\f09d"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
-.fa.fa-bell:before { content: "\f0f3"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+.audaz-kpi-icon-blue {
+    background: rgba(59, 130, 246, 0.12);
+    color: var(--audaz-accent-blue);
+}
 
-/* Asegurar que los íconos FA se muestren */
-.input-group-addon .fa,
-.input-group-addon .fas,
-.input-group-addon .far,
-.input-group-addon .fab {
-    display: inline-block !important;
-    font-style: normal !important;
-    font-variant: normal !important;
-    text-rendering: auto !important;
-    -webkit-font-smoothing: antialiased !important;
+.audaz-kpi-icon-amber {
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--audaz-accent-amber);
+}
+
+.audaz-kpi-trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+}
+
+.audaz-kpi-trend.up {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+}
+
+.audaz-kpi-trend.down {
+    background: rgba(239, 68, 68, 0.12);
+    color: #DC2626;
+}
+
+.audaz-kpi-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--audaz-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+}
+
+.audaz-kpi-value {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--audaz-text-dark);
+    font-family: 'Outfit', -apple-system, sans-serif;
+    line-height: 1.2;
+}
+
+.audaz-kpi-subtitle {
+    font-size: 12px;
+    color: var(--audaz-text-light);
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ==========================================================================
+   5. Multicurrency Overview Widget
+   ========================================================================== */
+.audaz-currency-banner {
+    background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+    border-radius: var(--audaz-radius-lg);
+    padding: 20px 24px;
+    margin-bottom: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    box-shadow: var(--audaz-shadow-sm);
+}
+
+.audaz-currency-rates {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.audaz-currency-rate-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 6px 14px;
+}
+
+.audaz-currency-flag {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 11px;
+    background: var(--audaz-primary);
+    color: #FFFFFF;
+}
+
+.audaz-currency-code {
+    font-size: 13px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.audaz-currency-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: #38BDF8;
+}
+
+/* ==========================================================================
+   6. Modern Chart & Analytics Cards
+   ========================================================================== */
+.audaz-card-modern {
+    background: var(--audaz-card-bg);
+    border: 1px solid var(--audaz-border);
+    border-radius: var(--audaz-radius-lg);
+    padding: 24px;
+    box-shadow: var(--audaz-shadow-sm);
+    margin-bottom: 24px;
+    transition: box-shadow 0.2s ease;
+}
+
+.audaz-card-modern:hover {
+    box-shadow: var(--audaz-shadow-md);
+}
+
+.audaz-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--audaz-border);
+}
+
+.audaz-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--audaz-text-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.audaz-card-title i {
+    color: var(--audaz-primary);
+}
+
+/* ==========================================================================
+   7. Responsive Refinements
+   ========================================================================== */
+@media (max-width: 1024px) {
+    .audaz-topbar-center {
+        display: none;
+    }
+    .audaz-dashboard-wrapper {
+        padding: 16px;
+    }
+    .audaz-dashboard-header {
+        padding: 20px;
+    }
+    .audaz-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .audaz-kpi-grid {
+        grid-template-columns: 1fr;
+    }
+    .audaz-user-info-text {
+        display: none;
+    }
 }

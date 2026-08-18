@@ -161,7 +161,8 @@ $(document).ready(function() {
         //Add Product
         $('#search_product')
             .autocomplete({
-                delay: 1000,
+                delay: 120,
+                minLength: 1,
                 source: function(request, response) {
                     var price_group = '';
                     var search_fields = [];
@@ -674,10 +675,8 @@ $(document).ready(function() {
             .first();
         
             payment_method_dropdown.val(pay_method);
-            payment_method_dropdown.change();
-        if (pay_method == 'card') {
-            $('div#card_details_modal').modal('show');
-        } else if (pay_method == 'suspend') {
+        payment_method_dropdown.change();
+        if (pay_method == 'suspend') {
             $('div#confirmSuspendModal').modal('show');
         } else {
             pos_form_obj.submit();
@@ -3474,5 +3473,187 @@ $(document).ready(function() {
         
         // Actualizar símbolos en productos existentes (para edición)
         setTimeout(updateProductCurrencySymbols, 500);
+    }
+
+    /* ==========================================================================
+       AUDAZPOS - MOTOR DE BÚSQUEDA INTELIGENTE PARA ALTO VOLUMEN (+1000 SKUs)
+       ========================================================================== */
+    var highSkuSearchTimer = null;
+    var highSkuSelectedCat = 'all';
+
+    function formatNumberBs(amount) {
+        if (isNaN(amount) || amount === null || amount === undefined) return '0,00';
+        return parseFloat(amount).toLocaleString('es-VE', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
+    function switchPosViewMode(mode) {
+        if (mode === 'search') {
+            $('#btn_pos_mode_catalog').removeClass('active tw-bg-white tw-text-slate-800 tw-shadow-sm').addClass('tw-text-slate-600');
+            $('#btn_pos_mode_search').addClass('active tw-bg-white tw-text-slate-800 tw-shadow-sm').removeClass('tw-text-slate-600');
+            $('#pos_catalog_view_container').hide();
+            $('#pos_high_sku_search_container').fadeIn(150);
+            localStorage.setItem('audaz_pos_view_mode', 'search');
+            setTimeout(function() {
+                $('#high_sku_search_input').focus();
+            }, 100);
+            if ($('#high_sku_results_list .high-sku-item').length === 0) {
+                runHighSkuSearch('');
+            }
+        } else {
+            $('#btn_pos_mode_search').removeClass('active tw-bg-white tw-text-slate-800 tw-shadow-sm').addClass('tw-text-slate-600');
+            $('#btn_pos_mode_catalog').addClass('active tw-bg-white tw-text-slate-800 tw-shadow-sm').removeClass('tw-text-slate-600');
+            $('#pos_high_sku_search_container').hide();
+            $('#pos_catalog_view_container').fadeIn(150);
+            localStorage.setItem('audaz_pos_view_mode', 'catalog');
+        }
+    }
+
+    function runHighSkuSearch(term) {
+        var location_id = $('input#location_id').val();
+        var bcvRate = parseFloat($('#bcv_exchange_rate_val').val()) || 1;
+        var price_group = $('#price_group').val() || '';
+
+        $('#high_sku_loading').show();
+        if (term.length > 0) {
+            $('#high_sku_clear_btn').show();
+        } else {
+            $('#high_sku_clear_btn').hide();
+        }
+
+        $.getJSON('/products/list', {
+            price_group: price_group,
+            location_id: location_id,
+            term: term,
+            not_for_selling: 0,
+            search_fields: ['name', 'sku', 'sub_sku', 'lot']
+        }, function(data) {
+            $('#high_sku_loading').hide();
+            var $list = $('#high_sku_results_list');
+            $list.empty();
+
+            if (!data || data.length === 0) {
+                $list.html(
+                    '<div class="tw-text-center tw-py-12 tw-text-slate-400">' +
+                        '<i class="fas fa-search-minus tw-text-3xl tw-mb-2"></i>' +
+                        '<p class="tw-text-xs tw-font-bold">No se encontraron productos para "' + $('<div>').text(term).html() + '"</p>' +
+                    '</div>'
+                );
+                return;
+            }
+
+            var count = 0;
+            $.each(data, function(idx, item) {
+                count++;
+                if (count > 50) return false; // Límite de 50 para ultra velocidad
+
+                var priceUsd = parseFloat(item.selling_price) || 0;
+                var priceBs = priceUsd * bcvRate;
+                var stock = parseFloat(item.qty_available) || 0;
+                var unit = item.unit || 'u';
+
+                var stockBadge = '';
+                if (item.enable_stock == 0) {
+                    stockBadge = '<span class="tw-text-blue-500 tw-font-bold tw-text-[11px]"><i class="fas fa-infinity tw-mr-0.5"></i> Ilimitado</span>';
+                } else if (stock > 5) {
+                    stockBadge = '<span class="tw-text-emerald-600 tw-font-extrabold tw-text-[11px]"><i class="fas fa-check-circle tw-mr-0.5"></i> ' + stock.toFixed(0) + ' ' + unit + ' disp.</span>';
+                } else if (stock > 0) {
+                    stockBadge = '<span class="tw-text-amber-500 tw-font-extrabold tw-text-[11px]"><i class="fas fa-exclamation-circle tw-mr-0.5"></i> ' + stock.toFixed(0) + ' ' + unit + ' (Bajo)</span>';
+                } else {
+                    stockBadge = '<span class="tw-text-red-500 tw-font-extrabold tw-text-[11px]"><i class="fas fa-times-circle tw-mr-0.5"></i> Agotado</span>';
+                }
+
+                var rowHtml = 
+                    '<div class="high-sku-item tw-bg-white hover:tw-bg-slate-50 tw-border tw-border-slate-100 hover:tw-border-[#FB4C0A] tw-rounded-xl tw-p-3 tw-mb-2 tw-flex tw-items-center tw-justify-between tw-cursor-pointer tw-transition-all tw-shadow-sm group" data-variation-id="' + item.variation_id + '">' +
+                        '<div class="tw-flex-1 tw-pr-3">' +
+                            '<div class="tw-flex tw-items-center tw-gap-2 tw-mb-1">' +
+                                '<span class="tw-text-[10px] tw-font-mono tw-font-bold tw-bg-slate-100 group-hover:tw-bg-orange-100 group-hover:tw-text-[#FB4C0A] tw-text-slate-600 tw-px-1.5 tw-py-0.5 tw-rounded">' + (item.sub_sku || 'N/A') + '</span>' +
+                                stockBadge +
+                            '</div>' +
+                            '<h4 class="tw-text-xs tw-font-bold tw-text-slate-800 group-hover:tw-text-[#FB4C0A] tw-m-0 tw-line-clamp-1">' + item.name + (item.variation && item.variation !== 'DUMMY' ? ' - ' + item.variation : '') + '</h4>' +
+                        '</div>' +
+                        '<div class="tw-text-right tw-flex tw-flex-col tw-items-end tw-gap-1">' +
+                            '<div class="tw-text-sm tw-font-extrabold tw-text-slate-900">$' + priceUsd.toFixed(2) + '</div>' +
+                            (bcvRate > 1 ? '<div class="tw-text-[11px] tw-font-bold tw-text-[#FB4C0A]">Bs. ' + formatNumberBs(priceBs) + '</div>' : '') +
+                        '</div>' +
+                        '<div class="tw-pl-3">' +
+                            '<button type="button" class="tw-bg-slate-100 group-hover:tw-bg-[#FB4C0A] tw-text-slate-700 group-hover:tw-text-white tw-w-8 tw-h-8 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-text-xs tw-font-bold tw-transition-all tw-border tw-border-slate-200 group-hover:tw-border-[#FB4C0A]">' +
+                                '<i class="fas fa-plus"></i>' +
+                            '</button>' +
+                        '</div>' +
+                    '</div>';
+
+                $list.append(rowHtml);
+            });
+        }).fail(function() {
+            $('#high_sku_loading').hide();
+        });
+    }
+
+    // Toggle de Modo de Vista
+    $(document).on('click', '#btn_pos_mode_catalog', function() {
+        switchPosViewMode('catalog');
+    });
+
+    $(document).on('click', '#btn_pos_mode_search', function() {
+        switchPosViewMode('search');
+    });
+
+    // Filtros de Categoría en Modo Alto Volumen
+    $(document).on('click', '.high-sku-cat-chip', function() {
+        $('.high-sku-cat-chip').removeClass('active tw-bg-[#0B0F1D] tw-text-white').addClass('tw-bg-slate-100 tw-text-slate-700');
+        $(this).addClass('active tw-bg-[#0B0F1D] tw-text-white').removeClass('tw-bg-slate-100 tw-text-slate-700');
+        highSkuSelectedCat = $(this).data('category-id');
+        var term = $('#high_sku_search_input').val() || '';
+        runHighSkuSearch(term);
+    });
+
+    // Input en Buscador de Alto Volumen (Debounce 120ms)
+    $(document).on('input keyup', '#high_sku_search_input', function(e) {
+        if (e.keyCode === 13) {
+            // Presionar Enter: agregar primer resultado
+            var $firstItem = $('#high_sku_results_list .high-sku-item').first();
+            if ($firstItem.length) {
+                var variation_id = $firstItem.data('variation-id');
+                pos_product_row(variation_id);
+                $(this).select();
+            }
+            return;
+        }
+
+        var term = $(this).val();
+        clearTimeout(highSkuSearchTimer);
+        highSkuSearchTimer = setTimeout(function() {
+            runHighSkuSearch(term);
+        }, 120);
+    });
+
+    // Botón de Limpiar Búsqueda
+    $(document).on('click', '#high_sku_clear_btn', function() {
+        $('#high_sku_search_input').val('').focus();
+        runHighSkuSearch('');
+    });
+
+    // Clic en fila de producto para agregar al carrito
+    $(document).on('click', '.high-sku-item', function(e) {
+        e.preventDefault();
+        var variation_id = $(this).data('variation-id');
+        if (variation_id) {
+            pos_product_row(variation_id);
+            // Animación de pulso
+            $(this).addClass('tw-scale-[0.98]');
+            var that = this;
+            setTimeout(function() {
+                $(that).removeClass('tw-scale-[0.98]');
+            }, 100);
+        }
+    });
+
+    // Restaurar modo preferido del cajero
+    var savedMode = localStorage.getItem('audaz_pos_view_mode');
+    if (savedMode === 'search') {
+        switchPosViewMode('search');
     }
 });

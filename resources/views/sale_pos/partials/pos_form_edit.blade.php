@@ -1,10 +1,12 @@
 <div class="row">
-	<div class="col-md-12">
-		<p><strong>@lang('sale.invoice_no'):</strong> {{$transaction->invoice_no}}</p>
+	<div class="col-md-12 mb-2">
+		<span class="badge" style="background: rgba(251, 76, 10, 0.15); color: #FB4C0A; font-weight: 700; padding: 6px 12px; border-radius: 8px; font-size: 13px;">
+			<i class="fas fa-file-invoice"></i> @lang('sale.invoice_no'): {{$transaction->invoice_no}}
+		</span>
 	</div>
-	<div class="col-md-4">
-		<div class="form-group" style="width: 100% !important">
-			<div class="input-group">
+	<div class="col-md-5 col-sm-12">
+		<div class="form-group mb-2">
+			<div class="audaz-pos-input-group">
 				<span class="input-group-addon">
 					<i class="fa fa-user"></i>
 				</span>
@@ -15,33 +17,33 @@
 				<input type="hidden" id="default_customer_balance" 
 				value="{{$transaction->contact->balance}}" >
 				{!! Form::select('contact_id', 
-					[], null, ['class' => 'form-control mousetrap', 'id' => 'customer_id', 'placeholder' => 'Enter Customer name / phone', 'required', 'style' => 'width: 100%;']); !!}
+					[], null, ['class' => 'form-control mousetrap', 'id' => 'customer_id', 'placeholder' => 'Buscar Cliente (Nombre / Teléfono)', 'required', 'style' => 'width: 100%;']); !!}
 				<span class="input-group-btn">
-					<button type="button" class="btn btn-default bg-white btn-flat add_new_customer" data-name=""  @if(!auth()->user()->can('customer.create')) disabled @endif><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
+					<button type="button" class="btn add_new_customer" data-name="" title="Nuevo Cliente" @if(!auth()->user()->can('customer.create')) disabled @endif><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
 				</span>
 			</div>
 			<small class="text-danger @if(empty($customer_due)) hide @endif contact_due_text"><strong>@lang('account.customer_due'):</strong> <span>{{$customer_due ?? ''}}</span></small>
 		</div>
 	</div>
-	<div class="col-md-8">
-		<div class="form-group">
-			<div class="input-group">
+	<div class="col-md-7 col-sm-12">
+		<div class="form-group mb-2">
+			<div class="audaz-pos-input-group">
 				<div class="input-group-btn">
-					<button type="button" class="btn btn-default bg-white btn-flat" data-toggle="modal" data-target="#configure_search_modal" title="{{__('lang_v1.configure_product_search')}}"><i class="fas fa-search-plus"></i></button>
+					<button type="button" class="btn" data-toggle="modal" data-target="#configure_search_modal" title="{{__('lang_v1.configure_product_search')}}"><i class="fas fa-search"></i></button>
 				</div>
-                {{-- Removed mousetrap class as it was causing issue with barcode scanning --}}
-				{!! Form::text('search_product', null, ['class' => 'form-control', 'id' => 'search_product', 'placeholder' => __('lang_v1.search_product_placeholder'),
-				'autofocus' => true,
+                {{-- Barcode scanner and search input --}}
+				{!! Form::text('search_product', null, ['class' => 'form-control mousetrap', 'id' => 'search_product', 'placeholder' => '🔍 [F2] Escanear código de barras o escribir producto (SKU/Nombre)...',
+				'disabled' => is_null($default_location)? true : false,
+				'autofocus' => is_null($default_location)? false : true,
 				]); !!}
 				<span class="input-group-btn">
-
 					<!-- Show button for weighing scale modal -->
 					@if(isset($pos_settings['enable_weighing_scale']) && $pos_settings['enable_weighing_scale'] == 1)
-						<button type="button" class="btn btn-default bg-white btn-flat" id="weighing_scale_btn" data-toggle="modal" data-target="#weighing_scale_modal" 
+						<button type="button" class="btn" id="weighing_scale_btn" data-toggle="modal" data-target="#weighing_scale_modal" 
 						title="@lang('lang_v1.weighing_scale')"><i class="fa fa-digital-tachograph text-primary fa-lg"></i></button>
 					@endif
 
-					<button type="button" class="btn btn-default bg-white btn-flat pos_add_quick_product" data-href="{{action([\App\Http\Controllers\ProductController::class, 'quickAdd'])}}" data-container=".quick_add_product_modal"><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
+					<button type="button" class="btn pos_add_quick_product" data-href="{{action([\App\Http\Controllers\ProductController::class, 'quickAdd'])}}" data-container=".quick_add_product_modal" title="Crear Producto Rápido"><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
 				</span>
 			</div>
 		</div>

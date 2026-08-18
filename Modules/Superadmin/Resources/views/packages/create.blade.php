@@ -217,6 +217,51 @@
                                     </div>
                                 @endforeach
                             @endforeach
+                            <div class="clearfix"></div>
+                            <div class="col-xs-12">
+                                <hr style="margin: 15px 0; border-color: #E2E8F0;">
+                                <h4 style="font-weight: 700; color: #1E293B; margin-bottom: 15px;">
+                                    <i class="fa fa-cubes text-primary"></i> Módulos y Funciones Especiales del Paquete
+                                </h4>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="checkbox">
+                                    <label>
+                                        {!! Form::checkbox('bookings', 1, false, ['class' => 'input-icheck']) !!}
+                                        Citas / Reservas
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="checkbox">
+                                    <label>
+                                        {!! Form::checkbox('kitchen', 1, false, ['class' => 'input-icheck']) !!}
+                                        Pantalla de Cocina (KDS)
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="checkbox">
+                                    <label>
+                                        {!! Form::checkbox('order_screen', 1, false, ['class' => 'input-icheck']) !!}
+                                        Pantalla de Pedidos
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="checkbox">
+                                    <label>
+                                        {!! Form::checkbox('tables', 1, false, ['class' => 'input-icheck']) !!}
+                                        Gestión de Mesas
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <hr style="margin: 15px 0; border-color: #E2E8F0;">
 
                             <div class="col-sm-3">
                                 <div class="checkbox">

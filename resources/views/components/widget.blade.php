@@ -1,30 +1,26 @@
-<div class="{{$class ?? ''}} tw-mb-4 tw-transition-all lg:tw-col-span-2 tw-duration-200 tw-bg-white tw-shadow-sm tw-rounded-xl tw-ring-1 hover:tw-shadow-md  tw-ring-gray-200"
+<div class="{{$class ?? ''}} box box-solid tw-mb-5 tw-bg-white tw-shadow-sm tw-rounded-2xl tw-border tw-border-slate-200"
     @if (!empty($id)) id="{{ $id }}" @endif>
-    <div class="tw-p-2 sm:tw-p-3">
+    <div style="padding: 6px 10px;">
         @if (empty($header))
             @if (!empty($title) || !empty($tool))
-                <div class="box-header">
+                <div class="box-header" style="border-bottom: 1px solid #F1F5F9; padding: 14px 18px;">
                     {!! $icon ?? '' !!}
-                    <h3 class="box-title">{{ $title ?? '' }}</h3>
+                    <h3 class="box-title" style="margin: 0; font-size: 16px; font-weight: 800; color: #0F172A;">{{ $title ?? '' }}</h3>
                     {!! $tool ?? '' !!}
 
                     @if (isset($help_text))
                         <br />
-                        <small>{!! $help_text !!}</small>
+                        <small style="color: #64748B; font-weight: 500;">{!! $help_text !!}</small>
                     @endif
                 </div>
             @endif
         @else
-            <div class="box-header">
+            <div class="box-header" style="border-bottom: 1px solid #F1F5F9; padding: 14px 18px;">
                 {!! $header !!}
             </div>
         @endif
-        <div class="tw-flow-root tw-border-gray-200">
-            <div class="">
-                <div class="tw-py-2 tw-align-middle sm:tw-px-5">
-                    {{ $slot }}
-                </div>
-            </div>
+        <div class="tw-flow-root" style="padding: 10px 14px;">
+            {{ $slot }}
         </div>
     </div>
 </div>

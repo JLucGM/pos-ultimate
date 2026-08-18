@@ -1,7 +1,7 @@
 <div class="row">
-	<div class="col-md-4">
-		<div class="form-group">
-			<div class="input-group">
+	<div class="col-md-5 col-sm-12">
+		<div class="form-group mb-2">
+			<div class="audaz-pos-input-group">
 				<span class="input-group-addon">
 					<i class="fa fa-user"></i>
 				</span>
@@ -18,35 +18,33 @@
 				value="{{ $walk_in_customer['selling_price_group_id'] ?? ''}}" >
 				@endif
 				{!! Form::select('contact_id', 
-					[], null, ['class' => 'form-control mousetrap', 'id' => 'customer_id', 'placeholder' => 'Enter Customer name / phone', 'required']); !!}
+					[], null, ['class' => 'form-control mousetrap', 'id' => 'customer_id', 'placeholder' => 'Buscar Cliente (Nombre / Teléfono)', 'required']); !!}
 				<span class="input-group-btn">
-					<button type="button" class="btn btn-default bg-white btn-flat add_new_customer" data-name=""  @if(!auth()->user()->can('customer.create')) disabled @endif><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
+					<button type="button" class="btn add_new_customer" data-name="" title="Nuevo Cliente" @if(!auth()->user()->can('customer.create')) disabled @endif><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
 				</span>
 			</div>
 			<small class="text-danger hide contact_due_text"><strong>@lang('account.customer_due'):</strong> <span></span></small>
 		</div>
 	</div>
-	<div class="col-md-8">
-		<div class="form-group">
-			<div class="input-group">
+	<div class="col-md-7 col-sm-12">
+		<div class="form-group mb-2">
+			<div class="audaz-pos-input-group">
 				<div class="input-group-btn">
-					<button type="button" class="btn btn-default bg-white btn-flat" data-toggle="modal" data-target="#configure_search_modal" title="{{__('lang_v1.configure_product_search')}}"><i class="fas fa-search-plus"></i></button>
+					<button type="button" class="btn" data-toggle="modal" data-target="#configure_search_modal" title="{{__('lang_v1.configure_product_search')}}"><i class="fas fa-search"></i></button>
 				</div>
-                {{-- Removed mousetrap class as it was causing issue with barcode scanning --}}
-				{!! Form::text('search_product', null, ['class' => 'form-control', 'id' => 'search_product', 'placeholder' => __('lang_v1.search_product_placeholder'),
+                {{-- Barcode scanner and search input --}}
+				{!! Form::text('search_product', null, ['class' => 'form-control mousetrap', 'id' => 'search_product', 'placeholder' => '🔍 [F2] Escanear código de barras o escribir producto (SKU/Nombre)...',
 				'disabled' => is_null($default_location)? true : false,
 				'autofocus' => is_null($default_location)? false : true,
 				]); !!}
 				<span class="input-group-btn">
-
 					<!-- Show button for weighing scale modal -->
 					@if(isset($pos_settings['enable_weighing_scale']) && $pos_settings['enable_weighing_scale'] == 1)
-						<button type="button" class="btn btn-default bg-white btn-flat" id="weighing_scale_btn" data-toggle="modal" data-target="#weighing_scale_modal" 
+						<button type="button" class="btn" id="weighing_scale_btn" data-toggle="modal" data-target="#weighing_scale_modal" 
 						title="@lang('lang_v1.weighing_scale')"><i class="fa fa-digital-tachograph text-primary fa-lg"></i></button>
 					@endif
-					
 
-					<button type="button" class="btn btn-default bg-white btn-flat pos_add_quick_product" data-href="{{action([\App\Http\Controllers\ProductController::class, 'quickAdd'])}}" data-container=".quick_add_product_modal"><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
+					<button type="button" class="btn pos_add_quick_product" data-href="{{action([\App\Http\Controllers\ProductController::class, 'quickAdd'])}}" data-container=".quick_add_product_modal" title="Crear Producto Rápido"><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
 				</span>
 			</div>
 		</div>
@@ -113,42 +111,32 @@
 			</div>
 		</div>
 		
-		<!-- Indicador Visual de Tasa de Cambio -->
+		<!-- Indicador Visual de Tasa de Cambio AudazPOS -->
 		<div class="col-md-12">
-			<div class="alert alert-info" id="exchange_rate_indicator" style="display:none; margin: 10px 0; padding: 15px; border-radius: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-				<div style="display: flex; align-items: center; color: white;">
-					<i class="fa fa-exchange-alt fa-2x" style="margin-right: 15px; animation: pulse 2s infinite;"></i>
-					<div style="flex: 1;">
-						<strong style="font-size: 14px; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">Tasa de Cambio Activa</strong>
-						<span style="font-size: 22px; font-weight: bold; display: block;" id="exchange_rate_display">
-							1 USD = 1 USD
-						</span>
+			<div id="exchange_rate_indicator" style="display:none; margin: 12px 0; padding: 14px 20px; border-radius: 14px; background: #0B0F1D; border: 1px solid rgba(251, 76, 10, 0.3); box-shadow: 0 4px 14px rgba(0,0,0,0.2);">
+				<div style="display: flex; align-items: center; justify-content: space-between; color: white;">
+					<div style="display: flex; align-items: center; gap: 14px;">
+						<div style="width: 42px; height: 42px; border-radius: 10px; background: rgba(251, 76, 10, 0.15); display: flex; align-items: center; justify-content: center; color: #FB4C0A; font-size: 18px;">
+							<i class="fa fa-exchange-alt"></i>
+						</div>
+						<div>
+							<strong style="font-size: 11px; display: block; text-transform: uppercase; letter-spacing: 0.05em; color: #94A3B8;">Tasa de Cambio Multimoneda</strong>
+							<span style="font-size: 20px; font-weight: 900; color: #FFFFFF; font-family: ui-monospace, SFMono-Regular, monospace;" id="exchange_rate_display">
+								1 USD = 1 USD
+							</span>
+						</div>
 					</div>
 					<div style="text-align: right;">
-						<small style="display: block; opacity: 0.9; font-size: 11px;">
-							<i class="fa fa-calendar"></i> Actualizado
+						<small style="display: block; color: #94A3B8; font-size: 11px;">
+							<i class="fa fa-sync-alt tw-text-[#FB4C0A]"></i> Actualizado
 						</small>
-						<small style="display: block; font-weight: bold; font-size: 12px;" id="exchange_rate_date">
+						<small style="display: block; font-weight: 700; font-size: 12px; color: #FFFFFF;" id="exchange_rate_date">
 							{{ date('d/m/Y') }}
 						</small>
 					</div>
 				</div>
 			</div>
 		</div>
-		
-		<style>
-			@keyframes pulse {
-				0%, 100% { transform: scale(1); }
-				50% { transform: scale(1.1); }
-			}
-			#exchange_rate_indicator {
-				transition: all 0.3s ease;
-			}
-			#exchange_rate_indicator:hover {
-				transform: translateY(-2px);
-				box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-			}
-		</style>
 	@endif
 	@if(!empty($price_groups) && count($price_groups) > 1)
 		<div class="col-md-4 col-sm-6">

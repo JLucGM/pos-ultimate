@@ -16,6 +16,22 @@
                         ]) !!}
                     </div>
                     <div class="col-md-9">
+                        <!-- Botones de Cobro Rápido Multimoneda Venezuela -->
+                        <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-coins tw-text-[#FB4C0A]"></i>
+                                <span style="font-size: 12px; font-weight: 700; color: #FFFFFF; text-transform: uppercase;">Modo de Pago Rápido:</span>
+                            </div>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <button type="button" class="btn btn-sm" id="quick_pay_usd_btn" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10B981; color: #34D399; font-weight: 800; border-radius: 8px; padding: 6px 14px;">
+                                    💵 Todo en Dólares ($)
+                                </button>
+                                <button type="button" class="btn btn-sm" id="quick_pay_bs_btn" style="background: rgba(56, 189, 248, 0.2); border: 1px solid #38BDF8; color: #38BDF8; font-weight: 800; border-radius: 8px; padding: 6px 14px;">
+                                    🇻🇪 Todo en Bolívares (Bs)
+                                </button>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div id="payment_rows_div">
                                 @php
@@ -101,6 +117,20 @@
                                                 </div>
                                             </div>
                                         @endif
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                {!! Form::label('change_return_payment_currency', 'Moneda de Vuelto:') !!}
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fas fa-coins"></i>
+                                                    </span>
+                                                    <select class="form-control" id="change_return_payment_currency">
+                                                        <option value="USD">Dólares ($ USD)</option>
+                                                        <option value="VES">Bolívares (Bs)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="clearfix"></div>
                                         @include('sale_pos.partials.payment_type_details', [
                                             'payment_line' => $change_return,
@@ -134,75 +164,55 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="box box-solid bg-orange">
-                            <div class="box-body">
-                                <div class="col-md-12">
-                                    <strong>
-                                        @lang('lang_v1.total_items'):
-                                    </strong>
-                                    <br />
-                                    <span class="lead text-bold total_quantity">0</span>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <hr>
-                                    <strong>
-                                        @lang('sale.total_payable'):
-                                    </strong>
-                                    <br />
-                                    <span class="lead text-bold total_payable_span">0</span>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <hr>
-                                    <strong>
-                                        @lang('lang_v1.total_paying'):
-                                    </strong>
-                                    <br />
-                                    <span class="lead text-bold total_paying">0</span>
-                                    <input type="hidden" id="total_paying_input">
-                                </div>
-
-                                <div class="col-md-12">
-                                    <hr>
-                                    <strong>
-                                        @lang('lang_v1.change_return'):
-                                    </strong>
-                                    <br />
-                                    <span class="lead text-bold change_return_span">0</span>
-                                    {!! Form::hidden('change_return', $change_return['amount'], [
-                                        'class' => 'form-control change_return input_number',
-                                        'required',
-                                        'id' => 'change_return',
-                                    ]) !!}
-                                    <!-- <span class="lead text-bold total_quantity">0</span> -->
-                                    @if (!empty($change_return['id']))
-                                        <input type="hidden" name="change_return_id"
-                                            value="{{ $change_return['id'] }}">
-                                    @endif
-                                </div>
-
-                                <div class="col-md-12">
-                                    <hr>
-                                    <strong>
-                                        @lang('lang_v1.balance'):
-                                    </strong>
-                                    <br />
-                                    <span class="lead text-bold balance_due">0</span>
-                                    <input type="hidden" id="in_balance_due" value=0>
-                                </div>
-
-
-
+                        <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 18px;">
+                            <div style="margin-bottom: 14px;">
+                                <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #94A3B8;">@lang('lang_v1.total_items')</div>
+                                <div style="font-size: 20px; font-weight: 800; color: #FFFFFF;" class="total_quantity">0</div>
                             </div>
-                            <!-- /.box-body -->
+
+                            <div style="margin-bottom: 14px; padding-top: 10px; border-top: 1px dashed rgba(255, 255, 255, 0.1);">
+                                <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #94A3B8;">@lang('sale.total_payable')</div>
+                                <div style="font-size: 24px; font-weight: 900; color: #FFFFFF;" class="total_payable_span">0.00</div>
+                                <div style="font-size: 14px; font-weight: 800; color: #38BDF8; font-family: ui-monospace, monospace;" class="pos_dual_total_bs">Bs. 0,00</div>
+                            </div>
+
+                            <div style="margin-bottom: 14px; padding-top: 10px; border-top: 1px dashed rgba(255, 255, 255, 0.1);">
+                                <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #38BDF8;">@lang('lang_v1.total_paying')</div>
+                                <div style="font-size: 22px; font-weight: 800; color: #38BDF8;" class="total_paying">0.00</div>
+                                <div style="font-size: 13px; font-weight: 800; color: #7DD3FC; font-family: ui-monospace, monospace;" class="pos_dual_paying_bs">Bs. 0,00</div>
+                                <input type="hidden" id="total_paying_input">
+                            </div>
+
+                            <div style="margin-bottom: 14px; padding-top: 10px; border-top: 1px dashed rgba(255, 255, 255, 0.1);">
+                                <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #10B981;">@lang('lang_v1.change_return') (Vuelto)</div>
+                                <div style="font-size: 24px; font-weight: 900; color: #10B981;" class="change_return_span">0.00</div>
+                                <div style="font-size: 14px; font-weight: 800; color: #34D399; font-family: ui-monospace, monospace;" class="pos_dual_change_bs">Bs. 0,00</div>
+                                {!! Form::hidden('change_return', $change_return['amount'], [
+                                    'class' => 'form-control change_return input_number',
+                                    'required',
+                                    'id' => 'change_return',
+                                ]) !!}
+                                @if (!empty($change_return['id']))
+                                    <input type="hidden" name="change_return_id"
+                                        value="{{ $change_return['id'] }}">
+                                @endif
+                            </div>
+
+                            <div style="padding-top: 10px; border-top: 1px dashed rgba(255, 255, 255, 0.1);">
+                                <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #FB4C0A;">@lang('lang_v1.balance')</div>
+                                <div style="font-size: 22px; font-weight: 900; color: #FB4C0A;" class="balance_due">0.00</div>
+                                <div style="font-size: 13px; font-weight: 800; color: #FCA5A5; font-family: ui-monospace, monospace;" class="pos_dual_balance_bs">Bs. 0,00</div>
+                                <input type="hidden" id="in_balance_due" value=0>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="tw-dw-btn tw-dw-btn-neutral tw-text-white" data-dismiss="modal">@lang('messages.close')</button>
-                <button type="submit" class="tw-dw-btn tw-dw-btn-primary tw-text-white" id="pos-save">@lang('sale.finalize_payment')</button>
+            <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button type="button" class="btn btn-default" style="border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #FFF; padding: 10px 20px; font-weight: 600;" data-dismiss="modal">@lang('messages.close')</button>
+                <button type="submit" class="btn" style="border-radius: 10px; background: linear-gradient(135deg, #FB4C0A 0%, #E03E00 100%); color: #FFF; padding: 10px 24px; font-weight: 800; box-shadow: 0 4px 14px rgba(251,76,10,0.4);" id="pos-save">
+                    <i class="fas fa-check-circle"></i> @lang('sale.finalize_payment')
+                </button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

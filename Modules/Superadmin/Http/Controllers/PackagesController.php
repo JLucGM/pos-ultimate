@@ -96,7 +96,7 @@ class PackagesController extends Controller
 
         try {
             $input = $request->only(['name', 'description', 'location_count', 'user_count', 'product_count', 'invoice_count', 'interval', 'interval_count', 'trial_days', 'price', 'sort_order', 'is_active', 'mark_package_as_popular', 'custom_permissions', 'is_private', 'is_one_time', 'enable_custom_link', 'custom_link',
-                'custom_link_text', 'businesses' ]);
+                'custom_link_text', 'businesses', 'bookings', 'kitchen', 'order_screen', 'tables' ]);
             $currency = System::getCurrency();
 
             $input['price'] = $this->businessUtil->num_uf($input['price'], $currency);
@@ -108,10 +108,15 @@ class PackagesController extends Controller
             $input['is_one_time'] = empty($input['is_one_time']) ? 0 : 1;
             $input['enable_custom_link'] = empty($input['enable_custom_link']) ? 0 : 1;
 
+            $input['bookings'] = empty($input['bookings']) ? 0 : 1;
+            $input['kitchen'] = empty($input['kitchen']) ? 0 : 1;
+            $input['order_screen'] = empty($input['order_screen']) ? 0 : 1;
+            $input['tables'] = empty($input['tables']) ? 0 : 1;
+
             $input['custom_link'] = empty($input['enable_custom_link']) ? '' : $input['custom_link'];
             $input['custom_link_text'] = empty($input['enable_custom_link']) ? '' : $input['custom_link_text'];
 
-            $input['businesses'] = $input['businesses'] = empty($input['businesses']) ? null : json_encode($input['businesses']);
+            $input['businesses'] = empty($input['businesses']) ? null : json_encode($input['businesses']);
 
             $package = new Package;
             $package->fill($input);
@@ -138,7 +143,7 @@ class PackagesController extends Controller
      */
     public function show()
     {
-        return view('superadmin::show');
+        return view('superadmin::packages.show');
     }
 
     /**
@@ -173,7 +178,7 @@ class PackagesController extends Controller
         }
 
         try {
-            $packages_details = $request->only(['name', 'id', 'description', 'location_count', 'user_count', 'product_count', 'invoice_count', 'interval', 'interval_count', 'trial_days', 'price', 'sort_order', 'is_active', 'mark_package_as_popular', 'custom_permissions', 'is_private', 'is_one_time', 'enable_custom_link', 'custom_link', 'custom_link_text', 'businesses']);
+            $packages_details = $request->only(['name', 'id', 'description', 'location_count', 'user_count', 'product_count', 'invoice_count', 'interval', 'interval_count', 'trial_days', 'price', 'sort_order', 'is_active', 'mark_package_as_popular', 'custom_permissions', 'is_private', 'is_one_time', 'enable_custom_link', 'custom_link', 'custom_link_text', 'businesses', 'bookings', 'kitchen', 'order_screen', 'tables']);
 
             $packages_details['is_active'] = empty($packages_details['is_active']) ? 0 : 1;
             $packages_details['mark_package_as_popular'] = empty($packages_details['mark_package_as_popular']) ? 0 : 1;
@@ -182,6 +187,12 @@ class PackagesController extends Controller
             $packages_details['is_private'] = empty($packages_details['is_private']) ? 0 : 1;
             $packages_details['is_one_time'] = empty($packages_details['is_one_time']) ? 0 : 1;
             $packages_details['enable_custom_link'] = empty($packages_details['enable_custom_link']) ? 0 : 1;
+
+            $packages_details['bookings'] = empty($packages_details['bookings']) ? 0 : 1;
+            $packages_details['kitchen'] = empty($packages_details['kitchen']) ? 0 : 1;
+            $packages_details['order_screen'] = empty($packages_details['order_screen']) ? 0 : 1;
+            $packages_details['tables'] = empty($packages_details['tables']) ? 0 : 1;
+
             $packages_details['custom_link'] = empty($packages_details['enable_custom_link']) ? '' : $packages_details['custom_link'];
             $packages_details['custom_link_text'] = empty($packages_details['enable_custom_link']) ? '' : $packages_details['custom_link_text'];
 

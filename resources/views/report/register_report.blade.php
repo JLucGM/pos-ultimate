@@ -51,13 +51,13 @@
                             <th>@lang('cash_register.total_cash')</th>
                             <th>@lang('lang_v1.total_bank_transfer')</th>
                             <th>@lang('lang_v1.total_advance_payment')</th>
-                            <th>{{$payment_types['custom_pay_1']}}</th>
-                            <th>{{$payment_types['custom_pay_2']}}</th>
-                            <th>{{$payment_types['custom_pay_3']}}</th>
-                            <th>{{$payment_types['custom_pay_4']}}</th>
-                            <th>{{$payment_types['custom_pay_5']}}</th>
-                            <th>{{$payment_types['custom_pay_6']}}</th>
-                            <th>{{$payment_types['custom_pay_7']}}</th>
+                            <th>{{$payment_types['custom_pay_1'] ?? __('lang_v1.custom_payment', ['number' => 1])}}</th>
+                            <th>{{$payment_types['custom_pay_2'] ?? __('lang_v1.custom_payment', ['number' => 2])}}</th>
+                            <th>{{$payment_types['custom_pay_3'] ?? __('lang_v1.custom_payment', ['number' => 3])}}</th>
+                            <th>{{$payment_types['custom_pay_4'] ?? __('lang_v1.custom_payment', ['number' => 4])}}</th>
+                            <th>{{$payment_types['custom_pay_5'] ?? __('lang_v1.custom_payment', ['number' => 5])}}</th>
+                            <th>{{$payment_types['custom_pay_6'] ?? __('lang_v1.custom_payment', ['number' => 6])}}</th>
+                            <th>{{$payment_types['custom_pay_7'] ?? __('lang_v1.custom_payment', ['number' => 7])}}</th>
                             <th>@lang('cash_register.other_payments')</th>
                             <th>@lang('sale.total')</th>
                             <th>@lang('messages.action')</th>

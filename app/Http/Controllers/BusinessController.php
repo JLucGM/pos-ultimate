@@ -105,10 +105,7 @@ class BusinessController extends Controller
 
         $system_settings = System::getProperties(['superadmin_enable_register_tc', 'superadmin_register_tc'], true);
 
-        $theme = config('ui.auth_theme', 'modern');
-        $view = $theme === 'modern' ? 'business.register_modern' : 'business.register';
-
-        return view($view, compact(
+        return view('business.register', compact(
             'currencies',
             'timezone_list',
             'months',

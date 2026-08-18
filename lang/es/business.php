@@ -42,8 +42,8 @@
     'update_settings' => 'Ajustes de actualización',
      'business_settings' => 'Configuración de la empresa', /* modified */
     'settings_updated_success' => 'Configuración actualizada con éxito',
-    'default_profit_percent' => 'Porcentaje de beneficio predeterminado',
-     'default_sales_tax' => 'Impuesto de venta predeterminado', /* modified */
+    'default_profit_percent' => '% ganancia estimado',
+    'default_sales_tax' => 'Impuesto de venta predeterminado', /* modified */
      'default_sales_discount' => 'Descuento de venta predeterminado', /* modified */
     'business_details' => 'Detalles comerciales',
     'tax' => 'Impuesto',

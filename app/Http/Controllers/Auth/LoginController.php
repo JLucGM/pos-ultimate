@@ -54,9 +54,7 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
-        $theme = config('ui.auth_theme', 'modern');
-        $view = $theme === 'modern' ? 'auth.login_modern' : 'auth.login';
-        return view($view);
+        return view('auth.login');
     }
 
     /**

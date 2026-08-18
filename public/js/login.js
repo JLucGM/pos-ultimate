@@ -1,8 +1,8 @@
 $(document).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
 
-    // registration form steps start
-    if ($('#business_register_form').length) {
+    // registration form steps start (only for legacy views)
+    if ($('#business_register_form').length && $('.modern-register-wrapper').length === 0) {
         var form = $('#business_register_form').show();
         form.steps({
             headerTag: 'h3',
@@ -14,7 +14,7 @@ $(document).ready(function() {
                 previous: LANG.previous,
             },
             onStepChanging: function(event, currentIndex, newIndex) {
-                // Allways allow previous action even if the current form is not valid!
+                // Always allow previous action even if the current form is not valid!
                 if (currentIndex > newIndex) {
                     return true;
                 }
@@ -73,7 +73,7 @@ $(document).ready(function() {
             },
             password: {
                 required: true,
-                minlength: 5,
+                minlength: 4,
             },
             confirm_password: {
                 equalTo: '#password',
@@ -112,10 +112,12 @@ $(document).ready(function() {
         },
     });
 
-    $('#business_logo').fileinput({
-        showUpload: false,
-        showPreview: false,
-        browseLabel: LANG.file_browse_label,
-        removeLabel: LANG.remove,
-    });
+    if ($('.modern-register-wrapper').length === 0 && $.fn.fileinput) {
+        $('#business_logo').fileinput({
+            showUpload: false,
+            showPreview: false,
+            browseLabel: LANG.file_browse_label,
+            removeLabel: LANG.remove,
+        });
+    }
 });

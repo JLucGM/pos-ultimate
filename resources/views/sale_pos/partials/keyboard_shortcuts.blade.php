@@ -129,5 +129,15 @@
 				$('button#weighing_scale_btn').trigger('click');
 			});
 		@endif
+
+		// Atajo F2 o Ctrl+B para enfocar buscador de productos al instante
+		Mousetrap.bind(['f2', 'ctrl+b'], function(e) {
+			e.preventDefault();
+			if ($('#pos_high_sku_search_container').is(':visible')) {
+				$('#high_sku_search_input').focus().select();
+			} else {
+				$('input#search_product').focus().select();
+			}
+		});
 	});
 </script>

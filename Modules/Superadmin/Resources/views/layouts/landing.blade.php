@@ -25,7 +25,7 @@
     <nav class="navbar" id="navbar">
         <div class="container nav-container">
             <a href="/" class="logo logo-only">
-                <img src="{{ asset('img/logo-audaz.png') }}" alt="{{ config('app.name', 'POS System') }}" class="logo-img">
+                <img src="{{ asset('images/landing/logo_full.png') }}" alt="{{ config('app.name', 'POS System') }}" class="logo-img">
             </a>
             
             <div class="nav-menu" id="navMenu">
@@ -61,7 +61,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <div class="footer-logo">
-                        <img src="{{ asset('img/logo-audaz.png') }}" alt="{{ config('app.name', 'POS System') }}" class="logo-img">
+                        <img src="{{ asset('images/landing/logo_full.png') }}" alt="{{ config('app.name', 'POS System') }}" class="logo-img">
                     </div>
                     <p>Sistema POS completo para pequeñas y medianas empresas. Gestiona tu negocio desde cualquier lugar.</p>
                     <div class="social-links">

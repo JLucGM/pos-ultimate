@@ -269,6 +269,11 @@ class SellPosController extends Controller
         $currencies = $this->currencyUtil->getActiveCurrencies();
         $base_currency = $this->currencyUtil->getBusinessCurrency($business_id);
         
+        // Tasa BCV Oficial para dualidad de monedas
+        $exchangeRateService = new \App\Services\ExchangeRateService();
+        $bcv_rate = $exchangeRateService->getCachedRate($business_id) ?? 1;
+        $secondary_currency = \DB::table('currencies')->whereIn('code', ['VES', 'VEF', 'Bs'])->first();
+
         // Preparar dropdown de monedas
         $currencies_dropdown = [];
         foreach ($currencies as $currency) {
@@ -309,7 +314,9 @@ class SellPosController extends Controller
                 'invoice_layouts',
                 'users',
                 'currencies_dropdown',
-                'base_currency'
+                'base_currency',
+                'bcv_rate',
+                'secondary_currency'
             ));
     }
 
@@ -2110,8 +2117,11 @@ class SellPosController extends Controller
 
             $show_prices = !empty($pos_settings['show_pricing_on_product_sugesstion']);
 
+            $exchangeRateService = new \App\Services\ExchangeRateService();
+            $bcv_rate = $exchangeRateService->getCachedRate($business_id) ?? 1;
+
             return view('sale_pos.partials.product_list')
-                ->with(compact('products', 'allowed_group_prices', 'show_prices'));
+                ->with(compact('products', 'allowed_group_prices', 'show_prices', 'bcv_rate'));
         }
     }
 
