@@ -29,6 +29,60 @@
             </a>
             
             <div class="nav-menu" id="navMenu">
+                <!-- Dropdown Soluciones -->
+                <div class="nav-item-dropdown">
+                    <a href="javascript:void(0);" class="nav-link nav-dropdown-trigger">
+                        Soluciones <i class="fas fa-chevron-down nav-dropdown-arrow"></i>
+                    </a>
+                    <div class="nav-dropdown-menu">
+                        <a href="{{ route('landing.solution', 'restaurantes') }}" class="nav-dropdown-item">
+                            <div class="nav-dd-icon" style="color: #FB4C0A; background: rgba(251, 76, 10, 0.15);">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <div>
+                                <div class="nav-dd-title">Restaurantes & Gastronomía</div>
+                                <div class="nav-dd-desc">Comandas, mesas, KDS y propinas</div>
+                            </div>
+                        </a>
+                        <a href="{{ route('landing.solution', 'retail') }}" class="nav-dropdown-item">
+                            <div class="nav-dd-icon" style="color: #6366F1; background: rgba(99, 102, 241, 0.15);">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <div>
+                                <div class="nav-dd-title">Comercio & Retail</div>
+                                <div class="nav-dd-desc">Código de barras, tallas y WooCommerce</div>
+                            </div>
+                        </a>
+                        <a href="{{ route('landing.solution', 'mayoristas') }}" class="nav-dropdown-item">
+                            <div class="nav-dd-icon" style="color: #10B981; background: rgba(16, 185, 129, 0.15);">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                            <div>
+                                <div class="nav-dd-title">Mayoristas & Distribuidoras</div>
+                                <div class="nav-dd-desc">Multialmacén, cotizaciones y crédito</div>
+                            </div>
+                        </a>
+                        <a href="{{ route('landing.solution', 'fabricas') }}" class="nav-dropdown-item">
+                            <div class="nav-dd-icon" style="color: #EC4899; background: rgba(236, 72, 153, 0.15);">
+                                <i class="fas fa-industry"></i>
+                            </div>
+                            <div>
+                                <div class="nav-dd-title">Fábricas & Manufactura</div>
+                                <div class="nav-dd-desc">Recetas, fórmulas y costeo de producción</div>
+                            </div>
+                        </a>
+                        <a href="{{ route('landing.solution', 'belleza-spa') }}" class="nav-dropdown-item">
+                            <div class="nav-dd-icon" style="color: #F59E0B; background: rgba(245, 158, 11, 0.15);">
+                                <i class="fas fa-cut"></i>
+                            </div>
+                            <div>
+                                <div class="nav-dd-title">Salones & Barberías</div>
+                                <div class="nav-dd-desc">Módulo de citas, comisiones y POS</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
                 <a href="{{ url('/#features') }}" class="nav-link">Características</a>
                 <a href="{{ route('pricing') }}" class="nav-link">Precios</a>
                 <a href="{{ url('/#testimonials') }}" class="nav-link">Testimonios</a>
@@ -63,7 +117,7 @@
                     <div class="footer-logo">
                         <img src="{{ asset('images/landing/logo_full.png') }}" alt="{{ config('app.name', 'POS System') }}" class="logo-img">
                     </div>
-                    <p>Sistema POS completo para pequeñas y medianas empresas. Gestiona tu negocio desde cualquier lugar.</p>
+                    <p>Plataforma de gestión comercial y punto de venta para todo tipo de organizaciones y negocios en crecimiento.</p>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-facebook"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
@@ -71,44 +125,35 @@
                         <a href="#"><i class="fab fa-linkedin"></i></a>
                     </div>
                 </div>
+
+                <div class="footer-section">
+                    <h4>Soluciones</h4>
+                    <ul>
+                        <li><a href="{{ route('landing.solution', 'restaurantes') }}">Restaurantes & Gastronomía</a></li>
+                        <li><a href="{{ route('landing.solution', 'retail') }}">Comercio & Retail</a></li>
+                        <li><a href="{{ route('landing.solution', 'mayoristas') }}">Mayoristas & Distribuidoras</a></li>
+                        <li><a href="{{ route('landing.solution', 'fabricas') }}">Fábricas & Manufactura</a></li>
+                        <li><a href="{{ route('landing.solution', 'belleza-spa') }}">Salones & Barberías</a></li>
+                    </ul>
+                </div>
                 
                 <div class="footer-section">
                     <h4>Producto</h4>
                     <ul>
-                        <li><a href="#features">Características</a></li>
+                        <li><a href="{{ url('/#features') }}">Características</a></li>
                         <li><a href="{{ route('pricing') }}">Precios</a></li>
-                        <li><a href="#">Integraciones</a></li>
-                        <li><a href="#">Actualizaciones</a></li>
+                        <li><a href="{{ url('/#testimonials') }}">Testimonios</a></li>
+                        <li><a href="{{ url('/#faq') }}">Preguntas Frecuentes</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-section">
                     <h4>Empresa</h4>
                     <ul>
-                        <li><a href="#">Sobre Nosotros</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Carreras</a></li>
-                        <li><a href="#">Contacto</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>Soporte</h4>
-                    <ul>
-                        <li><a href="#">Centro de Ayuda</a></li>
-                        <li><a href="#">Documentación</a></li>
-                        <li><a href="#">Tutoriales</a></li>
-                        <li><a href="#">Estado del Sistema</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>Legal</h4>
-                    <ul>
-                        <li><a href="#">Términos de Producto</a></li>
-                        <li><a href="#">Política de Privacidad</a></li>
-                        <li><a href="#">Política de Cookies</a></li>
-                        <li><a href="#">GDPR</a></li>
+                        <li><a href="{{ route('about') }}">Sobre Nosotros</a></li>
+                        <li><a href="{{ route('contact.page') }}">Contacto</a></li>
+                        <li><a href="{{ route('business.getRegister') }}">Crear Cuenta</a></li>
+                        <li><a href="{{ route('login') }}">Iniciar Sesión</a></li>
                     </ul>
                 </div>
             </div>

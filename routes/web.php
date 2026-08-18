@@ -76,6 +76,7 @@ include_once 'install_r.php';
 
 Route::middleware(['setData'])->group(function () {
     Route::get('/', [\Modules\Superadmin\Http\Controllers\LandingController::class, 'index'])->name('landing');
+    Route::get('/soluciones/{slug}', [\Modules\Superadmin\Http\Controllers\LandingController::class, 'solution'])->name('landing.solution');
 
     Auth::routes();
 

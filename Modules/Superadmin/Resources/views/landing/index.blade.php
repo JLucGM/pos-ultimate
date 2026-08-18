@@ -63,6 +63,209 @@
     </div>
 </section>
 
+<!-- Soluciones por Organización Showcase -->
+<section class="section solutions-showcase-section" id="solutions" style="background: #0B0F1D; padding: 80px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+    <div class="container">
+        <div class="section-header text-center" data-aos="fade-up">
+            <span class="section-badge" style="background: rgba(251, 76, 10, 0.15); color: #FB4C0A; border-color: rgba(251, 76, 10, 0.3);">Organizaciones & Nichos</span>
+            <h2 class="section-title">Soluciones Especializadas para Tu Tipo de Negocio</h2>
+            <p class="section-subtitle">No importa si vendes comida, ropa, al mayor, fabricas productos o agendas citas. Audaz se adapta a tu modelo operativo.</p>
+        </div>
+
+        <!-- Solutions Tabs Buttons -->
+        <div class="solution-tabs-nav" data-aos="fade-up">
+            <button type="button" class="solution-tab-btn active" data-target="#tab-restaurantes">
+                <i class="fas fa-utensils" style="color: #FB4C0A;"></i> Restaurantes
+            </button>
+            <button type="button" class="solution-tab-btn" data-target="#tab-retail">
+                <i class="fas fa-shopping-bag" style="color: #6366F1;"></i> Retail & Tiendas
+            </button>
+            <button type="button" class="solution-tab-btn" data-target="#tab-mayoristas">
+                <i class="fas fa-boxes" style="color: #10B981;"></i> Mayoristas
+            </button>
+            <button type="button" class="solution-tab-btn" data-target="#tab-fabricas">
+                <i class="fas fa-industry" style="color: #EC4899;"></i> Fábricas
+            </button>
+            <button type="button" class="solution-tab-btn" data-target="#tab-belleza">
+                <i class="fas fa-cut" style="color: #F59E0B;"></i> Salones & Barberías
+            </button>
+        </div>
+
+        <!-- Solutions Tab Panes Content -->
+        <div class="solution-tabs-content" data-aos="fade-up">
+            <!-- 1. Restaurantes -->
+            <div class="solution-tab-pane active" id="tab-restaurantes">
+                <div class="solution-tab-grid">
+                    <div class="solution-tab-info">
+                        <span class="solution-tab-badge" style="color: #FB4C0A; background: rgba(251, 76, 10, 0.15);">Gastronomía & Bares</span>
+                        <h3 class="solution-tab-heading">Agiliza la cocina y llena tu salón sin demoras ni errores</h3>
+                        <p class="solution-tab-paragraph">Comandas directas a cocina (KDS), mapa de mesas en tiempo real, división de cuentas entre amigos y propinas automáticas.</p>
+                        <ul class="solution-tab-bullets">
+                            <li><i class="fas fa-check-circle" style="color: #FB4C0A;"></i> Pantalla de cocina (KDS) digital sin papelitos perdidos.</li>
+                            <li><i class="fas fa-check-circle" style="color: #FB4C0A;"></i> Mapa de mesas interactivo (Ocupadas, Libres, Por cobrar).</li>
+                            <li><i class="fas fa-check-circle" style="color: #FB4C0A;"></i> Recetas y descuento automático de insumos en inventario.</li>
+                        </ul>
+                        <div class="solution-tab-actions">
+                            <a href="{{ route('landing.solution', 'restaurantes') }}" class="btn btn-primary">
+                                Conocer Solución Restaurantes <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="solution-tab-visual">
+                        <div class="solution-card-mockup" style="border-color: rgba(251, 76, 10, 0.3);">
+                            <div class="mockup-header" style="background: rgba(251, 76, 10, 0.1);">
+                                <i class="fas fa-utensils" style="color: #FB4C0A;"></i>
+                                <span>Pantalla de Comandas & Mesas</span>
+                            </div>
+                            <div class="mockup-body">
+                                <div class="mockup-item"><span>Mesa 4 • Terraza</span><span class="badge" style="background: #10B981; color:#fff;">2 Platos Listos</span></div>
+                                <div class="mockup-item"><span>Mesa 12 • Salón Principal</span><span class="badge" style="background: #F59E0B; color:#fff;">En Preparación</span></div>
+                                <div class="mockup-item"><span>Mesa 7 • Barra VIP</span><span class="badge" style="background: #FB4C0A; color:#fff;">Por Cobrar $48.50</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Retail & Tiendas -->
+            <div class="solution-tab-pane" id="tab-retail">
+                <div class="solution-tab-grid">
+                    <div class="solution-tab-info">
+                        <span class="solution-tab-badge" style="color: #6366F1; background: rgba(99, 102, 241, 0.15);">Comercio & Retail</span>
+                        <h3 class="solution-tab-heading">Ventas en 3 segundos con código de barras y multimoneda</h3>
+                        <p class="solution-tab-paragraph">Control de existencias por variantes de talla/color, alertas de bajo inventario y tienda online sincronizada con WooCommerce.</p>
+                        <ul class="solution-tab-bullets">
+                            <li><i class="fas fa-check-circle" style="color: #6366F1;"></i> Lector de barras, tickets térmicos e impresión de etiquetas.</li>
+                            <li><i class="fas fa-check-circle" style="color: #6366F1;"></i> Sincronización en vivo con tu tienda online WooCommerce.</li>
+                            <li><i class="fas fa-check-circle" style="color: #6366F1;"></i> Multi-cajas con turnos y arqueos ciegos por cajero.</li>
+                        </ul>
+                        <div class="solution-tab-actions">
+                            <a href="{{ route('landing.solution', 'retail') }}" class="btn btn-primary" style="background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);">
+                                Conocer Solución Retail <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="solution-tab-visual">
+                        <div class="solution-card-mockup" style="border-color: rgba(99, 102, 241, 0.3);">
+                            <div class="mockup-header" style="background: rgba(99, 102, 241, 0.1);">
+                                <i class="fas fa-barcode" style="color: #6366F1;"></i>
+                                <span>Punto de Venta Retail</span>
+                            </div>
+                            <div class="mockup-body">
+                                <div class="mockup-item"><span>Zapato Deportivo (Talla 42)</span><span class="badge" style="background: #6366F1; color:#fff;">Stock: 18 und</span></div>
+                                <div class="mockup-item"><span>Camisa Polo Slim (Negro - M)</span><span class="badge" style="background: #10B981; color:#fff;">WooCommerce Sync</span></div>
+                                <div class="mockup-item"><span>Tasa del Día (USD/VES)</span><span class="badge" style="background: #0B0F1D; color:#10B981; border: 1px solid #10B981;">En Vivo</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Mayoristas -->
+            <div class="solution-tab-pane" id="tab-mayoristas">
+                <div class="solution-tab-grid">
+                    <div class="solution-tab-info">
+                        <span class="solution-tab-badge" style="color: #10B981; background: rgba(16, 185, 129, 0.15);">Mayoristas & Distribuidoras</span>
+                        <h3 class="solution-tab-heading">Control multialmacén, cotizaciones y cuentas por cobrar</h3>
+                        <p class="solution-tab-paragraph">Diseñado para mover alto volumen de mercancía, compras a crédito, listas de precios diferenciadas y transferencias entre depósitos.</p>
+                        <ul class="solution-tab-bullets">
+                            <li><i class="fas fa-check-circle" style="color: #10B981;"></i> Reportes de cartera y seguimiento de Cuentas por Cobrar.</li>
+                            <li><i class="fas fa-check-circle" style="color: #10B981;"></i> Listas de precios personalizadas (Mayor, Detal, Distribuidor).</li>
+                            <li><i class="fas fa-check-circle" style="color: #10B981;"></i> Cotizaciones membretadas convertibles a factura en 1 clic.</li>
+                        </ul>
+                        <div class="solution-tab-actions">
+                            <a href="{{ route('landing.solution', 'mayoristas') }}" class="btn btn-primary" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+                                Conocer Solución Mayoristas <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="solution-tab-visual">
+                        <div class="solution-card-mockup" style="border-color: rgba(16, 185, 129, 0.3);">
+                            <div class="mockup-header" style="background: rgba(16, 185, 129, 0.1);">
+                                <i class="fas fa-warehouse" style="color: #10B981;"></i>
+                                <span>Logística & Cartera</span>
+                            </div>
+                            <div class="mockup-body">
+                                <div class="mockup-item"><span>Almacén Central ➔ Sucursal Norte</span><span class="badge" style="background: #10B981; color:#fff;">Despachado</span></div>
+                                <div class="mockup-item"><span>Distribuidora Los Andes C.A.</span><span class="badge" style="background: #F59E0B; color:#fff;">Crédito 15 días</span></div>
+                                <div class="mockup-item"><span>Cotización #COT-2041</span><span class="badge" style="background: #6366F1; color:#fff;">Aprobada $3,450</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Fábricas -->
+            <div class="solution-tab-pane" id="tab-fabricas">
+                <div class="solution-tab-grid">
+                    <div class="solution-tab-info">
+                        <span class="solution-tab-badge" style="color: #EC4899; background: rgba(236, 72, 153, 0.15);">Fábricas & Manufactura</span>
+                        <h3 class="solution-tab-heading">Fórmulas, recetas y costeo de producción exacto</h3>
+                        <p class="solution-tab-paragraph">Gestiona órdenes de producción que transforman materias primas en productos terminados, costeando mano de obra y mermas.</p>
+                        <ul class="solution-tab-bullets">
+                            <li><i class="fas fa-check-circle" style="color: #EC4899;"></i> Fórmulas de insumos con cálculo automático de costos.</li>
+                            <li><i class="fas fa-check-circle" style="color: #EC4899;"></i> Órdenes de fabricación por lote con auto-descuento de stock.</li>
+                            <li><i class="fas fa-check-circle" style="color: #EC4899;"></i> Control riguroso de desperdicios y mermas productivas.</li>
+                        </ul>
+                        <div class="solution-tab-actions">
+                            <a href="{{ route('landing.solution', 'fabricas') }}" class="btn btn-primary" style="background: linear-gradient(135deg, #EC4899 0%, #DB2777 100%);">
+                                Conocer Solución Fábricas <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="solution-tab-visual">
+                        <div class="solution-card-mockup" style="border-color: rgba(236, 72, 153, 0.3);">
+                            <div class="mockup-header" style="background: rgba(236, 72, 153, 0.1);">
+                                <i class="fas fa-industry" style="color: #EC4899;"></i>
+                                <span>Producción & Manufactura</span>
+                            </div>
+                            <div class="mockup-body">
+                                <div class="mockup-item"><span>Lote #LOT-892 (500 galones)</span><span class="badge" style="background: #10B981; color:#fff;">Finalizado</span></div>
+                                <div class="mockup-item"><span>Insumos Consumidos</span><span class="badge" style="background: #EC4899; color:#fff;">Descontados</span></div>
+                                <div class="mockup-item"><span>Costo Unitario Real</span><span class="badge" style="background: #0B0F1D; color:#EC4899; border: 1px solid #EC4899;">$4.12 / und</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Belleza & Barberías -->
+            <div class="solution-tab-pane" id="tab-belleza">
+                <div class="solution-tab-grid">
+                    <div class="solution-tab-info">
+                        <span class="solution-tab-badge" style="color: #F59E0B; background: rgba(245, 158, 11, 0.15);">Salones & Barberías</span>
+                        <h3 class="solution-tab-heading">Agenda de citas, comisiones del staff y cobro integrado</h3>
+                        <p class="solution-tab-paragraph">Permite a tus estilistas o barberos gestionar su agenda de citas, calcula comisiones por servicio y vende productos en un solo ticket.</p>
+                        <ul class="solution-tab-bullets">
+                            <li><i class="fas fa-check-circle" style="color: #F59E0B;"></i> Módulo interactivo de Citas & Reservas por profesional.</li>
+                            <li><i class="fas fa-check-circle" style="color: #F59E0B;"></i> Cálculo automático de comisiones por corte, tinte o servicio.</li>
+                            <li><i class="fas fa-check-circle" style="color: #F59E0B;"></i> Venta de ceras, champús y tratamientos en el mismo POS.</li>
+                        </ul>
+                        <div class="solution-tab-actions">
+                            <a href="{{ route('landing.solution', 'belleza-spa') }}" class="btn btn-primary" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);">
+                                Conocer Solución Belleza & Citas <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="solution-tab-visual">
+                        <div class="solution-card-mockup" style="border-color: rgba(245, 158, 11, 0.3);">
+                            <div class="mockup-header" style="background: rgba(245, 158, 11, 0.1);">
+                                <i class="fas fa-cut" style="color: #F59E0B;"></i>
+                                <span>Agenda de Citas & Staff</span>
+                            </div>
+                            <div class="mockup-body">
+                                <div class="mockup-item"><span>Corte & Barba • Carlos (Barbero 1)</span><span class="badge" style="background: #10B981; color:#fff;">3:30 PM - Confirmada</span></div>
+                                <div class="mockup-item"><span>Balayage & Peinado • Sofia (Estilista)</span><span class="badge" style="background: #F59E0B; color:#fff;">5:00 PM - En Proceso</span></div>
+                                <div class="mockup-item"><span>Comisión Acumulada del Día</span><span class="badge" style="background: #0B0F1D; color:#F59E0B; border: 1px solid #F59E0B;">$85.00</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Features Section -->
 <section id="features" class="features-section">
     <div class="container">
