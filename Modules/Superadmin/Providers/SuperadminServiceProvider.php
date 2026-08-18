@@ -120,9 +120,14 @@ class SuperadminServiceProvider extends ServiceProvider
             $sourcePath => $viewPath,
         ], 'views');
 
-        $this->loadViewsFrom(array_merge(array_map(function ($path) {
-            return $path.'/modules/superadmin';
-        }, config('view.paths')), [$sourcePath]), 'superadmin');
+        $paths = [];
+        foreach (config('view.paths', []) as $path) {
+            if (is_dir($path.'/modules/superadmin')) {
+                $paths[] = $path.'/modules/superadmin';
+            }
+        }
+
+        $this->loadViewsFrom(array_merge($paths, [$sourcePath]), 'superadmin');
     }
 
     /**
