@@ -159,8 +159,8 @@ body {
 }
 
 .navbar .btn {
-    border-radius: 10px !important;
-    padding: 8px 20px;
+    border-radius: 25px !important;
+    padding: 8px 22px;
     font-size: 13px;
     font-weight: 600;
 }
@@ -170,8 +170,8 @@ body {
     background: linear-gradient(135deg, #FB4C0A 0%, #E03E00 100%) !important;
     color: #FFFFFF !important;
     border: 1px solid rgba(255, 255, 255, 0.25) !important;
-    border-radius: 10px !important;
-    padding: 8px 22px !important;
+    border-radius: 25px !important;
+    padding: 9px 24px !important;
     font-size: 13px !important;
     font-weight: 700 !important;
     box-shadow: 0 4px 16px rgba(251, 76, 10, 0.4) !important;
