@@ -9,6 +9,13 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ExchangeRateController extends Controller
 {
+    protected $commonUtil;
+
+    public function __construct(\App\Utils\Util $commonUtil)
+    {
+        $this->commonUtil = $commonUtil;
+    }
+
     public function index()
     {
         if (!auth()->user()->can('view_exchange_rate')) {
@@ -33,35 +40,103 @@ class ExchangeRateController extends Controller
         return view('exchange_rates.create', compact('currencies'));
     }
 
+    protected function parseDate($dateStr)
+    {
+        if (empty($dateStr)) {
+            return date('Y-m-d');
+        }
+
+        try {
+            $parsed = $this->commonUtil->uf_date($dateStr);
+            if (!empty($parsed)) {
+                return $parsed;
+            }
+        } catch (\Throwable $e) {}
+
+        foreach (['d/m/Y', 'Y-m-d', 'd-m-Y', 'm/d/Y'] as $fmt) {
+            try {
+                return \Carbon\Carbon::createFromFormat($fmt, $dateStr)->format('Y-m-d');
+            } catch (\Throwable $e) {}
+        }
+
+        try {
+            return \Carbon\Carbon::parse($dateStr)->format('Y-m-d');
+        } catch (\Throwable $e) {}
+
+        return date('Y-m-d');
+    }
+
+    protected function parseRate($rateStr)
+    {
+        if (empty($rateStr)) {
+            return 0;
+        }
+        if (is_numeric($rateStr)) {
+            return (float) $rateStr;
+        }
+        $cleaned = str_replace(' ', '', (string) $rateStr);
+        // Handle format like 1.234,56 or 1234,56
+        if (strpos($cleaned, ',') !== false && strpos($cleaned, '.') !== false) {
+            $cleaned = str_replace('.', '', $cleaned);
+            $cleaned = str_replace(',', '.', $cleaned);
+        } else if (strpos($cleaned, ',') !== false) {
+            $cleaned = str_replace(',', '.', $cleaned);
+        }
+        return (float) $cleaned;
+    }
+
     public function store(Request $request)
     {
         if (!auth()->user()->can('create_exchange_rate')) {
             abort(403, 'Unauthorized action.');
         }
 
-        $request->validate([
-            'from_currency_id' => 'required|exists:currencies,id',
-            'to_currency_id' => 'required|exists:currencies,id|different:from_currency_id',
-            'rate' => 'required|numeric|min:0',
-            'effective_date' => 'required|date',
-            'notes' => 'nullable|string'
-        ]);
+        $business_id = $request->session()->get('user.business_id') ?: 1;
 
-        $business_id = $request->session()->get('user.business_id');
+        $effective_date = $this->parseDate($request->input('effective_date'));
+        $rate = $this->parseRate($request->input('rate'));
 
-        ExchangeRate::create([
-            'business_id' => $business_id,
-            'from_currency_id' => $request->from_currency_id,
-            'to_currency_id' => $request->to_currency_id,
-            'rate' => $request->rate,
-            'effective_date' => $request->effective_date,
-            'created_by' => auth()->id(),
-            'notes' => $request->notes
-        ]);
+        if ($rate <= 0) {
+            return redirect()->back()->withInput()->with('status', [
+                'success' => false,
+                'msg' => 'La tasa de cambio debe ser un número mayor a 0.'
+            ]);
+        }
+
+        if (!$request->input('from_currency_id') || !$request->input('to_currency_id')) {
+            return redirect()->back()->withInput()->with('status', [
+                'success' => false,
+                'msg' => 'Debe seleccionar la moneda de origen y la moneda de destino.'
+            ]);
+        }
+
+        if ($request->input('from_currency_id') == $request->input('to_currency_id')) {
+            return redirect()->back()->withInput()->with('status', [
+                'success' => false,
+                'msg' => 'La moneda de origen y destino no pueden ser iguales.'
+            ]);
+        }
+
+        ExchangeRate::updateOrCreate(
+            [
+                'business_id' => $business_id,
+                'from_currency_id' => $request->input('from_currency_id'),
+                'to_currency_id' => $request->input('to_currency_id'),
+                'effective_date' => $effective_date,
+            ],
+            [
+                'rate' => $rate,
+                'created_by' => auth()->id(),
+                'notes' => $request->input('notes')
+            ]
+        );
+
+        \Illuminate\Support\Facades\Cache::forget("exchange_rate_{$business_id}_{$request->from_currency_id}_{$request->to_currency_id}");
+        \Illuminate\Support\Facades\Cache::forget("exchange_rate_{$business_id}_{$request->to_currency_id}_{$request->from_currency_id}");
 
         $output = [
             'success' => true,
-            'msg' => __('exchange_rate.added_success')
+            'msg' => 'Tasa de cambio guardada exitosamente'
         ];
 
         return redirect()->route('exchange-rates.index')->with('status', $output);
@@ -73,7 +148,7 @@ class ExchangeRateController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $business_id = request()->session()->get('user.business_id');
+        $business_id = request()->session()->get('user.business_id') ?: 1;
         $rate = ExchangeRate::where('business_id', $business_id)->findOrFail($id);
         $currencies = Currency::pluck('currency', 'id');
 
@@ -86,28 +161,47 @@ class ExchangeRateController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $request->validate([
-            'from_currency_id' => 'required|exists:currencies,id',
-            'to_currency_id' => 'required|exists:currencies,id|different:from_currency_id',
-            'rate' => 'required|numeric|min:0',
-            'effective_date' => 'required|date',
-            'notes' => 'nullable|string'
+        $business_id = $request->session()->get('user.business_id') ?: 1;
+        $exchangeRate = ExchangeRate::where('business_id', $business_id)->findOrFail($id);
+
+        $effective_date = $this->parseDate($request->input('effective_date'));
+        $rate = $this->parseRate($request->input('rate'));
+
+        if ($rate <= 0) {
+            return redirect()->back()->withInput()->with('status', [
+                'success' => false,
+                'msg' => 'La tasa de cambio debe ser un número mayor a 0.'
+            ]);
+        }
+
+        if (!$request->input('from_currency_id') || !$request->input('to_currency_id')) {
+            return redirect()->back()->withInput()->with('status', [
+                'success' => false,
+                'msg' => 'Debe seleccionar la moneda de origen y la moneda de destino.'
+            ]);
+        }
+
+        if ($request->input('from_currency_id') == $request->input('to_currency_id')) {
+            return redirect()->back()->withInput()->with('status', [
+                'success' => false,
+                'msg' => 'La moneda de origen y destino no pueden ser iguales.'
+            ]);
+        }
+
+        $exchangeRate->update([
+            'from_currency_id' => $request->input('from_currency_id'),
+            'to_currency_id' => $request->input('to_currency_id'),
+            'rate' => $rate,
+            'effective_date' => $effective_date,
+            'notes' => $request->input('notes')
         ]);
 
-        $business_id = $request->session()->get('user.business_id');
-        $rate = ExchangeRate::where('business_id', $business_id)->findOrFail($id);
-
-        $rate->update([
-            'from_currency_id' => $request->from_currency_id,
-            'to_currency_id' => $request->to_currency_id,
-            'rate' => $request->rate,
-            'effective_date' => $request->effective_date,
-            'notes' => $request->notes
-        ]);
+        \Illuminate\Support\Facades\Cache::forget("exchange_rate_{$business_id}_{$request->from_currency_id}_{$request->to_currency_id}");
+        \Illuminate\Support\Facades\Cache::forget("exchange_rate_{$business_id}_{$request->to_currency_id}_{$request->from_currency_id}");
 
         $output = [
             'success' => true,
-            'msg' => __('exchange_rate.updated_success')
+            'msg' => 'Tasa de cambio actualizada exitosamente'
         ];
 
         return redirect()->route('exchange-rates.index')->with('status', $output);
@@ -268,22 +362,37 @@ class ExchangeRateController extends Controller
      */
     public function syncFromApi(Request $request)
     {
-        $business_id = $request->session()->get('user.business_id');
-        $source = $request->input('source', 'oficial');
+        try {
+            $business_id = $request->session()->get('user.business_id') ?: 1;
+            $source = $request->input('source', 'oficial');
 
-        $service = new \App\Services\ExchangeRateService();
-        $result = $service->updateRate($business_id, $source, auth()->id());
+            $service = new \App\Services\ExchangeRateService();
+            $result = $service->updateRate($business_id, $source, auth()->id());
 
-        if ($request->ajax()) {
-            return response()->json($result);
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json($result);
+            }
+
+            $output = [
+                'success' => $result['success'],
+                'msg' => $result['message'],
+            ];
+
+            return redirect()->route('exchange-rates.index')->with('status', $output);
+        } catch (\Exception $e) {
+            \Log::error('Error syncFromApi: ' . $e->getMessage());
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al sincronizar tasa: ' . $e->getMessage()
+                ], 500);
+            }
+
+            return redirect()->route('exchange-rates.index')->with('status', [
+                'success' => false,
+                'msg' => 'Error al sincronizar tasa: ' . $e->getMessage()
+            ]);
         }
-
-        $output = [
-            'success' => $result['success'],
-            'msg' => $result['message'],
-        ];
-
-        return redirect()->route('exchange-rates.index')->with('status', $output);
     }
 
     /**

@@ -119,10 +119,11 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     Route::get('/calendar', [HomeController::class, 'getCalendar'])->name('calendar');
 
     // Exchange Rates - Las rutas específicas deben ir ANTES del resource
-    Route::get('/get-exchange-rate', [App\Http\Controllers\ExchangeRateController::class, 'getCurrentRate'])->name('get-exchange-rate');
-    Route::get('/exchange-rates-data', [App\Http\Controllers\ExchangeRateController::class, 'getData'])->name('exchange-rates.getData');
-    Route::post('/exchange-rates/sync-api', [App\Http\Controllers\ExchangeRateController::class, 'syncFromApi'])->name('exchange-rates.sync-api');
-    Route::get('/exchange-rates/preview-api', [App\Http\Controllers\ExchangeRateController::class, 'previewApiRate'])->name('exchange-rates.preview-api');
+    Route::match(['get', 'post'], '/get-exchange-rate', [App\Http\Controllers\ExchangeRateController::class, 'getCurrentRate'])->name('get-exchange-rate');
+    Route::match(['get', 'post'], '/exchange-rates-data', [App\Http\Controllers\ExchangeRateController::class, 'getData'])->name('exchange-rates.getData');
+    Route::match(['get', 'post'], '/exchange-rates/sync-api', [App\Http\Controllers\ExchangeRateController::class, 'syncFromApi'])->name('exchange-rates.sync-api');
+    Route::match(['get', 'post'], '/exchange-rates/preview-api', [App\Http\Controllers\ExchangeRateController::class, 'previewApiRate'])->name('exchange-rates.preview-api');
+    Route::match(['get', 'post'], '/exchange-rates/preview-api-rate', [App\Http\Controllers\ExchangeRateController::class, 'previewApiRate']);
     Route::resource('exchange-rates', App\Http\Controllers\ExchangeRateController::class);
 
     Route::post('/test-email', [BusinessController::class, 'testEmailConfiguration']);

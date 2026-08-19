@@ -84,9 +84,11 @@
 @section('javascript')
 <script>
 $(document).ready(function() {
+    $('.select2').select2();
     $('#effective_date').datepicker({
         autoclose: true,
-        format: 'dd/mm/yyyy'
+        format: typeof datepicker_date_format !== 'undefined' ? datepicker_date_format : 'dd/mm/yyyy',
+        todayHighlight: true
     });
 });
 </script>

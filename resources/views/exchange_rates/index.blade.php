@@ -111,7 +111,11 @@ $(document).ready(function() {
 
         $.ajax({
             url: '{{ action([\App\Http\Controllers\ExchangeRateController::class, "syncFromApi"]) }}',
-            data: { source: 'oficial' },
+            type: 'POST',
+            data: { 
+                source: 'oficial',
+                _token: '{{ csrf_token() }}'
+            },
             dataType: 'json',
             success: function(res) {
                 $icon.removeClass('fa-spin');
@@ -126,10 +130,11 @@ $(document).ready(function() {
                     toastr.error(res.message || 'Error al sincronizar tasa');
                 }
             },
-            error: function() {
+            error: function(xhr) {
                 $icon.removeClass('fa-spin');
                 $btn.prop('disabled', false);
-                toastr.error('Error de conexión con el servidor');
+                var errorMsg = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Error de conexión con el servidor';
+                toastr.error(errorMsg);
             }
         });
     });
