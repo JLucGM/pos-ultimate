@@ -608,9 +608,6 @@ input:checked + .slider:before {
 <script>
 // Esperar a que TODO esté cargado
 window.addEventListener('load', function() {
-    console.log('=== Pricing Page JavaScript ===');
-    console.log('FAQ items encontrados:', document.querySelectorAll('.faq-item').length);
-    
     // Toggle between monthly and yearly pricing
     var billingToggle = document.getElementById('billingToggle');
     if (billingToggle) {
@@ -636,19 +633,16 @@ window.addEventListener('load', function() {
         });
     }
     
-    // FAQ Accordion - Versión JavaScript vanilla (igual que landing)
+    // FAQ Accordion - Versión JavaScript vanilla
     var faqQuestions = document.querySelectorAll('.faq-question');
-    console.log('FAQ questions encontradas:', faqQuestions.length);
     
-    faqQuestions.forEach(function(question, index) {
+    faqQuestions.forEach(function(question) {
         question.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             
             var item = this.parentElement;
             var wasActive = item.classList.contains('active');
-            
-            console.log('FAQ #' + index + ' clickeado. Estaba activo:', wasActive);
             
             // Cerrar todos los items primero
             document.querySelectorAll('.faq-item').forEach(function(i) {
@@ -658,19 +652,9 @@ window.addEventListener('load', function() {
             // Abrir el clickeado SOLO si NO estaba activo
             if (!wasActive) {
                 item.classList.add('active');
-                console.log('FAQ #' + index + ' ABIERTO');
-            } else {
-                console.log('FAQ #' + index + ' CERRADO (todos cerrados)');
             }
-            
-            // Debug: verificar estado después del click
-            setTimeout(function() {
-                console.log('Estado después del click:', item.classList.contains('active') ? 'ACTIVO' : 'INACTIVO');
-            }, 100);
         });
     });
-    
-    console.log('=== Pricing Page inicializado correctamente ===');
 });
 </script>
 @endsection

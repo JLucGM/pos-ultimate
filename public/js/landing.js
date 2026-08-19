@@ -396,8 +396,6 @@
         initSolutionTabs();
         initDropdownToggle();
     }
-
-    console.log('Landing page initialized successfully');
 })();
 
 

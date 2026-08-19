@@ -620,23 +620,16 @@
 <script>
 // Esperar a que TODO esté cargado
 window.addEventListener('load', function() {
-    console.log('=== Landing Page FAQ Debug ===');
-    console.log('jQuery disponible:', typeof $ !== 'undefined');
-    console.log('FAQ items encontrados:', document.querySelectorAll('.faq-item').length);
-    
-    // FAQ Accordion - Versión corregida
+    // FAQ Accordion
     var faqQuestions = document.querySelectorAll('.faq-question');
-    console.log('FAQ questions encontradas:', faqQuestions.length);
     
-    faqQuestions.forEach(function(question, index) {
+    faqQuestions.forEach(function(question) {
         question.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             
             var item = this.parentElement;
             var wasActive = item.classList.contains('active');
-            
-            console.log('FAQ #' + index + ' clickeado. Estaba activo:', wasActive);
             
             // Cerrar todos los items primero
             document.querySelectorAll('.faq-item').forEach(function(i) {
@@ -646,21 +639,12 @@ window.addEventListener('load', function() {
             // Abrir el clickeado SOLO si NO estaba activo
             if (!wasActive) {
                 item.classList.add('active');
-                console.log('FAQ #' + index + ' ABIERTO');
-            } else {
-                console.log('FAQ #' + index + ' CERRADO (todos cerrados)');
             }
-            
-            // Debug: verificar estado después del click
-            setTimeout(function() {
-                console.log('Estado después del click:', item.classList.contains('active') ? 'ACTIVO' : 'INACTIVO');
-            }, 100);
         });
     });
     
     // Smooth scroll para links internos
     var internalLinks = document.querySelectorAll('a[href^="#"]');
-    console.log('Links internos encontrados:', internalLinks.length);
     
     internalLinks.forEach(function(link) {
         link.addEventListener('click', function(e) {
@@ -681,8 +665,6 @@ window.addEventListener('load', function() {
                     top: offsetTop,
                     behavior: 'smooth'
                 });
-                
-                console.log('Scroll a:', href);
             }
         });
     });
@@ -708,8 +690,6 @@ window.addEventListener('load', function() {
             }
         });
     });
-    
-    console.log('=== FAQ y Soluciones inicializados correctamente ===');
 });
 </script>
 @endsection
