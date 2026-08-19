@@ -271,12 +271,15 @@
     @yield('javascript')
     
     <script>
-        // Initialize AOS
+        // Initialize AOS (Deshabilitado en móviles para prevenir desbordamiento en Safari iOS)
         AOS.init({
             duration: 800,
             easing: 'ease-in-out',
             once: true,
-            offset: 100
+            offset: 100,
+            disable: function() {
+                return window.innerWidth < 768;
+            }
         });
 
         // Smooth scroll para links internos

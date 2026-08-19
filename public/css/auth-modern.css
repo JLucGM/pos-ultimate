@@ -32,7 +32,9 @@
 
 html, body {
     height: 100%;
-    width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: clip !important;
 }
 
 body.auth-body {
@@ -41,7 +43,8 @@ body.auth-body {
     color: var(--auth-text-main);
     margin: 0 !important;
     padding: 0 !important;
-    overflow-x: hidden;
+    overflow-x: clip !important;
+    max-width: 100vw !important;
     min-height: 100vh;
 }
 
@@ -49,8 +52,10 @@ body.auth-body {
 .auth-fullscreen-layout {
     display: flex;
     min-height: 100vh;
-    width: 100vw;
+    width: 100% !important;
+    max-width: 100% !important;
     background: var(--auth-bg-dark);
+    overflow-x: hidden;
 }
 
 /* Left Brand Panel (Full Height con Líneas Modernas) */
