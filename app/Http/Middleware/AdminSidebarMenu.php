@@ -76,7 +76,7 @@ class AdminSidebarMenu
                             );
                         }
 
-                        // 4. [Cargar Pedido] (Acción directa para registrar cotización/pedido)
+                        // 4. [Nuevo Pedido] (Acción directa para registrar cotización/pedido)
                         if (in_array('add_sale', $enabled_modules) && ($is_admin || auth()->user()->hasAnyPermission(['quotation.create', 'direct_sell.access', 'sell.create']))) {
                             $sub->url(
                                 action([\App\Http\Controllers\SellController::class, 'create']) . '?status=quotation',

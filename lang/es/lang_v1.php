@@ -1162,7 +1162,7 @@ return [
     'refund' => 'Reembolso',
     'activate' => 'Activar',
     'deactivate' => 'Desactivar',
-    'add_quotation' => 'Cargar Pedido',
+    'add_quotation' => 'Nuevo Pedido',
     'product_stock_history' => 'Historial de existencias de Productos',
     'quantities_in' => 'Cantidades en',
     'quantities_out' => 'Cantidades fuera',
