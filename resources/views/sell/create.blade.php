@@ -143,7 +143,7 @@
 							value="{{ $walk_in_customer['selling_price_group_id'] ?? ''}}" >
 							@endif
 							{!! Form::select('contact_id', 
-								[], null, ['class' => 'form-control mousetrap', 'id' => 'customer_id', 'placeholder' => 'Enter Customer name / phone', 'required']); !!}
+								[], null, ['class' => 'form-control mousetrap', 'id' => 'customer_id', 'placeholder' => 'Buscar o seleccionar cliente (Nombre / Teléfono)', 'required']); !!}
 							<span class="input-group-btn">
 								<button type="button" class="btn btn-default bg-white btn-flat add_new_customer" data-name=""><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
 							</span>
@@ -155,16 +155,24 @@
 						@lang('lang_v1.billing_address'):
 					</strong>
 					<div id="billing_address_div">
-						{!! $walk_in_customer['contact_address'] ?? '' !!}
+						@if(!empty($walk_in_customer['contact_address']) && ($walk_in_customer['name'] ?? '') != 'Walk-In Customer')
+							{!! $walk_in_customer['contact_address'] !!}
+						@else
+							<span class="text-muted"><i>(Se llenará cuando seleccione el cliente)</i></span>
+						@endif
 					</div>
 					<br>
 					<strong>
 						@lang('lang_v1.shipping_address'):
 					</strong>
 					<div id="shipping_address_div">
-						{{$walk_in_customer['supplier_business_name'] ?? ''}},<br>
-						{{$walk_in_customer['name'] ?? ''}},<br>
-						{{$walk_in_customer['shipping_address'] ?? ''}}
+						@if(!empty($walk_in_customer['shipping_address']) && ($walk_in_customer['name'] ?? '') != 'Walk-In Customer')
+							{{$walk_in_customer['supplier_business_name'] ?? ''}}<br>
+							{{$walk_in_customer['name'] ?? ''}}<br>
+							{{$walk_in_customer['shipping_address'] ?? ''}}
+						@else
+							<span class="text-muted"><i>(Se llenará cuando seleccione el cliente)</i></span>
+						@endif
 					</div>					
 					</small>
 				</div>

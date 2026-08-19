@@ -2680,51 +2680,57 @@ $(document).on('change', '#discount_type_modal, #discount_type', function() {
 });
 
 function update_shipping_address(data) {
+    var is_walk_in = !data || !data.id || data.name == 'Walk-In Customer' || (data.text && data.text.indexOf('Walk-In') !== -1);
+
     if ($('#shipping_address_div').length) {
-        var shipping_address = '';
-        if (data.supplier_business_name) {
-            shipping_address += data.supplier_business_name;
+        if (is_walk_in && (!data.shipping_address || data.shipping_address == 'null')) {
+            $('#shipping_address_div').html('<span class="text-muted"><i>(Se llenará cuando seleccione el cliente)</i></span>');
+        } else {
+            var lines = [];
+            if (data.supplier_business_name) {
+                lines.push(data.supplier_business_name);
+            }
+            if (data.name && data.name != 'Walk-In Customer') {
+                lines.push(data.name);
+            }
+            if (data.shipping_address && data.shipping_address != 'null') {
+                lines.push(data.shipping_address);
+            }
+            $('#shipping_address_div').html(lines.length ? lines.join('<br>') : '<span class="text-muted"><i>(Se llenará cuando seleccione el cliente)</i></span>');
         }
-        if (data.name) {
-            shipping_address += ',<br>' + data.name;
-        }
-        if (data.text) {
-            shipping_address += ',<br>' + data.text;
-        }
-        shipping_address += ',<br>' + data.shipping_address ;
-        $('#shipping_address_div').html(shipping_address);
     }
     if ($('#billing_address_div').length) {
-        var address = [];
-        if (data.supplier_business_name) {
-            address.push(data.supplier_business_name);
+        if (is_walk_in && (!data.address_line_1 && !data.city)) {
+            $('#billing_address_div').html('<span class="text-muted"><i>(Se llenará cuando seleccione el cliente)</i></span>');
+        } else {
+            var address = [];
+            if (data.supplier_business_name) {
+                address.push(data.supplier_business_name);
+            }
+            if (data.name && data.name != 'Walk-In Customer') {
+                address.push(data.name);
+            }
+            if (data.address_line_1) {
+                address.push(data.address_line_1);
+            }
+            if (data.address_line_2) {
+                address.push(data.address_line_2);
+            }
+            if (data.city) {
+                address.push(data.city);
+            }
+            if (data.state) {
+                address.push(data.state);
+            }
+            if (data.country) {
+                address.push(data.country);
+            }
+            if (data.zip_code) {
+                address.push(data.zip_code);
+            }
+            var billing_address = address.join(', ');
+            $('#billing_address_div').html(billing_address || '<span class="text-muted"><i>(Se llenará cuando seleccione el cliente)</i></span>');
         }
-        if (data.name) {
-            address.push('<br>' + data.name);
-        }
-        if (data.text) {
-            address.push('<br>' + data.text);
-        }
-        if (data.address_line_1) {
-            address.push('<br>' + data.address_line_1);
-        }
-        if (data.address_line_2) {
-            address.push('<br>' + data.address_line_2);
-        }
-        if (data.city) {
-            address.push('<br>' + data.city);
-        }
-        if (data.state) {
-            address.push(data.state);
-        }
-        if (data.country) {
-            address.push(data.country);
-        }
-        if (data.zip_code) {
-            address.push('<br>' + data.zip_code);
-        }
-        var billing_address = address.join(', ');
-        $('#billing_address_div').html(billing_address);
     }
 
     if ($('#shipping_custom_field_1').length) {
