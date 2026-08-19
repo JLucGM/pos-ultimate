@@ -2207,42 +2207,44 @@ class SellPosController extends Controller
         }
     }
 
+    public function pay_pagomovil($transaction, $total_payable, $request)
+    {
+        return 'Pago Móvil Ref: ' . $request->input('reference_no', 'N/A') . ' | Banco: ' . $request->input('bank_name', 'N/A') . ' | Telf: ' . $request->input('phone_number', 'N/A');
+    }
+
+    public function pay_bank_transfer($transaction, $total_payable, $request)
+    {
+        return 'Transferencia Ref: ' . $request->input('reference_no', 'N/A') . ' | Banco: ' . $request->input('bank_name', 'N/A') . ' | Titular: ' . $request->input('holder_name', 'N/A');
+    }
+
+    public function pay_zelle($transaction, $total_payable, $request)
+    {
+        return 'Zelle Ref: ' . $request->input('reference_no', 'N/A') . ' | Cuenta: ' . $request->input('email_account', 'N/A') . ' | Titular: ' . $request->input('holder_name', 'N/A');
+    }
+
+    public function pay_binance($transaction, $total_payable, $request)
+    {
+        return 'Binance Pay TxID: ' . $request->input('reference_no', 'N/A') . ' | Usuario: ' . $request->input('holder_name', 'N/A');
+    }
+
+    public function pay_paypal($transaction, $total_payable, $request)
+    {
+        return 'PayPal TxID: ' . $request->input('reference_no', 'N/A') . ' | Email: ' . $request->input('email_account', 'N/A');
+    }
+
+    public function pay_offline($transaction, $total_payable, $request)
+    {
+        return 'Pago Reportado Ref: ' . $request->input('reference_no', 'N/A');
+    }
+
     public function pay_razorpay($transaction, $total_payable, $request)
     {
-        $pos_settings = empty($transaction->business->pos_settings) ? $this->businessUtil->defaultPosSettings() : json_decode($transaction->business->pos_settings, true);
-
-        $razorpay_payment_id = $request->razorpay_payment_id;
-        $razorpay_api = new Api($pos_settings['razor_pay_key_id'], $pos_settings['razor_pay_key_secret']);
-        $payment = $razorpay_api->payment->fetch($razorpay_payment_id)->capture(['amount' => $total_payable * 100]); // Captures a payment
-
-        if (empty($payment->error_code)) {
-            return $payment->id;
-        } else {
-            $error_description = $payment->error_description;
-
-            \Log::emergency($payment->error_description);
-            throw new \Exception($error_description);
-        }
+        return 'Razorpay Ref: ' . ($request->razorpay_payment_id ?? 'N/A');
     }
 
     public function pay_stripe($transaction, $total_payable, $request)
     {
-        $pos_settings = empty($transaction->business->pos_settings) ? $this->businessUtil->defaultPosSettings() : json_decode($transaction->business->pos_settings, true);
-
-        Stripe::setApiKey($pos_settings['stripe_secret_key']);
-
-        $metadata = ['stripe_email' => $request->stripeEmail];
-
-        $business_details = $this->businessUtil->getDetails($transaction->business->id);
-
-        $charge = Charge::create([
-            'amount' => $total_payable * 100,
-            'currency' => strtolower($business_details->currency_code),
-            'source' => $request->stripeToken,
-            'metadata' => $metadata,
-        ]);
-
-        return $charge->id;
+        return 'Stripe Ref: ' . ($request->stripeToken ?? 'N/A');
     }
 
     public function confirmPayment($id, Request $request)
