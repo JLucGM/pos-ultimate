@@ -136,7 +136,8 @@ class BusinessController extends Controller
                     'city' => 'required|max:255',
                     'zip_code' => 'required|max:255',
                     'landmark' => 'required|max:255',
-                    'time_zone' => 'required|max:255',
+                    'time_zone' => 'sometimes|nullable|max:255',
+                    'business_type' => 'sometimes|nullable|string|in:retail,restaurantes,mayoristas,fabricas,belleza-spa',
                     'surname' => 'max:10',
                     'email' => 'sometimes|nullable|email|unique:users|max:255',
                     'first_name' => 'required|max:255',
@@ -153,7 +154,6 @@ class BusinessController extends Controller
                     'city.required' => __('validation.required', ['attribute' => __('business.city')]),
                     'zip_code.required' => __('validation.required', ['attribute' => __('business.zip_code')]),
                     'landmark.required' => __('validation.required', ['attribute' => __('business.landmark')]),
-                    'time_zone.required' => __('validation.required', ['attribute' => __('business.time_zone')]),
                     'email.email' => __('validation.email', ['attribute' => __('business.email')]),
                     'email.email' => __('validation.unique', ['attribute' => __('business.email')]),
                     'first_name.required' => __('validation.required', ['attribute' => __('business.first_name')]),
@@ -175,9 +175,12 @@ class BusinessController extends Controller
 
             $user = User::create_user($owner_details);
 
-            $business_details = $request->only(['name', 'start_date', 'currency_id', 'time_zone',
+            $business_details = $request->only(['name', 'start_date', 'currency_id',
                 'fy_start_month', 'accounting_method', 'tax_label_1', 'tax_number_1',
                 'tax_label_2', 'tax_number_2', ]);
+
+            // Zona horaria por defecto para Venezuela si no se especifica
+            $business_details['time_zone'] = $request->input('time_zone') ?: 'America/Caracas';
 
             $business_location = $request->only(['name', 'country', 'state', 'city', 'zip_code', 'landmark',
                 'website', 'mobile', 'alternate_number', ]);
@@ -194,8 +197,21 @@ class BusinessController extends Controller
                 $business_details['logo'] = $logo_name;
             }
 
-            //default enabled modules
-            $business_details['enabled_modules'] = ['purchases', 'add_sale', 'pos_sale', 'stock_transfers', 'stock_adjustment', 'expenses'];
+            // Habilitar módulos base + específicos según el Tipo de Negocio / Solución seleccionado
+            $business_type = $request->input('business_type', 'retail');
+            $enabled_modules = ['purchases', 'add_sale', 'pos_sale', 'stock_transfers', 'stock_adjustment', 'expenses'];
+
+            if ($business_type === 'restaurantes') {
+                $enabled_modules = array_merge($enabled_modules, ['tables', 'modifiers', 'service_staff', 'kitchen', 'types_of_service']);
+            } elseif ($business_type === 'mayoristas') {
+                $enabled_modules = array_merge($enabled_modules, ['account']);
+            } elseif ($business_type === 'fabricas') {
+                $enabled_modules = array_merge($enabled_modules, ['manufacturing']);
+            } elseif ($business_type === 'belleza-spa') {
+                $enabled_modules = array_merge($enabled_modules, ['booking', 'service_staff', 'consultorio']);
+            }
+
+            $business_details['enabled_modules'] = array_values(array_unique($enabled_modules));
 
             $business = $this->businessUtil->createNewBusiness($business_details);
 
@@ -255,6 +271,25 @@ class BusinessController extends Controller
                         'order_screen'   => $trial_package->order_screen ?? 0,
                         'tables'         => $trial_package->tables ?? 0,
                     ];
+
+                    // Activar permisos y módulos en la suscripción del trial según el tipo de negocio
+                    if ($business_type === 'restaurantes') {
+                        $package_details['tables'] = 1;
+                        $package_details['kitchen'] = 1;
+                        $package_details['order_screen'] = 1;
+                        $package_details['restaurant'] = 1;
+                    } elseif ($business_type === 'fabricas') {
+                        $package_details['manufacturing_module'] = 1;
+                    } elseif ($business_type === 'belleza-spa') {
+                        $package_details['bookings'] = 1;
+                        $package_details['crm_module'] = 1;
+                        $package_details['essentials_module'] = 1;
+                    } elseif ($business_type === 'mayoristas') {
+                        $package_details['essentials_module'] = 1;
+                    } elseif ($business_type === 'retail') {
+                        $package_details['woocommerce_module'] = 1;
+                        $package_details['essentials_module'] = 1;
+                    }
 
                     if (! empty($trial_package->custom_permissions)) {
                         foreach ($trial_package->custom_permissions as $name => $value) {

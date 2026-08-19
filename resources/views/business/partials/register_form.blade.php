@@ -153,14 +153,24 @@
     </div>
     <div class="col-md-6">
         <div class="form-group">
-            {!! Form::label('time_zone', __('business.time_zone') . ':*') !!}
+            <label for="business_type" style="font-weight: 700; color: #1E293B;">
+                Tipo de Negocio / Solución: <span class="text-danger">*</span>
+            </label>
             <div class="input-group">
-                <span class="input-group-addon">
-                    <i class="fas fa-clock"></i>
+                <span class="input-group-addon" style="color: #FB4C0A;">
+                    <i class="fas fa-store"></i>
                 </span>
-                {!! Form::select('time_zone', $timezone_list, config('app.timezone'), ['class' => 'form-control select2_register','placeholder' => __('business.time_zone'), 'required']); !!}
+                <select name="business_type" id="business_type" class="form-control select2_register" required style="width: 100%;">
+                    <option value="retail" selected>🛒 Comercio & Retail (Tiendas, Ropa, Variedades)</option>
+                    <option value="restaurantes">🍽️ Restaurantes & Gastronomía (Mesas, Comandas, KDS)</option>
+                    <option value="mayoristas">📦 Mayoristas & Distribuidoras (Multialmacén, Crédito)</option>
+                    <option value="fabricas">🏭 Fábricas & Manufactura (Producción, Fórmulas)</option>
+                    <option value="belleza-spa">✂️ Salones de Belleza & Barberías (Citas, Comisiones)</option>
+                </select>
             </div>
+            <small class="text-muted" style="font-size: 11px;">Configuraremos las funciones y módulos ideales para tu sector.</small>
         </div>
+        <input type="hidden" name="time_zone" value="America/Caracas">
     </div>
     </fieldset>
 
