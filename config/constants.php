@@ -33,7 +33,7 @@ return [
     'document_size_limit' => '5000000', //in Bytes,
     'image_size_limit' => '5000000', //in Bytes
 
-    'asset_version' => 699,
+    'asset_version' => 700,
 
     'disable_purchase_in_other_currency' => true,
 
@@ -66,7 +66,7 @@ return [
 
     'google_recaptcha_key' => env('GOOGLE_RECAPTCHA_KEY'),
     'google_recaptcha_secret' => env('GOOGLE_RECAPTCHA_SECRET'),
-    'enable_recaptcha' => env('ENABLE_RECAPTCHA', false),
+    'enable_recaptcha' => env('ENABLE_RECATCHA', false),
     
     'mpdf_temp_path' => storage_path('app/pdf'), //Temporary path used by mpdf
 
@@ -85,7 +85,7 @@ return [
     'whatsapp_base_url' => 'https://wa.me',
     'enable_crm_call_log' => false,
     'enable_product_bulk_edit' => false,  //Will be depreciated in future
-    'enable_convert_draft_to_invoice' => false, //Experimental beta feature.
+    'enable_convert_draft_to_invoice' => true, //Experimental beta feature.
     'enable_download_pdf' => false,         //Experimental feature
     'invoice_scheme_separator' => '-',
     'show_payments_recovered_today' => false, //Displays payment recovered today table on dashboard

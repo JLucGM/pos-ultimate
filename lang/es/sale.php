@@ -11,10 +11,10 @@ return [
     |
     */
 
-    'sale' => 'Vender',
+    'sale' => 'Ventas',
     'sells' => 'Ventas',
     'list_sale' => 'Lista de ventas',
-    'add_sale' => 'Agregar venta',
+    'add_sale' => 'Nueva venta',
     'pos_sale' => 'POS',
     'draft_added' => 'Borrador añadido con éxito', /* modified */
     'invoice_added' => 'Factura añadida con éxito',

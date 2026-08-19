@@ -45,27 +45,12 @@ class AdminSidebarMenu
             )->order(5);
 
             // 2. VENTAS & FACTURACIÓN
-            if ($is_admin || auth()->user()->hasAnyPermission(['sell.view', 'sell.create', 'direct_sell.access', 'view_own_sell_only', 'view_commission_agent_sell', 'access_shipping', 'access_own_shipping', 'access_commission_agent_shipping', 'access_sell_return', 'direct_sell.view', 'direct_sell.update', 'access_own_sell_return'])) {
+            if ($is_admin || auth()->user()->hasAnyPermission(['sell.view', 'sell.create', 'direct_sell.access', 'view_own_sell_only', 'view_commission_agent_sell', 'access_shipping', 'access_own_shipping', 'access_commission_agent_shipping', 'access_sell_return', 'direct_sell.view', 'direct_sell.update', 'access_own_sell_return', 'quotation.view_all', 'quotation.view_own', 'draft.view_all', 'draft.view_own'])) {
                 $menu->dropdown(
                     __('sale.sale'),
                     function ($sub) use ($enabled_modules, $is_admin, $pos_settings) {
-                        if (!empty($pos_settings['enable_sales_order']) && ($is_admin || auth()->user()->hasAnyPermission(['so.view_own', 'so.view_all', 'so.create']))) {
-                            $sub->url(
-                                action([\App\Http\Controllers\SalesOrderController::class, 'index']),
-                                __('lang_v1.sales_order'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'sales-order']
-                            );
-                        }
-
-                        if ($is_admin || auth()->user()->hasAnyPermission(['sell.view', 'sell.create', 'direct_sell.access', 'direct_sell.view', 'view_own_sell_only', 'view_commission_agent_sell', 'access_shipping', 'access_own_shipping', 'access_commission_agent_shipping'])) {
-                            $sub->url(
-                                action([\App\Http\Controllers\SellController::class, 'index']),
-                                __('lang_v1.all_sales'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'sells' && request()->segment(2) == null]
-                            );
-                        }
-
-                        if (in_array('add_sale', $enabled_modules) && auth()->user()->can('direct_sell.access')) {
+                        // 1. [Nueva venta]
+                        if (in_array('add_sale', $enabled_modules) && (auth()->user()->can('direct_sell.access') || auth()->user()->can('sell.create'))) {
                             $sub->url(
                                 action([\App\Http\Controllers\SellController::class, 'create']),
                                 __('sale.add_sale'),
@@ -73,14 +58,7 @@ class AdminSidebarMenu
                             );
                         }
 
-                        if (auth()->user()->can('sell.view') && in_array('pos_sale', $enabled_modules)) {
-                            $sub->url(
-                                action([\App\Http\Controllers\SellPosController::class, 'index']),
-                                __('sale.list_pos'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'pos' && request()->segment(2) == null]
-                            );
-                        }
-
+                        // 2. [Borradores]
                         if (in_array('add_sale', $enabled_modules) && ($is_admin || auth()->user()->hasAnyPermission(['draft.view_all', 'draft.view_own']))) {
                             $sub->url(
                                 action([\App\Http\Controllers\SellController::class, 'getDrafts']),
@@ -89,6 +67,25 @@ class AdminSidebarMenu
                             );
                         }
 
+                        // 3. [Todas las ventas] (Filtrado automático por permisos de usuario/vendedor)
+                        if ($is_admin || auth()->user()->hasAnyPermission(['sell.view', 'sell.create', 'direct_sell.access', 'direct_sell.view', 'view_own_sell_only', 'view_commission_agent_sell', 'access_shipping', 'access_own_shipping', 'access_commission_agent_shipping'])) {
+                            $sub->url(
+                                action([\App\Http\Controllers\SellController::class, 'index']),
+                                __('lang_v1.all_sales'),
+                                ['icon' => '', 'active' => request()->segment(1) == 'sells' && request()->segment(2) == null]
+                            );
+                        }
+
+                        // 4. [Cargar Pedido] (Acción directa para registrar cotización/pedido)
+                        if (in_array('add_sale', $enabled_modules) && ($is_admin || auth()->user()->hasAnyPermission(['quotation.create', 'direct_sell.access', 'sell.create']))) {
+                            $sub->url(
+                                action([\App\Http\Controllers\SellController::class, 'create']) . '?status=quotation',
+                                __('lang_v1.add_quotation'),
+                                ['icon' => '', 'active' => request()->segment(1) == 'sells' && request()->segment(2) == 'create' && request()->get('status') == 'quotation']
+                            );
+                        }
+
+                        // 5. [Lista de Pedidos]
                         if (in_array('add_sale', $enabled_modules) && ($is_admin || auth()->user()->hasAnyPermission(['quotation.view_all', 'quotation.view_own']))) {
                             $sub->url(
                                 action([\App\Http\Controllers\SellController::class, 'getQuotations']),
@@ -97,6 +94,16 @@ class AdminSidebarMenu
                             );
                         }
 
+                        // POS (Punto de Venta)
+                        if (auth()->user()->can('sell.view') && in_array('pos_sale', $enabled_modules)) {
+                            $sub->url(
+                                action([\App\Http\Controllers\SellPosController::class, 'index']),
+                                __('sale.list_pos'),
+                                ['icon' => '', 'active' => request()->segment(1) == 'pos' && request()->segment(2) == null]
+                            );
+                        }
+
+                        // 6. [Devoluciones]
                         if (auth()->user()->can('access_sell_return') || auth()->user()->can('access_own_sell_return')) {
                             $sub->url(
                                 action([\App\Http\Controllers\SellReturnController::class, 'index']),
@@ -105,6 +112,7 @@ class AdminSidebarMenu
                             );
                         }
 
+                        // 7. [Despacho]
                         if ($is_admin || auth()->user()->hasAnyPermission(['access_shipping', 'access_own_shipping', 'access_commission_agent_shipping'])) {
                             $sub->url(
                                 action([\App\Http\Controllers\SellController::class, 'shipments']),
@@ -113,6 +121,7 @@ class AdminSidebarMenu
                             );
                         }
 
+                        // 8. [Descuentos]
                         if (auth()->user()->can('discount.access')) {
                             $sub->url(
                                 action([\App\Http\Controllers\DiscountController::class, 'index']),
@@ -121,6 +130,7 @@ class AdminSidebarMenu
                             );
                         }
 
+                        // Suscripciones recurrentes a clientes (si aplica)
                         if (in_array('subscription', $enabled_modules) && auth()->user()->can('direct_sell.access')) {
                             $sub->url(
                                 action([\App\Http\Controllers\SellPosController::class, 'listSubscriptions']),
