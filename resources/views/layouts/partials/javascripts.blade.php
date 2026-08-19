@@ -211,6 +211,16 @@
             
         });
 
+        $('#btnCalculatorMobile').on('click', function(e) {
+            e.preventDefault();
+            $('#btnCalculator').popover('toggle');
+        });
+
+        $('#view_todays_profit_mobile').on('click', function(e) {
+            e.preventDefault();
+            $('#view_todays_profit').trigger('click');
+        });
+
         $('.side-bar-collapse').click(function() {
             $('.side-bar').toggle('slow');
         });

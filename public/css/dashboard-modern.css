@@ -733,6 +733,24 @@ html, body {
     }
 }
 
+@media (max-width: 1023px) {
+    .side-bar-collapse {
+        display: none !important;
+    }
+    .small-view-button.audaz-top-btn {
+        display: inline-flex !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    .small-view-button.audaz-top-btn {
+        display: none !important;
+    }
+    .side-bar-collapse {
+        display: inline-flex !important;
+    }
+}
+
 @media (max-width: 768px) {
     .audaz-topbar {
         padding: 0 12px !important;

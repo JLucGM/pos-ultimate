@@ -21,68 +21,80 @@
         });
     });
 
-    // Navbar background on scroll
+    // Navbar background on scroll con throttle pasivo
     let lastScroll = 0;
     const navbar = document.getElementById('navbar');
     
     window.addEventListener('scroll', () => {
         const currentScroll = window.pageYOffset;
-        
-        if (currentScroll > 100) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-        
-        lastScroll = currentScroll;
-    });
-
-    // Mobile menu toggle
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const navMenu = document.getElementById('navMenu');
-    
-    if (mobileMenuBtn && navMenu) {
-        mobileMenuBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const isOpen = navMenu.classList.toggle('active');
-            const icon = mobileMenuBtn.querySelector('i');
-            if (icon) {
-                if (isOpen) {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                } else {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                }
+        if (navbar) {
+            if (currentScroll > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
             }
-        });
+        }
+        lastScroll = currentScroll;
+    }, { passive: true });
 
-        // Close menu when clicking on a link
-        navMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
+    // Mobile menu toggle con soporte táctil inmediato
+    function initMobileMenu() {
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navMenu = document.getElementById('navMenu');
+        
+        if (mobileMenuBtn && navMenu) {
+            function toggleMenu(e) {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                const isOpen = navMenu.classList.toggle('active');
                 const icon = mobileMenuBtn.querySelector('i');
                 if (icon) {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
+                    if (isOpen) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    } else {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
                 }
-            });
-        });
+            }
 
-        // Close when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!navMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-                if (navMenu.classList.contains('active')) {
+            mobileMenuBtn.addEventListener('click', toggleMenu);
+
+            // Close menu when clicking on a link
+            navMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
                     navMenu.classList.remove('active');
                     const icon = mobileMenuBtn.querySelector('i');
                     if (icon) {
                         icon.classList.remove('fa-times');
                         icon.classList.add('fa-bars');
                     }
+                });
+            });
+
+            // Close when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!navMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    if (navMenu.classList.contains('active')) {
+                        navMenu.classList.remove('active');
+                        const icon = mobileMenuBtn.querySelector('i');
+                        if (icon) {
+                            icon.classList.remove('fa-times');
+                            icon.classList.add('fa-bars');
+                        }
+                    }
                 }
-            }
-        });
+            });
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMobileMenu);
+    } else {
+        initMobileMenu();
     }
 
     // FAQ Accordion - DESHABILITADO (ahora está en la página)
@@ -151,18 +163,24 @@
         animateNumbers();
     }
 
-    // Parallax effect for hero section
+    // Parallax effect for hero section (solo en pantallas grandes con requestAnimationFrame)
     const heroSection = document.querySelector('.hero-section');
     
-    if (heroSection) {
+    if (heroSection && window.innerWidth >= 1024) {
+        let ticking = false;
         window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const parallax = heroSection.querySelector('.hero-image');
-            
-            if (parallax && scrolled < window.innerHeight) {
-                parallax.style.transform = `translateY(${scrolled * 0.3}px)`;
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrolled = window.pageYOffset;
+                    const parallax = heroSection.querySelector('.hero-image');
+                    if (parallax && scrolled < window.innerHeight) {
+                        parallax.style.transform = `translateY(${scrolled * 0.15}px)`;
+                    }
+                    ticking = false;
+                });
+                ticking = true;
             }
-        });
+        }, { passive: true });
     }
 
     // Add animation class when elements come into view

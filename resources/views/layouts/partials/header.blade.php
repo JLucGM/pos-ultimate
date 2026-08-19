@@ -67,7 +67,7 @@
 
         <!-- Quick Calendar & Tools Dropdown -->
         <details class="tw-dw-dropdown tw-relative tw-inline-block tw-text-left">
-            <summary class="audaz-top-btn" title="Herramientas y Calendario">
+            <summary class="audaz-top-btn" title="Herramientas y Accesos Rápidos">
                 <i class="fas fa-th"></i>
             </summary>
             <ul class="audaz-dropdown-menu" role="menu" tabindex="-1">
@@ -77,10 +77,33 @@
                 </div>
                 <li>
                     <a href="{{ route('calendar') }}" class="audaz-dropdown-item" role="menuitem">
-                        <i class="fas fa-calendar-alt"></i>
+                        <i class="fas fa-calendar-alt tw-text-indigo-400"></i>
                         <span>@lang('lang_v1.calendar')</span>
                     </a>
                 </li>
+
+                <!-- Calculadora (Integrada en Dropdown para móvil) -->
+                <li>
+                    <a href="javascript:void(0);" id="btnCalculatorMobile" title="@lang('lang_v1.calculator')" 
+                        data-content='@include('layouts.partials.calculator')'
+                        data-trigger="click" data-html="true" data-placement="bottom"
+                        class="audaz-dropdown-item" role="menuitem">
+                        <i class="fas fa-calculator tw-text-amber-400"></i>
+                        <span>@lang('lang_v1.calculator')</span>
+                    </a>
+                </li>
+
+                <!-- Ganancias de Hoy (Integrada en Dropdown para móvil) -->
+                @can('profit_loss_report.view')
+                <li>
+                    <a href="javascript:void(0);" id="view_todays_profit_mobile" title="{{ __('home.todays_profit') }}"
+                        class="audaz-dropdown-item" role="menuitem">
+                        <i class="fas fa-chart-line tw-text-emerald-400"></i>
+                        <span>{{ __('home.todays_profit') }}</span>
+                    </a>
+                </li>
+                @endcan
+
                 @if (Module::has('Essentials'))
                 <li>
                     <a href="#"
@@ -104,23 +127,23 @@
             </ul>
         </details>
 
-        <!-- Calculadora Popover -->
+        <!-- Calculadora Popover (Solo Desktop) -->
         <button id="btnCalculator" title="@lang('lang_v1.calculator')" data-content='@include('layouts.partials.calculator')'
             type="button" data-trigger="click" data-html="true" data-placement="bottom" 
-            class="audaz-top-btn tw-hidden md:tw-inline-flex">
+            class="audaz-top-btn tw-hidden lg:tw-inline-flex">
             <i class="fas fa-calculator"></i>
         </button>
 
-        <!-- Ganancias de Hoy -->
+        <!-- Ganancias de Hoy (Solo Desktop) -->
         @can('profit_loss_report.view')
             <button type="button" id="view_todays_profit" title="{{ __('home.todays_profit') }}"
                 data-toggle="tooltip" data-placement="bottom"
-                class="audaz-top-btn tw-hidden sm:tw-inline-flex">
+                class="audaz-top-btn tw-hidden lg:tw-inline-flex">
                 <i class="fas fa-chart-line tw-text-emerald-400"></i>
             </button>
         @endcan
 
-        <!-- Reloj / Fecha en Vivo -->
+        <!-- Reloj / Fecha en Vivo (Solo Pantallas Grandes) -->
         <div class="tw-hidden xl:tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-xl tw-bg-white/5 tw-border tw-border-white/10 tw-text-xs tw-font-semibold tw-text-slate-300">
             <i class="fas fa-clock tw-text-orange-500"></i>
             <span class="tw-font-mono">{{ @format_date('now') }}</span>

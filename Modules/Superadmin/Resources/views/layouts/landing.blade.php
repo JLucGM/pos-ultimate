@@ -351,10 +351,17 @@
                         });
                         
                         // Cerrar menú móvil si está abierto
-                        if (navMenu.classList.contains('active')) {
+                        var navMenu = document.getElementById('navMenu');
+                        var mobileMenuBtn = document.getElementById('mobileMenuBtn');
+                        if (navMenu && navMenu.classList.contains('active')) {
                             navMenu.classList.remove('active');
-                            mobileMenuBtn.querySelector('i').classList.add('fa-bars');
-                            mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+                            if (mobileMenuBtn) {
+                                var icon = mobileMenuBtn.querySelector('i');
+                                if (icon) {
+                                    icon.classList.add('fa-bars');
+                                    icon.classList.remove('fa-times');
+                                }
+                            }
                         }
                     } else {
                         // Si la sección no existe, redirigir a la página principal con el hash
