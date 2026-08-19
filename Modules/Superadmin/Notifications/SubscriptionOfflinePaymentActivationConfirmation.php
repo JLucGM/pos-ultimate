@@ -15,10 +15,20 @@ class SubscriptionOfflinePaymentActivationConfirmation extends Notification
      *
      * @return void
      */
-    public function __construct($business, $package)
+    public $business;
+    public $package;
+    public $offline_details;
+
+    /**
+     * Create a new notification instance.
+     *
+     * @return void
+     */
+    public function __construct($business, $package, $offline_details = [])
     {
         $this->business = $business;
         $this->package = $package;
+        $this->offline_details = $offline_details;
     }
 
     /**
@@ -40,13 +50,34 @@ class SubscriptionOfflinePaymentActivationConfirmation extends Notification
      */
     public function toMail($notifiable)
     {
-        $details = 'Business: '.$this->business->name.', Package: '.$this->package->name.', Price: '.$this->package->price;
+        $mail = (new MailMessage)
+                ->subject('🔔 Nuevo Reporte de Pago Offline: ' . $this->business->name)
+                ->greeting('¡Hola Superadministrador!')
+                ->line('Se ha registrado un nuevo reporte de pago por transferencia / pago móvil:')
+                ->line('• Empresa: ' . $this->business->name)
+                ->line('• Plan / Paquete: ' . $this->package->name);
 
-        return (new MailMessage)
-                ->greeting('Hello!')
-                ->line('Please confirm Offline Payment for subscription')
-                ->line($details)
-                ->line('To confirm go to superadmin subscriptions tab and confirm it.');
+        if (!empty($this->offline_details['reference_no'])) {
+            $mail->line('• N° de Referencia: ' . $this->offline_details['reference_no']);
+        }
+        if (!empty($this->offline_details['amount_paid'])) {
+            $mail->line('• Monto Pagado: ' . $this->offline_details['amount_paid'] . ' ' . ($this->offline_details['currency'] ?? ''));
+        }
+        if (!empty($this->offline_details['bank_name'])) {
+            $mail->line('• Banco Emisor: ' . $this->offline_details['bank_name']);
+        }
+        if (!empty($this->offline_details['phone_number'])) {
+            $mail->line('• Teléfono Emisor: ' . $this->offline_details['phone_number']);
+        }
+        if (!empty($this->offline_details['paid_on'])) {
+            $mail->line('• Fecha de Pago: ' . $this->offline_details['paid_on']);
+        }
+        if (!empty($this->offline_details['payment_note'])) {
+            $mail->line('• Observaciones: ' . $this->offline_details['payment_note']);
+        }
+
+        return $mail->action('Ver y Aprobar Suscripción', url('/superadmin/superadmin-subscription'))
+                    ->line('Por favor verifica la acreditación en la cuenta bancaria antes de aprobar la suscripción.');
     }
 
     /**

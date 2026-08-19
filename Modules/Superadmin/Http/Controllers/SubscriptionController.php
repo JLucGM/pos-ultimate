@@ -231,13 +231,21 @@ class SubscriptionController extends BaseController
                                 $coupon_status = ['status' => 'danger', 'msg' => __('superadmin::lang.coupon_expired')];
                             }
                     }
-                } else {
-                    $coupon_status = ['status' => 'danger', 'msg' => __('superadmin::lang.invalid_coupon')];
+            // Obtener tasa BCV oficial para dualidad USD / Bs
+            $bcv_rate = 1;
+            try {
+                $exchangeRateService = app(\App\Services\ExchangeRateService::class);
+                $bcv_rate = $exchangeRateService->getCachedRate($business_id);
+                if (empty($bcv_rate) || $bcv_rate <= 1) {
+                    $apiData = $exchangeRateService->fetchFromApi();
+                    $bcv_rate = !empty($apiData['oficial']) ? (float)$apiData['oficial'] : 1;
                 }
-               
+            } catch (\Exception $e) {
+                \Log::warning('Error obteniendo tasa BCV en SubscriptionController: ' . $e->getMessage());
             }
+
             return view('superadmin::subscription.pay')
-            ->with(compact('package', 'gateways', 'system_currency', 'layout', 'user', 'offline_payment_details', 'coupon_status', 'package_price_after_discount', 'discount_amount'));
+            ->with(compact('package', 'gateways', 'system_currency', 'layout', 'user', 'offline_payment_details', 'coupon_status', 'package_price_after_discount', 'discount_amount', 'bcv_rate'));
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -304,13 +312,42 @@ class SubscriptionController extends BaseController
             if (method_exists($this, $pay_function)) {
                 $payment_transaction_id = $this->$pay_function($business_id, $business_name, $package, $request);
             }
-            //Add subscription details after payment is succesful
-            $this->_add_subscription(request()->coupon_code, request()->price,$business_id, $package_id, request()->gateway, $payment_transaction_id, $user_id);
+
+            if (empty($payment_transaction_id) && !empty($request->reference_no)) {
+                $payment_transaction_id = $request->reference_no;
+            }
+
+            $custom_package_details = [];
+            if ($request->gateway == 'offline') {
+                $custom_package_details['offline_payment_info'] = [
+                    'reference_no'   => $request->input('reference_no'),
+                    'amount_paid'    => $request->input('amount_paid'),
+                    'currency'       => $request->input('currency', 'VES'),
+                    'paid_on'        => $request->input('paid_on', \Carbon\Carbon::today()->toDateString()),
+                    'phone_number'   => $request->input('phone_number'),
+                    'bank_name'      => $request->input('bank_name'),
+                    'payment_method' => $request->input('payment_method', 'Pago Móvil / Transferencia'),
+                    'payment_note'   => $request->input('payment_note'),
+                ];
+            }
+
+            //Add subscription details after payment is successful
+            $this->_add_subscription(
+                request()->coupon_code,
+                request()->price,
+                $business_id,
+                $package_id,
+                request()->gateway,
+                $payment_transaction_id,
+                $user_id,
+                false,
+                $custom_package_details
+            );
             DB::commit();
 
             $msg = __('lang_v1.success');
             if (request()->gateway == 'offline') {
-                $msg = __('superadmin::lang.notification_sent_for_approval');
+                $msg = 'Tu reporte de pago ha sido enviado con éxito. El administrador verificará la transferencia y activará tu plan en breve.';
             }
             $output = ['success' => 1, 'msg' => $msg];
         } catch (\Exception $e) {
@@ -413,15 +450,25 @@ class SubscriptionController extends BaseController
         $business = Business::find($business_id);
 
         if (! $this->moduleUtil->IsMailConfigured()) {
-            return null;
+            return $request->input('reference_no');
         }
         $system_currency = System::getCurrency();
         $package->price = $system_currency->symbol.number_format($package->price, 2, $system_currency->decimal_separator, $system_currency->thousand_separator);
 
-        Notification::route('mail', $email)
-            ->notify(new SubscriptionOfflinePaymentActivationConfirmation($business, $package));
+        $offline_details = [
+            'reference_no'  => $request->input('reference_no'),
+            'amount_paid'   => $request->input('amount_paid'),
+            'currency'      => $request->input('currency', 'VES'),
+            'paid_on'       => $request->input('paid_on', \Carbon\Carbon::today()->toDateString()),
+            'phone_number'  => $request->input('phone_number'),
+            'bank_name'     => $request->input('bank_name'),
+            'payment_note'  => $request->input('payment_note'),
+        ];
 
-        return null;
+        Notification::route('mail', $email)
+            ->notify(new SubscriptionOfflinePaymentActivationConfirmation($business, $package, $offline_details));
+
+        return $request->input('reference_no');
     }
 
 

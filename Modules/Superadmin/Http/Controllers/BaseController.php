@@ -70,7 +70,7 @@ class BaseController extends Controller
      *
      * @return object
      */
-    public function _add_subscription($code, $price, $business_id, $package, $gateway, $payment_transaction_id, $user_id, $is_superadmin = false)
+    public function _add_subscription($code, $price, $business_id, $package, $gateway, $payment_transaction_id, $user_id, $is_superadmin = false, $custom_package_details = [])
     {
         if (! is_object($package)) {
             $package = Package::active()->find($package);
@@ -111,6 +111,13 @@ class BaseController extends Controller
         if (! empty($package->custom_permissions)) {
             foreach ($package->custom_permissions as $name => $value) {
                 $subscription['package_details'][$name] = $value;
+            }
+        }
+
+        // Additional package details (such as offline payment report)
+        if (! empty($custom_package_details)) {
+            foreach ($custom_package_details as $key => $val) {
+                $subscription['package_details'][$key] = $val;
             }
         }
 
