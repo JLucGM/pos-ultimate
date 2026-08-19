@@ -211,18 +211,20 @@ function update_statistics(start, end) {
             $('.net').html(__currency_trans_from_en(data.net, true));
 
             // assign tooltip total_sell_return 
-            var lang = $('#total_srp').data('value');
-            var splitlang = lang.split('-');
+            var langSrp = $('#total_srp').data('value');
+            if (langSrp && typeof langSrp === 'string') {
+                var splitlang = langSrp.split('-');
+                var newContent = "<p class='mb-0 text-muted fs-10 mt-5'>" + (splitlang[0] || '') + ": <span class=''>" + __currency_trans_from_en(data.total_sell_return, true) + "</span><br>" + (splitlang[1] || '') + ": <span class=''>" + __currency_trans_from_en(data.total_sell_return_paid, true) + "</span></p>";
+                $('#total_srp').attr('data-content', newContent);
+            }
             
-            var newContent = "<p class='mb-0 text-muted fs-10 mt-5'>" + splitlang[0] + ": <span class=''>" + __currency_trans_from_en(data.total_sell_return, true) + "</span><br>" + splitlang[1] + ": <span class=''>" + __currency_trans_from_en(data.total_sell_return_paid, true) + "</span></p>";
-            $('#total_srp').attr('data-content', newContent)
             // assign tooltip total_purchase_return 
-            var lang = $('#total_prp').data('value');
-            var splitlang = lang.split('-');
-            
-            var newContent = "<p class='mb-0 text-muted fs-10 mt-5'>" + splitlang[0] + ": <span class=''>" + __currency_trans_from_en(data.total_purchase_return, true) + "</span><br>" + splitlang[1] + ": <span class=''>" + __currency_trans_from_en(data.total_purchase_return_paid, true) + "</span></p>";
-            
-            $('#total_prp').attr('data-content', newContent);
+            var langPrp = $('#total_prp').data('value');
+            if (langPrp && typeof langPrp === 'string') {
+                var splitlangPrp = langPrp.split('-');
+                var newContentPrp = "<p class='mb-0 text-muted fs-10 mt-5'>" + (splitlangPrp[0] || '') + ": <span class=''>" + __currency_trans_from_en(data.total_purchase_return, true) + "</span><br>" + (splitlangPrp[1] || '') + ": <span class=''>" + __currency_trans_from_en(data.total_purchase_return_paid, true) + "</span></p>";
+                $('#total_prp').attr('data-content', newContentPrp);
+            }
 
         },
     });

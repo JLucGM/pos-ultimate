@@ -1,5 +1,12 @@
 <script type="text/javascript">
     base_path = "{{ url('/') }}";
+    window.Laravel = { csrfToken: '{{ csrf_token() }}' };
+    if (!document.querySelector('meta[name="csrf-token"]')) {
+        var meta = document.createElement('meta');
+        meta.name = "csrf-token";
+        meta.content = "{{ csrf_token() }}";
+        document.head.appendChild(meta);
+    }
     //used for push notification
     APP = {};
     APP.PUSHER_APP_KEY = '{{ config('broadcasting.connections.pusher.key') }}';
