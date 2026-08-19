@@ -129,7 +129,7 @@
                     Selecciona tu Método de Pago:
                 </h4>
 
-				<div class="list-group" style="box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-radius: 12px; overflow: hidden;">
+				<div class="list-group" style="box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-radius: 12px;">
 					@foreach($gateways as $k => $v)
 						<div class="list-group-item" style="padding: 16px 20px; border-color: #E2E8F0;">
 							<div class="row" id="paymentdiv_{{$k}}">
@@ -145,4 +145,27 @@
         </div>
     </div>
 </section>
+@endsection
+
+@section('javascript')
+<script type="text/javascript">
+$(document).ready(function() {
+    // Mover todos los modales directamente a <body> para evitar conflictos de stacking context, z-index y parpadeo al pasar el cursor
+    $('.modal').each(function() {
+        $(this).appendTo('body');
+    });
+});
+</script>
+<style>
+.modal {
+    z-index: 1050 !important;
+}
+.modal-backdrop {
+    z-index: 1040 !important;
+}
+.modal-dialog {
+    z-index: 1055 !important;
+    position: relative;
+}
+</style>
 @endsection

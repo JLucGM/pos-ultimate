@@ -41,7 +41,7 @@
 </div>
 
 <!-- Modal Reporte Zelle -->
-<div class="modal fade" id="zelleModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="zelleModal" role="dialog">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content" style="border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
             <form action="{{ action([\Modules\Superadmin\Http\Controllers\SubscriptionController::class, 'confirm'], [$package->id]) }}" method="POST">

@@ -53,7 +53,7 @@
 </div>
 
 <!-- Modal Reporte Pago Móvil -->
-<div class="modal fade" id="pagoMovilModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="pagoMovilModal" role="dialog">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content" style="border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
             <form action="{{ action([\Modules\Superadmin\Http\Controllers\SubscriptionController::class, 'confirm'], [$package->id]) }}" method="POST">
