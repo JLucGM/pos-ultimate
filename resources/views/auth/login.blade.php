@@ -178,7 +178,7 @@
                             autocomplete="current-password"
                         >
                         <i class="fas fa-lock auth-field-icon"></i>
-                        <button type="button" class="auth-toggle-pwd" id="show_hide_icon" title="Mostrar/Ocultar contraseña" tabindex="-1">
+                        <button type="button" class="auth-toggle-pwd" id="show_hide_icon" onclick="togglePasswordVisibility()" title="Mostrar/Ocultar contraseña" tabindex="-1">
                             <i class="fas fa-eye" id="eye_icon"></i>
                         </button>
                     </div>
@@ -244,19 +244,30 @@
 
 @section('javascript')
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('#show_hide_icon').on('click', function(e) {
-            e.preventDefault();
-            const passwordInput = $('#password');
-            const icon = $(this).find('i');
+    function togglePasswordVisibility() {
+        var passwordInput = document.getElementById('password');
+        var icon = document.getElementById('eye_icon');
+        if (!passwordInput) return;
 
-            if (passwordInput.attr('type') === 'password') {
-                passwordInput.attr('type', 'text');
-                icon.removeClass('fa-eye').addClass('fa-eye-slash');
-            } else {
-                passwordInput.attr('type', 'password');
-                icon.removeClass('fa-eye-slash').addClass('fa-eye');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            if (icon) {
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
             }
+        } else {
+            passwordInput.type = 'password';
+            if (icon) {
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    }
+
+    $(document).ready(function() {
+        $(document).on('click', '#show_hide_icon', function(e) {
+            e.preventDefault();
+            togglePasswordVisibility();
         });
 
         $('.change_lang').click(function() {

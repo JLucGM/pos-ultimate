@@ -384,7 +384,7 @@ body.auth-body {
     background: rgba(19, 27, 49, 0.7) !important;
     border: 1px solid var(--auth-border) !important;
     border-radius: var(--auth-radius-md) !important;
-    padding: 0 18px 0 48px !important;
+    padding: 0 48px 0 48px !important;
     font-size: 15px !important;
     font-weight: 500 !important;
     color: #FFFFFF !important;
@@ -410,17 +410,25 @@ body.auth-body {
 
 .auth-toggle-pwd {
     position: absolute;
-    right: 16px;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
     background: none;
     border: none;
     color: var(--auth-text-dim);
     cursor: pointer;
     font-size: 16px;
-    padding: 4px;
+    padding: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: color 0.2s ease;
+    z-index: 20;
+    pointer-events: auto;
+}
+
+.auth-toggle-pwd i {
+    pointer-events: none;
 }
 
 .auth-toggle-pwd:hover {
