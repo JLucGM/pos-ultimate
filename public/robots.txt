@@ -1,12 +1,10 @@
-# robots.txt para Audaz POS
-# https://audaz.site/robots.txt
+# robots.txt para Kubre (kubre.site)
+# https://kubre.site/robots.txt
 
 User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /api/
-Disallow: /login
-Disallow: /register
 Disallow: /password/
 Disallow: /home
 Disallow: /dashboard
@@ -17,31 +15,30 @@ Disallow: /products/
 Disallow: /contacts/
 Disallow: /reports/
 Disallow: /settings/
+Disallow: /superadmin/
 
-# Allow important pages
+# Páginas Públicas Principales
 Allow: /
 Allow: /pricing
-Allow: /features
-Allow: /contact
+Allow: /soluciones/
+Allow: /login
+Allow: /business/register
 
 # Sitemap
-Sitemap: https://audaz.site/sitemap.xml
+Sitemap: https://kubre.site/sitemap.xml
 
 # Crawl-delay
-Crawl-delay: 10
+Crawl-delay: 5
 
-# Specific bots
+# Bots de Motores de Búsqueda
 User-agent: Googlebot
 Allow: /
+Disallow: /pos/
 Disallow: /admin/
-Disallow: /api/
+Disallow: /superadmin/
 
 User-agent: Bingbot
 Allow: /
+Disallow: /pos/
 Disallow: /admin/
-Disallow: /api/
-
-User-agent: Slurp
-Allow: /
-Disallow: /admin/
-Disallow: /api/
+Disallow: /superadmin/

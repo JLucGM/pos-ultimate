@@ -1,5 +1,7 @@
 @extends('superadmin::layouts.landing')
 @section('title', 'Kubre | Sistema de Gestión Comercial y Punto de Venta en la Nube')
+@section('meta_description', 'Descubre Kubre: software POS y gestión en la nube con ventas rápidas, inventario multialmacén, control de caja y tasas de cambio en tiempo real. 14 días de prueba gratis.')
+@section('meta_keywords', 'software pos venezuela, sistema punto de venta, inventario en la nube, facturacion multimoneda, kubre pos, pos restaurantes, pos retail')
 
 @section('content')
 <!-- Hero Section -->

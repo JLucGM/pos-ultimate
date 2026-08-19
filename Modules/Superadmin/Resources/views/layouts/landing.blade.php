@@ -1,10 +1,49 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Kubre | Sistema de Gestión Comercial y POS')</title>
+    
+    <!-- Metatítulo y Metadescripción SEO -->
+    <title>@yield('title', 'Kubre | Sistema de Gestión Comercial y Punto de Venta en la Nube')</title>
+    <meta name="description" content="@yield('meta_description', 'Kubre es el software de punto de venta y gestión comercial en la nube para controlar ventas, inventario multialmacén, facturación y tasas de cambio en tiempo real.')">
+    <meta name="keywords" content="@yield('meta_keywords', 'sistema pos venezuela, software punto de venta, control de inventario, facturacion multimoneda, kubre pos, software restaurantes, software retail, software mayoristas')">
+    <meta name="author" content="Kubre">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Kubre">
+    <meta property="og:title" content="@yield('title', 'Kubre | Sistema de Gestión Comercial y POS')">
+    <meta property="og:description" content="@yield('meta_description', 'Kubre es la solución integral en la nube para potenciar tu negocio con control de inventario, ventas y facturación multimoneda.')">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="{{ asset('images/logo.svg') }}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('title', 'Kubre | Sistema de Gestión Comercial y POS')">
+    <meta name="twitter:description" content="@yield('meta_description', 'Kubre es la solución integral en la nube para potenciar tu negocio con control de inventario, ventas y facturación multimoneda.')">
+    <meta name="twitter:image" content="{{ asset('images/logo.svg') }}">
+
+    <!-- JSON-LD Structured Data Schema.org -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Kubre",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web, Cloud, iOS, Android, Windows, Mac",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Prueba gratis de 14 días sin tarjeta de crédito"
+      },
+      "description": "Sistema de gestión comercial, inventario multialmacén y punto de venta en la nube con dualidad multimoneda.",
+      "url": "https://kubre.site"
+    }
+    </script>
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
@@ -127,6 +166,11 @@
                         <a href="#"><i class="fab fa-twitter"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
                         <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                    <div style="margin-top: 18px;">
+                        <button type="button" onclick="shareKubre()" class="btn btn-sm btn-outline-white" style="border-radius: 20px; font-size: 13px; font-weight: 700; padding: 7px 18px; display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18); color: #FFFFFF; cursor: pointer; transition: all 0.25s ease;">
+                            <i class="fas fa-share-alt" style="color: #FB4C0A;"></i> Compartir Kubre
+                        </button>
                     </div>
                 </div>
 
@@ -436,6 +480,29 @@
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Solicitud';
             });
         });
+
+        // Función inteligente para Compartir Kubre (Web Share API + Copia al portapapeles)
+        window.shareKubre = function() {
+            var shareData = {
+                title: 'Kubre | Sistema de Gestión Comercial y Punto de Venta',
+                text: 'Te recomiendo Kubre: software en la nube para ventas, inventario multialmacén y facturación multimoneda con prueba gratis de 14 días.',
+                url: window.location.origin
+            };
+
+            if (navigator.share) {
+                navigator.share(shareData).catch(function(err) {
+                    // Compartir cancelado por el usuario
+                });
+            } else {
+                var dummy = document.createElement('input');
+                document.body.appendChild(dummy);
+                dummy.value = window.location.origin;
+                dummy.select();
+                document.execCommand('copy');
+                document.body.removeChild(dummy);
+                alert('¡Enlace copiado al portapapeles! Ya puedes pegarlo y compartirlo por WhatsApp, redes o correo.');
+            }
+        };
     </script>
 </body>
 </html>
