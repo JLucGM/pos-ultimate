@@ -337,12 +337,27 @@
                 }
             });
             $(document).on('click', '.force_activate_now', function(e) {
-
                 e.preventDefault();
                 swal({
-                    title: 'This will End your current plan and activate this plan from today. Do you want to continue?',
+                    title: '¿Deseas activar este plan ahora?',
+                    text: 'Esto finalizará tu plan actual y activará este nuevo plan a partir de hoy. ¿Deseas continuar?',
                     icon: "warning",
-                    buttons: true,
+                    buttons: {
+                        cancel: {
+                            text: "Cancelar",
+                            value: null,
+                            visible: true,
+                            className: "btn btn-default",
+                            closeModal: true,
+                        },
+                        confirm: {
+                            text: "Sí, activar ahora",
+                            value: true,
+                            visible: true,
+                            className: "btn btn-primary",
+                            closeModal: true
+                        }
+                    },
                     dangerMode: true,
                 }).then((willActive) => {
                     if (willActive) {
@@ -353,10 +368,10 @@
                             dataType: "json",
                             success: function(result) {
                                 if (result.success == true) {
-                                    toastr.success(result.msg);
+                                    toastr.success(result.msg || 'Plan activado con éxito');
                                     location.reload();
                                 } else {
-                                    toastr.error(result.msg);
+                                    toastr.error(result.msg || 'No se pudo activar el plan');
                                 }
                             }
                         });
