@@ -140,10 +140,29 @@ class SuperadminSettingsController extends Controller
                 return back()->with('status', $output);
             }
 
-            $system_settings = $request->only(['app_currency_id', 'invoice_business_name', 'email', 'invoice_business_landmark', 'invoice_business_zip', 'invoice_business_state', 'invoice_business_city', 'invoice_business_country', 'package_expiry_alert_days', 'superadmin_register_tc', 'welcome_email_subject', 'welcome_email_body', 'additional_js', 'additional_css', 'offline_payment_details']);
+            $system_settings = $request->only([
+                'app_currency_id', 'invoice_business_name', 'email', 'invoice_business_landmark', 
+                'invoice_business_zip', 'invoice_business_state', 'invoice_business_city', 'invoice_business_country', 
+                'package_expiry_alert_days', 'superadmin_register_tc', 'welcome_email_subject', 'welcome_email_body', 
+                'additional_js', 'additional_css', 'offline_payment_details',
+                // Pago Móvil
+                'pagomovil_bank', 'pagomovil_phone', 'pagomovil_id_doc', 'pagomovil_holder',
+                // Transferencia Bancaria
+                'bank_transfer_bank', 'bank_transfer_account', 'bank_transfer_type', 'bank_transfer_holder', 'bank_transfer_id_doc',
+                // Zelle
+                'zelle_email', 'zelle_holder',
+                // Binance Pay
+                'binance_pay_id', 'binance_email', 'binance_network',
+                // PayPal
+                'paypal_email', 'paypal_me_url'
+            ]);
 
             //Checkboxes
-            $checkboxes = ['enable_business_based_username', 'superadmin_enable_register_tc', 'allow_email_settings_to_businesses', 'enable_new_business_registration_notification', 'enable_new_subscription_notification', 'enable_welcome_email', 'enable_offline_payment'];
+            $checkboxes = [
+                'enable_business_based_username', 'superadmin_enable_register_tc', 'allow_email_settings_to_businesses', 
+                'enable_new_business_registration_notification', 'enable_new_subscription_notification', 'enable_welcome_email', 
+                'enable_offline_payment', 'enable_pagomovil', 'enable_bank_transfer', 'enable_zelle', 'enable_binance', 'enable_paypal'
+            ];
             $input = $request->input();
             foreach ($checkboxes as $checkbox) {
                 $system_settings[$checkbox] = ! empty($input[$checkbox]) ? 1 : 0;
@@ -153,7 +172,7 @@ class SuperadminSettingsController extends Controller
                 System::updateOrCreate(
                     ['key' => $key],
                     ['value' => $setting]
-                            );
+                );
             }
 
             $env_settings = $request->only(['APP_NAME', 'APP_TITLE',

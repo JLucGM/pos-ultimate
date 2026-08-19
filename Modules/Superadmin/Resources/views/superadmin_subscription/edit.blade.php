@@ -26,8 +26,18 @@
                         <div><strong>Referencia:</strong> <span class="badge bg-purple">{{ $offline_info['reference_no'] ?? $subscription->payment_transaction_id }}</span></div>
                         <div><strong>Monto Reportado:</strong> <strong style="color: #10B981;">{{ $offline_info['amount_paid'] ?? '' }} {{ $offline_info['currency'] ?? '' }}</strong></div>
                         <div><strong>Fecha de Pago:</strong> {{ $offline_info['paid_on'] ?? '' }}</div>
-                        <div><strong>Banco Emisor:</strong> {{ $offline_info['bank_name'] ?? 'N/A' }}</div>
-                        <div><strong>Teléfono:</strong> {{ $offline_info['phone_number'] ?? 'N/A' }}</div>
+                        @if(!empty($offline_info['bank_name']))
+                            <div><strong>Banco Emisor:</strong> {{ $offline_info['bank_name'] }}</div>
+                        @endif
+                        @if(!empty($offline_info['phone_number']))
+                            <div><strong>Teléfono:</strong> {{ $offline_info['phone_number'] }}</div>
+                        @endif
+                        @if(!empty($offline_info['holder_name']))
+                            <div><strong>Titular Emisor:</strong> {{ $offline_info['holder_name'] }}</div>
+                        @endif
+                        @if(!empty($offline_info['email_account']))
+                            <div><strong>Cuenta/Email:</strong> {{ $offline_info['email_account'] }}</div>
+                        @endif
                         @if(!empty($offline_info['payment_note']))
                             <div style="grid-column: span 2; margin-top: 4px; padding-top: 6px; border-top: 1px dashed #CBD5E1;">
                                 <strong>Observaciones:</strong> <em>{{ $offline_info['payment_note'] }}</em>

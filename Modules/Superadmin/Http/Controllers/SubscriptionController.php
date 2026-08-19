@@ -318,15 +318,27 @@ class SubscriptionController extends BaseController
             }
 
             $custom_package_details = [];
-            if ($request->gateway == 'offline') {
+            $manual_gateways = ['offline', 'pagomovil', 'bank_transfer', 'zelle', 'binance', 'paypal'];
+            if (in_array($request->gateway, $manual_gateways)) {
+                $method_names = [
+                    'pagomovil' => 'Pago Móvil (VES)',
+                    'bank_transfer' => 'Transferencia Bancaria Nacional',
+                    'zelle' => 'Zelle (USD)',
+                    'binance' => 'Binance Pay / USDT',
+                    'paypal' => 'PayPal',
+                    'offline' => 'Pago Manual / Offline',
+                ];
+
                 $custom_package_details['offline_payment_info'] = [
                     'reference_no'   => $request->input('reference_no'),
                     'amount_paid'    => $request->input('amount_paid'),
-                    'currency'       => $request->input('currency', 'VES'),
+                    'currency'       => $request->input('currency', ($request->gateway == 'pagomovil' ? 'VES' : 'USD')),
                     'paid_on'        => $request->input('paid_on', \Carbon\Carbon::today()->toDateString()),
                     'phone_number'   => $request->input('phone_number'),
                     'bank_name'      => $request->input('bank_name'),
-                    'payment_method' => $request->input('payment_method', 'Pago Móvil / Transferencia'),
+                    'holder_name'    => $request->input('holder_name'),
+                    'email_account'  => $request->input('email_account'),
+                    'payment_method' => $method_names[$request->gateway] ?? $request->gateway,
                     'payment_note'   => $request->input('payment_note'),
                 ];
             }
@@ -346,8 +358,8 @@ class SubscriptionController extends BaseController
             DB::commit();
 
             $msg = __('lang_v1.success');
-            if (request()->gateway == 'offline') {
-                $msg = 'Tu reporte de pago ha sido enviado con éxito. El administrador verificará la transferencia y activará tu plan en breve.';
+            if (in_array(request()->gateway, $manual_gateways)) {
+                $msg = 'Tu reporte de pago ha sido enviado con éxito. El administrador verificará los fondos y activará tu plan en breve.';
             }
             $output = ['success' => 1, 'msg' => $msg];
         } catch (\Exception $e) {
@@ -469,6 +481,31 @@ class SubscriptionController extends BaseController
             ->notify(new SubscriptionOfflinePaymentActivationConfirmation($business, $package, $offline_details));
 
         return $request->input('reference_no');
+    }
+
+    protected function pay_pagomovil($business_id, $business_name, $package, $request)
+    {
+        return $this->pay_offline($business_id, $business_name, $package, $request);
+    }
+
+    protected function pay_bank_transfer($business_id, $business_name, $package, $request)
+    {
+        return $this->pay_offline($business_id, $business_name, $package, $request);
+    }
+
+    protected function pay_zelle($business_id, $business_name, $package, $request)
+    {
+        return $this->pay_offline($business_id, $business_name, $package, $request);
+    }
+
+    protected function pay_binance($business_id, $business_name, $package, $request)
+    {
+        return $this->pay_offline($business_id, $business_name, $package, $request);
+    }
+
+    protected function pay_paypal($business_id, $business_name, $package, $request)
+    {
+        return $this->pay_offline($business_id, $business_name, $package, $request);
     }
 
 

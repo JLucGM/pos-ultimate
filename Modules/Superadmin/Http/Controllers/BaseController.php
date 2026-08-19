@@ -20,46 +20,34 @@ class BaseController extends Controller
     {
         $gateways = [];
 
-        //Check if stripe is configured or not
-        if (env('STRIPE_PUB_KEY') && env('STRIPE_SECRET_KEY')) {
-            $gateways['stripe'] = 'Stripe';
+        // 1. Pago Móvil (VES Bs.)
+        $enable_pagomovil = System::getProperty('enable_pagomovil');
+        if ($enable_pagomovil === null || $enable_pagomovil == 1) {
+            $gateways['pagomovil'] = 'Pago Móvil (VES Bs.)';
         }
 
-        //Check if paypal is configured or not
-        if (env('PAYPAL_CLIENT_ID') && env('PAYPAL_APP_SECRET')) {
+        // 2. Transferencia Bancaria Nacional (VES / USD)
+        $enable_bank_transfer = System::getProperty('enable_bank_transfer');
+        if ($enable_bank_transfer === null || $enable_bank_transfer == 1) {
+            $gateways['bank_transfer'] = 'Transferencia Bancaria Nacional';
+        }
+
+        // 3. Zelle (USD)
+        $enable_zelle = System::getProperty('enable_zelle');
+        if ($enable_zelle === null || $enable_zelle == 1) {
+            $gateways['zelle'] = 'Zelle (Dólares USD)';
+        }
+
+        // 4. Binance Pay / USDT
+        $enable_binance = System::getProperty('enable_binance');
+        if ($enable_binance === null || $enable_binance == 1) {
+            $gateways['binance'] = 'Binance Pay / USDT';
+        }
+
+        // 5. PayPal (USD)
+        $enable_paypal = System::getProperty('enable_paypal');
+        if ($enable_paypal === null || $enable_paypal == 1) {
             $gateways['paypal'] = 'PayPal';
-        }
-
-        //Check if Razorpay is configured or not
-        if ((env('RAZORPAY_KEY_ID') && env('RAZORPAY_KEY_SECRET'))) {
-            $gateways['razorpay'] = 'Razor Pay';
-        }
-
-        //Check if Pesapal is configured or not
-        if ((config('pesapal.consumer_key') && config('pesapal.consumer_secret'))) {
-            $gateways['pesapal'] = 'PesaPal';
-        }
-
-        //check if Paystack is configured or not
-        $system = System::getCurrency();
-        if (in_array($system->country, ['Nigeria', 'Ghana']) && (config('paystack.publicKey') && config('paystack.secretKey'))) {
-            $gateways['paystack'] = 'Paystack';
-        }
-
-        //check if Flutterwave is configured or not
-        if (env('FLUTTERWAVE_PUBLIC_KEY') && env('FLUTTERWAVE_SECRET_KEY') && env('FLUTTERWAVE_ENCRYPTION_KEY')) {
-            $gateways['flutterwave'] = 'Flutterwave';
-        }
-
-         //check if MY FATOORAH is configured or not
-        if (env('MY_FATOORAH_API_KEY') && env('MY_FATOORAH_COUNTRY_ISO')) {
-            $gateways['myfatoorah'] = 'My Fatoorah';
-        }
-        // check if offline payment is enabled or not
-        $is_offline_payment_enabled = System::getProperty('enable_offline_payment');
-
-        if ($is_offline_payment_enabled) {
-            $gateways['offline'] = 'Offline';
         }
 
         return $gateways;
@@ -82,8 +70,9 @@ class BaseController extends Controller
             'payment_transaction_id' => $payment_transaction_id,
         ];
 
-        if ($package->price != 0 && (in_array($gateway, ['offline', 'pesapal']) && ! $is_superadmin)) {
-            //If offline then dates will be decided when approved by superadmin
+        $manual_gateways = ['offline', 'pagomovil', 'bank_transfer', 'zelle', 'binance', 'paypal'];
+        if ($package->price != 0 && (in_array($gateway, $manual_gateways) && ! $is_superadmin)) {
+            //If offline/manual report then dates will be decided when approved by superadmin
             $subscription['start_date'] = null;
             $subscription['end_date'] = null;
             $subscription['trial_end_date'] = null;
