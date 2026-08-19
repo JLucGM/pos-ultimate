@@ -226,11 +226,14 @@ class SubscriptionController extends BaseController
                                 $coupon_status = ['status' => 'danger', 'msg' => __('superadmin::lang.coupon_not_matched_with_business')];
                             }
                             //  check expiry date
-                           else if (Carbon::parse($current_date)->greaterThanOrEqualTo($coupon->expiry_date) && !is_null($coupon->expiry_date)) {
+                            else if (Carbon::parse($current_date)->greaterThanOrEqualTo($coupon->expiry_date) && !is_null($coupon->expiry_date)) {
 
                                 $coupon_status = ['status' => 'danger', 'msg' => __('superadmin::lang.coupon_expired')];
                             }
                     }
+                }
+            }
+
             // Obtener tasa BCV oficial para dualidad USD / Bs
             $bcv_rate = 1;
             try {
