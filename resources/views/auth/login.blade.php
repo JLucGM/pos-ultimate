@@ -49,7 +49,7 @@
         <div class="auth-brand-main-content">
             <div class="auth-pill-live">
                 <span class="auth-live-dot"></span>
-                <span>Tecnología POS en Tiempo Real</span>
+                <span>Tecnología en Tiempo Real</span>
             </div>
 
             <h1 class="auth-hero-title">
@@ -66,7 +66,7 @@
                         <i class="fas fa-bolt"></i>
                     </div>
                     <div class="auth-benefit-text">
-                        <h4>Punto de Venta Ultrarrápido</h4>
+                        <h4>Sistema de Ventas Ultrarrápido</h4>
                         <p>Facturación ágil con soporte offline y múltiples métodos de pago.</p>
                     </div>
                 </div>

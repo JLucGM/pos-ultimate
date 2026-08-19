@@ -1307,7 +1307,7 @@
         },
         "description": "Sistema POS completo en la nube para restaurantes, tiendas, consultorios y pequeñas empresas. Control de ventas, inventario, clientes y reportes desde cualquier lugar.",
         "featureList": [
-            "Punto de Venta Rápido",
+            "Sistema de Ventas Rápido",
             "Control de Inventario",
             "Gestión de Citas",
             "Reportes Inteligentes",

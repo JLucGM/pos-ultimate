@@ -115,7 +115,7 @@
                 <div class="feature-icon-modern bg-gradient-blue">
                     <i class="fas fa-cash-register"></i>
                 </div>
-                <h3>Punto de Venta Rápido</h3>
+                <h3>Sistema de Ventas Rápido</h3>
                 <p>Procesa ventas en segundos con nuestra interfaz intuitiva. Soporte para múltiples métodos de pago y descuentos.</p>
                 <a href="#" class="feature-link">
                     Conocer más <i class="fas fa-arrow-right"></i>

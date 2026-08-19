@@ -51,7 +51,7 @@
             </div>
             <div class="floating-card card-2">
                 <i class="fas fa-bolt" style="color: #6366F1;"></i>
-                <span>Punto de Venta Rápido</span>
+                <span>Sistema de Venta Rápido</span>
             </div>
             <div class="floating-card card-3">
                 <i class="fas fa-boxes" style="color: #F59E0B;"></i>
@@ -282,7 +282,7 @@
                 <div class="feature-icon bg-blue">
                     <i class="fas fa-cash-register"></i>
                 </div>
-                <h3>Punto de Venta Rápido</h3>
+                <h3>Sistema de Ventas Rápido</h3>
                 <p>Interfaz intuitiva para procesar ventas en segundos. Soporte para múltiples métodos de pago.</p>
             </div>
 
@@ -338,7 +338,7 @@
             </div>
             <div class="benefits-text" data-aos="fade-left">
                 <span class="section-badge">Beneficios</span>
-                <h2>¿Por Qué Elegir Nuestro Sistema POS?</h2>
+                <h2>¿Por Qué Elegir Kubre?</h2>
                 <ul class="benefits-list">
                     <li>
                         <i class="fas fa-check-circle"></i>

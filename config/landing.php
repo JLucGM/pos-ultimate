@@ -70,7 +70,7 @@ return [
         [
             'icon' => 'fas fa-cash-register',
             'color' => 'blue',
-            'title' => 'Punto de Venta Rápido',
+            'title' => 'Sistema de Ventas Rápido',
             'description' => 'Interfaz intuitiva para procesar ventas en segundos. Soporte para múltiples métodos de pago.',
         ],
         [
