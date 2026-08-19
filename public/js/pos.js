@@ -2996,7 +2996,14 @@ function submitQuickContactForm(form) {
                     .val(result.data.id)
                     .trigger('change');
                 $('div.contact_modal').modal('hide');
-                update_shipping_address(result.data)
+                update_shipping_address(result.data);
+                if (result.data.pay_term_number) {
+                    $('input#pay_term_number').val(result.data.pay_term_number);
+                }
+                if (result.data.pay_term_type) {
+                    $('#add_sell_form select[name="pay_term_type"]').val(result.data.pay_term_type);
+                    $('#edit_sell_form select[name="pay_term_type"]').val(result.data.pay_term_type);
+                }
                 toastr.success(result.msg);
             } else {
                 toastr.error(result.msg);

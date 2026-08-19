@@ -218,30 +218,10 @@
 						<input type="hidden" id="disable_qty_alert">
 					@endif
 				@else
-					<div class="@if(!empty($commission_agent)) col-sm-3 @else col-sm-4 @endif">
-						<div class="form-group">
-							{!! Form::label('status', __('sale.status') . ':*') !!}
-							{!! Form::select('status', $statuses, null, ['class' => 'form-control select2', 'placeholder' => __('messages.please_select'), 'required']); !!}
-						</div>
-					</div>
+					<input type="hidden" name="status" id="status" value="final">
 				@endif
-				@if($sale_type != 'sales_order')
-					<div class="col-sm-3">
-						<div class="form-group">
-							{!! Form::label('invoice_scheme_id', __('invoice.invoice_scheme') . ':') !!}
-							{!! Form::select('invoice_scheme_id', $invoice_schemes, $default_invoice_schemes->id, ['class' => 'form-control select2', 'placeholder' => __('messages.please_select')]); !!}
-						</div>
-					</div>
-				@endif
-					@can('edit_invoice_number')
-					<div class="col-sm-3">
-						<div class="form-group">
-							{!! Form::label('invoice_no', $sale_type == 'sales_order' ? __('restaurant.order_no') : __('sale.invoice_no') . ':') !!}
-							{!! Form::text('invoice_no', null, ['class' => 'form-control', 'placeholder' => $sale_type == 'sales_order' ? __('restaurant.order_no') : __('sale.invoice_no')]); !!}
-							<p class="help-block">@lang('lang_v1.keep_blank_to_autogenerate')</p>
-						</div>
-					</div>
-					@endcan
+
+				{!! Form::hidden('invoice_scheme_id', $default_invoice_schemes->id ?? null, ['id' => 'invoice_scheme_id']) !!}
 				
 				@php
 			        $custom_field_1_label = !empty($custom_labels['sell']['custom_field_1']) ? $custom_labels['sell']['custom_field_1'] : '';
@@ -320,16 +300,6 @@
 				        </div>
 				    </div>
 		        @endif
-		        <div class="col-sm-3">
-	                <div class="form-group">
-	                    {!! Form::label('upload_document', __('purchase.attach_document') . ':') !!}
-	                    {!! Form::file('sell_document', ['id' => 'upload_document', 'accept' => implode(',', array_keys(config('constants.document_upload_mimes_types')))]); !!}
-	                    <p class="help-block">
-	                    	@lang('purchase.max_file_size', ['size' => (config('constants.document_size_limit') / 1000000)])
-	                    	@includeIf('components.document_help_text')
-	                    </p>
-	                </div>
-	            </div>
 		        <div class="clearfix"></div>
 
 		        @if((!empty($pos_settings['enable_sales_order']) && $sale_type != 'sales_order') || $is_order_request_enabled)
@@ -932,6 +902,14 @@
     				$('#payment_rows_div').addClass('hide');
     			}
     		});
+    		if ($('#transaction_date').length) {
+    			if ($('#transaction_date').data('DateTimePicker')) {
+    				$('#transaction_date').data('DateTimePicker').destroy();
+    			}
+    			$('#transaction_date').on('focus mousedown click', function(e) {
+    				$(this).blur();
+    			});
+    		}
     		$('.paid_on').datetimepicker({
                 format: moment_date_format + ' ' + moment_time_format,
                 ignoreReadonly: true,

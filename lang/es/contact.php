@@ -19,7 +19,7 @@
     'add_contact' => 'Agregar un nuevo contacto',
     'contact_type' => 'Tipo de Contacto',
     'tax_no' => 'Número de impuesto',
-    'pay_term' => 'Término de pago',
+    'pay_term' => 'Término de Crédito / Pago',
     'pay_term_period' => 'Periodo de plazo de pago',
     'mobile' => 'Móvil',
     'landline' => 'Línea fija',

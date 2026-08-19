@@ -2,20 +2,20 @@
 
 return [
     'enable_editing_product_from_purchase' => 'Habilitar la edición del precio del Producto desde la pantalla de compra',
-    'sales_commission_agent' => 'Agente comercial', /* modified */
-    'sales_commission_agents' => 'Agentes comerciales', /* modified */
+    'sales_commission_agent' => 'Vendedor', /* modified */
+    'sales_commission_agents' => 'Vendedores', /* modified */
     'disable' => 'Inhabilitar',
     'logged_in_user' => 'Usuario conectado',
     'select_from_users_list' => 'Seleccionar de la lista de usuarios',
-    'select_from_commisssion_agents_list' => 'Seleccione de la lista de agentes comerciales', /* modified */
-    'add_sales_commission_agent' => 'Agregar agente comercial', /* modified */
-    'commission_agent_added_success' => 'Agente comercial agregado con éxito', /* modified */
-    'edit_sales_commission_agent' => 'Editar agente comercial', /* modified */
-    'commission_agent_updated_success' => 'Agente comercial actualizado con éxito', /* modified */
-    'commission_agent_deleted_success' => 'Agente comercial eliminado con éxito', /* modified */
+    'select_from_commisssion_agents_list' => 'Seleccione de la lista de vendedores', /* modified */
+    'add_sales_commission_agent' => 'Agregar vendedor', /* modified */
+    'commission_agent_added_success' => 'Vendedor agregado con éxito', /* modified */
+    'edit_sales_commission_agent' => 'Editar vendedor', /* modified */
+    'commission_agent_updated_success' => 'Vendedor actualizado con éxito', /* modified */
+    'commission_agent_deleted_success' => 'Vendedor eliminado con éxito', /* modified */
     'contact_no' => 'Contacto No.',
-    'commission_agent' => 'Comisionista',
-    'cmmsn_percent' => 'Porcentaje de la Comisión de Ventas (%)',
+    'commission_agent' => 'Vendedor',
+    'cmmsn_percent' => 'Porcentaje de Comisión (%)',
     'sales_added' => 'Ventas agregadas',
     'sales_with_commission' => 'Ventas con comisión',
     //"total_sale_with_commission" => "Venta total con comisión",
@@ -305,7 +305,7 @@ return [
     'client_tax_label' => 'Etiqueta de número de impuesto de cliente',
     'cat_code_label' => 'Categoría o etiqueta de código HSN',
     'list_sell_return' => 'Devoluciones',
-    'sell_return' => 'Vender el regreso',
+    'sell_return' => 'Devoluciones',
     'layout_credit_note' => 'Nota de crédito / detalles de devolución de venta',
     'cn_heading' => 'Título',
     'cn_no_label' => 'Número de referencia',
@@ -484,7 +484,7 @@ return [
     'all_purchase_returns' => 'Todas las devoluciones de compra',
     'parent_purchase' => 'Compra de padres',
     'purchase_return_details' => 'Detalles de devolución de compra',
-    'return_date' => 'Fecha de regreso',
+    'return_date' => 'Fecha de devolución',
     'parent_sale' => 'Venta de padres',
     'sell_quantity' => 'Cantidad de venta',
     'total_return_discount' => 'Descuento por devolución total',
@@ -508,7 +508,7 @@ return [
     'card_number' => 'Número de tarjeta',
     'card_transaction_number' => 'No. de transacción con tarjeta',
     'cheque_number' => 'Número de chequeo',
-    'commsn_percent_help' => 'Solo se utiliza si la configuración del tipo de agente de la comisión de ventas es: Usuario registrado o Seleccionar de la lista de usuarios',
+    'commsn_percent_help' => 'Solo se utiliza si la configuración del tipo de vendedor es: Usuario registrado o Seleccionar de la lista de usuarios',
     'max_amount_to_be_paid_is' => 'La cantidad máxima a pagar es: cantidad',
     'adjusted_for' => 'Ajustado para',
     'some_qty_returned' => 'Algunas cantidades se devuelven de esta compra',
@@ -520,13 +520,13 @@ return [
     'total_purchase_return_due' => 'Total de devoluciones de compra vencidas',
     'receive_purchase_return_due' => 'Recibir la devolución de la compra vencida',
     'some_qty_returned_from_sell' => 'Algunas cantidades se devuelven de esta venta',
-    'sell_due' => 'Vendedor',
-    'sell_return_due' => 'Vender devolución vencida',
+    'sell_due' => 'Venta pendiente / debida',
+    'sell_return_due' => 'Devolución de venta vencida',
     'total_sell_return_due' => 'Total de devolución de venta vencida',
-    'pay_sell_return_due' => 'Pago Vuelta Devolución Vencimiento',
-    'total_sell_return' => 'Total de devolución de venta',
-    'total_sell_return_paid' => 'Total de devolución de venta pagada',
-    'total_sell_return_inc_tax' => 'Total de devolución de venta incluyendo impuestos',
+    'pay_sell_return_due' => 'Pagar devolución vencida',
+    'total_sell_return' => 'Total de devoluciones',
+    'total_sell_return_paid' => 'Total devoluciones pagadas',
+    'total_sell_return_inc_tax' => 'Total de devoluciones incluyendo impuestos',
     'tooltip_columnize_taxes_heading' => 'Introduzca el nombre de impuesto para los encabezados, el encabezado debe estar presente en el nombre de impuesto. Por ejemplo, los encabezados pueden ser: CGST, SGST, IGST y CESS. Para los nombres de impuestos CGST@8% o CGST@10%; SGST @ 10% o SGST@8% etc ',
     'sales_payment_dues' => 'Pago de ventas vencido',
     'purchase_payment_dues' => 'Pago de Compra Vencido',
