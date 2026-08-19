@@ -239,28 +239,41 @@ class BusinessController extends Controller
                 }
 
                 if ($trial_package) {
+                    $has_trial = (int)$trial_package->trial_days > 0;
+                    $trial_days = $has_trial ? (int)$trial_package->trial_days : 0;
                     $start_date = \Carbon\Carbon::today();
-                    $trial_days = $trial_package->trial_days > 0 ? $trial_package->trial_days : 14;
-                    $trial_end = $start_date->copy()->addDays($trial_days);
+                    $end_date = $has_trial ? $start_date->copy()->addDays($trial_days) : null;
+
+                    $package_details = [
+                        'location_count' => $trial_package->location_count,
+                        'user_count'     => $trial_package->user_count,
+                        'product_count'  => $trial_package->product_count,
+                        'invoice_count'  => $trial_package->invoice_count,
+                        'name'           => $trial_package->name . ($has_trial ? ' (Prueba ' . $trial_days . ' días)' : ''),
+                        'bookings'       => $trial_package->bookings ?? 0,
+                        'kitchen'        => $trial_package->kitchen ?? 0,
+                        'order_screen'   => $trial_package->order_screen ?? 0,
+                        'tables'         => $trial_package->tables ?? 0,
+                    ];
+
+                    if (! empty($trial_package->custom_permissions)) {
+                        foreach ($trial_package->custom_permissions as $name => $value) {
+                            $package_details[$name] = $value;
+                        }
+                    }
 
                     \Modules\Superadmin\Entities\Subscription::create([
                         'business_id'    => $business->id,
                         'package_id'     => $trial_package->id,
-                        'start_date'     => $start_date->toDateString(),
-                        'trial_end_date' => $trial_end->toDateString(),
-                        'end_date'       => $trial_end->toDateString(),
-                        'package_price'  => 0,
+                        'start_date'     => $has_trial ? $start_date->toDateString() : null,
+                        'trial_end_date' => $has_trial ? $end_date->toDateString() : null,
+                        'end_date'       => $has_trial ? $end_date->toDateString() : null,
+                        'package_price'  => $has_trial ? 0 : $trial_package->price,
                         'original_price' => $trial_package->price,
-                        'package_details' => [
-                            'location_count' => $trial_package->location_count,
-                            'user_count'     => $trial_package->user_count,
-                            'product_count'  => $trial_package->product_count,
-                            'invoice_count'  => $trial_package->invoice_count,
-                            'name'           => $trial_package->name . ' (Prueba ' . $trial_days . ' días)',
-                        ],
+                        'package_details' => $package_details,
                         'created_id'     => $user->id,
-                        'paid_via'       => 'trial',
-                        'status'         => 'approved',
+                        'paid_via'       => $has_trial ? 'trial' : 'offline',
+                        'status'         => $has_trial ? 'approved' : 'waiting',
                     ]);
                 }
             }
