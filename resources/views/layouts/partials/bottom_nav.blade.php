@@ -20,6 +20,8 @@
     $can_create_so = $is_logged_in && ($is_admin || ($user && ($user->can('so.create') || $user->can('sell.create') || $user->can('direct_sell.access'))));
     $can_view_so = $is_logged_in && ($is_admin || ($user && ($user->can('so.view_own') || $user->can('so.view_all'))));
     $can_view_sells = $is_logged_in && ($is_admin || ($user && ($user->can('direct_sell.view') || $user->can('view_own_sell_only') || $user->can('sell.view'))));
+    $can_view_customers = $is_logged_in && ($is_admin || ($user && ($user->can('customer.view') || $user->can('customer.view_own') || $user->can('customer.create') || true)));
+    $is_customers_page = request()->is('contacts*') || (request()->segment(1) == 'contacts');
 @endphp
 
 @if ($is_logged_in && !$is_pos_page && request()->segment(1) != 'customer-display')
@@ -82,24 +84,17 @@
             </a>
         @endif
 
-        <!-- 4. Inventario / Productos -->
-        @can('product.view')
-            <a href="{{ action([\App\Http\Controllers\ProductController::class, 'index']) }}" 
-               class="audaz-bottom-nav-item {{ $is_products_page ? 'active' : '' }}">
+        <!-- 4. Clientes -->
+        @if ($can_view_customers)
+            <a href="{{ action([\App\Http\Controllers\ContactController::class, 'index'], ['type' => 'customer']) }}" 
+               class="audaz-bottom-nav-item {{ $is_customers_page ? 'active' : '' }}"
+               title="Mis Clientes">
                 <div class="nav-icon-wrapper">
-                    <i class="fas fa-boxes"></i>
+                    <i class="fas fa-users"></i>
                 </div>
-                <span class="nav-label">Inventario</span>
+                <span class="nav-label">Clientes</span>
             </a>
-        @else
-            <a href="{{ action([\App\Http\Controllers\PurchaseController::class, 'index']) }}" 
-               class="audaz-bottom-nav-item {{ request()->is('purchases*') ? 'active' : '' }}">
-                <div class="nav-icon-wrapper">
-                    <i class="fas fa-shopping-basket"></i>
-                </div>
-                <span class="nav-label">Compras</span>
-            </a>
-        @endcan
+        @endif
 
         <!-- 5. Menú Lateral Toggle -->
         <a href="javascript:void(0);" 

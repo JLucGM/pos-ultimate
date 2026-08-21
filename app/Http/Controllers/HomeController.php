@@ -73,8 +73,10 @@ class HomeController extends Controller
 
         $is_admin = $this->businessUtil->is_admin(auth()->user());
 
-        if (! auth()->user()->can('dashboard.data')) {
-            return view('home.index');
+        $seller_metrics = $this->getSellerDashboardMetrics($business_id, $user->id, $is_admin);
+
+        if (! auth()->user()->can('dashboard.data') && ! $is_admin) {
+            return view('home.index', compact('is_admin', 'seller_metrics'));
         }
 
         $fy = $this->businessUtil->getCurrentFinancialYear($business_id);
@@ -212,7 +214,117 @@ class HomeController extends Controller
         // Datos multimoneda para el dashboard
         $multimoneda_data = $this->getMultimonedaData($business_id);
 
-        return view('home.index', compact('sells_chart_1', 'sells_chart_2', 'widgets', 'all_locations', 'common_settings', 'is_admin', 'multimoneda_data'));
+        return view('home.index', compact('sells_chart_1', 'sells_chart_2', 'widgets', 'all_locations', 'common_settings', 'is_admin', 'multimoneda_data', 'seller_metrics'));
+    }
+
+    /**
+     * Obtiene metricas de vendedor / preventa para el dashboard
+     */
+    public function getSellerDashboardMetrics($business_id, $user_id, $is_admin)
+    {
+        $start_date = \Carbon::now()->subDays(30)->startOfDay();
+        $end_date = \Carbon::now()->endOfDay();
+
+        // 1. Tasa BCV Oficial
+        $exchangeRateService = new \App\Services\ExchangeRateService();
+        $bcv_rate = $exchangeRateService->getCachedRate($business_id) ?? 1;
+
+        // 2. Ventas Facturadas del Vendedor en el Último Mes (últimos 30 días)
+        $sales_query = Transaction::where('business_id', $business_id)
+            ->where('type', 'sell')
+            ->where('status', 'final')
+            ->whereBetween('transaction_date', [$start_date, $end_date]);
+
+        if (! $is_admin) {
+            $sales_query->where(function ($q) use ($user_id) {
+                $q->where('created_by', $user_id)
+                  ->orWhere('commission_agent', $user_id);
+            });
+        }
+        $total_sales_month = (float) $sales_query->sum('final_total');
+        $count_sales_month = (int) $sales_query->count();
+
+        // 3. Pedidos Acumulados (Últimos 30 días y activos)
+        $orders_query = Transaction::where('business_id', $business_id)
+            ->where('type', 'sales_order')
+            ->whereBetween('transaction_date', [$start_date, $end_date]);
+
+        if (! $is_admin) {
+            $orders_query->where(function ($q) use ($user_id) {
+                $q->where('created_by', $user_id)
+                  ->orWhere('commission_agent', $user_id);
+            });
+        }
+        $total_orders_month = (float) $orders_query->sum('final_total');
+        $count_orders_month = (int) $orders_query->count();
+        $count_orders_pending = (int) (clone $orders_query)->where('status', 'ordered')->count();
+        $count_orders_completed = (int) (clone $orders_query)->where('status', 'completed')->count();
+
+        // 4. Cuentas por Cobrar (Facturas con saldo pendiente)
+        $due_query = Transaction::where('business_id', $business_id)
+            ->where('type', 'sell')
+            ->where('status', 'final')
+            ->whereIn('payment_status', ['due', 'partial']);
+
+        if (! $is_admin) {
+            $due_query->where(function ($q) use ($user_id) {
+                $q->where('created_by', $user_id)
+                  ->orWhere('commission_agent', $user_id);
+            });
+        }
+
+        $due_transactions = $due_query->with('payment_lines')->get();
+        $total_due = 0;
+        foreach ($due_transactions as $t) {
+            $paid = $t->payment_lines->where('is_return', 0)->sum('amount');
+            $return_paid = $t->payment_lines->where('is_return', 1)->sum('amount');
+            $total_paid = $paid - $return_paid;
+            $due = max(0, $t->final_total - $total_paid);
+            $total_due += $due;
+        }
+        $count_due_invoices = $due_transactions->count();
+
+        // 5. Total de Clientes Activos
+        $contacts_query = \App\Contact::where('business_id', $business_id)
+            ->whereIn('type', ['customer', 'both'])
+            ->where('contact_status', 'active');
+
+        if (! $is_admin && config('constants.enable_contact_assign')) {
+            $contacts_query->onlyAssignedTo($user_id);
+        }
+        $total_customers = $contacts_query->count();
+
+        // 6. Últimos Pedidos Recientes del Vendedor
+        $recent_orders_query = Transaction::where('business_id', $business_id)
+            ->where('type', 'sales_order')
+            ->with(['contact'])
+            ->orderBy('transaction_date', 'desc')
+            ->take(6);
+
+        if (! $is_admin) {
+            $recent_orders_query->where(function ($q) use ($user_id) {
+                $q->where('created_by', $user_id)
+                  ->orWhere('commission_agent', $user_id);
+            });
+        }
+        $recent_orders = $recent_orders_query->get();
+
+        return [
+            'bcv_rate' => $bcv_rate,
+            'sales_month_usd' => $total_sales_month,
+            'sales_month_bs' => $total_sales_month * $bcv_rate,
+            'sales_count' => $count_sales_month,
+            'orders_month_usd' => $total_orders_month,
+            'orders_month_bs' => $total_orders_month * $bcv_rate,
+            'orders_count' => $count_orders_month,
+            'orders_pending_count' => $count_orders_pending,
+            'orders_completed_count' => $count_orders_completed,
+            'due_usd' => $total_due,
+            'due_bs' => $total_due * $bcv_rate,
+            'due_count' => $count_due_invoices,
+            'customers_count' => $total_customers,
+            'recent_orders' => $recent_orders,
+        ];
     }
 
     /**
