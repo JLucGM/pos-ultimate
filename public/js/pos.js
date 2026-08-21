@@ -2811,47 +2811,65 @@ function update_shipping_address(data) {
     $('#shipping_address').val(fullShipAddr);
 }
 
-$(document).on('click', '#get_order_gps_btn', function(e) {
+$(document).on('click touchend', '#get_order_gps_btn', function(e) {
     e.preventDefault();
     var $btn = $(this);
     var $status = $('#order_gps_status');
 
     if (!navigator.geolocation) {
         toastr.error('La geolocalización no está soportada por su navegador');
+        $status.html('⚠️ Geolocalización no soportada');
         return;
     }
 
     $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Obteniendo GPS...');
-    $status.html('Obteniendo ubicación GPS satelital...');
+    $status.html('📡 Conectando satélites GPS...');
+
+    function onPosSuccess(position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+        var coords = lat.toFixed(6) + ',' + lng.toFixed(6);
+        var mapsUrl = 'https://maps.google.com/?q=' + coords;
+
+        var currentVal = $('#shipping_address').val() || '';
+        if (currentVal.trim() !== '') {
+            if (currentVal.indexOf('maps.google.com') === -1) {
+                $('#shipping_address').val(currentVal + ' | GPS: ' + mapsUrl);
+            }
+        } else {
+            $('#shipping_address').val('Ubicación GPS: ' + mapsUrl);
+        }
+
+        $status.html('✅ Ubicación GPS: ' + coords);
+        $btn.prop('disabled', false).html('<i class="fas fa-check"></i> GPS Actualizado');
+        toastr.success('Ubicación GPS añadida al pedido: ' + coords);
+    }
+
+    function onFinalError(error) {
+        $btn.prop('disabled', false).html('<i class="fas fa-location-arrow"></i> 📍 Reintentar GPS');
+        var msg = 'No se pudo obtener la ubicación GPS.';
+        if (error && error.code === error.PERMISSION_DENIED) {
+            msg = 'Permiso de ubicación denegado en el navegador. Por favor active los permisos de GPS.';
+        } else if (error && error.code === error.TIMEOUT) {
+            msg = 'Tiempo de espera agotado al conectar satélites GPS.';
+        } else if (!window.isSecureContext && location.protocol !== 'https:' && location.hostname !== 'localhost') {
+            msg = 'Navegadores móviles requieren conexión HTTPS para habilitar el GPS.';
+        }
+        $status.html('⚠️ ' + msg);
+        toastr.error(msg);
+    }
 
     navigator.geolocation.getCurrentPosition(
-        function(position) {
-            var lat = position.coords.latitude;
-            var lng = position.coords.longitude;
-            var coords = lat.toFixed(6) + ',' + lng.toFixed(6);
-            var mapsUrl = 'https://maps.google.com/?q=' + coords;
-
-            var currentVal = $('#shipping_address').val() || '';
-            if (currentVal.trim() !== '') {
-                if (currentVal.indexOf('maps.google.com') === -1) {
-                    $('#shipping_address').val(currentVal + ' | GPS: ' + mapsUrl);
-                }
-            } else {
-                $('#shipping_address').val('Ubicación GPS: ' + mapsUrl);
-            }
-
-            $status.html('✅ Ubicación GPS: ' + coords);
-            $btn.prop('disabled', false).html('<i class="fas fa-check"></i> GPS Actualizado');
-            toastr.success('Ubicación GPS añadida al pedido: ' + coords);
-        },
+        onPosSuccess,
         function(error) {
-            $btn.prop('disabled', false).html('<i class="fas fa-location-arrow"></i> 📍 Reintentar GPS');
-            var msg = 'No se pudo obtener GPS. Verifique permisos.';
-            if (error.code === error.PERMISSION_DENIED) {
-                msg = 'Permiso de ubicación denegado en el navegador.';
-            }
-            $status.html('⚠️ ' + msg);
-            toastr.error(msg);
+            $status.html('📡 Reintentando mediante red móvil...');
+            navigator.geolocation.getCurrentPosition(
+                onPosSuccess,
+                function(err) {
+                    onFinalError(err);
+                },
+                { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 }
+            );
         },
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );

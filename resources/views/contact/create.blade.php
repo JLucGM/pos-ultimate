@@ -87,25 +87,19 @@
 
             <div class="clearfix"></div>
 
-            <div class="col-md-3 individual" style="display: none;">
-                <div class="form-group">
-                    {!! Form::label('prefix', __( 'business.prefix' ) . ':') !!}
-                    {!! Form::text('prefix', null, ['class' => 'form-control', 'placeholder' => __( 'business.prefix_placeholder' ) ]); !!}
-                </div>
-            </div>
-            <div class="col-md-3 individual" style="display: none;">
+            <div class="col-md-4 individual" style="display: none;">
                 <div class="form-group">
                     {!! Form::label('first_name', __( 'business.first_name' ) . ':*') !!}
                     {!! Form::text('first_name', null, ['class' => 'form-control', 'required', 'placeholder' => __( 'business.first_name' ) ]); !!}
                 </div>
             </div>
-            <div class="col-md-3 individual" style="display: none;">
+            <div class="col-md-4 individual" style="display: none;">
                 <div class="form-group">
                     {!! Form::label('middle_name', __( 'lang_v1.middle_name' ) . ':') !!}
                     {!! Form::text('middle_name', null, ['class' => 'form-control', 'placeholder' => __( 'lang_v1.middle_name' ) ]); !!}
                 </div>
             </div>
-            <div class="col-md-3 individual" style="display: none;">
+            <div class="col-md-4 individual" style="display: none;">
                 <div class="form-group">
                     {!! Form::label('last_name', __( 'business.last_name' ) . ':') !!}
                     {!! Form::text('last_name', null, ['class' => 'form-control', 'placeholder' => __( 'business.last_name' ) ]); !!}
@@ -113,7 +107,7 @@
             </div>
             <div class="clearfix"></div>
         
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     {!! Form::label('mobile', __('contact.mobile') . ':*') !!}
                     <div class="input-group">
@@ -125,29 +119,19 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
-                    {!! Form::label('alternate_number', __('contact.alternate_contact_number') . ':') !!}
+                    {!! Form::label('alternate_number', 'Número alternativo:') !!}
                     <div class="input-group">
                         <span class="input-group-addon">
                             <i class="fa fa-phone"></i>
                         </span>
-                        {!! Form::text('alternate_number', null, ['class' => 'form-control', 'placeholder' => __('contact.alternate_contact_number')]); !!}
+                        {!! Form::text('alternate_number', null, ['class' => 'form-control', 'placeholder' => 'Número alternativo']); !!}
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    {!! Form::label('landline', __('contact.landline') . ':') !!}
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="fa fa-phone"></i>
-                        </span>
-                        {!! Form::text('landline', null, ['class' => 'form-control', 'placeholder' => __('contact.landline')]); !!}
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
+
+            <div class="col-md-4">
                 <div class="form-group">
                     {!! Form::label('email', __('business.email') . ':') !!}
                     <div class="input-group">
@@ -238,40 +222,33 @@
 
                 <div class="col-md-4">
                     <div class="form-group">
-                      {!! Form::label('tax_number', __('contact.tax_no') . ':') !!}
+                      {!! Form::label('tax_number', 'Número de (RIF):') !!}
                         <div class="input-group">
                           <span class="input-group-addon">
                               <i class="fa fa-info"></i>
                           </span>
-                          {!! Form::text('tax_number', null, ['class' => 'form-control', 'placeholder' => __('contact.tax_no')]); !!}
+                          {!! Form::text('tax_number', null, ['class' => 'form-control', 'placeholder' => 'Número de (RIF)']); !!}
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-4 opening_balance">
-                  <div class="form-group">
-                      {!! Form::label('opening_balance', __('lang_v1.opening_balance') . ':') !!}
-                      <div class="input-group">
-                          <span class="input-group-addon">
-                              <i class="fas fa-money-bill-alt"></i>
-                          </span>
-                          {!! Form::text('opening_balance', 0, ['class' => 'form-control input_number']); !!}
-                      </div>
-                  </div>
-                </div>
+                <input type="hidden" name="opening_balance" value="0">
 
                 <div class="col-md-4 pay_term">
                   <div class="form-group">
-                    <div class="multi-input">
-                      {!! Form::label('pay_term_number', __('contact.pay_term') . ':') !!} @show_tooltip(__('tooltip.pay_term'))
-                      <br/>
-                      {!! Form::number('pay_term_number', null, ['class' => 'form-control width-40 pull-left', 'placeholder' => __('contact.pay_term')]); !!}
-
-                      {!! Form::select('pay_term_type', ['months' => __('lang_v1.months'), 'days' => __('lang_v1.days')], '', ['class' => 'form-control width-60 pull-left','placeholder' => __('messages.please_select')]); !!}
-                    </div>
+                      {!! Form::label('contact_pay_term_preset', 'Término de Crédito / Pago:') !!}
+                      <select name="contact_pay_term_preset" id="contact_pay_term_preset" class="form-control select2" style="width: 100%;">
+                          <option value="0" selected>Contado</option>
+                          <option value="3">Crédito 3 días</option>
+                          <option value="7">Crédito 7 días</option>
+                          <option value="10">Crédito 10 días</option>
+                          <option value="20">Crédito 20 días</option>
+                      </select>
+                      <input type="hidden" name="pay_term_number" id="contact_pay_term_number" value="">
+                      <input type="hidden" name="pay_term_type" id="contact_pay_term_type" value="days">
                   </div>
                 </div>
-                <div class="clearfix"></div>
+
                 @php
                   $common_settings = session()->get('business.common_settings');
                   $default_credit_limit = !empty($common_settings['default_credit_limit']) ? $common_settings['default_credit_limit'] : null;
@@ -288,21 +265,15 @@
                       <p class="help-block">@lang('lang_v1.credit_limit_help')</p>
                   </div>
                 </div>
-                
+                <div class="clearfix"></div>
 
                 <div class="col-md-12"><hr/></div>
                 <div class="clearfix"></div>
                 
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-group">
                         {!! Form::label('address_line_1', __('lang_v1.address_line_1') . ':') !!}
-                        {!! Form::text('address_line_1', null, ['class' => 'form-control', 'placeholder' => __('lang_v1.address_line_1'), 'rows' => 3]); !!}
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        {!! Form::label('address_line_2', __('lang_v1.address_line_2') . ':') !!}
-                        {!! Form::text('address_line_2', null, ['class' => 'form-control', 'placeholder' => __('lang_v1.address_line_2'), 'rows' => 3]); !!}
+                        {!! Form::text('address_line_1', null, ['class' => 'form-control', 'placeholder' => __('lang_v1.address_line_1')]); !!}
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -351,7 +322,7 @@
                 </div>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-12">
             <div class="form-group">
                 {!! Form::label('land_mark', __('business.land_mark') . ':') !!}
                 <div class="input-group">
@@ -360,127 +331,6 @@
                     </span>
                     {!! Form::text('land_mark', null, ['class' => 'form-control', 'placeholder' => __('business.land_mark')]); !!}
                 </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-                {!! Form::label('street_name', __('business.street_name') . ':') !!}
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <i class="fa fa-map-marker"></i>
-                    </span>
-                    {!! Form::text('street_name', null, ['class' => 'form-control', 'placeholder' => __('business.street_name')]); !!}
-                </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-                {!! Form::label('building_number', __('business.building_number') . ':') !!}
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <i class="fa fa-map-marker"></i>
-                    </span>
-                    {!! Form::text('building_number', null, ['class' => 'form-control', 'placeholder' => __('business.building_number')]); !!}
-                </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-                {!! Form::label('additional_number', __('business.additional_number') . ':') !!}
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <i class="fa fa-map-marker"></i>
-                    </span>
-                    {!! Form::text('additional_number', null, ['class' => 'form-control', 'placeholder' => __('business.additional_number')]); !!}
-                </div>
-            </div>
-          </div>
-
-          <div class="clearfix"></div>
-          <div class="col-md-12">
-            <hr/>
-          </div>
-          @php
-            $custom_labels = json_decode(session('business.custom_labels'), true);
-            $contact_custom_field1 = !empty($custom_labels['contact']['custom_field_1']) ? $custom_labels['contact']['custom_field_1'] : __('lang_v1.contact_custom_field1');
-            $contact_custom_field2 = !empty($custom_labels['contact']['custom_field_2']) ? $custom_labels['contact']['custom_field_2'] : __('lang_v1.contact_custom_field2');
-            $contact_custom_field3 = !empty($custom_labels['contact']['custom_field_3']) ? $custom_labels['contact']['custom_field_3'] : __('lang_v1.contact_custom_field3');
-            $contact_custom_field4 = !empty($custom_labels['contact']['custom_field_4']) ? $custom_labels['contact']['custom_field_4'] : __('lang_v1.contact_custom_field4');
-            $contact_custom_field5 = !empty($custom_labels['contact']['custom_field_5']) ? $custom_labels['contact']['custom_field_5'] : __('lang_v1.custom_field', ['number' => 5]);
-            $contact_custom_field6 = !empty($custom_labels['contact']['custom_field_6']) ? $custom_labels['contact']['custom_field_6'] : __('lang_v1.custom_field', ['number' => 6]);
-            $contact_custom_field7 = !empty($custom_labels['contact']['custom_field_7']) ? $custom_labels['contact']['custom_field_7'] : __('lang_v1.custom_field', ['number' => 7]);
-            $contact_custom_field8 = !empty($custom_labels['contact']['custom_field_8']) ? $custom_labels['contact']['custom_field_8'] : __('lang_v1.custom_field', ['number' => 8]);
-            $contact_custom_field9 = !empty($custom_labels['contact']['custom_field_9']) ? $custom_labels['contact']['custom_field_9'] : __('lang_v1.custom_field', ['number' => 9]);
-            $contact_custom_field10 = !empty($custom_labels['contact']['custom_field_10']) ? $custom_labels['contact']['custom_field_10'] : __('lang_v1.custom_field', ['number' => 10]);
-          @endphp
-          <div class="col-md-3">
-            <div class="form-group">
-                {!! Form::label('custom_field1', $contact_custom_field1 . ':') !!}
-                {!! Form::text('custom_field1', null, ['class' => 'form-control', 
-                    'placeholder' => $contact_custom_field1]); !!}
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-                {!! Form::label('custom_field2', $contact_custom_field2 . ':') !!}
-                {!! Form::text('custom_field2', null, ['class' => 'form-control', 
-                    'placeholder' => $contact_custom_field2]); !!}
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-                {!! Form::label('custom_field3', $contact_custom_field3 . ':') !!}
-                {!! Form::text('custom_field3', null, ['class' => 'form-control', 
-                    'placeholder' => $contact_custom_field3]); !!}
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-                {!! Form::label('custom_field4', $contact_custom_field4 . ':') !!}
-                {!! Form::text('custom_field4', null, ['class' => 'form-control', 
-                    'placeholder' => $contact_custom_field4]); !!}
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-                {!! Form::label('custom_field5', $contact_custom_field5 . ':') !!}
-                {!! Form::text('custom_field5', null, ['class' => 'form-control', 
-                    'placeholder' => $contact_custom_field5]); !!}
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-                {!! Form::label('custom_field6', $contact_custom_field6 . ':') !!}
-                {!! Form::text('custom_field6', null, ['class' => 'form-control', 
-                    'placeholder' => $contact_custom_field6]); !!}
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-                {!! Form::label('custom_field7', $contact_custom_field7 . ':') !!}
-                {!! Form::text('custom_field7', null, ['class' => 'form-control', 
-                    'placeholder' => $contact_custom_field7]); !!}
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-                {!! Form::label('custom_field8', $contact_custom_field8 . ':') !!}
-                {!! Form::text('custom_field8', null, ['class' => 'form-control', 
-                    'placeholder' => $contact_custom_field8]); !!}
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-                {!! Form::label('custom_field9', $contact_custom_field9 . ':') !!}
-                {!! Form::text('custom_field9', null, ['class' => 'form-control', 
-                    'placeholder' => $contact_custom_field9]); !!}
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-                {!! Form::label('custom_field10', $contact_custom_field10 . ':') !!}
-                {!! Form::text('custom_field10', null, ['class' => 'form-control', 
-                    'placeholder' => $contact_custom_field10]); !!}
             </div>
           </div>
           <div class="col-md-12 shipping_addr_div"><hr></div>
@@ -611,6 +461,22 @@
 
     <script>
     $(document).ready(function() {
+        // Inicializar select2 en modal
+        $('#contact_add_form #contact_pay_term_preset, #quick_add_contact #contact_pay_term_preset').select2();
+
+        // Sincronizar preset de términos de pago
+        $(document).on('change', '#contact_pay_term_preset', function() {
+            var val = $(this).val();
+            var form = $(this).closest('form');
+            if (val === '0' || val === 0) {
+                form.find('#contact_pay_term_number').val('');
+                form.find('#contact_pay_term_type').val('days');
+            } else {
+                form.find('#contact_pay_term_number').val(val);
+                form.find('#contact_pay_term_type').val('days');
+            }
+        });
+
         // 1. Botón Copiar Dirección Fiscal
         $(document).off('click', '#copy_fiscal_address_btn').on('click', '#copy_fiscal_address_btn', function(e) {
             e.preventDefault();
@@ -618,7 +484,6 @@
             var parts = [];
             
             var addr1 = form.find('input[name="address_line_1"]').val();
-            var addr2 = form.find('input[name="address_line_2"]').val();
             var landmark = form.find('input[name="land_mark"]').val();
             var city = form.find('input[name="city"]').val();
             var state = form.find('input[name="state"]').val();
@@ -626,7 +491,6 @@
             var zip = form.find('input[name="zip_code"]').val();
 
             if (addr1) parts.push(addr1);
-            if (addr2) parts.push(addr2);
             if (landmark) parts.push('Ref: ' + landmark);
             if (city) parts.push(city);
             if (state) parts.push(state);
@@ -642,8 +506,8 @@
             }
         });
 
-        // 2. Botón Obtener Coordenadas GPS
-        $(document).off('click', '#get_gps_location_btn').on('click', '#get_gps_location_btn', function(e) {
+        // 2. Botón Obtener Coordenadas GPS con Soporte Móvil Robusto
+        $(document).off('click touchend', '#get_gps_location_btn').on('click touchend', '#get_gps_location_btn', function(e) {
             e.preventDefault();
             var $btn = $(this);
             var form = $btn.closest('form');
@@ -651,42 +515,61 @@
 
             if (!navigator.geolocation) {
                 toastr.error('La geolocalización no está soportada por su navegador');
+                $status.html('⚠️ Geolocalización no soportada');
                 return;
             }
 
             $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Obteniendo GPS...');
-            $status.html('Obteniendo ubicación satelital...');
+            $status.html('📡 Conectando satélites GPS...');
+
+            function onPositionSuccess(position) {
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+                var coords = lat.toFixed(6) + ',' + lng.toFixed(6);
+                var mapsUrl = 'https://maps.google.com/?q=' + coords;
+
+                form.find('#position').val(coords);
+
+                var currentShipping = form.find('#shipping_address').val() || '';
+                if (currentShipping.trim() !== '') {
+                    if (currentShipping.indexOf('maps.google.com') === -1) {
+                        form.find('#shipping_address').val(currentShipping + ' | GPS: ' + mapsUrl);
+                    }
+                } else {
+                    form.find('#shipping_address').val('Ubicación GPS: ' + mapsUrl);
+                }
+
+                $status.html('✅ Coordenadas: ' + coords);
+                $btn.prop('disabled', false).html('<i class="fas fa-check"></i> GPS Actualizado');
+                toastr.success('Ubicación GPS capturada con éxito: ' + coords);
+            }
+
+            function handleFinalError(error) {
+                $btn.prop('disabled', false).html('<i class="fas fa-location-arrow"></i> 📍 Reintentar GPS');
+                var msg = 'No se pudo obtener la ubicación GPS.';
+                if (error && error.code === error.PERMISSION_DENIED) {
+                    msg = 'Permiso de ubicación denegado en el navegador. Por favor active los permisos de GPS en su teléfono/navegador.';
+                } else if (error && error.code === error.TIMEOUT) {
+                    msg = 'Tiempo de espera agotado al conectar satélites GPS.';
+                } else if (!window.isSecureContext && location.protocol !== 'https:' && location.hostname !== 'localhost') {
+                    msg = 'Navegadores móviles requieren conexión HTTPS para habilitar el GPS.';
+                }
+                $status.html('⚠️ ' + msg);
+                toastr.error(msg);
+            }
 
             navigator.geolocation.getCurrentPosition(
-                function(position) {
-                    var lat = position.coords.latitude;
-                    var lng = position.coords.longitude;
-                    var coords = lat.toFixed(6) + ',' + lng.toFixed(6);
-                    var mapsUrl = 'https://maps.google.com/?q=' + coords;
-
-                    form.find('#position').val(coords);
-
-                    var currentShipping = form.find('#shipping_address').val() || '';
-                    if (currentShipping.trim() !== '') {
-                        if (currentShipping.indexOf('maps.google.com') === -1) {
-                            form.find('#shipping_address').val(currentShipping + ' | GPS: ' + mapsUrl);
-                        }
-                    } else {
-                        form.find('#shipping_address').val('Ubicación GPS: ' + mapsUrl);
-                    }
-
-                    $status.html('✅ Coordenadas: ' + coords);
-                    $btn.prop('disabled', false).html('<i class="fas fa-check"></i> GPS Actualizado');
-                    toastr.success('Ubicación GPS capturada con éxito: ' + coords);
-                },
+                onPositionSuccess,
                 function(error) {
-                    $btn.prop('disabled', false).html('<i class="fas fa-location-arrow"></i> 📍 Reintentar GPS');
-                    var msg = 'No se pudo obtener la ubicación. Verifique los permisos de GPS en su dispositivo.';
-                    if (error.code === error.PERMISSION_DENIED) {
-                        msg = 'Permiso de ubicación denegado en el navegador.';
-                    }
-                    $status.html('⚠️ ' + msg);
-                    toastr.error(msg);
+                    // Intento de respaldo con precisión estándar (red/celular) en móviles
+                    $status.html('📡 Reintentando mediante red móvil...');
+                    navigator.geolocation.getCurrentPosition(
+                        onPositionSuccess,
+                        function(err) {
+                            handleFinalError(err);
+                        },
+                        { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 }
+                    );
                 },
                 { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
             );
