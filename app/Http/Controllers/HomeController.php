@@ -270,7 +270,7 @@ class HomeController extends Controller
             $due_query = Transaction::where('business_id', $business_id)
                 ->where('type', 'sell')
                 ->where('status', 'final')
-                ->whereIn('payment_status', ['due', 'partial'])
+                ->where('payment_status', '!=', 'paid')
                 ->with(['contact', 'payment_lines'])
                 ->orderBy('transaction_date', 'asc');
 
