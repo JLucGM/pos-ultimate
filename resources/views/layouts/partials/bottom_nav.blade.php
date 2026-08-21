@@ -1,7 +1,14 @@
 @php
     $is_logged_in = auth()->check();
     $user = $is_logged_in ? auth()->user() : null;
-    $is_admin = $is_logged_in && (new \App\Utils\BusinessUtil())->is_admin($user);
+    $is_admin = false;
+    if ($is_logged_in && !empty($user)) {
+        try {
+            $is_admin = !empty($user->business_id) ? $user->hasRole('Admin#' . $user->business_id) : true;
+        } catch (\Throwable $e) {
+            $is_admin = false;
+        }
+    }
 
     $is_pos_page = request()->segment(1) == 'pos';
     $is_home_page = request()->is('home*');
@@ -10,9 +17,9 @@
     $is_sells_page = request()->is('sells*') && request()->get('sale_type') != 'sales_order';
     $is_products_page = request()->is('products*');
 
-    $can_create_so = $is_logged_in && ($is_admin || $user->can('so.create') || $user->can('sell.create') || $user->can('direct_sell.access'));
-    $can_view_so = $is_logged_in && ($is_admin || $user->can('so.view_own') || $user->can('so.view_all'));
-    $can_view_sells = $is_logged_in && ($is_admin || $user->can('direct_sell.view') || $user->can('view_own_sell_only') || $user->can('sell.view'));
+    $can_create_so = $is_logged_in && ($is_admin || ($user && ($user->can('so.create') || $user->can('sell.create') || $user->can('direct_sell.access'))));
+    $can_view_so = $is_logged_in && ($is_admin || ($user && ($user->can('so.view_own') || $user->can('so.view_all'))));
+    $can_view_sells = $is_logged_in && ($is_admin || ($user && ($user->can('direct_sell.view') || $user->can('view_own_sell_only') || $user->can('sell.view'))));
 @endphp
 
 @if ($is_logged_in && !$is_pos_page && request()->segment(1) != 'customer-display')
