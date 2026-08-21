@@ -2,8 +2,8 @@
 
 return [
     'enable_editing_product_from_purchase' => 'Habilitar la edición del precio del Producto desde la pantalla de compra',
-    'sales_commission_agent' => 'Agente comercial',
-    'sales_commission_agents' => 'Agentes comerciales',
+    'sales_commission_agent' => 'Vendedor',
+    'sales_commission_agents' => 'Vendedores',
     'disable' => 'Inhabilitar',
     'logged_in_user' => 'Usuario conectado',
     'select_from_users_list' => "Seleccionar de la lista de usuarios",
@@ -14,7 +14,7 @@ return [
     'commission_agent_updated_success' => 'Agente comercial actualizado con éxito',
     'commission_agent_deleted_success' => 'Agente comercial eliminado con éxito',
     'contact_no' => 'Número de Contacto',
-    'commission_agent' => 'Comisionista',
+    'commission_agent' => 'Vendedor',
     'cmmsn_percent' => 'Porcentaje de la Comisión de Ventas (%)',
     'sales_added' => 'Ventas agregadas',
     'sales_with_commission' => 'Ventas con comisión',

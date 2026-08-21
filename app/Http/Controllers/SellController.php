@@ -731,6 +731,7 @@ class SellController extends Controller
 
         $preselected_sales_order = null;
         $preselected_sales_orders = [];
+        $default_commission_agent = null;
         if (!empty(request()->get('sales_order_id'))) {
             $so_id = request()->get('sales_order_id');
             $preselected_sales_order = Transaction::where('business_id', $business_id)
@@ -742,6 +743,7 @@ class SellController extends Controller
                     $walk_in_customer = $this->contactUtil->getContactInfo($business_id, $contact->id);
                 }
                 $preselected_sales_orders = [$preselected_sales_order->id => $preselected_sales_order->invoice_no];
+                $default_commission_agent = $preselected_sales_order->commission_agent ?: $preselected_sales_order->created_by;
             }
         }
 
@@ -769,6 +771,8 @@ class SellController extends Controller
             $commission_agent = User::forDropdown($business_id);
         } elseif ($commsn_agnt_setting == 'cmsn_agnt') {
             $commission_agent = User::saleCommissionAgentsDropdown($business_id);
+        } else {
+            $commission_agent = User::forDropdown($business_id);
         }
 
         $types = [];
@@ -875,6 +879,7 @@ class SellController extends Controller
                 'change_return',
                 'preselected_sales_order',
                 'preselected_sales_orders',
+                'default_commission_agent',
                 'bcv_rate',
                 'base_currency'
             ));
@@ -1187,6 +1192,8 @@ class SellController extends Controller
             $commission_agent = User::forDropdown($business_id);
         } elseif ($commsn_agnt_setting == 'cmsn_agnt') {
             $commission_agent = User::saleCommissionAgentsDropdown($business_id);
+        } else {
+            $commission_agent = User::forDropdown($business_id);
         }
 
         $types = [];

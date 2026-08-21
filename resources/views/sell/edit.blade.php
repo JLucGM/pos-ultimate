@@ -157,12 +157,13 @@
 				@if(!empty($commission_agent))
 				@php
 					$is_commission_agent_required = !empty($pos_settings['is_commission_agent_required']);
+					$selected_agent = !empty($transaction->commission_agent) ? $transaction->commission_agent : $transaction->created_by;
 				@endphp
 				<div class="col-sm-3">
 					<div class="form-group">
 					{!! Form::label('commission_agent', __('lang_v1.commission_agent') . ':') !!}
 					{!! Form::select('commission_agent', 
-								$commission_agent, $transaction->commission_agent, ['class' => 'form-control select2', 'id' => 'commission_agent', 'required' => $is_commission_agent_required]); !!}
+								$commission_agent, $selected_agent, ['class' => 'form-control select2', 'id' => 'commission_agent', 'placeholder' => __('messages.please_select'), 'required' => $is_commission_agent_required]); !!}
 					</div>
 				</div>
 				@endif

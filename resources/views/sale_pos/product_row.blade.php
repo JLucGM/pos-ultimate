@@ -125,18 +125,10 @@
 			$formatted_max_quantity = $product->formatted_qty_available;
 
 			if(!empty($action) && $action == 'edit') {
-				if(!empty($so_line)) {
-					$qty_available = $so_line->quantity - $so_line->so_quantity_invoiced + $product->quantity_ordered;
-					$max_quantity = $qty_available;
-					$formatted_max_quantity = number_format($qty_available, session('business.quantity_precision', 2), session('currency')['decimal_separator'], session('currency')['thousand_separator']);
-				}
-			} else {
-				if(!empty($so_line) && $so_line->qty_available <= $max_quantity) {
-					$max_quantity = $so_line->qty_available;
-					$formatted_max_quantity = $so_line->formatted_qty_available;
-				}
+				$qty_available = $product->qty_available + $product->quantity_ordered;
+				$max_quantity = $qty_available;
+				$formatted_max_quantity = number_format($qty_available, session('business.quantity_precision', 2), session('currency')['decimal_separator'], session('currency')['thousand_separator']);
 			}
-			
 
 			$max_qty_rule = $max_quantity;
 			$max_qty_msg = __('validation.custom-messages.quantity_not_available', ['qty'=> $formatted_max_quantity, 'unit' => $product->unit  ]);

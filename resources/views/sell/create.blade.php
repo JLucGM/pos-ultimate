@@ -194,12 +194,13 @@
 				@if(!empty($commission_agent))
 				@php
 					$is_commission_agent_required = !empty($pos_settings['is_commission_agent_required']);
+					$selected_commission_agent = $default_commission_agent ?? (!empty($preselected_sales_order->commission_agent) ? $preselected_sales_order->commission_agent : (!empty($preselected_sales_order->created_by) ? $preselected_sales_order->created_by : (auth()->check() ? auth()->user()->id : null)));
 				@endphp
 				<div class="col-sm-3">
 					<div class="form-group">
 					{!! Form::label('commission_agent', __('lang_v1.commission_agent') . ':') !!}
 					{!! Form::select('commission_agent', 
-								$commission_agent, null, ['class' => 'form-control select2', 'id' => 'commission_agent', 'required' => $is_commission_agent_required]); !!}
+								$commission_agent, $selected_commission_agent, ['class' => 'form-control select2', 'id' => 'commission_agent', 'placeholder' => __('messages.please_select'), 'required' => $is_commission_agent_required]); !!}
 					</div>
 				</div>
 				@endif

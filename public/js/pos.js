@@ -2959,10 +2959,20 @@ function set_so_values(so) {
     if ($('#shipping_details').is(':visible')) {
         $('#shipping_details').val(so.shipping_details);
     }
-    $('#shipping_address').val(so.shipping_address);
+    if (so.shipping_address) {
+        $('#shipping_address').val(so.shipping_address);
+    }
     $('#delivered_to').val(so.delivered_to);
     $('#shipping_charges').val( __number_f(so.shipping_charges));
     $('#shipping_status').val(so.shipping_status);
+    if (so.commission_agent) {
+        $('select#commission_agent').val(so.commission_agent).trigger('change');
+    } else if (so.created_by) {
+        $('select#commission_agent').val(so.created_by).trigger('change');
+    }
+    if (so.pay_term_number !== null && so.pay_term_number !== undefined) {
+        $('#pay_term_preset').val(so.pay_term_number).trigger('change');
+    }
     if ($('#shipping_custom_field_1').length) {
         $('#shipping_custom_field_1').val(so.shipping_custom_field_1);
     }
