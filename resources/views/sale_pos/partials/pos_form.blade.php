@@ -23,7 +23,7 @@
 					<button type="button" class="btn add_new_customer" data-name="" title="Nuevo Cliente" @if(!auth()->user()->can('customer.create')) disabled @endif><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
 				</span>
 			</div>
-			<small class="text-danger hide contact_due_text"><strong>@lang('account.customer_due'):</strong> <span></span></small>
+			<small class="text-danger hide contact_due_text font-weight-bold" style="display: block; margin-top: 5px; font-size: 12px;"><i class="fas fa-exclamation-circle"></i> <span></span></small>
 		</div>
 	</div>
 	<div class="col-md-7 col-sm-12">

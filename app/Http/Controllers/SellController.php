@@ -1280,9 +1280,24 @@ class SellController extends Controller
 
         $change_return = $this->dummyPaymentLine;
 
-        $customer_due = $this->transactionUtil->getContactDue($transaction->contact_id, $transaction->business_id);
-
-        $customer_due = $customer_due != 0 ? $this->transactionUtil->num_f($customer_due, true) : '';
+        $customer_due_raw = $this->transactionUtil->getContactDue($transaction->contact_id, $transaction->business_id);
+        $customer_due = '';
+        if ($customer_due_raw != 0) {
+            $rate = 1;
+            $today = \Carbon::now()->format('Y-m-d');
+            $exchange_rate = \App\ExchangeRate::where('business_id', $business_id)
+                ->where('source_currency', 'USD')
+                ->where('target_currency', 'VES')
+                ->whereDate('rate_date', '<=', $today)
+                ->orderBy('rate_date', 'desc')
+                ->first();
+            if ($exchange_rate && $exchange_rate->rate > 0) {
+                $rate = (float) $exchange_rate->rate;
+            }
+            $due_usd = number_format($customer_due_raw, 2, '.', ',');
+            $due_bs = number_format($customer_due_raw * $rate, 2, ',', '.');
+            $customer_due = "Cliente con saldo por pagar de: $ {$due_usd} ó Bs. {$due_bs}";
+        }
 
         //Added check because $users is of no use if enable_contact_assign if false
         $users = config('constants.enable_contact_assign') ? User::forDropdown($business_id, false, false, false, true) : [];

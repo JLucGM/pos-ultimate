@@ -1650,9 +1650,25 @@ class ContactController extends Controller
             $business_id = request()->session()->get('user.business_id');
             $due = $this->transactionUtil->getContactDue($contact_id, $business_id);
 
-            $output = $due != 0 ? $this->transactionUtil->num_f($due, true) : '';
+            if ($due != 0) {
+                $rate = 1;
+                $today = \Carbon::now()->format('Y-m-d');
+                $exchange_rate = \App\ExchangeRate::where('business_id', $business_id)
+                    ->where('source_currency', 'USD')
+                    ->where('target_currency', 'VES')
+                    ->whereDate('rate_date', '<=', $today)
+                    ->orderBy('rate_date', 'desc')
+                    ->first();
+                if ($exchange_rate && $exchange_rate->rate > 0) {
+                    $rate = (float) $exchange_rate->rate;
+                }
 
-            return $output;
+                $due_usd = number_format($due, 2, '.', ',');
+                $due_bs = number_format($due * $rate, 2, ',', '.');
+                return "Cliente con saldo por pagar de: $ {$due_usd} ó Bs. {$due_bs}";
+            }
+
+            return '';
         }
     }
 

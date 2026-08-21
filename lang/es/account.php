@@ -30,7 +30,7 @@ return [
     'liability' => 'Responsabilidad',
     'assets' => 'Bienes',
     'supplier_due' => 'Proveedor por pagar',
-    'customer_due' => 'Cliente por cobrar',
+    'customer_due' => 'Cliente con saldo por pagar',
     'account_balances' => 'Saldos de cuentas',
     'total_assets' => 'Los activos totales',
     'total_liability' => 'Responsabilidad Total',
