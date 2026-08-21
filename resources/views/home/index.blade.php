@@ -39,43 +39,21 @@
         </div>
 
         {{-- ========================================================================= --}}
-        {{-- 1. Accesos Rápidos del Vendedor / Preventa --}}
-        {{-- ========================================================================= --}}
-        <div class="audaz-quick-actions">
-            <a href="{{ action([\App\Http\Controllers\SellController::class, 'create']) }}?sale_type=sales_order" class="audaz-quick-btn featured">
-                <i class="fas fa-cart-plus"></i>
-                <span>+ Cargar Pedido</span>
-            </a>
-            <a href="{{ action([\App\Http\Controllers\SalesOrderController::class, 'index']) }}" class="audaz-quick-btn">
-                <i class="fas fa-receipt tw-text-orange-500"></i>
-                <span>Mis Pedidos</span>
-            </a>
-            <a href="{{ action([\App\Http\Controllers\ContactController::class, 'index'], ['type' => 'customer']) }}" class="audaz-quick-btn">
-                <i class="fas fa-users tw-text-blue-500"></i>
-                <span>Mis Clientes</span>
-            </a>
-            @if(!empty($is_admin) || auth()->user()->can('direct_sell.view') || auth()->user()->can('sell.view'))
-                <a href="{{ action([\App\Http\Controllers\SellController::class, 'index']) }}" class="audaz-quick-btn">
-                    <i class="fas fa-file-invoice-dollar tw-text-emerald-500"></i>
-                    <span>Ventas / Cobros</span>
-                </a>
-            @endif
-        </div>
-
-        {{-- ========================================================================= --}}
-        {{-- 2. Métricas Clave del Vendedor (Último Mes, Pedidos Acumulados, Cobranzas) --}}
+        {{-- 1. Métricas Clave del Vendedor (Último Mes, Pedidos Acumulados, Cobranzas) --}}
         {{-- ========================================================================= --}}
         @if(!empty($seller_metrics))
             <div class="tw-mb-6">
-                <div class="tw-flex tw-items-center tw-justify-between tw-mb-3">
+                <div class="tw-flex tw-flex-col sm:tw-flex-row sm:tw-items-center sm:tw-justify-between tw-gap-2 tw-mb-3">
                     <h3 class="tw-text-base tw-font-extrabold tw-text-slate-800 tw-flex tw-items-center tw-gap-2">
                         <span class="tw-w-2.5 tw-h-2.5 tw-rounded-full tw-bg-orange-500 tw-animate-pulse"></span>
                         <i class="fas fa-chart-line tw-text-orange-500"></i>
-                        Métricas de Preventa & Comercial
+                        Estadísticas Comerciales & Preventa
                     </h3>
-                    <span class="tw-text-xs tw-font-bold tw-text-slate-500 tw-bg-slate-100 tw-px-3 tw-py-1 tw-rounded-full">
-                        <i class="fas fa-university tw-text-sky-500"></i> Tasa BCV: Bs. {{ number_format($seller_metrics['bcv_rate'] ?? 1, 2) }}
-                    </span>
+                    <div class="tw-flex tw-items-center tw-gap-2">
+                        <span class="tw-text-xs tw-font-bold tw-text-slate-700 tw-bg-slate-100 tw-border tw-border-slate-200 tw-px-3 tw-py-1.5 tw-rounded-xl tw-shadow-sm">
+                            <i class="fas fa-university tw-text-sky-600"></i> Tasa Oficial BCV: <strong class="tw-text-sky-700 font-mono">Bs. {{ number_format($seller_metrics['bcv_rate'] ?? 1, 2) }}</strong>
+                        </span>
+                    </div>
                 </div>
 
                 <div class="audaz-seller-grid">
@@ -152,7 +130,7 @@
                         <div>
                             <p class="audaz-seller-card-title">Clientes Activos</p>
                             <p class="audaz-seller-card-value-usd">{{ $seller_metrics['customers_count'] ?? 0 }} <span class="tw-text-xs tw-text-slate-400">Clientes</span></p>
-                            <p class="audaz-seller-card-value-bs tw-text-purple-600">Gestión en Calle / Preventa</p>
+                            <p class="audaz-seller-card-value-bs tw-text-purple-600">Cartera Comercial</p>
                         </div>
                         <div class="audaz-seller-card-sub">
                             <i class="fas fa-map-marker-alt tw-text-purple-500"></i> Rutas y geolocalización
@@ -161,79 +139,78 @@
                 </div>
             </div>
 
-            {{-- 3. Tabla de Últimos Pedidos Recientes del Vendedor --}}
-            @if(!empty($seller_metrics['recent_orders']) && count($seller_metrics['recent_orders']) > 0)
+            {{-- 2. Tabla de Cuentas por Cobrar / Facturas Pendientes de Cobro con Alerta de Días --}}
+            @if(!empty($seller_metrics['pending_due_invoices']) && count($seller_metrics['pending_due_invoices']) > 0)
                 <div class="audaz-card-modern tw-mb-8">
-                    <div class="tw-flex tw-items-center tw-justify-between tw-mb-4">
+                    <div class="tw-flex tw-flex-col sm:tw-flex-row sm:tw-items-center sm:tw-justify-between tw-gap-2 tw-mb-4">
                         <div>
-                            <h3 class="tw-text-base tw-font-bold tw-text-slate-800 tw-flex tw-items-center tw-gap-2">
-                                <i class="fas fa-history tw-text-orange-500"></i>
-                                Últimos Pedidos Registrados
+                            <h3 class="tw-text-base tw-font-extrabold tw-text-slate-800 tw-flex tw-items-center tw-gap-2">
+                                <i class="fas fa-file-invoice-dollar tw-text-blue-600"></i>
+                                Cuentas por Cobrar (Facturas Pendientes)
                             </h3>
-                            <p class="tw-text-xs tw-text-slate-500 tw-mt-0.5">Pedidos recientes montados en el sistema</p>
+                            <p class="tw-text-xs tw-text-slate-500 tw-mt-0.5">
+                                Facturas emitidas con saldo pendiente. Facturas con <strong>más de 10 días</strong> se resaltan en rojo.
+                            </p>
                         </div>
-                        <a href="{{ action([\App\Http\Controllers\SalesOrderController::class, 'index']) }}" class="tw-text-xs tw-font-bold tw-text-orange-600 hover:tw-underline">
-                            Ver todos los pedidos <i class="fas fa-arrow-right tw-text-[10px]"></i>
-                        </a>
+                        <span class="tw-text-xs tw-font-bold tw-text-rose-700 tw-bg-rose-50 tw-border tw-border-rose-200 tw-px-3 tw-py-1 tw-rounded-full tw-w-fit">
+                            {{ count($seller_metrics['pending_due_invoices']) }} facturas pendientes de cobro
+                        </span>
                     </div>
 
                     <div class="table-responsive">
                         <table class="table table-hover table-striped" style="margin-bottom: 0;">
                             <thead>
                                 <tr style="background: #F8FAFC; color: #475569; font-size: 11px; text-transform: uppercase;">
-                                    <th>No. Pedido</th>
+                                    <th>No. Factura</th>
                                     <th>Cliente</th>
-                                    <th>Fecha</th>
-                                    <th>Estado</th>
-                                    <th class="text-right">Total ($ USD)</th>
-                                    <th class="text-right">Total (Bs.)</th>
+                                    <th>Fecha Emisión</th>
+                                    <th class="text-center">Días Pendiente</th>
+                                    <th class="text-right">Total Factura</th>
+                                    <th class="text-right">Saldo por Cobrar</th>
                                     <th class="text-center">Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($seller_metrics['recent_orders'] as $order)
+                                @foreach($seller_metrics['pending_due_invoices'] as $inv)
                                     <tr>
                                         <td>
-                                            <span class="tw-font-bold tw-text-slate-800">{{ $order->invoice_no }}</span>
+                                            <span class="tw-font-bold tw-text-slate-900">{{ $inv['invoice_no'] }}</span>
                                         </td>
                                         <td>
-                                            <span class="tw-font-semibold tw-text-slate-700">{{ $order->contact->name ?? 'Cliente General' }}</span>
-                                            @if(!empty($order->contact->supplier_business_name))
-                                                <br><small class="tw-text-slate-400">{{ $order->contact->supplier_business_name }}</small>
+                                            <span class="tw-font-bold tw-text-slate-800">{{ $inv['contact_name'] }}</span>
+                                            @if(!empty($inv['contact_business']))
+                                                <br><small class="tw-text-slate-500"><i class="fas fa-store tw-text-[10px]"></i> {{ $inv['contact_business'] }}</small>
+                                            @endif
+                                            @if(!empty($inv['contact_mobile']))
+                                                <br><small class="tw-text-slate-400"><i class="fas fa-phone tw-text-[10px]"></i> {{ $inv['contact_mobile'] }}</small>
                                             @endif
                                         </td>
                                         <td>
-                                            <span class="tw-text-xs tw-text-slate-500">{{ @format_datetime($order->transaction_date) }}</span>
-                                        </td>
-                                        <td>
-                                            @if($order->status == 'ordered')
-                                                <span class="label label-warning" style="border-radius: 6px; font-weight: 700;">
-                                                    <i class="fas fa-clock"></i> Pendiente
-                                                </span>
-                                            @elseif($order->status == 'completed')
-                                                <span class="label label-success" style="border-radius: 6px; font-weight: 700;">
-                                                    <i class="fas fa-check"></i> Facturado
-                                                </span>
-                                            @else
-                                                <span class="label label-default" style="border-radius: 6px;">{{ $order->status }}</span>
-                                            @endif
-                                        </td>
-                                        <td class="text-right font-weight-bold tw-text-emerald-600">
-                                            $ {{ number_format($order->final_total, 2) }}
-                                        </td>
-                                        <td class="text-right font-weight-bold tw-text-sky-600" style="font-family: ui-monospace, monospace;">
-                                            Bs. {{ number_format($order->final_total * ($seller_metrics['bcv_rate'] ?? 1), 2) }}
+                                            <span class="tw-text-xs tw-text-slate-600">{{ @format_datetime($inv['transaction_date']) }}</span>
                                         </td>
                                         <td class="text-center">
-                                            @if($order->status != 'completed' && (auth()->user()->can('sell.create') || auth()->user()->can('direct_sell.access') || !empty($is_admin)))
-                                                <a href="{{ action([\App\Http\Controllers\SellController::class, 'create']) }}?sales_order_id={{ $order->id }}" class="btn btn-xs btn-primary" title="Facturar Pedido" style="border-radius: 6px; font-weight: 600;">
-                                                    <i class="fas fa-file-invoice-dollar"></i> Facturar
-                                                </a>
+                                            @if($inv['is_overdue'])
+                                                <span class="label" style="background-color: #ef4444; color: #ffffff; font-weight: 900; font-size: 12px; padding: 4px 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35); display: inline-flex; align-items: center; gap: 4px;">
+                                                    <i class="fas fa-exclamation-triangle"></i> {{ $inv['days_pending'] }} días
+                                                </span>
                                             @else
-                                                <a href="{{ action([\App\Http\Controllers\SellController::class, 'show'], [$order->id]) }}" class="btn btn-xs btn-default btn-modal" data-container=".view_modal" style="border-radius: 6px;">
-                                                    <i class="fas fa-eye"></i> Ver
-                                                </a>
+                                                <span class="label" style="background-color: #e2e8f0; color: #334155; font-weight: 700; font-size: 11px; padding: 4px 8px; border-radius: 6px; display: inline-block;">
+                                                    {{ $inv['days_pending'] }} días
+                                                </span>
                                             @endif
+                                        </td>
+                                        <td class="text-right font-weight-bold tw-text-slate-700">
+                                            $ {{ number_format($inv['final_total'], 2) }}
+                                            <br><small class="tw-text-slate-400 font-weight-normal" style="font-family: ui-monospace, monospace;">Bs. {{ number_format($inv['final_total_bs'], 2) }}</small>
+                                        </td>
+                                        <td class="text-right font-weight-bold tw-text-rose-600">
+                                            $ {{ number_format($inv['due_amount'], 2) }}
+                                            <br><small class="tw-text-rose-500 font-weight-bold" style="font-family: ui-monospace, monospace;">Bs. {{ number_format($inv['due_amount_bs'], 2) }}</small>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="{{ action([\App\Http\Controllers\SellController::class, 'show'], [$inv['id']]) }}" class="btn btn-xs btn-default btn-modal" data-container=".view_modal" style="border-radius: 6px;" title="Ver Detalle de Factura">
+                                                <i class="fas fa-eye"></i> Ver
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach

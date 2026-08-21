@@ -270,7 +270,9 @@ class HomeController extends Controller
             $due_query = Transaction::where('business_id', $business_id)
                 ->where('type', 'sell')
                 ->where('status', 'final')
-                ->whereIn('payment_status', ['due', 'partial']);
+                ->whereIn('payment_status', ['due', 'partial'])
+                ->with(['contact', 'payment_lines'])
+                ->orderBy('transaction_date', 'asc');
 
             if (! $is_admin) {
                 $due_query->where(function ($q) use ($user_id) {
@@ -279,16 +281,41 @@ class HomeController extends Controller
                 });
             }
 
-            $due_transactions = $due_query->with('payment_lines')->get();
+            $due_transactions = $due_query->get();
             $total_due = 0;
+            $pending_due_invoices = [];
+            $now = \Carbon::now();
+
             foreach ($due_transactions as $t) {
                 $paid = $t->payment_lines->where('is_return', 0)->sum('amount');
                 $return_paid = $t->payment_lines->where('is_return', 1)->sum('amount');
                 $total_paid = $paid - $return_paid;
                 $due = max(0, $t->final_total - $total_paid);
-                $total_due += $due;
+
+                if ($due > 0.001) {
+                    $total_due += $due;
+                    
+                    $t_date = !empty($t->transaction_date) ? \Carbon::parse($t->transaction_date) : $now;
+                    $days_pending = (int) $t_date->diffInDays($now);
+
+                    $pending_due_invoices[] = [
+                        'id' => $t->id,
+                        'invoice_no' => $t->invoice_no,
+                        'contact_name' => $t->contact->name ?? 'Cliente General',
+                        'contact_business' => $t->contact->supplier_business_name ?? null,
+                        'contact_mobile' => $t->contact->mobile ?? null,
+                        'transaction_date' => $t->transaction_date,
+                        'days_pending' => $days_pending,
+                        'is_overdue' => $days_pending > 10,
+                        'final_total' => $t->final_total,
+                        'final_total_bs' => $t->final_total * $bcv_rate,
+                        'due_amount' => $due,
+                        'due_amount_bs' => $due * $bcv_rate,
+                        'payment_status' => $t->payment_status,
+                    ];
+                }
             }
-            $count_due_invoices = $due_transactions->count();
+            $count_due_invoices = count($pending_due_invoices);
 
             // 5. Total de Clientes Activos
             $contacts_query = \App\Contact::where('business_id', $business_id)
@@ -335,6 +362,7 @@ class HomeController extends Controller
                 'due_usd' => $total_due,
                 'due_bs' => $total_due * $bcv_rate,
                 'due_count' => $count_due_invoices,
+                'pending_due_invoices' => $pending_due_invoices,
                 'customers_count' => $total_customers,
                 'recent_orders' => $recent_orders,
             ];
@@ -353,6 +381,7 @@ class HomeController extends Controller
                 'due_usd' => 0,
                 'due_bs' => 0,
                 'due_count' => 0,
+                'pending_due_invoices' => [],
                 'customers_count' => 0,
                 'recent_orders' => collect([]),
             ];
