@@ -798,8 +798,6 @@
 					</div>
 				</div>
 		    </div>
-			@endcomponent
-			</div>
 		</div>
 	</div>
 	@if(!empty($common_settings['is_enabled_export']) && $sale_type != 'sales_order')

@@ -773,8 +773,6 @@
 					</div>
 				</div>
 		    </div>
-			@endcomponent
-			</div>
 			@if(!empty($common_settings['is_enabled_export']) && $transaction->type != 'sales_order')
 				@component('components.widget', ['class' => 'box-solid', 'title' => __('lang_v1.export')])
 					<div class="col-md-12 mb-12">
