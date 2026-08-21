@@ -54,15 +54,15 @@
             </a>
         @endif
 
-        <!-- 3. Botón Central Elevado: Nuevo Pedido -->
+        <!-- 3. Botón Central Elevado: Pedido -->
         @if ($can_create_so)
             <a href="{{ action([\App\Http\Controllers\SellController::class, 'create']) }}?sale_type=sales_order" 
                class="audaz-bottom-nav-item audaz-nav-fab-item {{ $is_sales_order_create ? 'active' : '' }}" 
-               title="Cargar Nuevo Pedido">
+               title="Cargar Pedido">
                 <div class="audaz-nav-fab">
                     <i class="fas fa-cart-plus"></i>
                 </div>
-                <span class="nav-label">Nuevo Pedido</span>
+                <span class="nav-label">Pedido</span>
             </a>
         @elseif (auth()->user()->can('sell.create'))
             <a href="{{ action([\App\Http\Controllers\SellPosController::class, 'create']) }}" 

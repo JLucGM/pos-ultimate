@@ -184,7 +184,7 @@
 			</select>
 		@endif
 	@endif
-	@if(!empty($is_direct_sell))
+	@if(!empty($is_direct_sell) && empty($is_sales_order) && !empty($product->enable_sr_no))
   		<br>
   		<textarea class="form-control" name="products[{{$row_count}}][sell_line_note]" rows="2">{{$sell_line_note}}</textarea>
   		<p class="help-block"><small>@lang('lang_v1.sell_line_description_help')</small></p>

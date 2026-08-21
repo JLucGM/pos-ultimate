@@ -527,8 +527,20 @@
 					</div>
 			    </div>
 				<input type="hidden" name="is_direct_sale" value="1">
-				<input type="hidden" name="is_serial_no" value="1">
+				<input type="hidden" name="is_serial_no" value="{{ $sale_type == 'sales_order' ? 0 : 1 }}">
 			@endcomponent
+
+			@if($sale_type == 'sales_order')
+				<div class="row">
+					<div class="col-md-12 text-center" style="margin-bottom: 15px;">
+						<button type="button" class="btn btn-default btn-sm" id="toggle_shipping_box" style="border-radius: 8px; font-weight: 600;">
+							<i class="fas fa-truck text-muted"></i> + Datos de Envío (Opcional) <i class="fas fa-chevron-down text-muted" style="font-size: 10px;"></i>
+						</button>
+					</div>
+				</div>
+			@endif
+
+			<div id="shipping_box_wrapper" @if($sale_type == 'sales_order') style="display: none;" @endif>
 			@component('components.widget', ['class' => 'box-solid'])
 			<div class="col-md-4">
 				<div class="form-group">
@@ -669,16 +681,18 @@
 			        </div>
 			    </div>
 	        @endif
-	        <div class="col-md-4">
-                <div class="form-group">
-                    {!! Form::label('shipping_documents', __('lang_v1.shipping_documents') . ':') !!}
-                    {!! Form::file('shipping_documents[]', ['id' => 'shipping_documents', 'multiple', 'accept' => implode(',', array_keys(config('constants.document_upload_mimes_types')))]); !!}
-                    <p class="help-block">
-                    	@lang('purchase.max_file_size', ['size' => (config('constants.document_size_limit') / 1000000)])
-                    	@includeIf('components.document_help_text')
-                    </p>
-                </div>
-            </div>
+			@if($sale_type != 'sales_order')
+				<div class="col-md-4">
+					<div class="form-group">
+						{!! Form::label('shipping_documents', __('lang_v1.shipping_documents') . ':') !!}
+						{!! Form::file('shipping_documents[]', ['id' => 'shipping_documents', 'multiple', 'accept' => implode(',', array_keys(config('constants.document_upload_mimes_types')))]); !!}
+						<p class="help-block">
+							@lang('purchase.max_file_size', ['size' => (config('constants.document_size_limit') / 1000000)])
+							@includeIf('components.document_help_text')
+						</p>
+					</div>
+				</div>
+			@endif
 	        <div class="clearfix"></div>
 	        <div class="col-md-12 text-center">
 				<button type="button" class="tw-dw-btn tw-dw-btn-primary tw-dw-btn-sm tw-text-white" id="toggle_additional_expense"> <i class="fas fa-plus"></i> @lang('lang_v1.add_additional_expenses') <i class="fas fa-chevron-down"></i></button>
@@ -757,6 +771,7 @@
 				</div>
 		    </div>
 			@endcomponent
+			</div>
 		</div>
 	</div>
 	@if(!empty($common_settings['is_enabled_export']) && $sale_type != 'sales_order')
@@ -1034,6 +1049,10 @@
 					}, 400);
 				}
 			}
+
+			$('#toggle_shipping_box').on('click', function() {
+				$('#shipping_box_wrapper').slideToggle();
+			});
 
     	});
     </script>
