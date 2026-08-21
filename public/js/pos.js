@@ -2786,9 +2786,66 @@ function update_shipping_address(data) {
         $('div.export_div').hide();
     }
     
-    $('#shipping_address_modal').val(data.shipping_address);
-    $('#shipping_address').val(data.shipping_address);
+    var fullShipAddr = data.shipping_address;
+    if (!fullShipAddr || fullShipAddr == 'null') {
+        var addrArr = [];
+        if (data.address_line_1) addrArr.push(data.address_line_1);
+        if (data.address_line_2) addrArr.push(data.address_line_2);
+        if (data.city) addrArr.push(data.city);
+        if (data.state) addrArr.push(data.state);
+        if (data.country) addrArr.push(data.country);
+        fullShipAddr = addrArr.join(', ');
+    }
+    
+    $('#shipping_address_modal').val(fullShipAddr);
+    $('#shipping_address').val(fullShipAddr);
 }
+
+$(document).on('click', '#get_order_gps_btn', function(e) {
+    e.preventDefault();
+    var $btn = $(this);
+    var $status = $('#order_gps_status');
+
+    if (!navigator.geolocation) {
+        toastr.error('La geolocalización no está soportada por su navegador');
+        return;
+    }
+
+    $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Obteniendo GPS...');
+    $status.html('Obteniendo ubicación GPS satelital...');
+
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
+            var coords = lat.toFixed(6) + ',' + lng.toFixed(6);
+            var mapsUrl = 'https://maps.google.com/?q=' + coords;
+
+            var currentVal = $('#shipping_address').val() || '';
+            if (currentVal.trim() !== '') {
+                if (currentVal.indexOf('maps.google.com') === -1) {
+                    $('#shipping_address').val(currentVal + ' | GPS: ' + mapsUrl);
+                }
+            } else {
+                $('#shipping_address').val('Ubicación GPS: ' + mapsUrl);
+            }
+
+            $status.html('✅ Ubicación GPS: ' + coords);
+            $btn.prop('disabled', false).html('<i class="fas fa-check"></i> GPS Actualizado');
+            toastr.success('Ubicación GPS añadida al pedido: ' + coords);
+        },
+        function(error) {
+            $btn.prop('disabled', false).html('<i class="fas fa-location-arrow"></i> 📍 Reintentar GPS');
+            var msg = 'No se pudo obtener GPS. Verifique permisos.';
+            if (error.code === error.PERMISSION_DENIED) {
+                msg = 'Permiso de ubicación denegado en el navegador.';
+            }
+            $status.html('⚠️ ' + msg);
+            toastr.error(msg);
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+});
 
 function get_sales_orders() {
     if ($('#sales_order_ids').length) {

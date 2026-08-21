@@ -481,10 +481,26 @@
       </div>
       <div class="clearfix"></div>
       <div class="col-md-12 shipping_addr_div"><hr></div>
-      <div class="col-md-8 col-md-offset-2 shipping_addr_div mb-10" >
-          <strong>{{__('lang_v1.shipping_address')}}</strong><br>
-          {!! Form::text('shipping_address', $contact->shipping_address, ['class' => 'form-control', 
-                'placeholder' => __('lang_v1.search_address'), 'id' => 'shipping_address']); !!}
+      <div class="col-md-12 shipping_addr_div mb-10" >
+          <div class="tw-flex tw-items-center tw-justify-between tw-flex-wrap tw-gap-2 tw-mb-2">
+              <strong class="tw-text-sm tw-font-bold tw-text-gray-800"><i class="fas fa-truck tw-text-orange-500"></i> {{__('lang_v1.shipping_address')}}</strong>
+              
+              <div class="tw-flex tw-items-center tw-gap-2">
+                  <!-- Botón Copiar Dirección Fiscal -->
+                  <button type="button" class="btn btn-xs btn-default" id="copy_fiscal_address_btn" style="border-radius: 6px; font-weight: 600;">
+                      <i class="fas fa-copy text-primary"></i> Usar dirección fiscal
+                  </button>
+                  
+                  <!-- Botón GPS / Geolocalización en sitio -->
+                  <button type="button" class="btn btn-xs btn-success" id="get_gps_location_btn" style="border-radius: 6px; font-weight: 600; color: #fff;">
+                      <i class="fas fa-location-arrow"></i> 📍 Obtener Mi Ubicación GPS
+                  </button>
+              </div>
+          </div>
+
+          {!! Form::textarea('shipping_address', $contact->shipping_address, ['class' => 'form-control', 
+                'placeholder' => __('lang_v1.search_address') . ' o enlace de GPS / Google Maps', 'id' => 'shipping_address', 'rows' => 2]); !!}
+          <small class="tw-text-emerald-600 font-weight-bold" id="gps_status_msg"></small>
         <div class="mb-10" id="map"></div>
       </div>
       {!! Form::hidden('position', $contact->position, ['id' => 'position']); !!}
@@ -593,5 +609,90 @@
 
     {!! Form::close() !!}
 
+    <script>
+    $(document).ready(function() {
+        // 1. Botón Copiar Dirección Fiscal
+        $(document).off('click', '#copy_fiscal_address_btn').on('click', '#copy_fiscal_address_btn', function(e) {
+            e.preventDefault();
+            var form = $(this).closest('form');
+            var parts = [];
+            
+            var addr1 = form.find('input[name="address_line_1"]').val();
+            var addr2 = form.find('input[name="address_line_2"]').val();
+            var landmark = form.find('input[name="land_mark"]').val();
+            var city = form.find('input[name="city"]').val();
+            var state = form.find('input[name="state"]').val();
+            var country = form.find('input[name="country"]').val();
+            var zip = form.find('input[name="zip_code"]').val();
+
+            if (addr1) parts.push(addr1);
+            if (addr2) parts.push(addr2);
+            if (landmark) parts.push('Ref: ' + landmark);
+            if (city) parts.push(city);
+            if (state) parts.push(state);
+            if (country) parts.push(country);
+            if (zip) parts.push('CP: ' + zip);
+
+            var fullFiscal = parts.join(', ');
+            if (fullFiscal.trim() !== '') {
+                form.find('#shipping_address').val(fullFiscal);
+                toastr.success('Dirección fiscal copiada a dirección de envío');
+            } else {
+                toastr.warning('Primero complete los campos de dirección fiscal arriba');
+            }
+        });
+
+        // 2. Botón Obtener Coordenadas GPS
+        $(document).off('click', '#get_gps_location_btn').on('click', '#get_gps_location_btn', function(e) {
+            e.preventDefault();
+            var $btn = $(this);
+            var form = $btn.closest('form');
+            var $status = form.find('#gps_status_msg');
+
+            if (!navigator.geolocation) {
+                toastr.error('La geolocalización no está soportada por su navegador');
+                return;
+            }
+
+            $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Obteniendo GPS...');
+            $status.html('Obteniendo ubicación satelital...');
+
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
+                    var coords = lat.toFixed(6) + ',' + lng.toFixed(6);
+                    var mapsUrl = 'https://maps.google.com/?q=' + coords;
+
+                    form.find('#position').val(coords);
+
+                    var currentShipping = form.find('#shipping_address').val() || '';
+                    if (currentShipping.trim() !== '') {
+                        if (currentShipping.indexOf('maps.google.com') === -1) {
+                            form.find('#shipping_address').val(currentShipping + ' | GPS: ' + mapsUrl);
+                        }
+                    } else {
+                        form.find('#shipping_address').val('Ubicación GPS: ' + mapsUrl);
+                    }
+
+                    $status.html('✅ Coordenadas: ' + coords);
+                    $btn.prop('disabled', false).html('<i class="fas fa-check"></i> GPS Actualizado');
+                    toastr.success('Ubicación GPS capturada con éxito: ' + coords);
+                },
+                function(error) {
+                    $btn.prop('disabled', false).html('<i class="fas fa-location-arrow"></i> 📍 Reintentar GPS');
+                    var msg = 'No se pudo obtener la ubicación. Verifique los permisos de GPS en su dispositivo.';
+                    if (error.code === error.PERMISSION_DENIED) {
+                        msg = 'Permiso de ubicación denegado en el navegador.';
+                    }
+                    $status.html('⚠️ ' + msg);
+                    toastr.error(msg);
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            );
+        });
+    });
+    </script>
+  
   </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->
