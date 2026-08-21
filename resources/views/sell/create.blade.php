@@ -10,7 +10,7 @@
 	}
 
 	if($sale_type == 'sales_order') {
-		$title = __('lang_v1.sales_order');
+		$title = 'Nuevo Pedido';
 	}
 @endphp
 
@@ -59,6 +59,26 @@
 	 @if(!empty($sale_type))
 	 	<input type="hidden" id="sale_type" name="type" value="{{$sale_type}}">
 	 @endif
+
+	<!-- Barra Flotante Multimoneda en Tiempo Real ($ USD y Bs. BCV) -->
+	<div class="audaz-dual-currency-bar no-print" id="dual_currency_sticky_bar">
+		<div class="dual-title">
+			<i class="fas fa-calculator tw-text-[#FB4C0A]"></i>
+			<span>Total en Vivo</span>
+		</div>
+		<div class="dual-amounts">
+			<div class="usd-badge" title="Total en Dólares">
+				<i class="fas fa-dollar-sign"></i> <span id="sticky_total_usd">0.00</span> USD
+			</div>
+			<div class="bs-badge" title="Equivalente en Bolívares">
+				<i class="fas fa-coins"></i> <span id="sticky_total_bs" class="sell_dual_total_bs">Bs. 0,00</span>
+			</div>
+			<div class="rate-pill" title="Tasa de Cambio Oficial BCV">
+				<i class="fas fa-university tw-text-sky-400"></i> Tasa: <span class="sell_dual_bcv_rate font-weight-bold">{{ @num_format($bcv_rate ?? 1) }}</span> Bs/$
+			</div>
+		</div>
+	</div>
+
 	<div class="row">
 		<div class="col-md-12 col-sm-12">
 			@component('components.widget', ['class' => 'box-solid'])
@@ -314,7 +334,7 @@
 					<div class="col-sm-3">
 						<div class="form-group">
 							{!! Form::label('sales_order_ids', __('lang_v1.sales_order').':') !!}
-							{!! Form::select('sales_order_ids[]', [], null, ['class' => 'form-control select2', 'multiple', 'id' => 'sales_order_ids']); !!}
+							{!! Form::select('sales_order_ids[]', $preselected_sales_orders ?? [], !empty($preselected_sales_order) ? [$preselected_sales_order->id] : null, ['class' => 'form-control select2' . (!empty($preselected_sales_order) ? ' not_loaded auto_load_so' : ''), 'multiple', 'id' => 'sales_order_ids']); !!}
 						</div>
 					</div>
 					<div class="clearfix"></div>
@@ -714,9 +734,26 @@
 				<input type="hidden" name="round_off_amount" 
 					id="round_off_amount" value=0>
 				@endif
-		    	<div><b>@lang('sale.total_payable'): </b>
+		    	<div class="tw-bg-slate-50 tw-p-4 tw-rounded-xl tw-border tw-border-slate-200 tw-mt-3 tw-shadow-sm">
 					<input type="hidden" name="final_total" id="final_total_input">
-					<span id="total_payable">0</span>
+					<input type="hidden" id="bcv_exchange_rate_val" value="{{ $bcv_rate ?? 1 }}">
+					
+					<div class="tw-flex tw-items-baseline tw-justify-between tw-gap-2">
+						<span class="tw-text-sm tw-font-bold tw-text-gray-700">@lang('sale.total_payable') ($ USD):</span>
+						<span id="total_payable" class="tw-text-2xl tw-font-black tw-text-emerald-600">0.00</span>
+					</div>
+
+					<div id="sell_secondary_currency_box" class="dual_currency_box tw-mt-2 tw-pt-2 tw-border-t tw-border-dashed tw-border-slate-300" style="display: none;">
+						<div class="tw-flex tw-items-baseline tw-justify-between tw-gap-2">
+							<span class="tw-text-xs tw-font-bold tw-text-sky-700">
+								<i class="fas fa-university"></i> Total en Bolívares (Bs.):
+							</span>
+							<span id="total_payable_secondary" class="sell_dual_total_bs tw-text-xl tw-font-black tw-text-sky-600" style="font-family: ui-monospace, monospace;">Bs. 0,00</span>
+						</div>
+						<div class="tw-text-right tw-mt-1">
+							<small class="tw-text-[11px] tw-font-semibold tw-text-slate-500">Tasa BCV: <span class="sell_dual_bcv_rate font-weight-bold">{{ @num_format($bcv_rate ?? 1) }}</span> Bs/$</small>
+						</div>
+					</div>
 				</div>
 		    </div>
 			@endcomponent
@@ -857,9 +894,13 @@
 	
 	<div class="row">
 		{!! Form::hidden('is_save_and_print', 0, ['id' => 'is_save_and_print']); !!}
-		<div class="col-sm-12 text-center tw-mt-4">
-			<button type="button" id="submit-sell" class="tw-dw-btn tw-dw-btn-primary tw-dw-btn-lg tw-text-white">@lang('messages.save')</button>
-			<button type="button" id="save-and-print" class="tw-dw-btn tw-dw-btn-success tw-dw-btn-lg tw-text-white">@lang('lang_v1.save_and_print')</button>
+		<div class="col-sm-12 text-center tw-mt-4 tw-mb-6">
+			<button type="button" id="submit-sell" class="tw-dw-btn tw-dw-btn-primary tw-dw-btn-lg tw-text-white">
+				<i class="fas fa-check-circle"></i> @if($sale_type == 'sales_order') Guardar Pedido @else @lang('messages.save') @endif
+			</button>
+			<button type="button" id="save-and-print" class="tw-dw-btn tw-dw-btn-success tw-dw-btn-lg tw-text-white">
+				<i class="fas fa-print"></i> @if($sale_type == 'sales_order') Guardar e Imprimir @else @lang('lang_v1.save_and_print') @endif
+			</button>
 		</div>
 	</div>
 	
@@ -979,6 +1020,19 @@
 
 			if($('.payment_types_dropdown').length){
 				$('.payment_types_dropdown').change();
+			}
+
+			if ($('#sales_order_ids').hasClass('auto_load_so')) {
+				var so_ids = $('#sales_order_ids').val();
+				if (so_ids && so_ids.length > 0) {
+					setTimeout(function() {
+						var initial_so_id = Array.isArray(so_ids) ? so_ids[0] : so_ids;
+						$('#sales_order_ids').trigger({
+							type: 'select2:select',
+							params: { data: { id: initial_so_id } }
+						});
+					}, 400);
+				}
 			}
 
     	});

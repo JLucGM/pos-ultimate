@@ -32,6 +32,26 @@
 	@if($transaction->type == 'sales_order')
 	 	<input type="hidden" id="sale_type" value="{{$transaction->type}}">
 	@endif
+
+	<!-- Barra Flotante Multimoneda en Tiempo Real ($ USD y Bs. BCV) -->
+	<div class="audaz-dual-currency-bar no-print" id="dual_currency_sticky_bar">
+		<div class="dual-title">
+			<i class="fas fa-calculator tw-text-[#FB4C0A]"></i>
+			<span>Total en Vivo</span>
+		</div>
+		<div class="dual-amounts">
+			<div class="usd-badge" title="Total en Dólares">
+				<i class="fas fa-dollar-sign"></i> <span id="sticky_total_usd">0.00</span> USD
+			</div>
+			<div class="bs-badge" title="Equivalente en Bolívares">
+				<i class="fas fa-coins"></i> <span id="sticky_total_bs" class="sell_dual_total_bs">Bs. 0,00</span>
+			</div>
+			<div class="rate-pill" title="Tasa de Cambio Oficial BCV">
+				<i class="fas fa-university tw-text-sky-400"></i> Tasa: <span class="sell_dual_bcv_rate font-weight-bold">{{ @num_format($bcv_rate ?? 1) }}</span> Bs/$
+			</div>
+		</div>
+	</div>
+
 	<div class="row">
 		<div class="col-md-12 col-sm-12">
 			@component('components.widget', ['class' => 'box-solid'])
@@ -690,9 +710,26 @@
 				<input type="hidden" name="round_off_amount" 
 					id="round_off_amount" value=0>
 				@endif
-		    	<div><b>@lang('sale.total_payable'): </b>
+		    	<div class="tw-bg-slate-50 tw-p-4 tw-rounded-xl tw-border tw-border-slate-200 tw-mt-3 tw-shadow-sm">
 					<input type="hidden" name="final_total" id="final_total_input">
-					<span id="total_payable">0</span>
+					<input type="hidden" id="bcv_exchange_rate_val" value="{{ $bcv_rate ?? 1 }}">
+					
+					<div class="tw-flex tw-items-baseline tw-justify-between tw-gap-2">
+						<span class="tw-text-sm tw-font-bold tw-text-gray-700">@lang('sale.total_payable') ($ USD):</span>
+						<span id="total_payable" class="tw-text-2xl tw-font-black tw-text-emerald-600">0.00</span>
+					</div>
+
+					<div id="sell_secondary_currency_box" class="dual_currency_box tw-mt-2 tw-pt-2 tw-border-t tw-border-dashed tw-border-slate-300" style="display: none;">
+						<div class="tw-flex tw-items-baseline tw-justify-between tw-gap-2">
+							<span class="tw-text-xs tw-font-bold tw-text-sky-700">
+								<i class="fas fa-university"></i> Total en Bolívares (Bs.):
+							</span>
+							<span id="total_payable_secondary" class="sell_dual_total_bs tw-text-xl tw-font-black tw-text-sky-600" style="font-family: ui-monospace, monospace;">Bs. 0,00</span>
+						</div>
+						<div class="tw-text-right tw-mt-1">
+							<small class="tw-text-[11px] tw-font-semibold tw-text-slate-500">Tasa BCV: <span class="sell_dual_bcv_rate font-weight-bold">{{ @num_format($bcv_rate ?? 1) }}</span> Bs/$</small>
+						</div>
+					</div>
 				</div>
 		    </div>
 			@endcomponent
@@ -831,10 +868,14 @@
 	@endcan
 	@endif
 	<div class="row">
-		<div class="col-md-12 text-center">
+		<div class="col-md-12 text-center tw-mt-4 tw-mb-6">
 	    	{!! Form::hidden('is_save_and_print', 0, ['id' => 'is_save_and_print']); !!}
-	    	<button type="button" class="tw-dw-btn tw-dw-btn-primary tw-text-white tw-dw-btn-lg" id="submit-sell">@lang('messages.update')</button>
-	    	<button type="button" id="save-and-print" class="tw-dw-btn tw-dw-btn-success tw-text-white tw-dw-btn-lg">@lang('lang_v1.update_and_print')</button>
+	    	<button type="button" class="tw-dw-btn tw-dw-btn-primary tw-text-white tw-dw-btn-lg" id="submit-sell">
+	    		<i class="fas fa-save"></i> @if($transaction->type == 'sales_order') Actualizar Pedido @else @lang('messages.update') @endif
+	    	</button>
+	    	<button type="button" id="save-and-print" class="tw-dw-btn tw-dw-btn-success tw-text-white tw-dw-btn-lg">
+	    		<i class="fas fa-print"></i> @if($transaction->type == 'sales_order') Actualizar e Imprimir @else @lang('lang_v1.update_and_print') @endif
+	    	</button>
 	    </div>
 	</div>
 	@if(in_array('subscription', $enabled_modules))

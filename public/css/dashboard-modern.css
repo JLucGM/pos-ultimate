@@ -1122,3 +1122,80 @@ html, body {
     color: #FFFFFF !important;
 }
 
+/* ==========================================================================
+   10. Audaz POS Multi-currency Real-time Sticky Bar (USD & Bs. BCV)
+   ========================================================================== */
+.audaz-dual-currency-bar {
+    position: sticky;
+    top: 55px;
+    z-index: 1020;
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 14px;
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    backdrop-filter: blur(10px);
+}
+
+.audaz-dual-currency-bar .dual-title {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94A3B8;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.audaz-dual-currency-bar .dual-amounts {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.audaz-dual-currency-bar .usd-badge {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: #10B981;
+    padding: 4px 12px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.audaz-dual-currency-bar .bs-badge {
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #38BDF8;
+    padding: 4px 12px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 900;
+    font-family: ui-monospace, monospace;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.audaz-dual-currency-bar .rate-pill {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #E2E8F0;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+

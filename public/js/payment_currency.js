@@ -48,19 +48,39 @@
     }
 
     /**
-     * Actualizar visualización dual en barra inferior del POS
+     * Actualizar visualización dual (POS, Crear Venta y Crear Pedido)
      */
-    function updatePosDualPayable() {
-        var rawTotal = $('#final_total_input').val() || '0';
-        var totalUsd = parseFloat(rawTotal.replace(/,/g, '')) || 0;
+    function updateDualPayable() {
+        var totalUsd = 0;
+        if ($('#final_total_input').length) {
+            if (typeof __read_number !== 'undefined') {
+                totalUsd = __read_number($('#final_total_input')) || 0;
+            } else {
+                var raw = $('#final_total_input').val() || '0';
+                totalUsd = parseFloat(raw.replace(/,/g, '')) || 0;
+            }
+        } else if ($('#total_payable').length) {
+            var txt = $('#total_payable').text() || '0';
+            totalUsd = parseFloat(txt.replace(/[^0-9.-]+/g, '')) || 0;
+        }
 
         getActiveBcvRate(function(rate) {
+            var formattedUsd = parseFloat(totalUsd).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
             if (rate > 1) {
                 var totalBs = totalUsd * rate;
                 $('#total_payable_secondary').text('Bs. ' + formatBs(totalBs));
-                $('#pos_secondary_currency_box').show();
+                $('.sell_dual_total_bs').text('Bs. ' + formatBs(totalBs));
+                $('#sticky_total_usd').text(formattedUsd);
+                $('#sticky_total_bs').text('Bs. ' + formatBs(totalBs));
+                $('.sell_dual_bcv_rate').text(formatBs(rate));
+                $('#pos_secondary_currency_box, #sell_secondary_currency_box, .dual_currency_box, #dual_currency_sticky_bar').show();
             } else {
-                $('#pos_secondary_currency_box').hide();
+                $('#sticky_total_usd').text(formattedUsd);
+                $('#pos_secondary_currency_box, #sell_secondary_currency_box, .dual_currency_box, #dual_currency_sticky_bar').hide();
             }
         });
     }
@@ -132,9 +152,9 @@
 
     // === EVENT LISTENERS ===
 
-    // Observar cambios en el total a pagar del POS
+    // Observar cambios en el total a pagar
     var observer = new MutationObserver(function() {
-        updatePosDualPayable();
+        updateDualPayable();
     });
 
     $(document).ready(function() {
@@ -143,9 +163,14 @@
             observer.observe(target, { childList: true, characterData: true, subtree: true });
         }
 
+        // Eventos en campos de productos y totales para recalcular al instante
+        $(document).on('change keyup input', '#final_total_input, .pos_quantity, .pos_unit_price, .pos_unit_price_inc_tax, #discount_amount, #tax_rate_id, .sub_unit', function() {
+            setTimeout(updateDualPayable, 80);
+        });
+
         // Consulta inicial de tasa
         getActiveBcvRate(function() {
-            updatePosDualPayable();
+            updateDualPayable();
         });
 
         // Eventos en campos de pago

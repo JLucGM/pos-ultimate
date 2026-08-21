@@ -18,9 +18,11 @@ use App\TypesOfService;
 use App\User;
 use App\Utils\BusinessUtil;
 use App\Utils\ContactUtil;
+use App\Utils\CurrencyUtil;
 use App\Utils\ModuleUtil;
 use App\Utils\ProductUtil;
 use App\Utils\TransactionUtil;
+use App\Services\ExchangeRateService;
 use App\Variation;
 use App\Warranty;
 use DB;
@@ -42,19 +44,22 @@ class SellController extends Controller
 
     protected $productUtil;
 
+    protected $currencyUtil;
+
     /**
      * Constructor
      *
      * @param  ProductUtils  $product
      * @return void
      */
-    public function __construct(ContactUtil $contactUtil, BusinessUtil $businessUtil, TransactionUtil $transactionUtil, ModuleUtil $moduleUtil, ProductUtil $productUtil)
+    public function __construct(ContactUtil $contactUtil, BusinessUtil $businessUtil, TransactionUtil $transactionUtil, ModuleUtil $moduleUtil, ProductUtil $productUtil, CurrencyUtil $currencyUtil)
     {
         $this->contactUtil = $contactUtil;
         $this->businessUtil = $businessUtil;
         $this->transactionUtil = $transactionUtil;
         $this->moduleUtil = $moduleUtil;
         $this->productUtil = $productUtil;
+        $this->currencyUtil = $currencyUtil;
 
         $this->dummyPaymentLine = ['method' => '', 'amount' => 0, 'note' => '', 'card_transaction_number' => '', 'card_number' => '', 'card_type' => '', 'card_holder_name' => '', 'card_month' => '', 'card_year' => '', 'card_security' => '', 'cheque_number' => '', 'bank_account_number' => '',
             'is_return' => 0, 'transaction_no' => '', ];
@@ -415,6 +420,9 @@ class SellController extends Controller
                                     $html .= '<li><a target="_blank" href="'.action([\App\Http\Controllers\SellPosController::class, 'edit'], [$row->id]).'"><i class="fas fa-edit"></i> '.__('messages.edit').'</a></li>';
                                 }
                             } elseif ($row->type == 'sales_order') {
+                                if ($row->status != 'completed' && (auth()->user()->can('sell.create') || auth()->user()->can('direct_sell.access'))) {
+                                    $html .= '<li><a href="'.action([\App\Http\Controllers\SellController::class, 'create']).'?sales_order_id='.$row->id.'"><i class="fas fa-file-invoice-dollar text-primary"></i> '.__('lang_v1.convert_to_invoice').'</a></li>';
+                                }
                                 if (auth()->user()->can('so.update')) {
                                     $html .= '<li><a target="_blank" href="'.action([\App\Http\Controllers\SellController::class, 'edit'], [$row->id]).'"><i class="fas fa-edit"></i> '.__('messages.edit').'</a></li>';
                                 }
@@ -721,6 +729,22 @@ class SellController extends Controller
 
         $walk_in_customer = $this->contactUtil->getWalkInCustomer($business_id);
 
+        $preselected_sales_order = null;
+        $preselected_sales_orders = [];
+        if (!empty(request()->get('sales_order_id'))) {
+            $so_id = request()->get('sales_order_id');
+            $preselected_sales_order = Transaction::where('business_id', $business_id)
+                                        ->where('type', 'sales_order')
+                                        ->find($so_id);
+            if (!empty($preselected_sales_order)) {
+                $contact = Contact::where('business_id', $business_id)->find($preselected_sales_order->contact_id);
+                if (!empty($contact)) {
+                    $walk_in_customer = $this->contactUtil->getContactInfo($business_id, $contact->id);
+                }
+                $preselected_sales_orders = [$preselected_sales_order->id => $preselected_sales_order->invoice_no];
+            }
+        }
+
         $business_details = $this->businessUtil->getDetails($business_id);
         $taxes = TaxRate::forBusinessDropdown($business_id, true, true);
 
@@ -729,9 +753,14 @@ class SellController extends Controller
         $business_locations = $business_locations['locations'];
 
         $default_location = null;
-        foreach ($business_locations as $id => $name) {
-            $default_location = BusinessLocation::findOrFail($id);
-            break;
+        if (!empty($preselected_sales_order) && !empty($preselected_sales_order->location_id)) {
+            $default_location = BusinessLocation::find($preselected_sales_order->location_id);
+        }
+        if (empty($default_location)) {
+            foreach ($business_locations as $id => $name) {
+                $default_location = BusinessLocation::findOrFail($id);
+                break;
+            }
         }
 
         $commsn_agnt_setting = $business_details->sales_cmsn_agnt;
@@ -811,6 +840,11 @@ class SellController extends Controller
 
         $change_return = $this->dummyPaymentLine;
 
+        // Tasa BCV y moneda para multimoneda en pedidos y ventas
+        $exchangeRateService = new ExchangeRateService();
+        $bcv_rate = $exchangeRateService->getCachedRate($business_id) ?? 1;
+        $base_currency = $this->currencyUtil->getBusinessCurrency($business_id);
+
         return view('sell.create')
             ->with(compact(
                 'business_details',
@@ -838,7 +872,11 @@ class SellController extends Controller
                 'is_order_request_enabled',
                 'users',
                 'default_price_group_id',
-                'change_return'
+                'change_return',
+                'preselected_sales_order',
+                'preselected_sales_orders',
+                'bcv_rate',
+                'base_currency'
             ));
     }
 
@@ -1249,8 +1287,13 @@ class SellController extends Controller
         //Added check because $users is of no use if enable_contact_assign if false
         $users = config('constants.enable_contact_assign') ? User::forDropdown($business_id, false, false, false, true) : [];
 
+        // Tasa BCV y moneda para multimoneda en pedidos y ventas
+        $exchangeRateService = new ExchangeRateService();
+        $bcv_rate = $exchangeRateService->getCachedRate($business_id) ?? 1;
+        $base_currency = $this->currencyUtil->getBusinessCurrency($business_id);
+
         return view('sell.edit')
-            ->with(compact('business_details', 'taxes', 'sell_details', 'transaction', 'commission_agent', 'types', 'customer_groups', 'pos_settings', 'waiters', 'invoice_schemes', 'default_invoice_schemes', 'redeem_details', 'edit_discount', 'edit_price', 'shipping_statuses', 'warranties', 'statuses', 'sales_orders', 'payment_types', 'accounts', 'payment_lines', 'change_return', 'is_order_request_enabled', 'customer_due', 'users'));
+            ->with(compact('business_details', 'taxes', 'sell_details', 'transaction', 'commission_agent', 'types', 'customer_groups', 'pos_settings', 'waiters', 'invoice_schemes', 'default_invoice_schemes', 'redeem_details', 'edit_discount', 'edit_price', 'shipping_statuses', 'warranties', 'statuses', 'sales_orders', 'payment_types', 'accounts', 'payment_lines', 'change_return', 'is_order_request_enabled', 'customer_due', 'users', 'bcv_rate', 'base_currency'));
     }
 
     /**
