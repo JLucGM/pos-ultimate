@@ -1237,7 +1237,6 @@ class Util
     public function shipping_statuses()
     {
         $statuses = [
-            'ordered' => __('lang_v1.ordered'),
             'packed' => __('lang_v1.packed'),
             'shipped' => __('lang_v1.shipped'),
             'delivered' => __('lang_v1.delivered'),

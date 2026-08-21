@@ -14,7 +14,7 @@ return [
     'sale' => 'Vender',
     'sells' => 'Ventas',
     'list_sale' => 'Lista de ventas',
-    'add_sale' => 'Agregar venta',
+    'add_sale' => 'Facturar',
     'pos_sale' => 'POS',
     'draft_added' => 'Borrador añadido con éxito', /* modified */
     'invoice_added' => 'Factura añadida con éxito',
@@ -66,7 +66,7 @@ return [
     'finalize_payment' => 'Finalizar el pago',
     'sale_date' => 'Fecha de venta',
     'list_pos' => 'Lista POS',
-    'edit_sale' => 'Editar Venta',
+    'edit_sale' => 'Facturar',
     'shipping' => 'Transporte',
     'shipping_details' => 'Detalles de envío',
     'shipping_charges' => 'Gastos de envío',

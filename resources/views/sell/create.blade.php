@@ -5,12 +5,10 @@
 		$title = __('lang_v1.add_quotation');
 	} else if (!empty($status) && $status == 'draft') {
 		$title = __('lang_v1.add_draft');
-	} else {
-		$title = __('sale.add_sale');
-	}
-
-	if($sale_type == 'sales_order') {
+	} else if($sale_type == 'sales_order') {
 		$title = 'Nuevo Pedido';
+	} else {
+		$title = 'Facturar';
 	}
 @endphp
 
@@ -152,18 +150,12 @@
 							<span class="input-group-addon">
 								<i class="fa fa-user"></i>
 							</span>
-							<input type="hidden" id="default_customer_id" 
-							value="{{ $walk_in_customer['id']}}" >
-							<input type="hidden" id="default_customer_name" 
-							value="{{ $walk_in_customer['name']}}" >
-							<input type="hidden" id="default_customer_balance" value="{{ $walk_in_customer['balance'] ?? ''}}" >
-							<input type="hidden" id="default_customer_address" value="{{ $walk_in_customer['shipping_address'] ?? ''}}" >
-							@if(!empty($walk_in_customer['price_calculation_type']) && $walk_in_customer['price_calculation_type'] == 'selling_price_group')
-								<input type="hidden" id="default_selling_price_group" 
-							value="{{ $walk_in_customer['selling_price_group_id'] ?? ''}}" >
-							@endif
+							<input type="hidden" id="default_customer_id" value="" >
+							<input type="hidden" id="default_customer_name" value="" >
+							<input type="hidden" id="default_customer_balance" value="" >
+							<input type="hidden" id="default_customer_address" value="" >
 							{!! Form::select('contact_id', 
-								[], null, ['class' => 'form-control mousetrap', 'id' => 'customer_id', 'placeholder' => 'Buscar o seleccionar cliente (Nombre / Teléfono)', 'required']); !!}
+								[], null, ['class' => 'form-control mousetrap', 'id' => 'customer_id', 'placeholder' => 'Ingresar caracteres', 'required']); !!}
 							<span class="input-group-btn">
 								<button type="button" class="btn btn-default bg-white btn-flat add_new_customer" data-name=""><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
 							</span>
@@ -181,38 +173,21 @@
 							<span class="text-muted"><i>(Se llenará cuando seleccione el cliente)</i></span>
 						@endif
 					</div>
-					<br>
-					<strong>
-						@lang('lang_v1.shipping_address'):
-					</strong>
-					<div id="shipping_address_div">
-						@if(!empty($walk_in_customer['shipping_address']) && ($walk_in_customer['name'] ?? '') != 'Walk-In Customer')
-							{{$walk_in_customer['supplier_business_name'] ?? ''}}<br>
-							{{$walk_in_customer['name'] ?? ''}}<br>
-							{{$walk_in_customer['shipping_address'] ?? ''}}
-						@else
-							<span class="text-muted"><i>(Se llenará cuando seleccione el cliente)</i></span>
-						@endif
-					</div>					
 					</small>
 				</div>
 
 				<div class="col-md-3">
 		          <div class="form-group">
-		            <div class="multi-input">
-		            @php
-						$is_pay_term_required = !empty($pos_settings['is_pay_term_required']);
-					@endphp
-		              {!! Form::label('pay_term_number', __('contact.pay_term') . ':') !!} @show_tooltip(__('tooltip.pay_term'))
-		              <br/>
-		              {!! Form::number('pay_term_number', $walk_in_customer['pay_term_number'], ['class' => 'form-control width-40 pull-left', 'placeholder' => __('contact.pay_term'), 'required' => $is_pay_term_required]); !!}
-
-		              {!! Form::select('pay_term_type', 
-		              	['months' => __('lang_v1.months'), 
-		              		'days' => __('lang_v1.days')], 
-		              		$walk_in_customer['pay_term_type'], 
-		              	['class' => 'form-control width-60 pull-left','placeholder' => __('messages.please_select'), 'required' => $is_pay_term_required]); !!}
-		            </div>
+		              {!! Form::label('pay_term_preset', 'Término de Pago / Crédito:') !!}
+		              <select name="pay_term_preset" id="pay_term_preset" class="form-control select2" style="width: 100%;">
+		                  <option value="0" selected>Contado</option>
+		                  <option value="3">Crédito 3 días</option>
+		                  <option value="7">Crédito 7 días</option>
+		                  <option value="10">Crédito 10 días</option>
+		                  <option value="20">Crédito 20 días</option>
+		              </select>
+		              <input type="hidden" name="pay_term_number" id="pay_term_number" value="">
+		              <input type="hidden" name="pay_term_type" id="pay_term_type" value="">
 		          </div>
 		        </div>
 
@@ -331,10 +306,10 @@
 		        <div class="clearfix"></div>
 
 		        @if((!empty($pos_settings['enable_sales_order']) && $sale_type != 'sales_order') || $is_order_request_enabled)
-					<div class="col-sm-3">
+					<div class="col-sm-6 col-md-6">
 						<div class="form-group">
-							{!! Form::label('sales_order_ids', __('lang_v1.sales_order').':') !!}
-							{!! Form::select('sales_order_ids[]', $preselected_sales_orders ?? [], !empty($preselected_sales_order) ? [$preselected_sales_order->id] : null, ['class' => 'form-control select2' . (!empty($preselected_sales_order) ? ' not_loaded auto_load_so' : ''), 'multiple', 'id' => 'sales_order_ids']); !!}
+							{!! Form::label('sales_order_ids', 'Facturar pedido:') !!}
+							{!! Form::select('sales_order_ids[]', $preselected_sales_orders ?? [], !empty($preselected_sales_order) ? [$preselected_sales_order->id] : null, ['class' => 'form-control select2' . (!empty($preselected_sales_order) ? ' not_loaded auto_load_so' : ''), 'multiple', 'id' => 'sales_order_ids', 'style' => 'width: 100%;', 'placeholder' => 'Ingresar caracteres o seleccionar pedido']); !!}
 						</div>
 					</div>
 					<div class="clearfix"></div>
@@ -381,7 +356,7 @@
 								<th class="@if(!auth()->user()->can('edit_product_price_from_sale_screen')) hide @endif">
 									@lang('sale.unit_price')
 								</th>
-								<th class="@if(!auth()->user()->can('edit_product_discount_from_sale_screen')) hide @endif">
+								<th class="hide">
 									@lang('receipt.discount')
 								</th>
 								<th class="text-center {{$hide_tax}}">
@@ -569,24 +544,24 @@
 			@else
 				<div id="shipping_box_wrapper">
 				@component('components.widget', ['class' => 'box-solid'])
-				<div class="col-md-4">
+				<div class="col-md-8">
 					<div class="form-group">
-			            {!! Form::label('shipping_details', __('sale.shipping_details')) !!}
-			            {!! Form::textarea('shipping_details',null, ['class' => 'form-control','placeholder' => __('sale.shipping_details') ,'rows' => '3', 'cols'=>'30']); !!}
-			        </div>
+						<div class="tw-flex tw-items-center tw-justify-between tw-mb-1">
+							{!! Form::label('shipping_address', __('lang_v1.shipping_address') . ':') !!}
+							<button type="button" class="btn btn-xs btn-success" id="get_order_gps_btn" style="border-radius: 6px; font-weight: 600; color: #fff;">
+								<i class="fas fa-location-arrow"></i> 📍 GPS En Sitio
+							</button>
+						</div>
+						{!! Form::textarea('shipping_address', !empty($walk_in_customer['shipping_address']) ? $walk_in_customer['shipping_address'] : null, ['class' => 'form-control', 'placeholder' => __('lang_v1.shipping_address') . ' o enlace de Google Maps', 'rows' => '2', 'id' => 'shipping_address']); !!}
+						<small class="tw-text-emerald-600 font-weight-bold" id="order_gps_status"></small>
+					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="form-group">
-			            {!! Form::label('shipping_address', __('lang_v1.shipping_address')) !!}
-			            {!! Form::textarea('shipping_address',null, ['class' => 'form-control','placeholder' => __('lang_v1.shipping_address') ,'rows' => '3', 'cols'=>'30']); !!}
-			        </div>
-				</div>
-				<div class="col-md-4">
-					<div class="form-group">
-						{!!Form::label('shipping_charges', __('sale.shipping_charges'))!!}
+						{!!Form::label('shipping_charges', __('sale.shipping_charges') . ':')!!}
 						<div class="input-group">
 						<span class="input-group-addon">
-						<i class="fa fa-info"></i>
+						<i class="fa fa-truck"></i>
 						</span>
 						{!!Form::text('shipping_charges',@num_format(0.00),['class'=>'form-control input_number','placeholder'=> __('sale.shipping_charges')]);!!}
 						</div>
@@ -708,16 +683,6 @@
 				        </div>
 				    </div>
 		        @endif
-				<div class="col-md-4">
-					<div class="form-group">
-						{!! Form::label('shipping_documents', __('lang_v1.shipping_documents') . ':') !!}
-						{!! Form::file('shipping_documents[]', ['id' => 'shipping_documents', 'multiple', 'accept' => implode(',', array_keys(config('constants.document_upload_mimes_types')))]); !!}
-						<p class="help-block">
-							@lang('purchase.max_file_size', ['size' => (config('constants.document_size_limit') / 1000000)])
-							@includeIf('components.document_help_text')
-						</p>
-					</div>
-				</div>
 		        <div class="clearfix"></div>
 		        <div class="col-md-12 text-center">
 					<button type="button" class="tw-dw-btn tw-dw-btn-primary tw-dw-btn-sm tw-text-white" id="toggle_additional_expense"> <i class="fas fa-plus"></i> @lang('lang_v1.add_additional_expenses') <i class="fas fa-chevron-down"></i></button>

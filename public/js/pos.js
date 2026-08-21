@@ -101,7 +101,7 @@ $(document).ready(function() {
         minimumInputLength: 1,
         language: {
             inputTooShort: function (args) {
-                return LANG.please_enter + args.minimum + LANG.or_more_characters;
+                return 'Ingresar caracteres';
             },
             noResults: function() {
                 var name = $('#customer_id')
@@ -115,6 +115,12 @@ $(document).ready(function() {
                     '</button>'
                 );
             },
+            searching: function() {
+                return LANG.searching;
+            },
+            errorLoading: function() {
+                return LANG.error_occurred;
+            },
         },
         escapeMarkup: function(markup) {
             return markup;
@@ -124,16 +130,20 @@ $(document).ready(function() {
         var data = e.params.data;
         if (data.pay_term_number) {
             $('input#pay_term_number').val(data.pay_term_number);
+            if ($('#pay_term_preset').length) {
+                $('#pay_term_preset').val(data.pay_term_number).trigger('change.select2');
+            }
         } else {
             $('input#pay_term_number').val('');
+            if ($('#pay_term_preset').length) {
+                $('#pay_term_preset').val('0').trigger('change.select2');
+            }
         }
 
         if (data.pay_term_type) {
-            $('#add_sell_form select[name="pay_term_type"]').val(data.pay_term_type);
-            $('#edit_sell_form select[name="pay_term_type"]').val(data.pay_term_type);
+            $('#add_sell_form select[name="pay_term_type"], #edit_sell_form select[name="pay_term_type"], input#pay_term_type').val(data.pay_term_type);
         } else {
-            $('#add_sell_form select[name="pay_term_type"]').val('');
-            $('#edit_sell_form select[name="pay_term_type"]').val('');
+            $('#add_sell_form select[name="pay_term_type"], #edit_sell_form select[name="pay_term_type"], input#pay_term_type').val('');
         }
         
         update_shipping_address(data);
@@ -2859,7 +2869,11 @@ function get_sales_orders() {
             url: '/get-sales-orders/' + customer_id + '?location_id=' + location_id,
             dataType: 'json',
             success: function(data) {
-                $('#sales_order_ids').select2('destroy').empty().select2({data: data});
+                $('#sales_order_ids').select2('destroy').empty().select2({
+                    data: data,
+                    width: '100%',
+                    placeholder: 'Seleccionar pedido(s) para facturar'
+                });
                 $('table#pos_table tbody').find('tr').each( function(){
                     if (typeof($(this).data('so_id')) !== 'undefined') {
                         $(this).remove();
@@ -2870,6 +2884,17 @@ function get_sales_orders() {
         });
     }
 }
+
+$(document).on('change', '#pay_term_preset', function() {
+    var days = $(this).val();
+    if (days && parseInt(days) > 0) {
+        $('input#pay_term_number').val(days);
+        $('#add_sell_form select[name="pay_term_type"], #edit_sell_form select[name="pay_term_type"], input#pay_term_type').val('days');
+    } else {
+        $('input#pay_term_number').val('');
+        $('#add_sell_form select[name="pay_term_type"], #edit_sell_form select[name="pay_term_type"], input#pay_term_type').val('');
+    }
+});
 
 $("#sales_order_ids").on("select2:select", function (e) {
     var sales_order_id = e.params.data.id;

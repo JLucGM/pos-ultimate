@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-	$title = $transaction->type == 'sales_order' ? __('lang_v1.edit_sales_order') : __('sale.edit_sale');
+	$title = $transaction->type == 'sales_order' ? 'Editar Pedido' : 'Facturar';
 @endphp
 @section('title', $title)
 
@@ -119,7 +119,7 @@
 							<input type="hidden" id="default_customer_name" 
 							value="{{ $transaction->contact->name }}" >
 							{!! Form::select('contact_id', 
-								[], null, ['class' => 'form-control mousetrap', 'id' => 'customer_id', 'placeholder' => 'Enter Customer name / phone', 'required']); !!}
+								[], null, ['class' => 'form-control mousetrap', 'id' => 'customer_id', 'placeholder' => 'Ingresar caracteres', 'required']); !!}
 							<span class="input-group-btn">
 								<button type="button" class="btn btn-default bg-white btn-flat add_new_customer" data-name=""><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
 							</span>
@@ -133,34 +133,24 @@
 						<div id="billing_address_div">
 							{!! $transaction->contact->contact_address ?? '' !!}
 						</div>
-						<br>
-						<strong>
-							@lang('lang_v1.shipping_address'):
-						</strong>
-						<div id="shipping_address_div">
-							{!! $transaction->contact->supplier_business_name ?? '' !!}, <br>
-							{!! $transaction->contact->name ?? '' !!}, <br>
-							{!!$transaction->contact->shipping_address ?? '' !!}
-						</div>						
 					</small>
 				</div>
 
 				<div class="col-md-3">
 		          <div class="form-group">
-		            <div class="multi-input">
-		            	@php
-							$is_pay_term_required = !empty($pos_settings['is_pay_term_required']);
-						@endphp
-		              {!! Form::label('pay_term_number', __('contact.pay_term') . ':') !!} @show_tooltip(__('tooltip.pay_term'))
-		              <br/>
-		              {!! Form::number('pay_term_number', $transaction->pay_term_number, ['class' => 'form-control width-40 pull-left', 'placeholder' => __('contact.pay_term'), 'required' => $is_pay_term_required]); !!}
-
-		              {!! Form::select('pay_term_type', 
-		              	['months' => __('lang_v1.months'), 
-		              		'days' => __('lang_v1.days')], 
-		              		$transaction->pay_term_type, 
-		              	['class' => 'form-control width-60 pull-left','placeholder' => __('messages.please_select'), 'required' => $is_pay_term_required]); !!}
-		            </div>
+		              {!! Form::label('pay_term_preset', 'Término de Pago / Crédito:') !!}
+		              @php
+		                  $current_pay_term = !empty($transaction->pay_term_number) ? (int)$transaction->pay_term_number : 0;
+		              @endphp
+		              <select name="pay_term_preset" id="pay_term_preset" class="form-control select2" style="width: 100%;">
+		                  <option value="0" @if($current_pay_term == 0) selected @endif>Contado</option>
+		                  <option value="3" @if($current_pay_term == 3) selected @endif>Crédito 3 días</option>
+		                  <option value="7" @if($current_pay_term == 7) selected @endif>Crédito 7 días</option>
+		                  <option value="10" @if($current_pay_term == 10) selected @endif>Crédito 10 días</option>
+		                  <option value="20" @if($current_pay_term == 20) selected @endif>Crédito 20 días</option>
+		              </select>
+		              <input type="hidden" name="pay_term_number" id="pay_term_number" value="{{ $transaction->pay_term_number }}">
+		              <input type="hidden" name="pay_term_type" id="pay_term_type" value="{{ $transaction->pay_term_type ?? 'days' }}">
 		          </div>
 		        </div>
 
@@ -309,10 +299,10 @@
 	            </div>
 		        <div class="clearfix"></div>
 		        @if((!empty($pos_settings['enable_sales_order']) && $transaction->type != 'sales_order') || $is_order_request_enabled)
-					<div class="col-sm-3">
+					<div class="col-sm-6 col-md-6">
 						<div class="form-group">
-							{!! Form::label('sales_order_ids', __('lang_v1.sales_order').':') !!}
-							{!! Form::select('sales_order_ids[]', $sales_orders, $transaction->sales_order_ids, ['class' => 'form-control select2 not_loaded', 'multiple', 'id' => 'sales_order_ids']); !!}
+							{!! Form::label('sales_order_ids', 'Facturar pedido:') !!}
+							{!! Form::select('sales_order_ids[]', $sales_orders, $transaction->sales_order_ids, ['class' => 'form-control select2 not_loaded', 'multiple', 'id' => 'sales_order_ids', 'style' => 'width: 100%;', 'placeholder' => 'Ingresar caracteres o seleccionar pedido']); !!}
 						</div>
 					</div>
 					<div class="clearfix"></div>
@@ -360,7 +350,7 @@
 								<th class="@if(!auth()->user()->can('edit_product_price_from_sale_screen')) hide @endif">
 									@lang('sale.unit_price')
 								</th>
-								<th class="@if(!auth()->user()->can('edit_product_discount_from_sale_screen')) hide @endif">
+								<th class="hide">
 									@lang('receipt.discount')
 								</th>
 								<th class="text-center {{$hide_tax}}">
@@ -540,24 +530,24 @@
 			@else
 				<div id="shipping_box_wrapper">
 				@component('components.widget', ['class' => 'box-solid'])
-				<div class="col-md-4">
+				<div class="col-md-8">
 					<div class="form-group">
-			            {!! Form::label('shipping_details', __('sale.shipping_details')) !!}
-			            {!! Form::textarea('shipping_details',$transaction->shipping_details, ['class' => 'form-control','placeholder' => __('sale.shipping_details') ,'rows' => '3', 'cols'=>'30']); !!}
-			        </div>
+						<div class="tw-flex tw-items-center tw-justify-between tw-mb-1">
+							{!! Form::label('shipping_address', __('lang_v1.shipping_address') . ':') !!}
+							<button type="button" class="btn btn-xs btn-success" id="get_order_gps_btn" style="border-radius: 6px; font-weight: 600; color: #fff;">
+								<i class="fas fa-location-arrow"></i> 📍 GPS En Sitio
+							</button>
+						</div>
+						{!! Form::textarea('shipping_address', $transaction->shipping_address, ['class' => 'form-control', 'placeholder' => __('lang_v1.shipping_address') . ' o enlace de Google Maps', 'rows' => '2', 'id' => 'shipping_address']); !!}
+						<small class="tw-text-emerald-600 font-weight-bold" id="order_gps_status"></small>
+					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="form-group">
-			            {!! Form::label('shipping_address', __('lang_v1.shipping_address')) !!}
-			            {!! Form::textarea('shipping_address', $transaction->shipping_address, ['class' => 'form-control','placeholder' => __('lang_v1.shipping_address') ,'rows' => '3', 'cols'=>'30']); !!}
-			        </div>
-				</div>
-				<div class="col-md-4">
-					<div class="form-group">
-						{!!Form::label('shipping_charges', __('sale.shipping_charges'))!!}
+						{!!Form::label('shipping_charges', __('sale.shipping_charges') . ':')!!}
 						<div class="input-group">
 						<span class="input-group-addon">
-						<i class="fa fa-info"></i>
+						<i class="fa fa-truck"></i>
 						</span>
 						{!!Form::text('shipping_charges',@num_format($transaction->shipping_charges),['class'=>'form-control input_number','placeholder'=> __('sale.shipping_charges')]);!!}
 						</div>
@@ -679,20 +669,6 @@
 				        </div>
 				    </div>
 		        @endif
-				<div class="col-md-4">
-					<div class="form-group">
-						{!! Form::label('shipping_documents', __('lang_v1.shipping_documents') . ':') !!}
-						{!! Form::file('shipping_documents[]', ['id' => 'shipping_documents', 'multiple', 'accept' => implode(',', array_keys(config('constants.document_upload_mimes_types')))]); !!}
-						<p class="help-block">
-							@lang('purchase.max_file_size', ['size' => (config('constants.document_size_limit') / 1000000)])
-							@includeIf('components.document_help_text')
-						</p>
-						@php
-							$medias = $transaction->media->where('model_media_type', 'shipping_document')->all();
-						@endphp
-						@include('sell.partials.media_table', ['medias' => $medias, 'delete' => true])
-					</div>
-				</div>
 		        <div class="clearfix"></div>
 		        <div class="col-md-12 text-center">
 					<button type="button" class="tw-dw-btn tw-dw-btn-primary tw-text-white tw-dw-btn-sm" id="toggle_additional_expense"> <i class="fas fa-plus"></i> @lang('lang_v1.add_additional_expenses') <i class="fas fa-chevron-down"></i></button>
