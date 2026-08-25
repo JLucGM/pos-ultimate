@@ -463,6 +463,12 @@ class ManageUserController extends Controller
 
         Auth::loginUsingId($id);
 
+        $target_user = Auth::user();
+        if ($target_user) {
+            $target_user->active_session_id = session()->getId();
+            $target_user->save();
+        }
+
         return redirect()->route('home');
     }
 }

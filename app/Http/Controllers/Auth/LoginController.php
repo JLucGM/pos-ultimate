@@ -69,7 +69,12 @@ class LoginController extends Controller
 
     public function logout()
     {
-        $this->businessUtil->activityLog(auth()->user(), 'logout');
+        $user = auth()->user();
+        if ($user) {
+            $this->businessUtil->activityLog($user, 'logout');
+            $user->active_session_id = null;
+            $user->save();
+        }
 
         request()->session()->flush();
         \Auth::logout();
@@ -122,6 +127,10 @@ class LoginController extends Controller
                     ['success' => 0, 'msg' => __('lang_v1.business_dont_have_crm_subscription')]
                 );
         }
+
+        // Registrar la sesión activa actual para prevenir inicios de sesión simultáneos en múltiples dispositivos
+        $user->active_session_id = $request->session()->getId();
+        $user->save();
     }
 
     protected function redirectTo()

@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'session_expired_logged_in_another_device' => 'Tu sesión ha sido cerrada porque esta cuenta ha iniciado sesión en otro dispositivo.',
     'enable_editing_product_from_purchase' => 'Habilitar la edición del precio del Producto desde la pantalla de compra',
     'sales_commission_agent' => 'Vendedor', /* modified */
     'sales_commission_agents' => 'Vendedores', /* modified */

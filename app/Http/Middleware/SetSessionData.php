@@ -18,6 +18,31 @@ class SetSessionData
      */
     public function handle($request, Closure $next)
     {
+        if (Auth::check()) {
+            $user = Auth::user();
+
+            // Verificación de Sesión Única: Cierra sesión si la cuenta fue abierta en otro dispositivo
+            if (! empty($user->active_session_id) && $request->session()->getId() !== $user->active_session_id) {
+                Auth::logout();
+                $request->session()->flush();
+
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json([
+                        'success' => 0,
+                        'msg' => __('lang_v1.session_expired_logged_in_another_device'),
+                    ], 401);
+                }
+
+                return redirect('/login')->with('status', [
+                    'success' => 0,
+                    'msg' => __('lang_v1.session_expired_logged_in_another_device'),
+                ]);
+            } elseif (empty($user->active_session_id)) {
+                $user->active_session_id = $request->session()->getId();
+                $user->save();
+            }
+        }
+
         if (! $request->session()->has('user')) {
             $business_util = new BusinessUtil;
 
