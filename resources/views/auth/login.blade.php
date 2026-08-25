@@ -209,6 +209,15 @@
                 </button>
             </form>
 
+            @if(config('constants.allow_registration'))
+                <div style="text-align: center; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--auth-border); font-size: 14px; color: var(--auth-text-muted);">
+                    ¿No tienes una cuenta aún? 
+                    <a href="{{ route('business.getRegister') }}" style="color: #FB4C0A; font-weight: 700; text-decoration: none; margin-left: 4px;">
+                        Regístrate gratis aquí <i class="fas fa-chevron-right" style="font-size: 11px;"></i>
+                    </a>
+                </div>
+            @endif
+
             <!-- Acceso a Demos si está activo -->
             @if (config('app.env') == 'demo' && !empty($demo_types))
                 <div class="auth-demo-box">

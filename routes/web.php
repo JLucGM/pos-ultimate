@@ -78,8 +78,10 @@ Route::middleware(['setData'])->group(function () {
     Route::get('/', [\Modules\Superadmin\Http\Controllers\LandingController::class, 'index'])->name('landing');
     Route::get('/soluciones/{slug}', [\Modules\Superadmin\Http\Controllers\LandingController::class, 'solution'])->name('landing.solution');
 
-    Auth::routes();
+    Auth::routes(['register' => false]);
 
+    Route::get('/register', [BusinessController::class, 'getRegister'])->name('register');
+    Route::post('/register', [BusinessController::class, 'postRegister']);
     Route::get('/business/register', [BusinessController::class, 'getRegister'])->name('business.getRegister');
     Route::post('/business/register', [BusinessController::class, 'postRegister'])->name('business.postRegister');
     Route::post('/business/register/check-username', [BusinessController::class, 'postCheckUsername'])->name('business.postCheckUsername');

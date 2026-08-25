@@ -110,10 +110,15 @@
                             Seleccionar Plan
                         </a>
                     @else
-                        <button onclick="openPaymentModal({{ $package->id }}, '{{ $package->name }}', '{{ $package->currency }}{{ number_format($package->price, 0) }}/mes')" 
-                           class="btn {{ $package->is_popular ? 'btn-primary' : 'btn-outline' }} btn-block">
-                            Comenzar Ahora
-                        </button>
+                        <a href="{{ route('business.getRegister') }}?package={{ $package->id }}" 
+                           class="btn {{ $package->is_popular ? 'btn-primary' : 'btn-outline' }} btn-block" style="text-decoration: none;">
+                            <i class="fas fa-rocket" style="margin-right: 6px;"></i> Comenzar Prueba Gratis
+                        </a>
+                        <div style="text-align: center; margin-top: 8px;">
+                            <a href="javascript:void(0);" onclick="openPaymentModal({{ $package->id }}, '{{ $package->name }}', '{{ $package->currency }}{{ number_format($package->price, 0) }}/mes')" style="font-size: 12px; color: var(--text-muted); text-decoration: underline;">
+                                O pagar suscripción directamente
+                            </a>
+                        </div>
                     @endauth
                 </div>
             </div>

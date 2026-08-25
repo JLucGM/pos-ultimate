@@ -135,6 +135,7 @@
                     <a href="{{ route('login') }}" class="nav-link">Iniciar Sesión</a>
                     <a href="{{ route('business.getRegister') }}" class="btn btn-accent btn-sm">Registrarse</a>
                 @else
+                    <a href="{{ route('business.getRegister') }}" class="btn btn-accent btn-sm" style="margin-right: 8px;">Registrarse</a>
                     <a href="{{ url('/home') }}" class="btn btn-primary btn-sm">
                         <i class="fas fa-tachometer-alt"></i> Dashboard
                     </a>

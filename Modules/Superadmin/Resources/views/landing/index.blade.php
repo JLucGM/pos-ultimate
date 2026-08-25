@@ -21,11 +21,14 @@
                 Controla ventas en segundos, inventario multialmacén, tasas de cambio dinámicas y finanzas desde cualquier dispositivo. La suite definitiva para comercios, restaurantes, mayoristas y empresas.
             </p>
             <div class="hero-buttons" data-aos="fade-up" data-aos-delay="200">
-                <a href="{{ route('pricing') }}" class="btn btn-primary btn-lg">
-                    <i class="fas fa-rocket"></i> Ver Planes y Precios
+                <a href="{{ route('business.getRegister') }}" class="btn btn-accent btn-lg">
+                    <i class="fas fa-rocket"></i> Prueba Gratis 14 Días
+                </a>
+                <a href="{{ route('pricing') }}" class="btn btn-outline-white btn-lg">
+                    <i class="fas fa-tags"></i> Ver Planes y Precios
                 </a>
                 <a href="#features" class="btn btn-outline-white btn-lg">
-                    <i class="fas fa-sparkles"></i> Descubrir Módulos
+                    <i class="fas fa-sparkles"></i> Módulos
                 </a>
             </div>
             <div class="hero-stats" data-aos="fade-up" data-aos-delay="300">
@@ -606,11 +609,11 @@
             <h2>¿Listo para Transformar tu Negocio?</h2>
             <p>Únete a cientos de empresas que ya confían en nuestro sistema POS</p>
             <div class="cta-buttons">
-                <a href="{{ route('pricing') }}" class="btn btn-white btn-lg">
-                    Comenzar Prueba Gratuita
+                <a href="{{ route('business.getRegister') }}" class="btn btn-white btn-lg">
+                    <i class="fas fa-rocket"></i> Comenzar Prueba Gratuita (14 Días)
                 </a>
-                <a href="#contact" class="btn btn-outline-white btn-lg">
-                    Contactar Ventas
+                <a href="{{ route('pricing') }}" class="btn btn-outline-white btn-lg">
+                    <i class="fas fa-tags"></i> Ver Todos los Planes
                 </a>
             </div>
         </div>
