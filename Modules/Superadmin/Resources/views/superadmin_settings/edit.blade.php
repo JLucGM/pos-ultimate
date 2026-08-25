@@ -84,5 +84,39 @@
             });
         }
     });
+
+    $(document).on('click', '#btn_send_superadmin_test_email', function() {
+        var testEmail = $('#superadmin_test_email_input').val();
+        if (!testEmail) {
+            toastr.error('Por favor ingresa un correo de destino');
+            return;
+        }
+
+        var $btn = $(this);
+        var origHtml = $btn.html();
+        $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Enviando...');
+
+        $.ajax({
+            method: 'POST',
+            url: "{{ route('superadmin.settings.test-email') }}",
+            data: {
+                _token: $('input[name="_token"]').val() || '{{ csrf_token() }}',
+                test_email: testEmail
+            },
+            dataType: 'json',
+            success: function(result) {
+                $btn.prop('disabled', false).html(origHtml);
+                if (result.success == 1) {
+                    toastr.success(result.msg);
+                } else {
+                    toastr.error(result.msg);
+                }
+            },
+            error: function(xhr) {
+                $btn.prop('disabled', false).html(origHtml);
+                toastr.error('Error al procesar la solicitud: ' + (xhr.responseJSON && xhr.responseJSON.msg ? xhr.responseJSON.msg : xhr.statusText));
+            }
+        });
+    });
 </script>
 @endsection

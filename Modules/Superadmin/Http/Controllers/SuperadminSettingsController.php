@@ -241,4 +241,34 @@ class SuperadminSettingsController extends Controller
             ->action([\Modules\Superadmin\Http\Controllers\SuperadminSettingsController::class, 'edit'])
             ->with('status', $output);
     }
+
+    /**
+     * Test Superadmin Email SMTP configuration
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function testEmail(Request $request)
+    {
+        try {
+            $email = $request->input('test_email') ?: config('mail.from.address');
+
+            \Mail::raw("¡Excelente! La configuración de correo SMTP en tu sistema " . config('app.name', 'AudazPOS') . " está funcionando perfectamente a través de Resend / SMTP.\n\nFecha de prueba: " . date('Y-m-d H:i:s'), function ($message) use ($email) {
+                $message->to($email)
+                    ->subject('✅ Prueba Exitosa de Correo - ' . config('app.name', 'AudazPOS'));
+            });
+
+            return response()->json([
+                'success' => 1,
+                'msg' => 'Correo de prueba enviado con éxito a: ' . $email,
+            ]);
+        } catch (\Exception $e) {
+            \Log::emergency('File:' . $e->getFile() . ' Line:' . $e->getLine() . ' Message:' . $e->getMessage());
+
+            return response()->json([
+                'success' => 0,
+                'msg' => 'Error SMTP al enviar: ' . $e->getMessage(),
+            ]);
+        }
+    }
 }
