@@ -94,7 +94,7 @@ class LoginController extends Controller
     {
         $this->businessUtil->activityLog($user, 'login', null, [], false, $user->business_id);
 
-        if (! $user->business->is_active) {
+        if ($user->business && ! $user->business->is_active) {
             \Auth::logout();
 
             return redirect('/login')
@@ -128,9 +128,15 @@ class LoginController extends Controller
                 );
         }
 
-        // Registrar la sesión activa actual para prevenir inicios de sesión simultáneos en múltiples dispositivos
-        $user->active_session_id = $request->session()->getId();
-        $user->save();
+        // Registrar la sesión activa actual de forma segura para prevenir inicios simultáneos
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasColumn('users', 'active_session_id')) {
+                $user->active_session_id = $request->session()->getId();
+                $user->save();
+            }
+        } catch (\Exception $e) {
+            \Log::warning('Could not save active_session_id: ' . $e->getMessage());
+        }
     }
 
     protected function redirectTo()
