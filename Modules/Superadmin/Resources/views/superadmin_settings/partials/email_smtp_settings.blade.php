@@ -50,6 +50,30 @@
                 {!! Form::text('MAIL_FROM_NAME', $default_values['MAIL_FROM_NAME'], ['class' => 'form-control','placeholder' => __('superadmin::lang.mail_from_name')]); !!}
             </div>
         </div>
+
+        <div class="col-xs-12" style="margin-top: 10px; margin-bottom: 20px;">
+            <div style="background: rgba(16, 185, 129, 0.08); border: 2px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 18px;">
+                <h4 style="margin-top: 0; color: #10B981; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-paper-plane"></i> Probar Configuración SMTP (Enviar Correo de Prueba)
+                </h4>
+                <p class="text-muted" style="font-size: 13px; margin-bottom: 12px;">
+                    Asegúrate de guardar los cambios primero con el botón <strong>Actualizar</strong> abajo, y luego escribe tu correo para probar el envío:
+                </p>
+                <div class="row">
+                    <div class="col-md-7 col-xs-12">
+                        <div class="input-group">
+                            <input type="email" id="superadmin_test_email_input" class="form-control input-lg" placeholder="Ingresa tu correo (ej. tu@gmail.com)" value="{{ auth()->user()->email ?? '' }}" style="font-size: 15px;">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-success btn-lg" id="btn_send_superadmin_test_email" style="font-weight: 700; padding-left: 20px; padding-right: 20px;">
+                                    <i class="fas fa-paper-plane"></i> Enviar Correo de Prueba
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="clearfix"></div>
         <div class="col-md-4">
             <div class="form-group">
@@ -103,30 +127,6 @@
             <div class="form-group">
                 {!! Form::label('welcome_email_body', __('superadmin::lang.welcome_email_body') . ':') !!}
                 {!! Form::textarea('welcome_email_body', isset($settings["welcome_email_body"]) ? $settings["welcome_email_body"] : '', ['class' => 'form-control','placeholder' => __('superadmin::lang.welcome_email_body')]); !!}
-            </div>
-        </div>
-
-        <div class="col-xs-12">
-            <hr>
-            <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 20px; margin-top: 10px;">
-                <h4 style="margin-top: 0; color: #10B981; font-weight: 700; display: flex; align-items: center; gap: 8px;">
-                    <i class="fas fa-paper-plane"></i> Enviar Correo Electrónico de Prueba (Test Email)
-                </h4>
-                <p class="text-muted" style="font-size: 13px;">
-                    Guarda los cambios arriba primero y luego ingresa tu correo personal para verificar que la conexión SMTP funcione correctamente:
-                </p>
-                <div class="row">
-                    <div class="col-md-6 col-xs-12">
-                        <div class="input-group">
-                            <input type="email" id="superadmin_test_email_input" class="form-control" placeholder="tu-correo@gmail.com" value="{{ auth()->user()->email ?? '' }}">
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-success" id="btn_send_superadmin_test_email" style="font-weight: 600;">
-                                    <i class="fas fa-paper-plane"></i> Enviar Prueba
-                                </button>
-                            </span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
