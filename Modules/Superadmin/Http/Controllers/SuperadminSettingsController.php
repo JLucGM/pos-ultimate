@@ -251,23 +251,57 @@ class SuperadminSettingsController extends Controller
     public function testEmail(Request $request)
     {
         try {
+            // Prevenir timeout estableciendo límite estricto de 12 segundos para la conexión SMTP
+            @set_time_limit(15);
+            \Illuminate\Support\Facades\Config::set('mail.mailers.smtp.timeout', 10);
+
             $email = $request->input('test_email') ?: config('mail.from.address');
 
-            \Mail::raw("¡Excelente! La configuración de correo SMTP en tu sistema " . config('app.name', 'AudazPOS') . " está funcionando perfectamente a través de Resend / SMTP.\n\nFecha de prueba: " . date('Y-m-d H:i:s'), function ($message) use ($email) {
+            if (empty($email) || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                return response()->json([
+                    'success' => 0,
+                    'msg' => 'Por favor ingresa un correo de destino válido.',
+                ]);
+            }
+
+            // Recargar instancias de transporte de correo
+            if (app()->bound('mail.manager')) {
+                app('mail.manager')->forgetMailers();
+            }
+
+            $from_address = config('mail.from.address');
+            $from_name = config('mail.from.name', 'AudazPOS');
+
+            \Illuminate\Support\Facades\Mail::raw("¡Excelente! La configuración de correo SMTP en tu sistema " . config('app.name', 'AudazPOS') . " está funcionando perfectamente a través de Resend / SMTP.\n\nFecha de prueba: " . date('Y-m-d H:i:s'), function ($message) use ($email, $from_address, $from_name) {
+                if (! empty($from_address)) {
+                    $message->from($from_address, $from_name);
+                }
                 $message->to($email)
                     ->subject('✅ Prueba Exitosa de Correo - ' . config('app.name', 'AudazPOS'));
             });
 
             return response()->json([
                 'success' => 1,
-                'msg' => 'Correo de prueba enviado con éxito a: ' . $email,
+                'msg' => '¡Correo de prueba enviado con éxito a: ' . $email . '! Revisa tu bandeja de entrada o spam.',
             ]);
         } catch (\Exception $e) {
             \Log::emergency('File:' . $e->getFile() . ' Line:' . $e->getLine() . ' Message:' . $e->getMessage());
 
+            $error_msg = $e->getMessage();
+
+            // Diagnósticos útiles según el tipo de fallo
+            if (strpos($error_msg, 'Connection timed out') !== false || strpos($error_msg, 'Operation timed out') !== false || strpos($error_msg, '110') !== false) {
+                $port = config('mail.mailers.smtp.port', 587);
+                $error_msg .= " (El servidor no pudo conectar al puerto {$port}. Si tu proveedor de hosting bloquea el puerto 587 saliente, prueba cambiando el puerto a 465 con cifrado 'ssl', o puerto 2587).";
+            } elseif (strpos($error_msg, '535') !== false || strpos($error_msg, 'Authentication') !== false) {
+                $error_msg .= " (Error de autenticación: Verifica que el Usuario sea exactamente 'resend' en minúsculas y la Contraseña sea tu API Key re_...).";
+            } elseif (strpos($error_msg, 'from') !== false || strpos($error_msg, 'Sender') !== false) {
+                $error_msg .= " (Verifica que la dirección del remitente use el dominio verificado en Resend).";
+            }
+
             return response()->json([
                 'success' => 0,
-                'msg' => 'Error SMTP al enviar: ' . $e->getMessage(),
+                'msg' => 'Error SMTP: ' . $error_msg,
             ]);
         }
     }

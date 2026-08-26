@@ -305,15 +305,34 @@ class NotificationUtil extends Util
         }
 
         $mail_driver = ! empty($email_settings['mail_driver']) ? $email_settings['mail_driver'] : 'smtp';
+        Config::set('mail.default', $mail_driver);
         Config::set('mail.driver', $mail_driver);
-        Config::set('mail.host', $email_settings['mail_host']);
-        Config::set('mail.port', $email_settings['mail_port']);
-        Config::set('mail.username', $email_settings['mail_username']);
-        Config::set('mail.password', $email_settings['mail_password']);
-        Config::set('mail.encryption', $email_settings['mail_encryption']);
 
-        Config::set('mail.from.address', $email_settings['mail_from_address']);
-        Config::set('mail.from.name', $email_settings['mail_from_name']);
+        // Modern Laravel 8+ configuration
+        Config::set('mail.mailers.smtp.transport', 'smtp');
+        Config::set('mail.mailers.smtp.host', $email_settings['mail_host'] ?? config('mail.mailers.smtp.host'));
+        Config::set('mail.mailers.smtp.port', $email_settings['mail_port'] ?? config('mail.mailers.smtp.port'));
+        Config::set('mail.mailers.smtp.username', $email_settings['mail_username'] ?? config('mail.mailers.smtp.username'));
+        Config::set('mail.mailers.smtp.password', $email_settings['mail_password'] ?? config('mail.mailers.smtp.password'));
+        Config::set('mail.mailers.smtp.encryption', $email_settings['mail_encryption'] ?? config('mail.mailers.smtp.encryption'));
+        Config::set('mail.mailers.smtp.timeout', 15);
+
+        // Legacy Laravel keys for backwards compatibility
+        Config::set('mail.host', $email_settings['mail_host'] ?? config('mail.mailers.smtp.host'));
+        Config::set('mail.port', $email_settings['mail_port'] ?? config('mail.mailers.smtp.port'));
+        Config::set('mail.username', $email_settings['mail_username'] ?? config('mail.mailers.smtp.username'));
+        Config::set('mail.password', $email_settings['mail_password'] ?? config('mail.mailers.smtp.password'));
+        Config::set('mail.encryption', $email_settings['mail_encryption'] ?? config('mail.mailers.smtp.encryption'));
+
+        $from_address = ! empty($email_settings['mail_from_address']) ? $email_settings['mail_from_address'] : config('mail.from.address');
+        $from_name = ! empty($email_settings['mail_from_name']) ? $email_settings['mail_from_name'] : config('mail.from.name');
+
+        Config::set('mail.from.address', $from_address);
+        Config::set('mail.from.name', $from_name);
+
+        if (app()->bound('mail.manager')) {
+            app('mail.manager')->forgetMailers();
+        }
     }
 
     public function replaceHmsBookingTags($data, $transaction, $adults, $childrens, $customer){
