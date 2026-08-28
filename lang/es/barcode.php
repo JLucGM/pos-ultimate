@@ -12,7 +12,7 @@
     */
 
      'barcodes' => 'Códigos de barras',
-     'barcode_settings' => 'Configuraciones de código de barras',
+     'barcode_settings' => 'Códigos de barra',
      'manage_your_barcodes' => 'Gestiona la configuración de tu código de barras',
      'all_your_barcode' => 'Toda la configuración de tu código de barras', /* modified */
      'setting_name' => 'Nombre de configuración de la hoja adhesiva',
