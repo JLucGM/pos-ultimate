@@ -268,6 +268,58 @@
                 </div>
             </div>
         </div>
+        <!-- Módulos y Extensiones Habilitados para la Empresa (Superadmin) -->
+        <div class="tw-mt-5 tw-transition-all lg:tw-col-span-1 tw-duration-200 tw-bg-white tw-shadow-sm tw-rounded-xl tw-ring-1 hover:tw-shadow-md hover:tw-translate-y-0.5 tw-ring-gray-200">
+            <div class="tw-p-4 sm:tw-p-5">
+                <div class="tw-flex tw-items-center tw-justify-between tw-border-b tw-border-gray-200 tw-pb-3">
+                    <div class="tw-flex tw-items-center tw-gap-2.5">
+                        <i class="fa fa-cubes text-primary" style="font-size: 18px;"></i>
+                        <strong style="font-size: 16px; color: #0F172A;">Módulos y Funciones Habilitadas</strong>
+                    </div>
+                    <span class="badge" style="background: #EFF6FF; color: #1D4ED8; font-weight: 600; font-size: 11px;">
+                        Control Exclusivo Superadmin
+                    </span>
+                </div>
+
+                <div class="tw-mt-4">
+                    <p class="text-muted" style="font-size: 13px; margin-bottom: 16px;">
+                        Como Superadministrador puedes activar o revocar módulos individuales para este cliente independientemente del paquete asignado.
+                    </p>
+
+                    {!! Form::open(['url' => route('superadmin.business.update-modules', [$business->id]), 'method' => 'post']) !!}
+                    <div class="row">
+                        @if(!empty($modules))
+                            @foreach($modules as $k => $v)
+                                @php
+                                    $is_mod_active = in_array($k, $enabled_modules);
+                                @endphp
+                                <div class="col-sm-6 col-md-4 col-lg-3" style="margin-bottom: 12px;">
+                                    <div style="background: {{ $is_mod_active ? '#F0FDF4' : '#F8FAFC' }}; border: 1px solid {{ $is_mod_active ? '#86EFAC' : '#E2E8F0' }}; border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <div style="width: 28px; height: 28px; border-radius: 6px; background: {{ $is_mod_active ? '#DCFCE7' : '#E2E8F0' }}; color: {{ $is_mod_active ? '#166534' : '#64748B' }}; display: flex; align-items: center; justify-content: center; font-size: 13px;">
+                                                <i class="{{ $v['icon'] ?? 'fa fa-cube' }}"></i>
+                                            </div>
+                                            <label style="margin: 0; font-weight: 600; font-size: 12px; color: #1E293B; cursor: pointer;">
+                                                {!! Form::checkbox('enabled_modules[]', $k, $is_mod_active, ['class' => 'input-icheck']) !!}
+                                                <span style="margin-left: 4px;">{{ $v['name'] }}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+
+                    <div class="tw-mt-4 tw-pt-3 tw-border-t tw-border-gray-200 text-right">
+                        <button type="submit" class="btn btn-primary" style="border-radius: 8px; font-weight: 600;">
+                            <i class="fa fa-save"></i> Guardar Módulos Autorizados
+                        </button>
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+            </div>
+        </div>
+
         @include('superadmin::business.update_password_modal')
     </section>
     <!-- /.content -->

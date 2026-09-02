@@ -95,6 +95,10 @@ class BaseController extends Controller
             'product_count' => $package->product_count,
             'invoice_count' => $package->invoice_count,
             'name' => $package->name,
+            'bookings' => $package->bookings ?? 0,
+            'kitchen' => $package->kitchen ?? 0,
+            'order_screen' => $package->order_screen ?? 0,
+            'tables' => $package->tables ?? 0,
         ];
         //Custom permissions.
         if (! empty($package->custom_permissions)) {

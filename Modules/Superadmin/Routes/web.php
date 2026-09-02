@@ -32,6 +32,7 @@ Route::middleware('web', 'auth', 'language', 'AdminSidebarMenu', 'superadmin')->
     Route::get('/users/{business_id}', [Modules\Superadmin\Http\Controllers\BusinessController::class, 'usersList']);
     Route::post('/update-password', [Modules\Superadmin\Http\Controllers\BusinessController::class, 'updatePassword']);
 
+    Route::post('/business/{business_id}/update-modules', [Modules\Superadmin\Http\Controllers\BusinessController::class, 'updateBusinessModules'])->name('superadmin.business.update-modules');
     Route::resource('/business', Modules\Superadmin\Http\Controllers\BusinessController::class);
     Route::get('/business/{id}/destroy', [Modules\Superadmin\Http\Controllers\BusinessController::class, 'destroy']);
 

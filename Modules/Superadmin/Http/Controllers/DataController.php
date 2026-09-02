@@ -159,4 +159,25 @@ class DataController extends Controller
             ],
         ];
     }
+
+    /**
+     * Defines superadmin package custom permissions.
+     *
+     * @return array
+     */
+    public function superadmin_package()
+    {
+        return [
+            [
+                'name' => 'account_module',
+                'label' => 'Módulo de Cuentas y Contabilidad Bancaria',
+                'default' => false,
+            ],
+            [
+                'name' => 'subscription_module',
+                'label' => 'Módulo de Facturación Recurrente / Suscripciones',
+                'default' => false,
+            ],
+        ];
+    }
 }

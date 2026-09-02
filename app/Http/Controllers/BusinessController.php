@@ -278,13 +278,19 @@ class BusinessController extends Controller
                         $package_details['kitchen'] = 1;
                         $package_details['order_screen'] = 1;
                         $package_details['restaurant'] = 1;
+                        $package_details['types_of_service'] = 1;
+                        $package_details['modifiers'] = 1;
+                        $package_details['service_staff'] = 1;
                     } elseif ($business_type === 'fabricas') {
                         $package_details['manufacturing_module'] = 1;
                     } elseif ($business_type === 'belleza-spa') {
                         $package_details['bookings'] = 1;
+                        $package_details['consultorio_module'] = 1;
+                        $package_details['service_staff'] = 1;
                         $package_details['crm_module'] = 1;
                         $package_details['essentials_module'] = 1;
                     } elseif ($business_type === 'mayoristas') {
+                        $package_details['account_module'] = 1;
                         $package_details['essentials_module'] = 1;
                     } elseif ($business_type === 'retail') {
                         $package_details['woocommerce_module'] = 1;
@@ -407,6 +413,7 @@ class BusinessController extends Controller
         $sms_settings = empty($business->sms_settings) ? $this->businessUtil->defaultSmsSettings() : $business->sms_settings;
 
         $modules = $this->moduleUtil->availableModules();
+        $allowed_modules = $this->moduleUtil->getAllowedModulesForBusiness($business_id);
 
         $theme_colors = $this->theme_colors;
 
@@ -422,7 +429,7 @@ class BusinessController extends Controller
 
         $payment_types = $this->moduleUtil->payment_types(null, false, $business_id);
 
-        return view('business.settings', compact('business', 'currencies', 'tax_rates', 'timezone_list', 'months', 'accounting_methods', 'commission_agent_dropdown', 'units_dropdown', 'date_formats', 'shortcuts', 'pos_settings', 'modules', 'theme_colors', 'email_settings', 'sms_settings', 'mail_drivers', 'allow_superadmin_email_settings', 'custom_labels', 'common_settings', 'weighing_scale_setting', 'payment_types'));
+        return view('business.settings', compact('business', 'currencies', 'tax_rates', 'timezone_list', 'months', 'accounting_methods', 'commission_agent_dropdown', 'units_dropdown', 'date_formats', 'shortcuts', 'pos_settings', 'modules', 'allowed_modules', 'theme_colors', 'email_settings', 'sms_settings', 'mail_drivers', 'allow_superadmin_email_settings', 'custom_labels', 'common_settings', 'weighing_scale_setting', 'payment_types'));
     }
 
     /**
@@ -552,9 +559,16 @@ class BusinessController extends Controller
 
             $business_details['common_settings'] = ! empty($request->input('common_settings')) ? $request->input('common_settings') : [];
 
-            //Enabled modules
-            $enabled_modules = $request->input('enabled_modules');
-            $business_details['enabled_modules'] = ! empty($enabled_modules) ? $enabled_modules : null;
+            //Enabled modules with plan-level security validation
+            $raw_enabled_modules = $request->input('enabled_modules', []);
+            $raw_enabled_modules = is_array($raw_enabled_modules) ? $raw_enabled_modules : [];
+
+            $allowed_modules = $this->moduleUtil->getAllowedModulesForBusiness($business_id);
+
+            // Only allow modules that are authorized in business subscription/plan
+            $filtered_enabled_modules = array_values(array_intersect($raw_enabled_modules, $allowed_modules));
+
+            $business_details['enabled_modules'] = ! empty($filtered_enabled_modules) ? $filtered_enabled_modules : null;
             $business->fill($business_details);
             $business->save();
 

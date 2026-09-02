@@ -477,39 +477,230 @@ class ModuleUtil extends Util
     public function availableModules()
     {
         return [
-            'purchases' => ['name' => __('purchase.purchases')],
-            'add_sale' => ['name' => __('sale.add_sale')],
-            'pos_sale' => ['name' => __('sale.pos_sale')],
-            'stock_transfers' => ['name' => __('lang_v1.stock_transfers')],
-            'stock_adjustment' => ['name' => __('stock_adjustment.stock_adjustment')],
-            'expenses' => ['name' => __('expense.expenses')],
-            'account' => ['name' => __('lang_v1.account')],
-            'tables' => ['name' => __('restaurant.tables'),
+            'purchases' => [
+                'name' => __('purchase.purchases'),
+                'icon' => 'fa fa-shopping-cart',
+                'description' => 'Gestión de compras a proveedores, órdenes de compra y recepción.',
+                'category' => 'core',
+                'category_name' => 'Operaciones Base',
+            ],
+            'add_sale' => [
+                'name' => __('sale.add_sale'),
+                'icon' => 'fa fa-file-invoice-dollar',
+                'description' => 'Facturación directa, cotizaciones, notas de entrega y ventas estándar.',
+                'category' => 'core',
+                'category_name' => 'Operaciones Base',
+            ],
+            'pos_sale' => [
+                'name' => __('sale.pos_sale'),
+                'icon' => 'fa fa-cash-register',
+                'description' => 'Terminal de punto de venta rápido para mostrador y cajas registradoras.',
+                'category' => 'core',
+                'category_name' => 'Operaciones Base',
+            ],
+            'stock_transfers' => [
+                'name' => __('lang_v1.stock_transfers'),
+                'icon' => 'fa fa-truck',
+                'description' => 'Transferencias de mercancía y existencias entre diferentes sucursales.',
+                'category' => 'core',
+                'category_name' => 'Operaciones Base',
+            ],
+            'stock_adjustment' => [
+                'name' => __('stock_adjustment.stock_adjustment'),
+                'icon' => 'fa fa-boxes',
+                'description' => 'Control de mermas, pérdidas, sobrantes y ajustes de inventario.',
+                'category' => 'core',
+                'category_name' => 'Operaciones Base',
+            ],
+            'expenses' => [
+                'name' => __('expense.expenses'),
+                'icon' => 'fa fa-receipt',
+                'description' => 'Registro y control de egresos, gastos operativos y cajas chicas.',
+                'category' => 'core',
+                'category_name' => 'Operaciones Base',
+            ],
+            'account' => [
+                'name' => __('lang_v1.account'),
+                'icon' => 'fa fa-landmark',
+                'description' => 'Manejo de cuentas bancarias, libro mayor, balance y transferencias de fondos.',
+                'category' => 'specialized',
+                'category_name' => 'Módulos Especializados',
+            ],
+            'manufacturing' => [
+                'name' => 'Producción / Manufactura',
+                'icon' => 'fa fa-industry',
+                'description' => 'Fórmulas, recetas, insumos, órdenes de producción y costeo de fabricación.',
+                'category' => 'specialized',
+                'category_name' => 'Módulos Especializados',
+                'tooltip' => 'Gestiona procesos de producción y órdenes de manufactura',
+            ],
+            'consultorio' => [
+                'name' => 'Consultorio y Citas',
+                'icon' => 'fa fa-stethoscope',
+                'description' => 'Agenda de citas médicas o estéticas, historial y control de sala de espera.',
+                'category' => 'specialized',
+                'category_name' => 'Módulos Especializados',
+                'tooltip' => 'Gestión de citas para consultorios médicos y salones de belleza',
+            ],
+            'tables' => [
+                'name' => __('restaurant.tables'),
+                'icon' => 'fa fa-chair',
+                'description' => 'Organización y visualización del salón de mesas para restaurantes o bares.',
+                'category' => 'specialized',
+                'category_name' => 'Módulos Especializados',
                 'tooltip' => __('restaurant.tooltip_tables'),
             ],
-            'modifiers' => ['name' => __('restaurant.modifiers'),
+            'kitchen' => [
+                'name' => __('restaurant.kitchen_for_restaurant'),
+                'icon' => 'fa fa-utensils',
+                'description' => 'Pantalla KDS de cocina para visualización y despacho de pedidos en tiempo real.',
+                'category' => 'specialized',
+                'category_name' => 'Módulos Especializados',
+            ],
+            'modifiers' => [
+                'name' => __('restaurant.modifiers'),
+                'icon' => 'fa fa-layer-group',
+                'description' => 'Grupos de modificadores (términos de cocción, extras, salsas, etc.).',
+                'category' => 'specialized',
+                'category_name' => 'Módulos Especializados',
                 'tooltip' => __('restaurant.tooltip_modifiers'),
             ],
             'service_staff' => [
                 'name' => __('restaurant.service_staff'),
+                'icon' => 'fa fa-user-tie',
+                'description' => 'Asignación de meseros o especialistas por pedido y cálculo de propinas/comisión.',
+                'category' => 'specialized',
+                'category_name' => 'Módulos Especializados',
                 'tooltip' => __('restaurant.tooltip_service_staff'),
             ],
-            'booking' => ['name' => __('lang_v1.enable_booking')],
-            'kitchen' => [
-                'name' => __('restaurant.kitchen_for_restaurant'),
-            ],
-            'subscription' => ['name' => __('lang_v1.enable_subscription')],
-            'types_of_service' => ['name' => __('lang_v1.types_of_service'),
+            'types_of_service' => [
+                'name' => __('lang_v1.types_of_service'),
+                'icon' => 'fa fa-concierge-bell',
+                'description' => 'Tipos de servicio con listas de precios y recargos (Comer aquí, Llevar, Delivery).',
+                'category' => 'specialized',
+                'category_name' => 'Módulos Especializados',
                 'tooltip' => __('lang_v1.types_of_service_help_long'),
             ],
-            'manufacturing' => ['name' => 'Producción',
-                'tooltip' => 'Gestiona procesos de producción y órdenes de manufactura',
+            'booking' => [
+                'name' => __('lang_v1.enable_booking'),
+                'icon' => 'fa fa-calendar-check',
+                'description' => 'Módulo de reservaciones de mesas o recursos para clientes.',
+                'category' => 'specialized',
+                'category_name' => 'Módulos Especializados',
             ],
-            'consultorio' => [
-                'name' => 'Consultorio',
-                'tooltip' => 'Gestión de citas para consultorios médicos y salones de belleza',
+            'subscription' => [
+                'name' => __('lang_v1.enable_subscription'),
+                'icon' => 'fa fa-sync-alt',
+                'description' => 'Facturación recurrente y suscripciones para clientes de tu negocio.',
+                'category' => 'specialized',
+                'category_name' => 'Módulos Especializados',
             ],
         ];
+    }
+
+    /**
+     * Returns list of module keys allowed for a specific business based on active subscription / plan.
+     *
+     * @param int $business_id
+     * @return array
+     */
+    public function getAllowedModulesForBusiness($business_id)
+    {
+        // Base modules always allowed in all plans
+        $base_modules = ['purchases', 'add_sale', 'pos_sale', 'stock_transfers', 'stock_adjustment', 'expenses'];
+
+        if (! $this->isSuperadminInstalled()) {
+            return array_keys($this->availableModules());
+        }
+
+        if (auth()->check() && auth()->user()->can('superadmin')) {
+            return array_keys($this->availableModules());
+        }
+
+        $subscription = \Modules\Superadmin\Entities\Subscription::active_subscription($business_id);
+
+        // If no active subscription, return base modules
+        if (empty($subscription)) {
+            return $base_modules;
+        }
+
+        $package_details = !empty($subscription->package_details) ? (is_array($subscription->package_details) ? $subscription->package_details : json_decode($subscription->package_details, true)) : [];
+
+        $allowed = $base_modules;
+
+        // Check each advanced module in package_details
+        if (!empty($package_details['manufacturing_module']) || !empty($package_details['manufacturing'])) {
+            $allowed[] = 'manufacturing';
+        }
+
+        if (!empty($package_details['consultorio_module']) || !empty($package_details['consultorio'])) {
+            $allowed[] = 'consultorio';
+        }
+
+        if (!empty($package_details['account_module']) || !empty($package_details['account'])) {
+            $allowed[] = 'account';
+        }
+
+        if (!empty($package_details['tables']) || !empty($package_details['restaurant'])) {
+            $allowed[] = 'tables';
+        }
+
+        if (!empty($package_details['kitchen']) || !empty($package_details['restaurant'])) {
+            $allowed[] = 'kitchen';
+        }
+
+        if (!empty($package_details['order_screen']) || !empty($package_details['restaurant'])) {
+            $allowed[] = 'order_screen';
+        }
+
+        if (!empty($package_details['modifiers']) || !empty($package_details['restaurant'])) {
+            $allowed[] = 'modifiers';
+        }
+
+        if (!empty($package_details['service_staff']) || !empty($package_details['restaurant']) || !empty($package_details['consultorio_module']) || !empty($package_details['consultorio'])) {
+            $allowed[] = 'service_staff';
+        }
+
+        if (!empty($package_details['types_of_service']) || !empty($package_details['restaurant'])) {
+            $allowed[] = 'types_of_service';
+        }
+
+        if (!empty($package_details['bookings']) || !empty($package_details['booking']) || !empty($package_details['consultorio_module']) || !empty($package_details['consultorio'])) {
+            $allowed[] = 'booking';
+        }
+
+        if (!empty($package_details['subscription_module']) || !empty($package_details['subscription'])) {
+            $allowed[] = 'subscription';
+        }
+
+        // Also check if superadmin assigned custom module overrides to this business
+        $business = \App\Business::find($business_id);
+        if (!empty($business) && !empty($business->common_settings['superadmin_custom_modules']) && is_array($business->common_settings['superadmin_custom_modules'])) {
+            $allowed = array_merge($allowed, $business->common_settings['superadmin_custom_modules']);
+        }
+
+        return array_values(array_unique($allowed));
+    }
+
+    /**
+     * Checks if a module is allowed for a business
+     *
+     * @param string $module
+     * @param int|null $business_id
+     * @return bool
+     */
+    public function isModuleAllowedForBusiness($module, $business_id = null)
+    {
+        if (empty($business_id)) {
+            $business_id = request()->session()->get('user.business_id');
+        }
+
+        if (empty($business_id)) {
+            return true;
+        }
+
+        $allowed = $this->getAllowedModulesForBusiness($business_id);
+        return in_array($module, $allowed);
     }
 
     /**

@@ -360,8 +360,50 @@ class BusinessController extends BaseController
 
         $created_by = ! empty($created_id) ? User::find($created_id) : null;
 
+        $modules = $this->moduleUtil->availableModules();
+        $enabled_modules = !empty($business->enabled_modules) ? (is_array($business->enabled_modules) ? $business->enabled_modules : json_decode($business->enabled_modules, true)) : [];
+        $enabled_modules = is_array($enabled_modules) ? $enabled_modules : [];
+
         return view('superadmin::business.show')
-            ->with(compact('business', 'created_by'));
+            ->with(compact('business', 'created_by', 'modules', 'enabled_modules'));
+    }
+
+    /**
+     * Updates business allowed modules and custom overrides from superadmin
+     *
+     * @param Request $request
+     * @param int $business_id
+     * @return Response
+     */
+    public function updateBusinessModules(Request $request, $business_id)
+    {
+        if (! auth()->user()->can('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        try {
+            $business = Business::findOrFail($business_id);
+            $enabled_modules = $request->input('enabled_modules', []);
+            $enabled_modules = is_array($enabled_modules) ? $enabled_modules : [];
+
+            $common_settings = $business->common_settings ?? [];
+            $common_settings['superadmin_custom_modules'] = $enabled_modules;
+            $business->common_settings = $common_settings;
+            $business->enabled_modules = !empty($enabled_modules) ? array_values(array_unique($enabled_modules)) : null;
+            $business->save();
+
+            // If business is current session business, update session
+            if (request()->session()->get('user.business_id') == $business_id) {
+                request()->session()->put('business', $business);
+            }
+
+            $output = ['success' => 1, 'msg' => __('lang_v1.success')];
+        } catch (\Exception $e) {
+            \Log::emergency('File:'.$e->getFile().'Line:'.$e->getLine().'Message:'.$e->getMessage());
+            $output = ['success' => 0, 'msg' => __('messages.something_went_wrong')];
+        }
+
+        return back()->with('status', $output);
     }
 
     /**
