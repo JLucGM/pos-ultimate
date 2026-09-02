@@ -700,13 +700,16 @@ class BusinessController extends Controller
             ];
             if (! empty($sms_settings['test_number'])) {
                 $response = $this->businessUtil->sendSms($data);
+                $is_success = !empty($response);
+                $msg = $is_success ? __('lang_v1.success') : 'No se pudo enviar el SMS. Verifica las credenciales ingresadas.';
             } else {
-                $response = __('lang_v1.test_number_is_required');
+                $is_success = false;
+                $msg = __('lang_v1.test_number_is_required');
             }
 
             $output = [
-                'success' => 1,
-                'msg' => $response,
+                'success' => $is_success ? 1 : 0,
+                'msg' => $msg,
             ];
         } catch (\Exception $e) {
             \Log::emergency('File:'.$e->getFile().'Line:'.$e->getLine().'Message:'.$e->getMessage());

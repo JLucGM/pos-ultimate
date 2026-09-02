@@ -177,144 +177,146 @@ class NotificationTemplate extends Model
             [
                 'business_id' => $business_id,
                 'template_for' => 'new_sale',
-                'email_body' => '<p>Dear {contact_name},</p>
+                'email_body' => '<p>Estimado(a) {contact_name},</p>
 
-                    <p>Your invoice number is {invoice_number}<br />
-                    Total amount: {total_amount}<br />
-                    Paid amount: {received_amount}</p>
+                    <p>Su número de factura es {invoice_number}<br />
+                    Monto total: {total_amount}<br />
+                    Monto pagado: {received_amount}</p>
 
-                    <p>Thank you for shopping with us.</p>
+                    <p>Gracias por su preferencia y por comprar con nosotros.</p>
 
                     <p>{business_logo}</p>
 
                     <p>&nbsp;</p>',
-                'sms_body' => 'Dear {contact_name}, Thank you for shopping with us. {business_name}',
-                'subject' => 'Thank you from {business_name}',
+                'sms_body' => 'Estimado(a) {contact_name}, gracias por su compra. Factura: {invoice_number}, Total: {total_amount}. {business_name}',
+                'subject' => 'Gracias por su compra en {business_name}',
                 'auto_send' => '0',
             ],
 
             [
                 'business_id' => $business_id,
                 'template_for' => 'payment_received',
-                'email_body' => '<p>Dear {contact_name},</p>
+                'email_body' => '<p>Estimado(a) {contact_name},</p>
 
-                <p>We have received a payment of {received_amount}</p>
+                <p>Hemos recibido su pago por un monto de {received_amount}.</p>
+
+                <p>Gracias por su puntualidad.</p>
 
                 <p>{business_logo}</p>',
-                'sms_body' => 'Dear {contact_name}, We have received a payment of {received_amount}. {business_name}',
-                'subject' => 'Payment Received, from {business_name}',
+                'sms_body' => 'Estimado(a) {contact_name}, hemos recibido su pago de {received_amount}. {business_name}',
+                'subject' => 'Comprobante de Pago Recibido - {business_name}',
                 'auto_send' => '0',
             ],
             [
                 'business_id' => $business_id,
                 'template_for' => 'payment_reminder',
-                'email_body' => '<p>Dear {contact_name},</p>
+                'email_body' => '<p>Estimado(a) {contact_name},</p>
 
-                    <p>This is to remind you that you have pending payment of {due_amount}. Kindly pay it as soon as possible.</p>
+                    <p>Le recordamos cordialmente que tiene un saldo pendiente de {due_amount}. Le agradecemos realizar su pago a la brevedad posible.</p>
 
                     <p>{business_logo}</p>',
-                'sms_body' => 'Dear {contact_name}, You have pending payment of {due_amount}. Kindly pay it as soon as possible. {business_name}',
-                'subject' => 'Payment Reminder, from {business_name}',
+                'sms_body' => 'Estimado(a) {contact_name}, le recordamos que tiene un saldo pendiente de {due_amount}. {business_name}',
+                'subject' => 'Recordatorio de Pago Pendiente - {business_name}',
                 'auto_send' => '0',
             ],
             [
                 'business_id' => $business_id,
                 'template_for' => 'new_booking',
-                'email_body' => '<p>Dear {contact_name},</p>
+                'email_body' => '<p>Estimado(a) {contact_name},</p>
 
-                    <p>Your booking is confirmed</p>
+                    <p>Su reserva ha sido confirmada exitosamente.</p>
 
-                    <p>Date: {start_time} to {end_time}</p>
+                    <p>Horario: {start_time} a {end_time}</p>
 
-                    <p>Table: {table}</p>
+                    <p>Mesa: {table}</p>
 
-                    <p>Location: {location}</p>
+                    <p>Ubicación: {location}</p>
 
                     <p>{business_logo}</p>',
-                'sms_body' => 'Dear {contact_name}, Your booking is confirmed. Date: {start_time} to {end_time}, Table: {table}, Location: {location}', 'subject' => 'Booking Confirmed - {business_name}',
+                'sms_body' => 'Estimado(a) {contact_name}, su reserva está confirmada. Horario: {start_time} a {end_time}, Mesa: {table}, Ubicación: {location}. {business_name}',
+                'subject' => 'Reserva Confirmada - {business_name}',
                 'auto_send' => '0',
             ],
             [
                 'business_id' => $business_id,
                 'template_for' => 'new_order',
-                'email_body' => '<p>Dear {contact_name},</p>
+                'email_body' => '<p>Estimado(a) {contact_name},</p>
 
-                    <p>We have a new order with reference number {order_ref_number}. Kindly process the products as soon as possible.</p>
+                    <p>Hemos generado un nuevo pedido con el número de referencia {order_ref_number}. Por favor procesar los productos a la brevedad.</p>
 
                     <p>{business_name}<br />
                     {business_logo}</p>',
-                'sms_body' => 'Dear {contact_name}, We have a new order with reference number {order_ref_number}. Kindly process the products as soon as possible. {business_name}',
-                'subject' => 'New Order, from {business_name}',
+                'sms_body' => 'Estimado(a) {contact_name}, nuevo pedido con referencia {order_ref_number}. {business_name}',
+                'subject' => 'Nuevo Pedido - {business_name}',
                 'auto_send' => '0',
             ],
             [
                 'business_id' => $business_id,
                 'template_for' => 'payment_paid',
-                'email_body' => '<p>Dear {contact_name},</p>
+                'email_body' => '<p>Estimado(a) {contact_name},</p>
 
-                    <p>We have paid amount {paid_amount} again invoice number {order_ref_number}.<br />
-                    Kindly note it down.</p>
+                    <p>Hemos emitido un pago por {paid_amount} correspondiente a la factura {order_ref_number}.<br />
+                    Por favor tomar nota del registro.</p>
 
                     <p>{business_name}<br />
                     {business_logo}</p>',
-                'sms_body' => 'We have paid amount {paid_amount} again invoice number {order_ref_number}.
-                    Kindly note it down. {business_name}',
-                'subject' => 'Payment Paid, from {business_name}',
+                'sms_body' => 'Hemos emitido el pago de {paid_amount} para la factura {order_ref_number}. {business_name}',
+                'subject' => 'Pago Realizado - {business_name}',
                 'auto_send' => '0',
             ],
             [
                 'business_id' => $business_id,
                 'template_for' => 'items_received',
-                'email_body' => '<p>Dear {contact_name},</p>
+                'email_body' => '<p>Estimado(a) {contact_name},</p>
 
-                    <p>We have received all items from invoice reference number {order_ref_number}. Thank you for processing it.</p>
+                    <p>Hemos recibido satisfactoriamente todos los artículos de la factura {order_ref_number}. Muchas gracias por su gestión.</p>
 
                     <p>{business_name}<br />
                     {business_logo}</p>',
-                'sms_body' => 'We have received all items from invoice reference number {order_ref_number}. Thank you for processing it. {business_name}',
-                'subject' => 'Items received, from {business_name}',
+                'sms_body' => 'Hemos recibido todos los artículos de la factura {order_ref_number}. Muchas gracias. {business_name}',
+                'subject' => 'Artículos Recibidos - {business_name}',
                 'auto_send' => '0',
             ],
             [
                 'business_id' => $business_id,
                 'template_for' => 'items_pending',
-                'email_body' => '<p>Dear {contact_name},<br />
-                    This is to remind you that we have not yet received some items from invoice reference number {order_ref_number}. Please process it as soon as possible.</p>
+                'email_body' => '<p>Estimado(a) {contact_name},<br />
+                    Le informamos que aún tenemos artículos pendientes por recibir correspondientes a la referencia {order_ref_number}. Por favor procesar su envío a la brevedad.</p>
 
                     <p>{business_name}<br />
                     {business_logo}</p>',
-                'sms_body' => 'This is to remind you that we have not yet received some items from invoice reference number {order_ref_number} . Please process it as soon as possible.{business_name}',
-                'subject' => 'Items Pending, from {business_name}',
+                'sms_body' => 'Recordatorio: artículos pendientes por recibir de la referencia {order_ref_number}. Por favor verificar. {business_name}',
+                'subject' => 'Artículos Pendientes de Entrega - {business_name}',
                 'auto_send' => '0',
             ],
 
             [
                 'business_id' => $business_id,
                 'template_for' => 'new_quotation',
-                'email_body' => '<p>Dear {contact_name},</p>
+                'email_body' => '<p>Estimado(a) {contact_name},</p>
 
-                    <p>Your quotation number is {invoice_number}<br />
-                    Total amount: {total_amount}</p>
+                    <p>Adjunto encontrará su cotización número {invoice_number}<br />
+                    Monto total: {total_amount}</p>
 
-                    <p>Thank you for shopping with us.</p>
+                    <p>Quedamos a su entera disposición para cualquier consulta.</p>
 
                     <p>{business_logo}</p>
 
                     <p>&nbsp;</p>',
-                'sms_body' => 'Dear {contact_name}, Thank you for shopping with us. {business_name}',
-                'subject' => 'Thank you from {business_name}',
+                'sms_body' => 'Estimado(a) {contact_name}, cotización número {invoice_number}, Total: {total_amount}. {business_name}',
+                'subject' => 'Cotización {invoice_number} - {business_name}',
                 'auto_send' => '0',
             ],
             [
                 'business_id' => $business_id,
                 'template_for' => 'purchase_order',
-                'email_body' => '<p>Dear {contact_name},</p>
+                'email_body' => '<p>Estimado(a) {contact_name},</p>
 
-                    <p>We have a new purchase order with reference number {order_ref_number}. The respective invoice is attached here with.</p>
+                    <p>Hemos emitido una nueva orden de compra con el número de referencia {order_ref_number}. Encontrará la orden adjunta a este correo.</p>
 
                     <p>{business_logo}</p>',
-                'sms_body' => 'We have a new purchase order with reference number {order_ref_number}. {business_name}',
-                'subject' => 'New Purchase Order, from {business_name}',
+                'sms_body' => 'Nueva orden de compra con referencia {order_ref_number}. {business_name}',
+                'subject' => 'Orden de Compra - {business_name}',
                 'auto_send' => '0',
             ],
         ];

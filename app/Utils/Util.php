@@ -448,12 +448,15 @@ class Util
             return false;
         }
 
-        $twilio = new \Aloha\Twilio\Twilio($sms_settings['twilio_sid'], $sms_settings['twilio_token'], $sms_settings['twilio_from']);
+        $twilio = new \Aloha\Twilio\Twilio($sms_settings['twilio_sid'], $sms_settings['twilio_token'], $sms_settings['twilio_from'] ?? null);
 
         $numbers = explode(',', trim($data['mobile_number']));
+        $response = [];
         foreach ($numbers as $number) {
-            $twilio->message($number, $data['sms_body']);
+            $response[] = $twilio->message($number, $data['sms_body']);
         }
+
+        return !empty($response) ? $response : true;
     }
 
     /**

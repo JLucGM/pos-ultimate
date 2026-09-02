@@ -39,15 +39,17 @@ class NewSubscriptionNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $paid_via = ! empty($this->subscription->paid_via) ? $this->subscription->paid_via : 'Free';
-
-        $details = 'Package: '.$this->subscription->package->name.', Transaction ID: '.$this->subscription->payment_transaction_id.', Paid Via: '.$paid_via;
+        $paid_via = ! empty($this->subscription->paid_via) ? $this->subscription->paid_via : 'Gratuito / Prueba';
+        $package_name = !empty($this->subscription->package) ? $this->subscription->package->name : ($this->subscription->package_details['name'] ?? 'N/A');
 
         return (new MailMessage)
-                ->subject('New Subscription')
-                ->greeting('Hello!')
-                ->line('New package has been subscribed by '.$this->subscription->business->name)
-                ->line($details);
+                ->subject('Nueva Suscripción de Paquete - ' . config('app.name'))
+                ->greeting('¡Hola!')
+                ->line('La empresa ' . $this->subscription->business->name . ' ha activado una nueva suscripción:')
+                ->line('Plan / Paquete: ' . $package_name)
+                ->line('Método de Pago: ' . ucfirst($paid_via))
+                ->line('ID de Transacción: ' . ($this->subscription->payment_transaction_id ?? 'N/A'))
+                ->salutation('Saludos cordiales, Equipo de ' . config('app.name'));
     }
 
     /**

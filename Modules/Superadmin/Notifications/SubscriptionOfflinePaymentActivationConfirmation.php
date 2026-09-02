@@ -51,33 +51,34 @@ class SubscriptionOfflinePaymentActivationConfirmation extends Notification
     public function toMail($notifiable)
     {
         $mail = (new MailMessage)
-                ->subject('🔔 Nuevo Reporte de Pago Offline: ' . $this->business->name)
+                ->subject('Nuevo Reporte de Pago: ' . $this->business->name)
                 ->greeting('¡Hola Superadministrador!')
                 ->line('Se ha registrado un nuevo reporte de pago por transferencia / pago móvil:')
-                ->line('• Empresa: ' . $this->business->name)
-                ->line('• Plan / Paquete: ' . $this->package->name);
+                ->line('- Empresa: ' . $this->business->name)
+                ->line('- Plan / Paquete: ' . $this->package->name);
 
         if (!empty($this->offline_details['reference_no'])) {
-            $mail->line('• N° de Referencia: ' . $this->offline_details['reference_no']);
+            $mail->line('- N° de Referencia: ' . $this->offline_details['reference_no']);
         }
         if (!empty($this->offline_details['amount_paid'])) {
-            $mail->line('• Monto Pagado: ' . $this->offline_details['amount_paid'] . ' ' . ($this->offline_details['currency'] ?? ''));
+            $mail->line('- Monto Pagado: ' . $this->offline_details['amount_paid'] . ' ' . ($this->offline_details['currency'] ?? ''));
         }
         if (!empty($this->offline_details['bank_name'])) {
-            $mail->line('• Banco Emisor: ' . $this->offline_details['bank_name']);
+            $mail->line('- Banco Emisor: ' . $this->offline_details['bank_name']);
         }
         if (!empty($this->offline_details['phone_number'])) {
-            $mail->line('• Teléfono Emisor: ' . $this->offline_details['phone_number']);
+            $mail->line('- Teléfono Emisor: ' . $this->offline_details['phone_number']);
         }
         if (!empty($this->offline_details['paid_on'])) {
-            $mail->line('• Fecha de Pago: ' . $this->offline_details['paid_on']);
+            $mail->line('- Fecha de Pago: ' . $this->offline_details['paid_on']);
         }
         if (!empty($this->offline_details['payment_note'])) {
-            $mail->line('• Observaciones: ' . $this->offline_details['payment_note']);
+            $mail->line('- Observaciones: ' . $this->offline_details['payment_note']);
         }
 
         return $mail->action('Ver y Aprobar Suscripción', url('/superadmin/superadmin-subscription'))
-                    ->line('Por favor verifica la acreditación en la cuenta bancaria antes de aprobar la suscripción.');
+                    ->line('Por favor verifica la acreditación en la cuenta bancaria antes de aprobar la suscripción.')
+                    ->salutation('Saludos cordiales, Equipo de ' . config('app.name'));
     }
 
     /**

@@ -45,7 +45,11 @@ class TestEmailNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('This is a test email');
+                    ->subject('Correo de Prueba - ' . config('app.name'))
+                    ->greeting('¡Hola!')
+                    ->line('Este es un correo de prueba para verificar que la configuración de tu servidor de correo (SMTP) está funcionando correctamente.')
+                    ->line('Si recibiste este mensaje, tu servicio de correo está listo para enviar notificaciones.')
+                    ->salutation('Saludos cordiales, Equipo de ' . config('app.name'));
     }
 
     /**
