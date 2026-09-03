@@ -1,5 +1,11 @@
 
 {!! Form::hidden('language', request()->lang); !!}
+<!-- Anti-Bot Honeypot & Security Tokens (Invisible to humans, traps automated scripts) -->
+<div style="position: absolute; left: -9999px; top: -9999px; opacity: 0; pointer-events: none; height: 0; width: 0; overflow: hidden;" aria-hidden="true" tabindex="-1">
+    <input type="text" name="website_url_hp" id="website_url_hp" tabindex="-1" autocomplete="new-password" value="">
+    <input type="text" name="user_validation_hp" id="user_validation_hp" tabindex="-1" autocomplete="off" value="">
+    <input type="hidden" name="_form_load_time" value="{{ time() }}">
+</div>
 
 <!-- PASO 1: Datos del Negocio -->
 <div class="auth-step-pane active" id="auth-step-1">

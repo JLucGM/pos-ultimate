@@ -126,6 +126,39 @@ class BusinessController extends Controller
             return redirect('/');
         }
 
+        // ── 1. Anti-Bot Honeypot Trap (Campos invisibles para humanos) ──
+        if (! empty($request->input('website_url_hp')) || ! empty($request->input('user_validation_hp'))) {
+            \Log::warning('Bot registration blocked via Honeypot trap | IP: ' . $request->ip() . ' | UA: ' . $request->userAgent());
+            return redirect('/login')->with('status', ['success' => 1, 'msg' => 'Registro completado. Por favor inicia sesión.']);
+        }
+
+        // ── 2. Anti-Bot Speed Trap (Formularios completados en < 2 segundos) ──
+        $form_load_time = (int) $request->input('_form_load_time', 0);
+        if ($form_load_time > 0 && (time() - $form_load_time) < 2) {
+            \Log::warning('Bot registration blocked via Speed Trap (<2s) | IP: ' . $request->ip() . ' | UA: ' . $request->userAgent());
+            return redirect('/login')->with('status', ['success' => 1, 'msg' => 'Registro completado. Por favor inicia sesión.']);
+        }
+
+        // ── 3. Filtro de Correos Temporales / Desechables (Disposable Emails) ──
+        $email = strtolower(trim((string) $request->input('email')));
+        if (! empty($email)) {
+            $disposable_domains = [
+                'tempmail.com', 'temp-mail.org', 'guerrillamail.com', 'guerrillamail.net', 'guerrillamail.org',
+                'sharklasers.com', 'grr.la', 'yopmail.com', 'yopmail.fr', 'mailinator.com', '10minutemail.com',
+                'trashmail.com', 'dispostable.com', 'fakeinbox.com', 'throwawaymail.com', 'getairmail.com',
+                'mohmal.com', 'crazymailing.com', 'nada.ltd', 'emailondeck.com', 'tempail.com', 'mytemp.email',
+                'mailcatch.com', 'maildrop.cc', 'harakirimail.com', 'tmail.ws', 'burnermail.io'
+            ];
+            $email_parts = explode('@', $email);
+            $email_domain = end($email_parts);
+            if (in_array($email_domain, $disposable_domains)) {
+                return redirect()->back()->withInput()->with('status', [
+                    'success' => 0,
+                    'msg' => 'No se permiten correos electrónicos temporales o desechables. Por favor ingresa un correo corporativo o personal válido.',
+                ]);
+            }
+        }
+
         try {
             $validator = $request->validate(
                 [
@@ -212,6 +245,15 @@ class BusinessController extends Controller
             }
 
             $business_details['enabled_modules'] = array_values(array_unique($enabled_modules));
+
+            // Registrar IP y navegador de procedencia para auditoría de seguridad
+            $client_ip = $request->ip();
+            $user_agent = $request->userAgent();
+            $business_details['common_settings'] = [
+                'registration_ip' => $client_ip,
+                'registration_user_agent' => $user_agent,
+            ];
+            \Log::info("Registro de Empresa Exitoso | Empresa: {$business_details['name']} | Email: {$email} | IP: {$client_ip} | UA: {$user_agent}");
 
             $business = $this->businessUtil->createNewBusiness($business_details);
 
