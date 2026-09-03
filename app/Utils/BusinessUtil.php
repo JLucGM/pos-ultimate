@@ -212,6 +212,8 @@ class BusinessUtil extends Util
         //Disable inline tax editing
         $business_details['enable_inline_tax'] = 0;
 
+        $business_details['date_format'] = !empty($business_details['date_format']) ? $business_details['date_format'] : 'd/m/Y';
+
         $business = Business::create_business($business_details);
 
         return $business;

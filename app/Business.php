@@ -47,10 +47,10 @@ class Business extends Model
     public static function date_formats()
     {
         return [
+            'd/m/Y' => 'dd/mm/yyyy (Ej: 31/12/2026)',
             'd-m-Y' => 'dd-mm-yyyy',
-            'm-d-Y' => 'mm-dd-yyyy',
-            'd/m/Y' => 'dd/mm/yyyy',
             'm/d/Y' => 'mm/dd/yyyy',
+            'm-d-Y' => 'mm-dd-yyyy',
         ];
     }
 

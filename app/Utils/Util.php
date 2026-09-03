@@ -233,7 +233,7 @@ class Util
      */
     public function uf_date($date, $time = false)
     {
-        $date_format = session('business.date_format');
+        $date_format = session('business.date_format') ?: config('constants.default_date_format', 'd/m/Y');
         $mysql_format = 'Y-m-d';
         if ($time) {
             if (session('business.time_format') == 12) {
@@ -244,7 +244,11 @@ class Util
             $mysql_format = 'Y-m-d H:i:s';
         }
 
-        return ! empty($date_format) ? \Carbon::createFromFormat($date_format, $date)->format($mysql_format) : null;
+        try {
+            return ! empty($date_format) && ! empty($date) ? \Carbon::createFromFormat($date_format, $date)->format($mysql_format) : (! empty($date) ? \Carbon::parse($date)->format($mysql_format) : null);
+        } catch (\Exception $e) {
+            return ! empty($date) ? \Carbon::parse($date)->format($mysql_format) : null;
+        }
     }
 
     /**
@@ -288,7 +292,7 @@ class Util
      */
     public function format_date($date, $show_time = false, $business_details = null)
     {
-        $format = ! empty($business_details) ? $business_details->date_format : session('business.date_format');
+        $format = ! empty($business_details) ? $business_details->date_format : (session('business.date_format') ?: config('constants.default_date_format', 'd/m/Y'));
         if (! empty($show_time)) {
             $time_format = ! empty($business_details) ? $business_details->time_format : session('business.time_format');
             if ($time_format == 12) {

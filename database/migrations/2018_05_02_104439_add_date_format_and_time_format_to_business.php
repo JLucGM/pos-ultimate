@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('business', function (Blueprint $table) {
-            $table->string('date_format')->default('m/d/Y')->after('enabled_modules');
+            $table->string('date_format')->default('d/m/Y')->after('enabled_modules');
             $table->enum('time_format', [12, 24])->default(24)->after('date_format');
         });
     }

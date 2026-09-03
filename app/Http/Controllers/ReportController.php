@@ -1574,7 +1574,7 @@ class ReportController extends Controller
 
             if (! empty($purchase_line)) {
                 if (! empty($purchase_line->exp_date)) {
-                    $purchase_line->exp_date = date('m/d/Y', strtotime($purchase_line->exp_date));
+                    $purchase_line->exp_date = $this->productUtil->format_date($purchase_line->exp_date);
                 }
             }
 
