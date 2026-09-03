@@ -113,10 +113,12 @@ class SubscriptionController extends BaseController
                         ->with('status', $output);
             }
 
-            //Check if one time only package
+            //Check if one time only package (allow trial users to purchase the real package)
             if (empty($form_register) && $package->is_one_time) {
                 $count_subcriptions = Subscription::where('business_id', $business_id)
                                                 ->where('package_id', $package_id)
+                                                ->where('paid_via', '!=', 'trial')
+                                                ->where('package_price', '>', 0)
                                                 ->count();
 
                 if ($count_subcriptions > 0) {
@@ -369,8 +371,6 @@ class SubscriptionController extends BaseController
             DB::rollBack();
 
             \Log::emergency('File:'.$e->getFile().'Line:'.$e->getLine().'Message:'.$e->getMessage());
-            echo 'File:'.$e->getFile().'Line:'.$e->getLine().'Message:'.$e->getMessage();
-            exit;
             $output = ['success' => 0, 'msg' => $e->getMessage()];
         }
 
@@ -975,5 +975,43 @@ class SubscriptionController extends BaseController
         }
 
         return $end_date;
+    }
+
+    /**
+     * Handles client request to activate an locked module and notifies superadmin
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function requestModule(Request $request)
+    {
+        try {
+            $business_id = request()->session()->get('user.business_id');
+            $business = Business::with(['owner', 'locations'])->findOrFail($business_id);
+            $user = auth()->user();
+
+            $module_key = $request->input('module_key');
+            $module_name = $request->input('module_name', $module_key);
+
+            $superadmin_email = System::getProperty('email');
+
+            if (!empty($superadmin_email)) {
+                Notification::route('mail', $superadmin_email)
+                    ->notify(new \Modules\Superadmin\Notifications\ModuleActivationRequestNotification($business, $user, $module_key, $module_name));
+            }
+
+            $output = [
+                'success' => true,
+                'msg' => '¡Solicitud enviada con éxito! El Superadministrador ha sido notificado.',
+            ];
+        } catch (\Exception $e) {
+            \Log::emergency('File:'.$e->getFile().'Line:'.$e->getLine().'Message:'.$e->getMessage());
+            $output = [
+                'success' => false,
+                'msg' => __('messages.something_went_wrong'),
+            ];
+        }
+
+        return $output;
     }
 }

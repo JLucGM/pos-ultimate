@@ -111,6 +111,7 @@ class Subscription extends Model
 
         $subscription = Subscription::where('business_id', $business_id)
                             ->approved()
+                            ->where('paid_via', '!=', 'trial')
                             ->select(DB::raw('MAX(end_date) as end_date'))
                             ->first();
 

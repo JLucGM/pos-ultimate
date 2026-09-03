@@ -83,6 +83,7 @@ Route::middleware('web', 'SetSessionData', 'auth', 'language', 'timezone', 'Admi
 
     Route::get('/subscription/{package_id}/register-pay', [Modules\Superadmin\Http\Controllers\SubscriptionController::class, 'registerPay'])->name('register-pay');
 
+    Route::post('/subscription/request-module', [Modules\Superadmin\Http\Controllers\SubscriptionController::class, 'requestModule'])->name('subscription.request-module');
     Route::resource('/subscription', 'Modules\Superadmin\Http\Controllers\SubscriptionController');
 
     Route::get('/subscription/{subcription_id}/force-active', [Modules\Superadmin\Http\Controllers\SubscriptionController::class, 'forceActive'])->name('force-active');

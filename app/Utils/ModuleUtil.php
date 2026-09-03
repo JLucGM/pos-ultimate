@@ -24,13 +24,7 @@ class ModuleUtil extends Util
         $is_available = Module::has($module_name);
 
         if ($is_available) {
-            //Check if installed by checking the system table {module_name}_version
-            $module_version = System::getProperty(strtolower($module_name).'_version');
-            if (empty($module_version)) {
-                return false;
-            } else {
-                return true;
-            }
+            return true;
         }
 
         return false;

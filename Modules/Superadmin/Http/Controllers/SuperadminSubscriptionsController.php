@@ -219,6 +219,15 @@ class SuperadminSubscriptionsController extends BaseController
                     $subscriptions->start_date = $dates['start'];
                     $subscriptions->end_date = $dates['end'];
                     $subscriptions->trial_end_date = $dates['trial'];
+
+                    // Terminate any previous trial subscription for this business
+                    Subscription::where('business_id', $subscriptions->business_id)
+                        ->where('id', '!=', $subscriptions->id)
+                        ->where('paid_via', 'trial')
+                        ->where('status', 'approved')
+                        ->update([
+                            'end_date' => \Carbon\Carbon::yesterday()->toDateString(),
+                        ]);
                 }
 
                 $subscriptions->status = $input['status'];

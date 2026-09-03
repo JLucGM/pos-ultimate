@@ -113,8 +113,8 @@
                                 </h2>
 
                                 <div class="box-tools pull-right">
-                                    <span class="badge bg-green">
-                                        @lang('superadmin::lang.running')
+                                    <span class="badge {{ $active->paid_via == 'trial' ? 'bg-yellow' : 'bg-green' }}">
+                                        {{ $active->paid_via == 'trial' ? 'Modo Demo / Prueba' : __('superadmin::lang.running') }}
                                     </span>
                                 </div>
 
@@ -125,6 +125,13 @@
 
                                 @lang('superadmin::lang.remaining', ['days' => \Carbon::today()->diffInDays($active->end_date)])
 
+                                @if($active->paid_via == 'trial')
+                                    <div style="margin-top: 12px;">
+                                        <a href="#packages_list_section" class="btn btn-sm btn-primary" style="border-radius: 8px; font-weight: 600;">
+                                            <i class="fa fa-crown text-warning"></i> Adquirir Plan Definitivo
+                                        </a>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>

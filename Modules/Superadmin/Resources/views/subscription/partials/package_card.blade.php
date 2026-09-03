@@ -2,7 +2,22 @@
     <div
         class="tw-flex tw-flex-col tw-gap-6 tw-p-6 tw-shadow bg-white tw-rounded-2xl tw-shadow-lg tw-transition-all tw-duration-700 hover:tw-scale-110 tw-cursor-pointer">
 
-        @if ($package->mark_package_as_popular == 1)
+        @php
+            $is_current_active = isset($active) && !empty($active) && $active->package_id == $package->id;
+            $is_trial = $is_current_active && $active->paid_via == 'trial';
+        @endphp
+
+        @if ($is_current_active)
+            @if ($is_trial)
+                <div class="tw-self-center text-center" style="background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; font-weight: 700; font-size: 12px; padding: 4px 12px; border-radius: 9999px;">
+                    <i class="fa fa-clock"></i> Modo Demo Activo ({{ \Carbon\Carbon::today()->diffInDays($active->end_date) }} días restantes)
+                </div>
+            @else
+                <div class="tw-self-center text-center" style="background: #DCFCE7; color: #166534; border: 1px solid #86EFAC; font-weight: 700; font-size: 12px; padding: 4px 12px; border-radius: 9999px;">
+                    <i class="fa fa-check-circle"></i> Tu Plan Actual
+                </div>
+            @endif
+        @elseif ($package->mark_package_as_popular == 1)
             <div class="tw-dw-badge tw-dw-badge-primary tw-self-center tw-badge-lg">
                 @lang('superadmin::lang.popular')
             </div>
@@ -113,7 +128,11 @@
             @else
                 <a href="{{ action([\Modules\Superadmin\Http\Controllers\SubscriptionController::class, 'pay'], [$package->id]) }}"
                     class="tw-bg-gradient-to-r tw-from-indigo-500 tw-to-blue-500 tw-h-12 tw-rounded-xl tw-text-sm md:tw-text-base tw-text-white tw-font-semibold tw-tw-w-full tw-tw-max-w-full tw-mt-2 tw-flex tw-items-center tw-justify-center hover:tw-from-indigo-600 hover:tw-to-blue-600 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-ring-offset-2 active:tw-from-indigo-700 active:tw-to-blue-700">
-                    @if ($package->price != 0)
+                    @if ($is_trial)
+                        <i class="fa fa-crown text-warning" style="margin-right: 6px;"></i> Comprar Plan Definitivo
+                    @elseif ($is_current_active)
+                        <i class="fa fa-redo" style="margin-right: 6px;"></i> Renovar Plan
+                    @elseif ($package->price != 0)
                         @lang('superadmin::lang.pay_and_subscribe')
                     @else
                         @lang('superadmin::lang.subscribe')

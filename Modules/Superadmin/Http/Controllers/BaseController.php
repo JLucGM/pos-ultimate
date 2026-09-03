@@ -117,6 +117,17 @@ class BaseController extends Controller
         $subscription['created_id'] = $user_id;
         $subscription = Subscription::create($subscription);
 
+        // If newly created subscription is approved and paid, terminate any previous trial subscription
+        if ($subscription->status == 'approved' && $subscription->paid_via != 'trial') {
+            Subscription::where('business_id', $business_id)
+                ->where('id', '!=', $subscription->id)
+                ->where('paid_via', 'trial')
+                ->where('status', 'approved')
+                ->update([
+                    'end_date' => \Carbon\Carbon::yesterday()->toDateString(),
+                ]);
+        }
+
         if (! $is_superadmin) {
             $email = System::getProperty('email');
             $is_notif_enabled = System::getProperty('enable_new_subscription_notification');

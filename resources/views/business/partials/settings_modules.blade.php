@@ -206,8 +206,8 @@
                         <span style="font-size: 12px; color: #94A3B8;">Función Avanzada de AudazPOS</span>
                     </div>
                 </div>
-            </div>
-            <div class="modal-body" style="padding: 24px;">
+                   <div class="modal-body" style="padding: 24px;">
+                <input type="hidden" id="modal_module_key" value="">
                 <div style="background: #FEF3C7; border: 1px solid #FCD34D; border-radius: 10px; padding: 14px 16px; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 12px;">
                     <i class="fa fa-lock text-warning" style="font-size: 20px; color: #D97706; margin-top: 2px;"></i>
                     <div>
@@ -230,8 +230,8 @@
                         <i class="fa fa-lightbulb text-primary"></i> ¿Cómo activarlo?
                     </h5>
                     <ul style="margin: 0; padding-left: 20px; color: #475569; font-size: 12px; line-height: 1.6;">
-                        <li><strong>Actualiza tu Plan:</strong> Revisa nuestros paquetes de suscripción con funciones para tu rubro.</li>
-                        <li><strong>Solicitud a Medida:</strong> Si deseas un add-on independiente para tu negocio, contáctanos directamente.</li>
+                        <li><strong>Notificar al Administrador:</strong> Pulsa el botón para enviar una solicitud formal de habilitación.</li>
+                        <li><strong>Actualizar Plan:</strong> Revisa nuestros planes de suscripción que incluyen este y otros módulos.</li>
                     </ul>
                 </div>
             </div>
@@ -240,9 +240,12 @@
                     <i class="fa fa-times"></i> Cerrar
                 </button>
                 <div style="display: flex; gap: 8px;">
+                    <button type="button" class="btn btn-info" id="btn_send_module_request" style="border-radius: 8px; font-weight: 600;">
+                        <i class="fa fa-paper-plane"></i> Notificar al Administrador
+                    </button>
                     @if(Module::has('Superadmin'))
                         <a href="{{ action([\Modules\Superadmin\Http\Controllers\SubscriptionController::class, 'index']) }}" class="btn btn-primary" style="border-radius: 8px; font-weight: 600;">
-                            <i class="fa fa-crown text-warning"></i> Ver Planes y Mejorar
+                            <i class="fa fa-crown text-warning"></i> Ver Planes
                         </a>
                     @endif
                 </div>
@@ -254,14 +257,54 @@
 <script type="text/javascript">
     $(document).on('click', '.btn-upgrade-modal-trigger', function(e) {
         e.preventDefault();
+        var moduleKey = $(this).data('module');
         var moduleName = $(this).data('name');
         var moduleDesc = $(this).data('desc');
         var moduleIcon = $(this).data('icon');
 
+        $('#modal_module_key').val(moduleKey);
         $('#modal_module_name').text(moduleName);
         $('#modal_module_desc').text(moduleDesc);
         $('#modal_module_icon').attr('class', moduleIcon);
 
         $('#module_upgrade_modal').modal('show');
+    });
+
+    $(document).on('click', '#btn_send_module_request', function(e) {
+        e.preventDefault();
+        var $btn = $(this);
+        var originalHtml = $btn.html();
+        var moduleKey = $('#modal_module_key').val();
+        var moduleName = $('#modal_module_name').text();
+
+        $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Enviando...');
+
+        $.ajax({
+            url: "{{ route('subscription.request-module') }}",
+            type: 'POST',
+            data: {
+                module_key: moduleKey,
+                module_name: moduleName,
+                _token: "{{ csrf_token() }}"
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    toastr.success(response.msg);
+                    $btn.html('<i class="fa fa-check"></i> Solicitud Enviada');
+                    setTimeout(function() {
+                        $('#module_upgrade_modal').modal('hide');
+                        $btn.prop('disabled', false).html(originalHtml);
+                    }, 1500);
+                } else {
+                    toastr.error(response.msg);
+                    $btn.prop('disabled', false).html(originalHtml);
+                }
+            },
+            error: function() {
+                toastr.error('Ocurrió un error al enviar la solicitud.');
+                $btn.prop('disabled', false).html(originalHtml);
+            }
+        });
     });
 </script>
