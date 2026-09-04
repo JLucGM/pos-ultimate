@@ -385,6 +385,8 @@ class TransactionUtil extends Util
                     'res_line_order_status' => ! empty($product['res_service_staff_id']) ? 'received' : null,
                     'so_line_id' => ! empty($product['so_line_id']) ? $product['so_line_id'] : null,
                     'secondary_unit_quantity' => ! empty($product['secondary_unit_quantity']) ? $this->num_uf($product['secondary_unit_quantity']) : 0,
+                    'pieces_quantity' => ! empty($product['pieces_quantity']) ? $this->num_uf($product['pieces_quantity']) : 0,
+                    'estimated_weight' => ! empty($product['estimated_weight']) ? $this->num_uf($product['estimated_weight']) : 0,
                 ];
 
                 foreach ($extra_line_parameters as $key => $value) {
@@ -604,6 +606,8 @@ class TransactionUtil extends Util
             'sub_unit_id' => ! empty($product['sub_unit_id']) ? $product['sub_unit_id'] : null,
             'res_service_staff_id' => ! empty($product['res_service_staff_id']) ? $product['res_service_staff_id'] : null,
             'secondary_unit_quantity' => ! empty($product['secondary_unit_quantity']) ? $this->num_uf($product['secondary_unit_quantity']) : 0,
+            'pieces_quantity' => ! empty($product['pieces_quantity']) ? $this->num_uf($product['pieces_quantity']) : 0,
+            'estimated_weight' => ! empty($product['estimated_weight']) ? $this->num_uf($product['estimated_weight']) : 0,
         ]);
         $sell_line->save();
 
@@ -2037,6 +2041,8 @@ class TransactionUtil extends Util
                 //Field for 2nd column
                 'quantity' => $this->num_f($line->quantity, false, $business_details, true),
                 'quantity_uf' => $line->quantity,
+                'pieces_quantity' => ! empty($line->pieces_quantity) ? $this->num_f($line->pieces_quantity, false, $business_details, true) : null,
+                'estimated_weight' => ! empty($line->estimated_weight) ? $this->num_f($line->estimated_weight, false, $business_details, true) : null,
                 'units' => $unit_name,
 
                 'base_unit_name' => $base_unit_name,

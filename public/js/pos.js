@@ -346,6 +346,24 @@ $(document).ready(function() {
         adjustComboQty(tr);
     });
 
+    //Update weight and line total when pieces quantity changes for estimated weight products
+    $('table#pos_table tbody').on('change', 'input.pos_pieces_quantity', function() {
+        var tr = $(this).closest('tr');
+        var pieces = __read_number($(this));
+        if (isNaN(pieces) || pieces < 0) {
+            pieces = 1;
+            __write_number($(this), pieces);
+        }
+        var est_weight = parseFloat(tr.find('input.row_estimated_weight').val()) || 0;
+        if (est_weight > 0) {
+            var calculated_weight = pieces * est_weight;
+            // Round to 4 decimals for precision
+            calculated_weight = parseFloat(calculated_weight.toFixed(4));
+            __write_number(tr.find('input.pos_quantity'), calculated_weight);
+            tr.find('input.pos_quantity').trigger('change');
+        }
+    });
+
     //If change in unit price update price including tax and line total
     $('table#pos_table tbody').on('change', 'input.pos_unit_price', function() {
         var unit_price = __read_number($(this));
@@ -1635,11 +1653,18 @@ function pos_product_row(variation_id = null, purchase_line_id = null, weighing_
                     add_via_ajax = false;
                     is_added = true;
 
-                    //Increment product quantity
-                    qty_element = $(this).find('.pos_quantity');
-                    var qty = __read_number(qty_element);
-                    __write_number(qty_element, qty + 1);
-                    qty_element.change();
+                    //Increment product quantity or pieces
+                    var pieces_element = $(this).find('.pos_pieces_quantity');
+                    if (pieces_element.length > 0) {
+                        var p_qty = __read_number(pieces_element);
+                        __write_number(pieces_element, p_qty + 1);
+                        pieces_element.change();
+                    } else {
+                        qty_element = $(this).find('.pos_quantity');
+                        var qty = __read_number(qty_element);
+                        __write_number(qty_element, qty + 1);
+                        qty_element.change();
+                    }
 
                     round_row_to_iraqi_dinnar($(this));
 

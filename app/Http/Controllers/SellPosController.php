@@ -966,6 +966,10 @@ class SellPosController extends Controller
                 'units.allow_decimal as unit_allow_decimal',
                 'u.short_name as second_unit',
                 'transaction_sell_lines.secondary_unit_quantity',
+                'transaction_sell_lines.pieces_quantity',
+                'transaction_sell_lines.estimated_weight',
+                'p.enable_estimated_weight',
+                'p.estimated_weight as product_estimated_weight',
                 'transaction_sell_lines.tax_id as tax_id',
                 'transaction_sell_lines.item_tax as item_tax',
                 'transaction_sell_lines.unit_price as default_sell_price',
@@ -1720,8 +1724,17 @@ class SellPosController extends Controller
 
         $product = $this->productUtil->getDetailsFromVariation($variation_id, $business_id, $location_id, $check_qty);
 
-        if (!isset($product->quantity_ordered)) {
+        if (!empty($so_line)) {
+            $product->pieces_quantity = !empty($so_line->pieces_quantity) ? $so_line->pieces_quantity : (!empty($product->enable_estimated_weight) ? 1 : 0);
+            $product->estimated_weight = !empty($so_line->estimated_weight) ? $so_line->estimated_weight : $product->estimated_weight;
             $product->quantity_ordered = $quantity;
+        } elseif (!empty($product->enable_estimated_weight)) {
+            $product->pieces_quantity = request()->get('pieces_quantity', 1);
+            $product->quantity_ordered = $product->pieces_quantity * ($product->estimated_weight > 0 ? $product->estimated_weight : 1);
+        } else {
+            if (!isset($product->quantity_ordered)) {
+                $product->quantity_ordered = $quantity;
+            }
         }
 
         $product->secondary_unit_quantity = !isset($product->secondary_unit_quantity) ? 0 : $product->secondary_unit_quantity;

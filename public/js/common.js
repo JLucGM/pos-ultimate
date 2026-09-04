@@ -255,7 +255,7 @@ $(document).ready(function () {
     //Input number
     $(document).on(
         'click',
-        '.input-number .quantity-up, .input-number .quantity-down',
+        '.input-number .quantity-up, .input-number .quantity-down, .input-number .pieces-up, .input-number .pieces-down',
         function () {
             var input = $(this).closest('.input-number').find('input');
             var qty = __read_number(input);
@@ -266,7 +266,7 @@ $(document).ready(function () {
             var min = parseFloat(input.data('min'));
             var max = parseFloat(input.data('max'));
 
-            if ($(this).hasClass('quantity-up')) {
+            if ($(this).hasClass('quantity-up') || $(this).hasClass('pieces-up')) {
                 //if max reached return false
                 if (typeof max != 'undefined' && qty + step > max) {
                     return false;
@@ -274,7 +274,7 @@ $(document).ready(function () {
 
                 __write_number(input, qty + step);
                 input.change();
-            } else if ($(this).hasClass('quantity-down')) {
+            } else if ($(this).hasClass('quantity-down') || $(this).hasClass('pieces-down')) {
                 //if max reached return false
                 if (typeof min != 'undefined' && qty - step < min) {
                     return false;

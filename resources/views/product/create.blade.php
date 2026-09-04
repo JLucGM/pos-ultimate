@@ -259,6 +259,26 @@
                 {!! Form::text('weight', !empty($duplicate_product->weight) ? $duplicate_product->weight : null, ['class' => 'form-control', 'placeholder' => __('lang_v1.weight')]); !!}
             </div>
         </div>
+        <div class="col-sm-4">
+            <div class="form-group" style="padding-top: 5px;">
+                <label style="font-weight: 700; cursor: pointer; display: block;">
+                    {!! Form::checkbox('enable_estimated_weight', 1, !empty($duplicate_product->enable_estimated_weight), ['class' => 'input-icheck', 'id' => 'enable_estimated_weight']); !!} 
+                    <strong>⚖️ Venta por peso estimado (piezas a peso variable)</strong>
+                </label>
+                <small class="text-muted" style="display: block; margin-top: 3px;">Permite vender por piezas en preventa/pedidos calculando sobre peso estimado y ajustar el peso real exacto al facturar.</small>
+            </div>
+        </div>
+        <div class="col-sm-4" id="estimated_weight_div" style="@if(empty($duplicate_product->enable_estimated_weight)) display: none; @endif">
+            <div class="form-group">
+                {!! Form::label('estimated_weight', 'Peso estimado por pieza / unidad:') !!}
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="fas fa-balance-scale"></i>
+                    </span>
+                    {!! Form::text('estimated_weight', !empty($duplicate_product->estimated_weight) ? @format_quantity($duplicate_product->estimated_weight) : null, ['class' => 'form-control input_number', 'placeholder' => 'Ej: 1.800 (en Kg/Gr)']); !!}
+                </div>
+            </div>
+        </div>
         @php
         $custom_labels = json_decode(session('business.custom_labels'), true);
         $product_custom_fields = !empty($custom_labels['product']) ? $custom_labels['product'] : [];
@@ -390,6 +410,12 @@
             // onKeyDetect: function(iKeyCode){ // output all potentially relevant key events - great for debugging!
             //     console.log('Pressed: ' + iKeyCode);
             // }
+        $(document).on('ifChanged', '#enable_estimated_weight', function() {
+            if ($(this).is(':checked')) {
+                $('#estimated_weight_div').slideDown(200);
+            } else {
+                $('#estimated_weight_div').slideUp(200);
+            }
         });
     });
 </script>

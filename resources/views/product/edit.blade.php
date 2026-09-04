@@ -280,6 +280,26 @@
             {!! Form::text('weight', $product->weight, ['class' => 'form-control', 'placeholder' => __('lang_v1.weight')]); !!}
           </div>
         </div>
+        <div class="col-sm-4">
+          <div class="form-group" style="padding-top: 5px;">
+            <label style="font-weight: 700; cursor: pointer; display: block;">
+              {!! Form::checkbox('enable_estimated_weight', 1, !empty($product->enable_estimated_weight), ['class' => 'input-icheck', 'id' => 'enable_estimated_weight']); !!} 
+              <strong>⚖️ Venta por peso estimado (piezas a peso variable)</strong>
+            </label>
+            <small class="text-muted" style="display: block; margin-top: 3px;">Permite vender por piezas en preventa/pedidos calculando sobre peso estimado y ajustar el peso real exacto al facturar.</small>
+          </div>
+        </div>
+        <div class="col-sm-4" id="estimated_weight_div" style="@if(empty($product->enable_estimated_weight)) display: none; @endif">
+          <div class="form-group">
+            {!! Form::label('estimated_weight', 'Peso estimado por pieza / unidad:') !!}
+            <div class="input-group">
+              <span class="input-group-addon">
+                <i class="fas fa-balance-scale"></i>
+              </span>
+              {!! Form::text('estimated_weight', !empty($product->estimated_weight) ? @format_quantity($product->estimated_weight) : null, ['class' => 'form-control input_number', 'placeholder' => 'Ej: 1.800 (en Kg/Gr)']); !!}
+            </div>
+          </div>
+        </div>
         <div class="clearfix"></div>
         
         @php
@@ -385,6 +405,13 @@
   <script type="text/javascript">
     $(document).ready( function(){
       __page_leave_confirmation('#product_add_form');
+      $(document).on('ifChanged', '#enable_estimated_weight', function() {
+        if ($(this).is(':checked')) {
+          $('#estimated_weight_div').slideDown(200);
+        } else {
+          $('#estimated_weight_div').slideUp(200);
+        }
+      });
     });
   </script>
 @endsection

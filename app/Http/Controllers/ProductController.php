@@ -459,6 +459,8 @@ class ProductController extends Controller
 
             $product_details['enable_stock'] = (! empty($request->input('enable_stock')) && $request->input('enable_stock') == 1) ? 1 : 0;
             $product_details['not_for_selling'] = (! empty($request->input('not_for_selling')) && $request->input('not_for_selling') == 1) ? 1 : 0;
+            $product_details['enable_estimated_weight'] = (! empty($request->input('enable_estimated_weight')) && $request->input('enable_estimated_weight') == 1) ? 1 : 0;
+            $product_details['estimated_weight'] = (! empty($request->input('estimated_weight')) && $product_details['enable_estimated_weight'] == 1) ? $this->productUtil->num_uf($request->input('estimated_weight')) : 0;
 
             if (! empty($request->input('sub_category_id'))) {
                 $product_details['sub_category_id'] = $request->input('sub_category_id');
@@ -704,6 +706,8 @@ class ProductController extends Controller
             $product->alert_quantity = ! empty($product_details['alert_quantity']) ? $this->productUtil->num_uf($product_details['alert_quantity']) : $product_details['alert_quantity'];
             $product->tax_type = $product_details['tax_type'];
             $product->weight = $product_details['weight'];
+            $product->enable_estimated_weight = (! empty($request->input('enable_estimated_weight')) && $request->input('enable_estimated_weight') == 1) ? 1 : 0;
+            $product->estimated_weight = (! empty($request->input('estimated_weight')) && $product->enable_estimated_weight == 1) ? $this->productUtil->num_uf($request->input('estimated_weight')) : 0;
             $product->product_custom_field1 = $product_details['product_custom_field1'] ?? '';
             $product->product_custom_field2 = $product_details['product_custom_field2'] ?? '';
             $product->product_custom_field3 = $product_details['product_custom_field3'] ?? '';
@@ -1487,6 +1491,8 @@ class ProductController extends Controller
             if (! empty($request->input('not_for_selling')) && $request->input('not_for_selling') == 1) {
                 $product_details['not_for_selling'] = 1;
             }
+            $product_details['enable_estimated_weight'] = (! empty($request->input('enable_estimated_weight')) && $request->input('enable_estimated_weight') == 1) ? 1 : 0;
+            $product_details['estimated_weight'] = (! empty($request->input('estimated_weight')) && $product_details['enable_estimated_weight'] == 1) ? $this->productUtil->num_uf($request->input('estimated_weight')) : 0;
             if (empty($product_details['sku'])) {
                 $product_details['sku'] = ' ';
             }

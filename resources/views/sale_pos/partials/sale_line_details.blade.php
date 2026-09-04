@@ -78,6 +78,12 @@
                     @endif
                     {{$sell_line->product->second_unit->short_name}}
                 @endif
+                @if(!empty($sell_line->pieces_quantity) && $sell_line->pieces_quantity > 0)
+                    <br>
+                    <small class="text-info" style="font-weight: 700;">
+                        <i class="fas fa-boxes"></i> {{ @format_quantity($sell_line->pieces_quantity) }} pzas
+                    </small>
+                @endif
             </td>
             @if(!empty($pos_settings['inline_service_staff']))
                 <td>

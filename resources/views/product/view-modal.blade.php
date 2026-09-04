@@ -91,6 +91,10 @@
 							<b>@lang('lang_v1.weight'): </b>
 							{{$product->weight }}<br>
 						@endif
+						@if(!empty($product->enable_estimated_weight))
+							<b>⚖️ Peso Estimado por pieza: </b>
+							{{ @format_quantity($product->estimated_weight) }} {{$product->unit->short_name ?? ''}}<br>
+						@endif
 						<b>@lang('product.applicable_tax'): </b>
 						{{$product->product_tax->name ?? __('lang_v1.none') }}<br>
 						@php

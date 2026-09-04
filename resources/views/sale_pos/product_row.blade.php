@@ -226,45 +226,94 @@
         		@endphp
         	@endif
         @endforeach
-		<div style="display: inline-flex; align-items: center; gap: 4px;">
-			<div class="input-number" style="display: inline-flex; align-items: center; border: 1.5px solid #CBD5E1; border-radius: 8px; background: #FFFFFF; height: 28px; width: 105px; box-sizing: border-box; overflow: hidden;">
-				<button type="button" class="quantity-down" style="height: 26px; width: 28px; padding: 0; margin: 0; display: inline-flex; align-items: center; justify-content: center; border: none; background: #F8FAFC; border-right: 1px solid #E2E8F0; cursor: pointer; flex-shrink: 0;">
-					<i class="fa fa-minus text-danger" style="font-size: 10px;"></i>
-				</button>
-				<input type="text" data-min="1" style="height: 26px; border: none; text-align: center; font-weight: 800; font-size: 12.5px; padding: 0 4px; width: 45px; background: transparent; box-shadow: none; outline: none; flex: 1; min-width: 0;"
-					class="form-control pos_quantity input_number mousetrap input_quantity" 
-					value="{{@format_quantity($product->quantity_ordered)}}" name="products[{{$row_count}}][quantity]" data-allow-overselling="@if(empty($pos_settings['allow_overselling'])){{'false'}}@else{{'true'}}@endif" 
-					@if($allow_decimal) 
-						data-decimal=1 
-					@else 
-						data-decimal=0 
-						data-rule-abs_digit="true" 
-						data-msg-abs_digit="@lang('lang_v1.decimal_value_not_allowed')" 
-					@endif
-					data-rule-required="true" 
-					data-msg-required="@lang('validation.custom-messages.this_field_is_required')" 
-					@if($product->enable_stock && empty($pos_settings['allow_overselling']) && empty($is_sales_order) )
-						data-rule-max-value="{{$max_qty_rule}}" data-qty_available="{{$product->qty_available}}" data-msg-max-value="{{$max_qty_msg}}" 
-						data-msg_max_default="@lang('validation.custom-messages.quantity_not_available', ['qty'=> $product->formatted_qty_available, 'unit' => $product->unit  ])" 
-					@endif 
-				>
-				<button type="button" class="quantity-up" style="height: 26px; width: 28px; padding: 0; margin: 0; display: inline-flex; align-items: center; justify-content: center; border: none; background: #F8FAFC; border-left: 1px solid #E2E8F0; cursor: pointer; flex-shrink: 0;">
-					<i class="fa fa-plus text-success" style="font-size: 10px;"></i>
-				</button>
-			</div>
+		@if(!empty($product->enable_estimated_weight))
+			@php
+				$row_estimated_weight = !empty($product->estimated_weight) ? $product->estimated_weight : (!empty($product->product_estimated_weight) ? $product->product_estimated_weight : 0);
+				$row_pieces_quantity = !empty($product->pieces_quantity) ? $product->pieces_quantity : ( ($row_estimated_weight > 0 && !empty($product->quantity_ordered)) ? round($product->quantity_ordered / $row_estimated_weight, 2) : 1 );
+			@endphp
+			<div style="display: flex; flex-direction: column; gap: 4px; min-width: 140px;">
+				<!-- Control de Piezas -->
+				<div style="display: inline-flex; align-items: center; gap: 4px;">
+					<span style="font-size: 10px; font-weight: 800; color: #475569; text-transform: uppercase; width: 34px;">Pzas:</span>
+					<div class="input-number" style="display: inline-flex; align-items: center; border: 1.5px solid #CBD5E1; border-radius: 6px; background: #FFFFFF; height: 26px; width: 95px; box-sizing: border-box; overflow: hidden;">
+						<button type="button" class="pieces-down" style="height: 24px; width: 24px; padding: 0; margin: 0; display: inline-flex; align-items: center; justify-content: center; border: none; background: #F8FAFC; border-right: 1px solid #E2E8F0; cursor: pointer; flex-shrink: 0;">
+							<i class="fa fa-minus text-danger" style="font-size: 9px;"></i>
+						</button>
+						<input type="text" data-min="1" style="height: 24px; border: none; text-align: center; font-weight: 800; font-size: 11.5px; padding: 0 2px; width: 40px; background: transparent; box-shadow: none; outline: none; flex: 1; min-width: 0;"
+							class="form-control pos_pieces_quantity input_number" 
+							value="{{ @format_quantity($row_pieces_quantity) }}" 
+							name="products[{{$row_count}}][pieces_quantity]"
+						>
+						<button type="button" class="pieces-up" style="height: 24px; width: 24px; padding: 0; margin: 0; display: inline-flex; align-items: center; justify-content: center; border: none; background: #F8FAFC; border-left: 1px solid #E2E8F0; cursor: pointer; flex-shrink: 0;">
+							<i class="fa fa-plus text-success" style="font-size: 9px;"></i>
+						</button>
+					</div>
+				</div>
 
+				<!-- Control de Peso Facturable (Kg / Gr) -->
+				<div style="display: inline-flex; align-items: center; gap: 4px;">
+					<span style="font-size: 10px; font-weight: 800; color: #0284C7; text-transform: uppercase; width: 34px;">Peso:</span>
+					<input type="text" data-min="0.001" style="height: 26px; border: 1.5px solid #0284C7; border-radius: 6px; text-align: center; font-weight: 800; font-size: 12px; padding: 0 4px; width: 95px; background: #F0F9FF; box-sizing: border-box;"
+						class="form-control pos_quantity input_number mousetrap input_quantity" 
+						value="{{@format_quantity($product->quantity_ordered)}}" 
+						name="products[{{$row_count}}][quantity]" 
+						data-allow-overselling="@if(empty($pos_settings['allow_overselling'])){{'false'}}@else{{'true'}}@endif" 
+						data-decimal=1
+						data-rule-required="true" 
+						data-msg-required="@lang('validation.custom-messages.this_field_is_required')" 
+					>
+					<span style="font-size: 11px; font-weight: 800; color: #0284C7;">{{$product->unit}}</span>
+				</div>
+
+				<!-- Indicador de Peso Estimado -->
+				<div style="font-size: 9.5px; color: #64748B; font-weight: 700; line-height: 1.1;">
+					⚖️ Est: {{ @format_quantity($row_estimated_weight) }} {{$product->unit}}/pza
+				</div>
+			</div>
+			<input type="hidden" class="row_enable_estimated_weight" name="products[{{$row_count}}][enable_estimated_weight]" value="1">
+			<input type="hidden" class="row_estimated_weight" name="products[{{$row_count}}][estimated_weight]" value="{{$row_estimated_weight}}">
 			<input type="hidden" name="products[{{$row_count}}][product_unit_id]" value="{{$product->unit_id}}">
-			@if(count($sub_units) > 0)
-				@php
-					$selected_sub_unit = !empty($product->sub_unit_id) && isset($sub_units[$product->sub_unit_id]) ? $sub_units[$product->sub_unit_id]['name'] : $product->unit;
-					$selected_sub_unit_id = !empty($product->sub_unit_id) ? $product->sub_unit_id : key($sub_units);
-				@endphp
-				<input type="hidden" name="products[{{$row_count}}][sub_unit_id]" class="sub_unit" value="{{$selected_sub_unit_id}}">
-				<span style="font-size: 11px; font-weight: 800; color: #64748B; margin-left: 4px;">{{ $selected_sub_unit }}</span>
-			@else
-				<span style="font-size: 11px; font-weight: 800; color: #64748B; margin-left: 4px;">{{$product->unit}}</span>
-			@endif
-		</div>
+		@else
+			<div style="display: inline-flex; align-items: center; gap: 4px;">
+				<div class="input-number" style="display: inline-flex; align-items: center; border: 1.5px solid #CBD5E1; border-radius: 8px; background: #FFFFFF; height: 28px; width: 105px; box-sizing: border-box; overflow: hidden;">
+					<button type="button" class="quantity-down" style="height: 26px; width: 28px; padding: 0; margin: 0; display: inline-flex; align-items: center; justify-content: center; border: none; background: #F8FAFC; border-right: 1px solid #E2E8F0; cursor: pointer; flex-shrink: 0;">
+						<i class="fa fa-minus text-danger" style="font-size: 10px;"></i>
+					</button>
+					<input type="text" data-min="1" style="height: 26px; border: none; text-align: center; font-weight: 800; font-size: 12.5px; padding: 0 4px; width: 45px; background: transparent; box-shadow: none; outline: none; flex: 1; min-width: 0;"
+						class="form-control pos_quantity input_number mousetrap input_quantity" 
+						value="{{@format_quantity($product->quantity_ordered)}}" name="products[{{$row_count}}][quantity]" data-allow-overselling="@if(empty($pos_settings['allow_overselling'])){{'false'}}@else{{'true'}}@endif" 
+						@if($allow_decimal) 
+							data-decimal=1 
+						@else 
+							data-decimal=0 
+							data-rule-abs_digit="true" 
+							data-msg-abs_digit="@lang('lang_v1.decimal_value_not_allowed')" 
+						@endif
+						data-rule-required="true" 
+						data-msg-required="@lang('validation.custom-messages.this_field_is_required')" 
+						@if($product->enable_stock && empty($pos_settings['allow_overselling']) && empty($is_sales_order) )
+							data-rule-max-value="{{$max_qty_rule}}" data-qty_available="{{$product->qty_available}}" data-msg-max-value="{{$max_qty_msg}}" 
+							data-msg_max_default="@lang('validation.custom-messages.quantity_not_available', ['qty'=> $product->formatted_qty_available, 'unit' => $product->unit  ])" 
+						@endif 
+					>
+					<button type="button" class="quantity-up" style="height: 26px; width: 28px; padding: 0; margin: 0; display: inline-flex; align-items: center; justify-content: center; border: none; background: #F8FAFC; border-left: 1px solid #E2E8F0; cursor: pointer; flex-shrink: 0;">
+						<i class="fa fa-plus text-success" style="font-size: 10px;"></i>
+					</button>
+				</div>
+
+				<input type="hidden" name="products[{{$row_count}}][product_unit_id]" value="{{$product->unit_id}}">
+				@if(count($sub_units) > 0)
+					@php
+						$selected_sub_unit = !empty($product->sub_unit_id) && isset($sub_units[$product->sub_unit_id]) ? $sub_units[$product->sub_unit_id]['name'] : $product->unit;
+						$selected_sub_unit_id = !empty($product->sub_unit_id) ? $product->sub_unit_id : key($sub_units);
+					@endphp
+					<input type="hidden" name="products[{{$row_count}}][sub_unit_id]" class="sub_unit" value="{{$selected_sub_unit_id}}">
+					<span style="font-size: 11px; font-weight: 800; color: #64748B; margin-left: 4px;">{{ $selected_sub_unit }}</span>
+				@else
+					<span style="font-size: 11px; font-weight: 800; color: #64748B; margin-left: 4px;">{{$product->unit}}</span>
+				@endif
+			</div>
+		@endif
 
 		@if(!empty($product->second_unit))
             <br>
