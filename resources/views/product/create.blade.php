@@ -255,8 +255,9 @@
 
         <div class="col-sm-4">
             <div class="form-group">
-                {!! Form::label('weight', __('lang_v1.weight') . ':') !!}
-                {!! Form::text('weight', !empty($duplicate_product->weight) ? $duplicate_product->weight : null, ['class' => 'form-control', 'placeholder' => __('lang_v1.weight')]); !!}
+                {!! Form::label('weight', __('lang_v1.weight') . ' (Físico / Empaque):') !!}
+                @show_tooltip('Peso físico del empaque o producto para fines informativos o de envío (opcional).')
+                {!! Form::text('weight', !empty($duplicate_product->weight) ? $duplicate_product->weight : null, ['class' => 'form-control', 'placeholder' => 'Ej: 500g, 1.5 Kg']); !!}
             </div>
         </div>
         <div class="col-sm-4">
@@ -271,11 +272,12 @@
         <div class="col-sm-4" id="estimated_weight_div" style="@if(empty($duplicate_product->enable_estimated_weight)) display: none; @endif">
             <div class="form-group">
                 {!! Form::label('estimated_weight', 'Peso estimado por pieza / unidad:') !!}
+                @show_tooltip('Peso promedio de cada pieza en la unidad base del producto (ej: 1.800 para 1.8 Kg). Se usa para calcular el total estimado del pedido.')
                 <div class="input-group">
                     <span class="input-group-addon">
                         <i class="fas fa-balance-scale"></i>
                     </span>
-                    {!! Form::text('estimated_weight', !empty($duplicate_product->estimated_weight) ? @format_quantity($duplicate_product->estimated_weight) : null, ['class' => 'form-control input_number', 'placeholder' => 'Ej: 1.800 (en Kg/Gr)']); !!}
+                    {!! Form::text('estimated_weight', !empty($duplicate_product->estimated_weight) ? @format_quantity($duplicate_product->estimated_weight) : null, ['class' => 'form-control input_number', 'data-decimal' => '1', 'placeholder' => 'Ej: 1.800 (en Kg/Gr)']); !!}
                 </div>
             </div>
         </div>
