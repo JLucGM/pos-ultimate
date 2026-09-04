@@ -1141,7 +1141,7 @@
         <div class="container-fluid">
             <div class="nav-container">
                 <a href="/" class="logo-modern">
-                    <img src="{{ asset('img/logo-audaz.png') }}" alt="{{ config('app.name') }}">
+                    <img src="{{ asset('img/logo_v2_full.png') }}" alt="{{ config('app.name') }}" style="max-height: 48px; width: auto;">
                 </a>
                 
                 <div class="nav-menu-modern" id="navMenu">
@@ -1327,13 +1327,13 @@
         },
         "provider": {
             "@type": "Organization",
-            "name": "Audaz POS",
+            "name": "Kubre",
             "url": "{{ url('/') }}",
-            "logo": "{{ asset('img/logo-audaz.png') }}",
+            "logo": "{{ asset('img/logo_v2_full.png') }}",
             "sameAs": [
-                "https://www.facebook.com/audazpos",
-                "https://www.instagram.com/audazpos",
-                "https://twitter.com/audazpos"
+                "https://www.facebook.com/kubre",
+                "https://www.instagram.com/kubre",
+                "https://twitter.com/kubre"
             ]
         }
     }
@@ -1343,10 +1343,10 @@
     {
         "@context": "https://schema.org",
         "@type": "Organization",
-        "name": "Audaz POS",
+        "name": "Kubre",
         "url": "{{ url('/') }}",
-        "logo": "{{ asset('img/logo-audaz.png') }}",
-        "description": "Sistema POS completo en la nube para pequeñas y medianas empresas",
+        "logo": "{{ asset('img/logo_v2_full.png') }}",
+        "description": "Plataforma todo-en-uno de gestión empresarial y control en la nube",
         "address": {
             "@type": "PostalAddress",
             "addressCountry": "VE",

@@ -7,10 +7,10 @@
     <div class="auth-left">
         <div class="auth-branding">
             <div class="brand-logo">
-                <img src="{{ asset('img/logo-audaz.png') }}" alt="{{ config('app.name') }}" class="logo-img">
+                <img src="{{ asset('img/logo_v2_full.png') }}" alt="{{ config('app.name', 'Kubre') }}" class="logo-img" style="max-height: 48px; width: auto;">
             </div>
-            <h1 class="brand-title">{{ config('app.name', 'AudazPOS') }}</h1>
-            <p class="brand-subtitle">Sistema de punto de venta completo para tu negocio</p>
+            <h1 class="brand-title">{{ config('app.name', 'Kubre') }}</h1>
+            <p class="brand-subtitle">Plataforma de gestión empresarial y control en la nube</p>
             
             <div class="features-list">
                 <div class="feature-item">

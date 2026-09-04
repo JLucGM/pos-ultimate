@@ -36,7 +36,7 @@
         <div class="auth-brand-header">
             <a href="{{ url('/') }}" class="auth-brand-logo-wrap">
                 <div class="auth-brand-logo-icon">
-                    <img src="{{ asset('images/logo.svg') }}" alt="{{ config('app.name', 'Kubre') }}" />
+                    <img src="{{ asset('img/logo_v2_full.png') }}" alt="{{ config('app.name', 'Kubre') }}" style="max-height: 48px; width: auto;" />
                 </div>
             </a>
             

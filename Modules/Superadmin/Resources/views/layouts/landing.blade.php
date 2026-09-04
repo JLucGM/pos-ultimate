@@ -52,7 +52,7 @@
           "url": "https://kubre.site",
           "logo": {
             "@type": "ImageObject",
-            "url": "{{ asset('images/logo.svg') }}"
+            "url": "{{ asset('img/logo_v2_full.png') }}"
           },
           "description": "Plataforma de gestión empresarial, operaciones y control comercial en la nube."
         },
@@ -110,7 +110,7 @@
     <nav class="navbar" id="navbar">
         <div class="container nav-container">
             <a href="/" class="logo logo-only">
-                <img src="{{ asset('images/logo.svg') }}" alt="{{ config('app.name', 'Kubre') }}" class="logo-img" style="height: 48px; width: auto;">
+                <img src="{{ asset('img/logo_v2_full.png') }}" alt="{{ config('app.name', 'Kubre') }}" class="logo-img" style="height: 48px; width: auto;">
             </a>
             
             <div class="nav-menu" id="navMenu">
@@ -201,7 +201,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <div class="footer-logo">
-                        <img src="{{ asset('images/logo.svg') }}" alt="{{ config('app.name', 'Kubre') }}" class="logo-img" style="height: 70px; width: auto;">
+                        <img src="{{ asset('img/logo_v2_full.png') }}" alt="{{ config('app.name', 'Kubre') }}" class="logo-img" style="height: 52px; width: auto;">
                     </div>
                     <p>Plataforma de gestión comercial y punto de venta para todo tipo de organizaciones y negocios en crecimiento.</p>
                     <div class="social-links">
