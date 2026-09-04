@@ -191,21 +191,6 @@
                          <td>{{ $custom_labels['contact']['custom_field_1'] ?? __('lang_v1.contact_custom_field1') }} <small class="text-muted">(@lang('lang_v1.optional'))</small></td>
                         <td>&nbsp;</td>
                     </tr>
-                    <tr>
-                        <td>25</td>
-                        <td>{{ $custom_labels['contact']['custom_field_2'] ?? __('lang_v1.contact_custom_field2') }} <small class="text-muted">(@lang('lang_v1.optional'))</small></td>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td>26</td>
-                        <td>{{ $custom_labels['contact']['custom_field_3'] ?? __('lang_v1.contact_custom_field3') }} <small class="text-muted">(@lang('lang_v1.optional'))</small></td>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td>27</td>
-                        <td>{{ $custom_labels['contact']['custom_field_4'] ?? __('lang_v1.contact_custom_field4') }} <small class="text-muted">(@lang('lang_v1.optional'))</small></td>
-                        <td>&nbsp;</td>
-                    </tr>
                 </table>
             @endcomponent
         </div>

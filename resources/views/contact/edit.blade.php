@@ -329,6 +329,21 @@
             </div>
         </div>
       </div>
+      @php
+        $contact_custom_labels = !empty($custom_labels) ? $custom_labels : json_decode(session('business.custom_labels'), true);
+        $contact_custom_field1 = !empty($contact_custom_labels['contact']['custom_field_1']) ? $contact_custom_labels['contact']['custom_field_1'] : __('lang_v1.contact_custom_field1');
+      @endphp
+      <div class="col-md-12">
+        <div class="form-group">
+            {!! Form::label('custom_field1', $contact_custom_field1 . ':') !!}
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-info-circle"></i>
+                </span>
+                {!! Form::text('custom_field1', $contact->custom_field1, ['class' => 'form-control', 'placeholder' => $contact_custom_field1]); !!}
+            </div>
+        </div>
+      </div>
       <div class="clearfix"></div>
       <div class="col-md-12 shipping_addr_div"><hr></div>
       <div class="col-md-12 shipping_addr_div mb-10" >
