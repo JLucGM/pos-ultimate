@@ -1,7 +1,9 @@
 @extends('superadmin::layouts.landing')
-@section('title', 'Planes y Precios Transparentes | Kubre POS')
-@section('meta_description', 'Conoce los planes de suscripción de Kubre POS. Sin costos ocultos, facturación flexible y 14 días de prueba gratis sin tarjeta de crédito.')
-@section('meta_keywords', 'precios kubre, planes pos venezuela, suscripcion software punto de venta, software comercial precios')
+@section('title', 'Planes y Precios Transparentes | Plataforma de Gestión Kubre')
+@section('meta_description', 'Conoce los planes de suscripción de Kubre. Sin costos ocultos, facturación flexible y 14 días de prueba gratis sin tarjeta de crédito.')
+@section('meta_keywords', 'precios software gestion, planes erp nube, suscripcion software administrativo, software empresarial precios')
+@section('og_title', 'Planes y Precios | Kubre')
+@section('og_description', 'Escala tu empresa con planes flexibles diseñados para cada etapa de crecimiento.')
 
 @section('content')
 <!-- Pricing Hero -->

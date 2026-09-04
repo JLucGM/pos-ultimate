@@ -1,13 +1,17 @@
-# robots.txt para Kubre (kubre.site)
-# https://kubre.site/robots.txt
-
+# robots.txt para Kubre (https://kubre.site)
 User-agent: *
 Allow: /
+Allow: /pricing
+Allow: /soluciones/*
+Allow: /business/register
+Allow: /login
+Allow: /css/
+Allow: /js/
+Allow: /images/
+
+# Áreas privadas del sistema
 Disallow: /admin/
-Disallow: /api/
-Disallow: /password/
-Disallow: /home
-Disallow: /dashboard
+Disallow: /superadmin/
 Disallow: /pos/
 Disallow: /sells/
 Disallow: /purchases/
@@ -15,30 +19,12 @@ Disallow: /products/
 Disallow: /contacts/
 Disallow: /reports/
 Disallow: /settings/
-Disallow: /superadmin/
+Disallow: /home
+Disallow: /dashboard
+Disallow: /api/
+Disallow: /password/
+Disallow: /uploads/
 
-# Páginas Públicas Principales
-Allow: /
-Allow: /pricing
-Allow: /soluciones/
-Allow: /login
-Allow: /business/register
-
-# Sitemap
+# Sitemap Oficial
 Sitemap: https://kubre.site/sitemap.xml
 
-# Crawl-delay
-Crawl-delay: 5
-
-# Bots de Motores de Búsqueda
-User-agent: Googlebot
-Allow: /
-Disallow: /pos/
-Disallow: /admin/
-Disallow: /superadmin/
-
-User-agent: Bingbot
-Allow: /
-Disallow: /pos/
-Disallow: /admin/
-Disallow: /superadmin/

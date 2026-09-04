@@ -1,7 +1,9 @@
 @extends('superadmin::layouts.landing')
-@section('title', $solution['hero_title'] . ' | Kubre')
-@section('meta_description', 'Kubre para ' . $solution['name'] . ': ' . $solution['tagline'] . '. Módulos especializados, control de inventario y punto de venta para potenciar tu sector.')
-@section('meta_keywords', 'kubre ' . $solution['slug'] . ', software para ' . $solution['name'] . ', pos ' . $solution['slug'] . ', sistema pos venezuela')
+@section('title', $solution['name'] . ' - Gestión y Control Especializado | Kubre')
+@section('meta_description', 'Kubre para ' . $solution['name'] . ': ' . ($solution['short_desc'] ?? $solution['hero_subtitle']) . ' Módulos especializados, control operativo y finanzas en la nube.')
+@section('meta_keywords', 'software para ' . strtolower($solution['name']) . ', gestion ' . $solution['slug'] . ', plataforma ' . $solution['slug'] . ', control de inventario, kubre ' . $solution['slug'])
+@section('og_title', $solution['hero_title'] . ' | Kubre')
+@section('og_description', $solution['hero_subtitle'])
 
 @section('content')
 <!-- Vertical Solution Hero Section -->

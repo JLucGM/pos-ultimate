@@ -1,7 +1,9 @@
 @extends('superadmin::layouts.landing')
-@section('title', 'Kubre | Sistema de Gestión Comercial y Punto de Venta en la Nube')
-@section('meta_description', 'Descubre Kubre: software POS y gestión en la nube con ventas rápidas, inventario multialmacén, control de caja y tasas de cambio en tiempo real. 14 días de prueba gratis.')
-@section('meta_keywords', 'software pos venezuela, sistema punto de venta, inventario en la nube, facturacion multimoneda, kubre pos, pos restaurantes, pos retail')
+@section('title', 'Kubre | Plataforma de Gestión Empresarial y Control en la Nube')
+@section('meta_description', 'Centraliza finanzas, inventario multialmacén, operaciones multisede, facturación multimoneda y ventas en una sola plataforma inteligente. 14 días de prueba gratis.')
+@section('meta_keywords', 'software de gestion empresarial, erp en la nube, plataforma de administracion comercial, control de inventario multialmacen, facturacion multimoneda, cuentas por cobrar, gestion de compras, kubre, kubre erp')
+@section('og_title', 'Kubre | Plataforma Todo-en-Uno de Gestión Empresarial')
+@section('og_description', 'Toma el control total de tu empresa: finanzas en tiempo real, inventario multialmacén, producción, compras y facturación multimoneda.')
 
 @section('content')
 <!-- Hero Section -->
@@ -11,14 +13,14 @@
         <div class="hero-text">
             <div class="auth-pill-badge" data-aos="fade-down" style="margin-bottom: 20px;">
                 <span class="auth-pill-dot"></span>
-                <span>Nuevo: Facturación & Gestión Multimoneda en Vivo</span>
+                <span>Plataforma de Control Operativo y Financiero en Vivo</span>
             </div>
 
             <h1 class="hero-title" data-aos="fade-up">
-                Impulsa tu Negocio con <span class="text-gradient">Kubre</span>: Todo en Uno
+                Escala tu Empresa con <span class="text-gradient">Kubre</span>: Todo en Uno
             </h1>
             <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="100">
-                Controla ventas en segundos, inventario multialmacén, tasas de cambio dinámicas y finanzas desde cualquier dispositivo. La suite definitiva para comercios, restaurantes, mayoristas y empresas.
+                Centraliza finanzas, inventario multialmacén, facturación multimoneda en tiempo real y operaciones comerciales desde cualquier lugar. El sistema integral para comercios, restaurantes, mayoristas y fábricas.
             </p>
             <div class="hero-buttons" data-aos="fade-up" data-aos-delay="200">
                 <a href="{{ route('business.getRegister') }}" class="btn btn-accent btn-lg">

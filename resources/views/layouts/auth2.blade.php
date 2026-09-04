@@ -9,6 +9,17 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title') - {{ config('app.name', 'Kubre') }}</title>
+    <meta name="description" content="@yield('meta_description', 'Accede a Kubre: la plataforma todo-en-uno de gestión empresarial y control comercial en la nube.')">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Kubre">
+    <meta property="og:title" content="@yield('title') - Kubre">
+    <meta property="og:description" content="Plataforma de gestión empresarial y control comercial en la nube.">
+    <meta property="og:image" content="{{ asset('images/kubre-og.jpg') }}">
+    <meta property="og:url" content="{{ url()->current() }}">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">

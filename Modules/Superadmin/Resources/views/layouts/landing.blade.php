@@ -1,47 +1,87 @@
 <!DOCTYPE html>
 <html lang="es">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Metatítulo y Metadescripción SEO -->
-    <title>@yield('title', 'Kubre | Sistema de Gestión Comercial y Punto de Venta en la Nube')</title>
-    <meta name="description" content="@yield('meta_description', 'Kubre es el software de punto de venta y gestión comercial en la nube para controlar ventas, inventario multialmacén, facturación y tasas de cambio en tiempo real.')">
-    <meta name="keywords" content="@yield('meta_keywords', 'sistema pos venezuela, software punto de venta, control de inventario, facturacion multimoneda, kubre pos, software restaurantes, software retail, software mayoristas')">
+    <title>@yield('title', 'Kubre | Plataforma de Gestión Empresarial y Control en la Nube')</title>
+    <meta name="description" content="@yield('meta_description', 'Kubre es la plataforma todo-en-uno de gestión empresarial en la nube: centraliza finanzas, inventario multialmacén, operaciones multisede, facturación multimoneda y ventas. Prueba gratis 14 días.')">
+    <meta name="keywords" content="@yield('meta_keywords', 'software de gestion empresarial, erp en la nube, plataforma de administracion comercial, control de inventario multialmacen, facturacion multimoneda, cuentas por cobrar, gestion de compras, kubre, kubre erp')">
     <meta name="author" content="Kubre">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Geo Tags -->
+    <meta name="geo.region" content="VE">
+    <meta name="geo.placename" content="Venezuela">
+    <meta name="language" content="Spanish">
 
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Kubre">
-    <meta property="og:title" content="@yield('title', 'Kubre | Sistema de Gestión Comercial y POS')">
-    <meta property="og:description" content="@yield('meta_description', 'Kubre es la solución integral en la nube para potenciar tu negocio con control de inventario, ventas y facturación multimoneda.')">
+    <meta property="og:title" content="@yield('og_title', 'Kubre | Plataforma de Gestión Empresarial y Control en la Nube')">
+    <meta property="og:description" content="@yield('og_description', 'Centraliza finanzas, inventario multialmacén, operaciones multisede, facturación multimoneda y ventas en una sola plataforma inteligente.')">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:image" content="{{ asset('images/logo.svg') }}">
+    <meta property="og:image" content="{{ asset('images/kubre-og.jpg') }}">
+    <meta property="og:image:secure_url" content="{{ asset('images/kubre-og.jpg') }}">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Kubre - Plataforma de Gestión Empresarial en la Nube">
+    <meta property="og:locale" content="es_ES">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="@yield('title', 'Kubre | Sistema de Gestión Comercial y POS')">
-    <meta name="twitter:description" content="@yield('meta_description', 'Kubre es la solución integral en la nube para potenciar tu negocio con control de inventario, ventas y facturación multimoneda.')">
-    <meta name="twitter:image" content="{{ asset('images/logo.svg') }}">
+    <meta name="twitter:title" content="@yield('og_title', 'Kubre | Plataforma de Gestión Empresarial y Control en la Nube')">
+    <meta name="twitter:description" content="@yield('og_description', 'Centraliza finanzas, inventario multialmacén, operaciones multisede, facturación multimoneda y ventas en una sola plataforma inteligente.')">
+    <meta name="twitter:image" content="{{ asset('images/kubre-og.jpg') }}">
+    <meta name="twitter:image:alt" content="Kubre - Plataforma de Gestión Empresarial">
 
-    <!-- JSON-LD Structured Data Schema.org -->
+    <!-- JSON-LD Structured Data Schema.org (SoftwareApplication + Organization) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "Kubre",
-      "applicationCategory": "BusinessApplication",
-      "operatingSystem": "Web, Cloud, iOS, Android, Windows, Mac",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD",
-        "description": "Prueba gratis de 14 días sin tarjeta de crédito"
-      },
-      "description": "Sistema de gestión comercial, inventario multialmacén y punto de venta en la nube con dualidad multimoneda.",
-      "url": "https://kubre.site"
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://kubre.site/#organization",
+          "name": "Kubre",
+          "url": "https://kubre.site",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "{{ asset('images/logo.svg') }}"
+          },
+          "description": "Plataforma de gestión empresarial, operaciones y control comercial en la nube."
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://kubre.site/#website",
+          "url": "https://kubre.site",
+          "name": "Kubre",
+          "publisher": {
+            "@id": "https://kubre.site/#organization"
+          },
+          "inLanguage": "es"
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "Kubre",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web, Cloud, iOS, Android, Windows, macOS",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "description": "Prueba gratuita de 14 días sin tarjeta de crédito"
+          },
+          "description": "Plataforma todo-en-uno de gestión empresarial: finanzas, inventario multialmacén, control logístico, producción y facturación multimoneda en tiempo real.",
+          "url": "https://kubre.site",
+          "image": "{{ asset('images/kubre-og.jpg') }}"
+        }
+      ]
     }
     </script>
     
@@ -50,6 +90,8 @@
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 
     <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Font Awesome -->

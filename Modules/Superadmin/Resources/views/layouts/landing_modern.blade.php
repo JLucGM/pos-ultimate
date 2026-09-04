@@ -7,14 +7,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Primary Meta Tags -->
-    <title>@yield('title', 'Kubre | Sistema de Gestión Comercial y POS') - {{ config('app.name') }}</title>
-    <meta name="title" content="@yield('meta_title', 'Kubre | Sistema de Gestión Comercial y Software POS en la Nube')">
-    <meta name="description" content="@yield('meta_description', 'Kubre es la plataforma todo-en-uno en la nube para gestionar ventas, inventario multialmacén, compras, facturación multimoneda y finanzas desde cualquier lugar.')">
-    <meta name="keywords" content="sistema pos, punto de venta, software pos, pos en la nube, sistema de ventas, control de inventario, pos para restaurantes, pos para tiendas, pos venezuela, software facturación, sistema citas, kubre, kubre pos">
+    <title>@yield('title', 'Kubre | Plataforma de Gestión Empresarial y Control en la Nube')</title>
+    <meta name="title" content="@yield('meta_title', 'Kubre | Plataforma de Gestión Empresarial y Control en la Nube')">
+    <meta name="description" content="@yield('meta_description', 'Kubre es la plataforma todo-en-uno en la nube para gestionar finanzas, inventario multialmacén, compras, facturación multimoneda y ventas desde cualquier lugar.')">
+    <meta name="keywords" content="software de gestion empresarial, erp en la nube, plataforma de administracion comercial, control de inventario multialmacen, facturacion multimoneda, cuentas por cobrar, gestion de compras, kubre, kubre erp">
     <meta name="author" content="Kubre">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="language" content="Spanish">
-    <meta name="revisit-after" content="7 days">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ url()->current() }}">
@@ -22,26 +21,29 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:title" content="@yield('og_title', 'Kubre | Sistema de Gestión Comercial y POS')">
-    <meta property="og:description" content="@yield('og_description', 'Kubre es la plataforma todo-en-uno en la nube para gestionar ventas, inventario multialmacén, compras y facturación.')">
-    <meta property="og:image" content="{{ asset('images/favicon.png') }}">
+    <meta property="og:title" content="@yield('og_title', 'Kubre | Plataforma de Gestión Empresarial y Control en la Nube')">
+    <meta property="og:description" content="@yield('og_description', 'Centraliza finanzas, inventario multialmacén, operaciones multisede, facturación multimoneda y ventas en una sola plataforma inteligente.')">
+    <meta property="og:image" content="{{ asset('images/kubre-og.jpg') }}">
+    <meta property="og:image:secure_url" content="{{ asset('images/kubre-og.jpg') }}">
+    <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Kubre - Plataforma de Gestión Empresarial en la Nube">
     <meta property="og:site_name" content="Kubre">
     <meta property="og:locale" content="es_ES">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ url()->current() }}">
-    <meta property="twitter:title" content="@yield('twitter_title', 'Kubre | Sistema de Gestión Comercial y POS')">
-    <meta property="twitter:description" content="@yield('twitter_description', 'Kubre: Sistema de gestión comercial y POS en la nube.')">
-    <meta property="twitter:image" content="{{ asset('images/favicon.png') }}">
+    <meta property="twitter:title" content="@yield('og_title', 'Kubre | Plataforma de Gestión Empresarial y Control en la Nube')">
+    <meta property="twitter:description" content="@yield('og_description', 'Centraliza finanzas, inventario multialmacén, operaciones multisede, facturación multimoneda y ventas en una sola plataforma inteligente.')">
+    <meta property="twitter:image" content="{{ asset('images/kubre-og.jpg') }}">
+    <meta property="twitter:image:alt" content="Kubre - Plataforma de Gestión Empresarial">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
-    <link rel="manifest" href="{{ asset('site.webmanifest') }}">
     
     <!-- Geo Tags -->
     <meta name="geo.region" content="VE">
