@@ -564,33 +564,92 @@ function urlSearchParam(param) {
     }
 }
 
-// For dropdown hidden issue
-// (function() {
-//   var dropdownMenu;
-//   $('table').on('show.bs.dropdown', function(e) {
-//     dropdownMenu = $(e.target).find('.dropdown-menu');
-//     $('body').append(dropdownMenu.detach());
-//     var eOffset = $(e.target).offset();
-//     if(dropdownMenu.hasClass('dropdown-menu-right')) {
-//         dropdownMenu.css({
-//             'display': 'block',
-//             'top': eOffset.top + $(e.target).outerHeight(),
-//             'left': 'auto',
-//             'right': 0
-//         });
-//     } else {
-//         dropdownMenu.css({
-//             'display': 'block',
-//             'top': eOffset.top + $(e.target).outerHeight(),
-//             'left': eOffset.left
-//         });
-//     }
-//   });
-//   $('table').on('hide.bs.dropdown', function(e) {
-//     $(e.target).append(dropdownMenu.detach());
-//     dropdownMenu.hide();
-//   });
-// })();
+// ==========================================================================
+// Smart Viewport-Aware Dropdown Engine for Tables, Modals & Mobile Screens
+// ==========================================================================
+(function() {
+    $(document).on('shown.bs.dropdown', function(e) {
+        var $dropdown = $(e.target);
+        var $menu = $dropdown.children('.dropdown-menu');
+        var $btn = $dropdown.children('.dropdown-toggle');
+        
+        if (!$menu.length || !$btn.length) return;
+        
+        // Check if inside a table, responsive container, or modal
+        if ($dropdown.closest('.table-responsive, .dataTables_wrapper, table, .modal-body, .box-body').length > 0) {
+            var btnRect = $btn[0].getBoundingClientRect();
+            var menuWidth = $menu.outerWidth() || 190;
+            var menuHeight = $menu.outerHeight() || 200;
+            var windowWidth = $(window).width();
+            var windowHeight = $(window).height();
+            
+            var top = btnRect.bottom + 4;
+            var left = btnRect.left;
+            
+            // Auto flip upwards if near the bottom of screen
+            if (btnRect.bottom + menuHeight > windowHeight - 12 && btnRect.top > menuHeight + 12) {
+                top = btnRect.top - menuHeight - 4;
+                $dropdown.addClass('dropup-auto');
+            } else {
+                $dropdown.removeClass('dropup-auto');
+            }
+            
+            // Prevent horizontal overflow on right edge
+            if (left + menuWidth > windowWidth - 12) {
+                left = Math.max(12, windowWidth - menuWidth - 12);
+            }
+            // Prevent overflow on left edge
+            if (left < 12) {
+                left = 12;
+            }
+            
+            $menu.css({
+                'position': 'fixed',
+                'top': top + 'px',
+                'left': left + 'px',
+                'right': 'auto',
+                'bottom': 'auto',
+                'z-index': '100080',
+                'max-height': 'calc(100vh - 30px)',
+                'overflow-y': 'auto',
+                '-webkit-overflow-scrolling': 'touch'
+            });
+        }
+    });
+
+    $(document).on('hidden.bs.dropdown', function(e) {
+        var $menu = $(e.target).children('.dropdown-menu');
+        $menu.css({
+            'position': '',
+            'top': '',
+            'left': '',
+            'right': '',
+            'bottom': '',
+            'z-index': '',
+            'max-height': '',
+            'overflow-y': '',
+            '-webkit-overflow-scrolling': ''
+        });
+        $(e.target).removeClass('dropup-auto');
+    });
+
+    // Close fixed dropdowns on window/container scroll to keep UX crisp
+    $(window).on('scroll', function() {
+        $('.btn-group.open, .dropdown.open').each(function() {
+            if ($(this).closest('.table-responsive, .dataTables_wrapper, table').length > 0) {
+                $(this).removeClass('open').trigger('hidden.bs.dropdown');
+            }
+        });
+    });
+
+    $('#scrollable-container').on('scroll', function() {
+        $('.btn-group.open, .dropdown.open').each(function() {
+            if ($(this).closest('.table-responsive, .dataTables_wrapper, table').length > 0) {
+                $(this).removeClass('open').trigger('hidden.bs.dropdown');
+            }
+        });
+    });
+})();
 
 function updateOnlineStatus() {
     if (!__is_online()) {

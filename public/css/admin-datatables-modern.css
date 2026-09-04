@@ -1017,11 +1017,130 @@ div.dataTables_processing[style*="display: none"],
 }
 
 /* ==========================================================================
-   15. Responsive Adaptations for DataTables on Mobile / Tablet
+   15. Global Z-Index Hierarchy (Modals, Dropdowns, Select2 & DatePickers)
+   ========================================================================== */
+.modal-backdrop {
+    z-index: 100040 !important;
+}
+.modal {
+    z-index: 100050 !important;
+}
+.modal-dialog {
+    z-index: 100060 !important;
+}
+.dropdown-menu {
+    z-index: 100080 !important;
+}
+.select2-container--open,
+.select2-dropdown {
+    z-index: 100100 !important;
+}
+.daterangepicker,
+.datepicker,
+.bootstrap-datetimepicker-widget {
+    z-index: 100100 !important;
+}
+.swal2-container,
+.swal-overlay,
+#toast-container {
+    z-index: 100200 !important;
+}
+
+/* ==========================================================================
+   16. Unclipped Dropdowns in Tables & DataTables (Desktop + Mobile)
+   ========================================================================== */
+.table-responsive {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    position: relative !important;
+}
+
+.table-responsive .dropdown-menu,
+.dataTables_wrapper .dropdown-menu {
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.2), 0 4px 12px rgba(15, 23, 42, 0.08) !important;
+    padding: 6px !important;
+    min-width: 170px !important;
+    background: #FFFFFF !important;
+}
+
+.table-responsive .dropdown-menu > li > a,
+.dataTables_wrapper .dropdown-menu > li > a {
+    padding: 8px 12px !important;
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    color: #1E293B !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    transition: all 0.15s ease !important;
+}
+
+.table-responsive .dropdown-menu > li > a:hover,
+.dataTables_wrapper .dropdown-menu > li > a:hover {
+    background: #F1F5F9 !important;
+    color: var(--adm-primary) !important;
+}
+
+/* ==========================================================================
+   17. Responsive Mobile Adaptations (Screen <= 768px)
    ========================================================================== */
 @media (max-width: 768px) {
+    /* Page & Body Horizontal Overflow Fix */
+    body, html, .thetop, main, .content-wrapper, .content, .audaz-dashboard-wrapper {
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+    }
+
+    #scrollable-container {
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior-y: contain !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Box Header & Action Buttons on Mobile */
+    .box-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+        padding: 12px 14px !important;
+    }
+
+    .box-header .box-tools {
+        position: static !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        gap: 6px !important;
+        margin-top: 4px !important;
+        float: none !important;
+    }
+
+    .box-header .box-tools .btn,
+    .box-header .box-tools a,
+    .box-header .box-tools .tw-dw-btn {
+        flex: 1 1 auto !important;
+        min-height: 36px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+        padding: 6px 12px !important;
+    }
+
+    /* Filter & Search Controls on Mobile */
     .audaz-status-pills {
         padding-bottom: 6px !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
     }
 
     .audaz-status-pill {
@@ -1034,13 +1153,24 @@ div.dataTables_processing[style*="display: none"],
         width: 100% !important;
         float: none !important;
         text-align: left !important;
-        margin-bottom: 8px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .dataTables_wrapper .dataTables_filter label {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+        font-size: 12px !important;
     }
 
     .dataTables_wrapper .dataTables_filter input[type="search"],
     .dataTables_wrapper .dataTables_filter input {
         width: 100% !important;
         min-width: 100% !important;
+        height: 38px !important;
+        font-size: 13px !important;
+        border-radius: 10px !important;
     }
 
     .dt-buttons,
@@ -1050,53 +1180,124 @@ div.dataTables_processing[style*="display: none"],
         padding-bottom: 6px !important;
     }
 
-    /* ==========================================================================
-       Compact & Slim Mobile Buttons (Orange / Primary / Action Buttons)
-       ========================================================================== */
-    .tw-from-indigo-600.tw-to-blue-500,
-    .tw-dw-btn.tw-from-indigo-600,
-    a.tw-dw-btn.tw-bg-gradient-to-r,
-    button.tw-dw-btn.tw-bg-gradient-to-r,
-    .tw-dw-btn,
-    .btn-primary,
-    .btn-audaz-pos {
-        min-height: 32px !important;
-        height: auto !important;
-        padding: 5px 12px !important;
+    /* Action Buttons inside Table Rows */
+    .table td .btn-group,
+    .table td .btn {
+        margin: 2px 0 !important;
+    }
+
+    .table td .btn-group .btn {
+        min-height: 28px !important;
+        padding: 4px 8px !important;
         font-size: 11.5px !important;
-        font-weight: 600 !important;
-        letter-spacing: -0.01em !important;
-        border-radius: 12px !important;
-        margin: 2px !important;
-        gap: 5px !important;
-        box-shadow: 0 2px 6px rgba(251, 76, 10, 0.2) !important;
+        font-weight: 700 !important;
+        border-radius: 8px !important;
     }
 
-    .tw-dw-btn svg,
-    a.tw-dw-btn svg,
-    button.tw-dw-btn svg {
-        width: 14px !important;
-        height: 14px !important;
-        min-width: 14px !important;
+    /* Modal Enhancements for Mobile (Full Width, Sticky Footer, Touch Safe) */
+    .modal-dialog {
+        margin: 10px auto !important;
+        width: calc(100% - 16px) !important;
+        max-width: calc(100% - 16px) !important;
     }
 
-    .tw-dw-btn i,
-    a.tw-dw-btn i,
-    button.tw-dw-btn i,
-    .btn-primary i {
-        font-size: 11px !important;
+    .modal-content {
+        max-height: 92vh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        border-radius: 18px !important;
+        overflow: visible !important;
     }
 
-    .box-tools .tw-dw-btn,
-    .box-tools .btn {
-        margin: 2px !important;
-        padding: 4px 10px !important;
-        font-size: 11px !important;
+    .modal-body {
+        flex: 1 1 auto !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding: 16px 14px !important;
+    }
+
+    .modal-footer {
+        flex-shrink: 0 !important;
+        padding: 12px 14px !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        justify-content: flex-end !important;
+        border-top: 1px solid #E2E8F0 !important;
+        background: #FFFFFF !important;
+        border-radius: 0 0 18px 18px !important;
+    }
+
+    .modal-footer .btn {
+        min-height: 38px !important;
+        padding: 8px 14px !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        flex: 1 1 auto !important;
+        margin: 0 !important;
     }
 
     .view_modal.modal.fade .modal-dialog,
     .offcanvas-right.modal.fade .modal-dialog {
         max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    /* DateRangePicker Mobile View */
+    .daterangepicker {
+        width: calc(100vw - 20px) !important;
+        max-width: calc(100vw - 20px) !important;
+        left: 10px !important;
+        right: 10px !important;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25) !important;
+        border-radius: 16px !important;
+    }
+
+    .daterangepicker .drp-calendar {
+        float: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 8px !important;
+    }
+
+    .daterangepicker .ranges {
+        float: none !important;
+        width: 100% !important;
+        text-align: center !important;
+    }
+
+    .daterangepicker .drp-buttons {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        padding: 10px !important;
+    }
+
+    .daterangepicker .drp-buttons .btn {
+        flex: 1 1 auto !important;
+        min-height: 34px !important;
+    }
+
+    /* Select2 Mobile Friendly */
+    .select2-container {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .select2-dropdown {
+        width: 100% !important;
+        max-width: calc(100vw - 20px) !important;
+        border-radius: 14px !important;
+        box-shadow: 0 12px 35px rgba(15, 23, 42, 0.2) !important;
+    }
+
+    .select2-results__option {
+        padding: 10px 14px !important;
+        font-size: 13px !important;
+        min-height: 40px !important;
+        display: flex !important;
+        align-items: center !important;
     }
 }
 

@@ -871,16 +871,18 @@ html, body {
     .box, .nav-tabs-custom, .card {
         border-radius: 16px !important;
         max-width: 100% !important;
-        overflow: hidden !important;
+        overflow: visible !important;
         margin-bottom: 14px !important;
     }
 
-    /* Padding bottom compensation for fixed mobile bottom nav */
+    /* Padding bottom compensation for fixed mobile bottom nav & scrolling safety */
     #scrollable-container,
     .audaz-dashboard-wrapper,
     .content,
-    .content-wrapper {
-        padding-bottom: 84px !important;
+    .content-wrapper,
+    .box-footer,
+    .submit-button-container {
+        padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
     }
 }
 
@@ -901,7 +903,7 @@ html, body {
     display: flex !important;
     align-items: center !important;
     justify-content: space-around !important;
-    z-index: 9999 !important;
+    z-index: 9990 !important;
     padding: 0 4px !important;
     padding-bottom: env(safe-area-inset-bottom, 0px) !important;
     box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.35) !important;
