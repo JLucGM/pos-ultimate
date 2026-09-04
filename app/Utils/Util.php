@@ -711,23 +711,39 @@ class Util
 
         $uploaded_file_name = null;
         if ($request->hasFile($file_name) && $request->file($file_name)->isValid()) {
+            $file = $request->file($file_name);
+            $extension = strtolower($file->getClientOriginalExtension());
+            $guess_extension = strtolower($file->guessExtension() ?? '');
 
-            //Check if mime type is image
+            // Dangerous executable extensions blacklist
+            $dangerous_extensions = [
+                'php', 'php3', 'php4', 'php5', 'php7', 'php8', 'phtml', 'phar', 
+                'sh', 'bash', 'py', 'pl', 'cgi', 'exe', 'bat', 'cmd', 'js', 'html', 'htm', 'htaccess'
+            ];
+
+            if (in_array($extension, $dangerous_extensions) || in_array($guess_extension, $dangerous_extensions)) {
+                \Log::warning('Security Alert: Blocked upload of executable file: ' . $extension);
+                throw new \Exception('Invalid file type');
+            }
+
+            // Check if mime type is image
             if ($file_type == 'image') {
-                if (strpos($request->$file_name->getClientMimeType(), 'image/') === false) {
+                $allowed_img_exts = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'ico'];
+                if (! in_array($extension, $allowed_img_exts) || strpos($file->getClientMimeType(), 'image/') === false) {
                     throw new \Exception('Invalid image file');
                 }
             }
 
             if ($file_type == 'document') {
-                if (! in_array($request->$file_name->getClientMimeType(), array_keys(config('constants.document_upload_mimes_types')))) {
+                if (! in_array($file->getClientMimeType(), array_keys(config('constants.document_upload_mimes_types')))) {
                     throw new \Exception('Invalid document file');
                 }
             }
 
-            if ($request->$file_name->getSize() <= config('constants.document_size_limit')) {
-                $new_file_name = time().'_'.$request->$file_name->getClientOriginalName();
-                if ($request->$file_name->storeAs($dir_name, $new_file_name)) {
+            if ($file->getSize() <= config('constants.document_size_limit', 5000000)) {
+                $safe_original_name = preg_replace('/[^a-zA-Z0-9_\.-]/', '', $file->getClientOriginalName());
+                $new_file_name = time().'_'.$safe_original_name;
+                if ($file->storeAs($dir_name, $new_file_name)) {
                     $uploaded_file_name = $new_file_name;
                 }
             }

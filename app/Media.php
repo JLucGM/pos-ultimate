@@ -134,13 +134,44 @@ class Media extends Model
     }
 
     /**
-     * Uploads requested file to storage.
+     * Uploads requested file to storage with strict security checks.
      */
     public static function uploadFile($file)
     {
         $file_name = null;
-        if ($file->getSize() <= config('constants.document_size_limit')) {
-            $new_file_name = time().'_'.mt_rand().'_'.$file->getClientOriginalName();
+        if (! $file || ! $file->isValid()) {
+            return null;
+        }
+
+        // Dangerous executable extensions blacklist
+        $dangerous_extensions = [
+            'php', 'php3', 'php4', 'php5', 'php7', 'php8', 'phtml', 'phar', 
+            'sh', 'bash', 'py', 'pl', 'cgi', 'exe', 'bat', 'cmd', 'js', 'html', 'htm', 'htaccess'
+        ];
+
+        $extension = strtolower($file->getClientOriginalExtension());
+        $guess_extension = strtolower($file->guessExtension() ?? '');
+
+        if (in_array($extension, $dangerous_extensions) || in_array($guess_extension, $dangerous_extensions)) {
+            \Log::warning('Security Alert: Attempted upload of dangerous file extension: ' . $extension);
+            return null;
+        }
+
+        // Safe whitelist for media files
+        $allowed_extensions = [
+            'jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'ico',
+            'pdf', 'csv', 'txt', 'doc', 'docx', 'xls', 'xlsx', 'zip', 'rar'
+        ];
+
+        if (! in_array($extension, $allowed_extensions)) {
+            \Log::warning('Rejected upload of unauthorized file type: ' . $extension);
+            return null;
+        }
+
+        if ($file->getSize() <= config('constants.document_size_limit', 5000000)) {
+            // Sanitize original file name: keep only alphanumeric, dots, dashes, underscores
+            $safe_original_name = preg_replace('/[^a-zA-Z0-9_\.-]/', '', $file->getClientOriginalName());
+            $new_file_name = time().'_'.mt_rand().'_'.$safe_original_name;
             if ($file->storeAs('/media', $new_file_name)) {
                 $file_name = $new_file_name;
             }
