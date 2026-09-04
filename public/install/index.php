@@ -1,9 +1,8 @@
 <?php
-if (empty($_POST)) {
-    $envPath = realpath(__DIR__ . '/../../') . '/.env';
-    if (file_exists($envPath)) {
-        exit('Installation already done');
-    }
+$envPath = realpath(__DIR__ . '/../../') . '/.env';
+if (file_exists($envPath)) {
+    http_response_code(404);
+    exit('Installation already completed.');
 }
 ?>
 
