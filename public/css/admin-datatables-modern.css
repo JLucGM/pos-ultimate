@@ -1020,13 +1020,13 @@ div.dataTables_processing[style*="display: none"],
    15. Global Z-Index Hierarchy (Modals, Dropdowns, Select2 & DatePickers)
    ========================================================================== */
 .modal-backdrop {
-    z-index: 100040 !important;
+    z-index: 1040 !important;
 }
 .modal {
-    z-index: 100050 !important;
+    z-index: 1050 !important;
 }
 .modal-dialog {
-    z-index: 100060 !important;
+    z-index: 1060 !important;
 }
 .dropdown-menu {
     z-index: 100080 !important;

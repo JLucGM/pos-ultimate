@@ -649,6 +649,13 @@ function urlSearchParam(param) {
             }
         });
     });
+
+    // Ensure all modals are direct children of body so the backdrop never covers the modal
+    $(document).on('show.bs.modal', '.modal', function() {
+        if (!$(this).parent().is('body')) {
+            $(this).appendTo('body');
+        }
+    });
 })();
 
 function updateOnlineStatus() {
