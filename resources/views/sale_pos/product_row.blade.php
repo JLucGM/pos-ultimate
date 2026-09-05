@@ -226,10 +226,17 @@
         		@endphp
         	@endif
         @endforeach
-		@if(!empty($product->enable_estimated_weight))
+		@php
+			$is_estimated_weight_item = !empty($product->enable_estimated_weight) 
+				|| (!empty($product->estimated_weight) && (float)$product->estimated_weight > 0)
+				|| (!empty($product->product_estimated_weight) && (float)$product->product_estimated_weight > 0)
+				|| (!empty($so_line) && (!empty($so_line->pieces_quantity) || !empty($so_line->estimated_weight)));
+		@endphp
+
+		@if($is_estimated_weight_item)
 			@php
-				$row_estimated_weight = !empty($product->estimated_weight) ? $product->estimated_weight : (!empty($product->product_estimated_weight) ? $product->product_estimated_weight : 0);
-				$row_pieces_quantity = !empty($product->pieces_quantity) ? $product->pieces_quantity : ( ($row_estimated_weight > 0 && !empty($product->quantity_ordered)) ? round($product->quantity_ordered / $row_estimated_weight, 2) : 1 );
+				$row_estimated_weight = !empty($product->estimated_weight) ? $product->estimated_weight : (!empty($product->product_estimated_weight) ? $product->product_estimated_weight : (!empty($so_line->estimated_weight) ? $so_line->estimated_weight : 0));
+				$row_pieces_quantity = !empty($product->pieces_quantity) ? $product->pieces_quantity : (!empty($so_line->pieces_quantity) ? $so_line->pieces_quantity : ( ($row_estimated_weight > 0 && !empty($product->quantity_ordered)) ? round($product->quantity_ordered / $row_estimated_weight, 2) : 1 ));
 			@endphp
 			<div style="display: flex; flex-direction: column; gap: 4px; min-width: 140px;">
 				<!-- Control de Piezas -->
@@ -266,9 +273,11 @@
 				</div>
 
 				<!-- Indicador de Peso Estimado -->
+				@if($row_estimated_weight > 0)
 				<div style="font-size: 9.5px; color: #64748B; font-weight: 700; line-height: 1.1;">
 					⚖️ Est: {{ @format_quantity($row_estimated_weight) }} {{$product->unit}}/pza
 				</div>
+				@endif
 			</div>
 			<input type="hidden" class="row_enable_estimated_weight" name="products[{{$row_count}}][enable_estimated_weight]" value="1">
 			<input type="hidden" class="row_estimated_weight" name="products[{{$row_count}}][estimated_weight]" value="{{$row_estimated_weight}}">

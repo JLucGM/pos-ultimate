@@ -6,6 +6,54 @@
 		</div>
 		<div class="modal-body">
 			<div class="row">
+				@php
+					$modal_is_estimated = !empty($product->enable_estimated_weight) 
+						|| (!empty($product->estimated_weight) && (float)$product->estimated_weight > 0)
+						|| (!empty($product->product_estimated_weight) && (float)$product->product_estimated_weight > 0)
+						|| (!empty($so_line) && (!empty($so_line->pieces_quantity) || !empty($so_line->estimated_weight)));
+					$modal_est_weight = !empty($product->estimated_weight) ? $product->estimated_weight : (!empty($product->product_estimated_weight) ? $product->product_estimated_weight : (!empty($so_line->estimated_weight) ? $so_line->estimated_weight : 0));
+					$modal_pieces_qty = !empty($product->pieces_quantity) ? $product->pieces_quantity : (!empty($so_line->pieces_quantity) ? $so_line->pieces_quantity : ( ($modal_est_weight > 0 && !empty($product->quantity_ordered)) ? round($product->quantity_ordered / $modal_est_weight, 2) : 1 ));
+				@endphp
+
+				@if($modal_is_estimated)
+					<div class="col-xs-12" style="margin-bottom: 12px;">
+						<div style="background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%); border: 1.5px solid #38BDF8; border-radius: 10px; padding: 12px;">
+							<div style="font-size: 11.5px; font-weight: 800; color: #0369A1; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+								<i class="fas fa-balance-scale"></i> Control de Peso y Piezas (Pesaje al Facturar)
+							</div>
+							<div class="row">
+								<div class="col-xs-12 col-sm-6">
+									<label style="font-size: 11px; font-weight: 700; color: #1E293B; margin-bottom: 3px;">Cantidad de Piezas (Pzas):</label>
+									<div class="input-group">
+										<span class="input-group-addon" style="background: #FFFFFF; font-size: 11px; font-weight: 700;">Pzas</span>
+										<input type="text" class="form-control modal_pieces_quantity input_number" 
+											data-row_index="{{$row_count}}" 
+											value="{{ @format_quantity($modal_pieces_qty) }}" 
+											placeholder="Piezas">
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-6">
+									<label style="font-size: 11px; font-weight: 700; color: #0284C7; margin-bottom: 3px;">Peso Real Facturable ({{$product->unit}}):</label>
+									<div class="input-group">
+										<span class="input-group-addon" style="background: #0284C7; color: #FFFFFF; font-size: 11px; font-weight: 700;">{{$product->unit}}</span>
+										<input type="text" class="form-control modal_weight_quantity input_number" 
+											data-row_index="{{$row_count}}" 
+											value="{{ @format_quantity($product->quantity_ordered) }}" 
+											placeholder="Peso real">
+									</div>
+								</div>
+								@if($modal_est_weight > 0)
+									<div class="col-xs-12" style="margin-top: 6px;">
+										<small style="color: #64748B; font-weight: 600;">
+											⚖️ Peso promedio estimado: <strong>{{ @format_quantity($modal_est_weight) }} {{$product->unit}}/pieza</strong>. Modifique las piezas o el peso real pesado en balanza.
+										</small>
+									</div>
+								@endif
+							</div>
+						</div>
+					</div>
+				@endif
+
 				<div class="form-group col-xs-12 @if(!auth()->user()->can('edit_product_price_from_sale_screen')) hide @endif">
 					@php
 						$pos_unit_price = !empty($product->unit_price_before_discount) ? $product->unit_price_before_discount : $product->default_sell_price;

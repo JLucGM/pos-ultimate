@@ -6327,8 +6327,16 @@ class TransactionUtil extends Util
             $total_ordered = $sales_order->sell_lines->sum('quantity');
             $total_received = $sales_order->sell_lines->sum('so_quantity_invoiced');
 
+            $has_uncompleted_lines = false;
+            foreach ($sales_order->sell_lines as $line) {
+                if ($line->quantity > $line->so_quantity_invoiced) {
+                    $has_uncompleted_lines = true;
+                    break;
+                }
+            }
+
             $status = $total_received == 0 ? 'ordered' : 'partial';
-            if ($total_ordered == $total_received) {
+            if ((!$has_uncompleted_lines && $total_received > 0) || ($total_ordered > 0 && $total_received >= $total_ordered)) {
                 $status = 'completed';
             }
             $sales_order->status = $status;

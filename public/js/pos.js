@@ -364,6 +364,54 @@ $(document).ready(function() {
         }
     });
 
+    // Sync modal pieces and weight inputs with table row
+    $(document).on('change', 'input.modal_pieces_quantity', function() {
+        var row_index = $(this).data('row_index');
+        var tr = $('table#pos_table tbody').find('tr[data-row_index="' + row_index + '"]');
+        var pieces = __read_number($(this));
+        if (isNaN(pieces) || pieces < 0) {
+            pieces = 1;
+            __write_number($(this), pieces);
+        }
+        if (tr.length > 0) {
+            var row_pieces = tr.find('input.pos_pieces_quantity');
+            __write_number(row_pieces, pieces);
+            row_pieces.trigger('change');
+            var updated_weight = __read_number(tr.find('input.pos_quantity'));
+            var modal_weight = $(this).closest('.modal').find('input.modal_weight_quantity');
+            __write_number(modal_weight, updated_weight);
+        }
+    });
+
+    $(document).on('change', 'input.modal_weight_quantity', function() {
+        var row_index = $(this).data('row_index');
+        var tr = $('table#pos_table tbody').find('tr[data-row_index="' + row_index + '"]');
+        var weight = __read_number($(this));
+        if (isNaN(weight) || weight < 0) {
+            weight = 0;
+            __write_number($(this), weight);
+        }
+        if (tr.length > 0) {
+            var row_qty = tr.find('input.pos_quantity');
+            __write_number(row_qty, weight);
+            row_qty.trigger('change');
+        }
+    });
+
+    $(document).on('show.bs.modal', '.row_edit_product_price_model', function () {
+        var modal = $(this);
+        var row_index = modal.find('input.modal_pieces_quantity').data('row_index');
+        if (typeof row_index !== 'undefined') {
+            var tr = $('table#pos_table tbody').find('tr[data-row_index="' + row_index + '"]');
+            if (tr.length > 0) {
+                var current_pieces = __read_number(tr.find('input.pos_pieces_quantity'));
+                var current_weight = __read_number(tr.find('input.pos_quantity'));
+                __write_number(modal.find('input.modal_pieces_quantity'), current_pieces);
+                __write_number(modal.find('input.modal_weight_quantity'), current_weight);
+            }
+        }
+    });
+
     //If change in unit price update price including tax and line total
     $('table#pos_table tbody').on('change', 'input.pos_unit_price', function() {
         var unit_price = __read_number($(this));

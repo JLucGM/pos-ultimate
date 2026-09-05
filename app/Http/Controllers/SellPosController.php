@@ -1725,10 +1725,14 @@ class SellPosController extends Controller
         $product = $this->productUtil->getDetailsFromVariation($variation_id, $business_id, $location_id, $check_qty);
 
         if (!empty($so_line)) {
+            if (!empty($so_line->pieces_quantity) || !empty($so_line->estimated_weight)) {
+                $product->enable_estimated_weight = 1;
+            }
             $product->pieces_quantity = !empty($so_line->pieces_quantity) ? $so_line->pieces_quantity : (!empty($product->enable_estimated_weight) ? 1 : 0);
-            $product->estimated_weight = !empty($so_line->estimated_weight) ? $so_line->estimated_weight : $product->estimated_weight;
+            $product->estimated_weight = !empty($so_line->estimated_weight) ? $so_line->estimated_weight : (!empty($product->estimated_weight) ? $product->estimated_weight : 0);
             $product->quantity_ordered = $quantity;
-        } elseif (!empty($product->enable_estimated_weight)) {
+        } elseif (!empty($product->enable_estimated_weight) || (!empty($product->estimated_weight) && (float)$product->estimated_weight > 0)) {
+            $product->enable_estimated_weight = 1;
             $product->pieces_quantity = request()->get('pieces_quantity', 1);
             $product->quantity_ordered = $product->pieces_quantity * ($product->estimated_weight > 0 ? $product->estimated_weight : 1);
         } else {
