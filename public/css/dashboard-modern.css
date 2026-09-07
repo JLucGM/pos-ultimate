@@ -909,9 +909,15 @@ html, body {
     box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.35) !important;
 }
 
-@media (min-width: 769px) {
-    .audaz-bottom-nav {
+@media (min-width: 769px), print {
+    .audaz-bottom-nav,
+    .audaz-bottom-nav-item,
+    nav.audaz-bottom-nav {
         display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
     }
 }
 
@@ -1389,6 +1395,32 @@ html, body {
 .audaz-quick-btn span {
     font-size: 12px;
     font-weight: 700;
+}
+
+/* ==========================================================================
+   10. Print Mode Overrides (Hide mobile bars, banners & actions)
+   ========================================================================== */
+@media print {
+    .audaz-bottom-nav,
+    .audaz-bottom-nav *,
+    nav.audaz-bottom-nav,
+    .audaz-pwa-banner,
+    .audaz-quick-btn,
+    .no-print,
+    .no-print * {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        height: 0 !important;
+        width: 0 !important;
+        position: absolute !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
 }
 
 

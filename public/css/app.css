@@ -727,8 +727,26 @@ tr.details td.details-control {
     ::-webkit-scrollbar{
         display: none !important;
     }
-    #toast-container {
-      display: none;
+    #toast-container,
+    .audaz-bottom-nav,
+    .audaz-bottom-nav *,
+    nav.audaz-bottom-nav,
+    .audaz-pwa-banner,
+    .pos-form-actions,
+    .no-print,
+    .no-print * {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        height: 0 !important;
+        width: 0 !important;
+        position: absolute !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
     }
 }
 
