@@ -227,6 +227,35 @@
           </div>
         </div>
 
+        <!-- SENIAT: Agente Especial de Retención -->
+        <div class="col-md-12">
+            <div style="background: #F8FAFC; border: 1.5px solid #E2E8F0; border-left: 4px solid #0284C7; border-radius: 10px; padding: 12px 16px; margin-bottom: 15px;">
+                <div class="row" style="display: flex; align-items: center; flex-wrap: wrap;">
+                    <div class="col-md-7 col-sm-12">
+                        <div class="checkbox" style="margin-top: 5px; margin-bottom: 5px;">
+                            <label style="font-weight: 700; color: #1E293B; font-size: 13px; cursor: pointer;">
+                                {!! Form::checkbox('is_tax_withholding_agent', 1, !empty($contact->is_tax_withholding_agent), ['id' => 'is_tax_withholding_agent']) !!}
+                                <i class="fas fa-university tw-text-sky-600" style="margin-left: 4px; margin-right: 4px;"></i>
+                                Contribuyente Especial / Agente de Retención de IVA (SENIAT)
+                            </label>
+                            <p class="help-block" style="margin-bottom: 0; margin-left: 20px; font-size: 11px; color: #64748B;">
+                                Marque si este contacto está calificado y notificado por el SENIAT como Sujeto Pasivo Especial.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-sm-12" id="withholding_rate_container" style="@if(empty($contact->is_tax_withholding_agent)) display: none; @endif">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            {!! Form::label('tax_withholding_rate', '% Retención de IVA:') !!}
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-percent"></i></span>
+                                {!! Form::select('tax_withholding_rate', ['75' => '75% (General SENIAT)', '100' => '100% (Total / Sin requisitos)', '0' => '0% (Exento)'], !empty($contact->tax_withholding_rate) ? (string)(int)$contact->tax_withholding_rate : '75', ['class' => 'form-control', 'id' => 'tax_withholding_rate', 'style' => 'width:100%;']) !!}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <input type="hidden" name="opening_balance" value="{{ $opening_balance ?? 0 }}">
 
         <div class="col-md-4 pay_term">
@@ -478,6 +507,19 @@
     $(document).ready(function() {
         // Inicializar select2 en modal
         $('#contact_edit_form #contact_pay_term_preset').select2();
+
+        // Toggle Agente de Retención SENIAT
+        function toggleWithholdingRate(form) {
+            var isChecked = form.find('#is_tax_withholding_agent').is(':checked');
+            if (isChecked) {
+                form.find('#withholding_rate_container').slideDown(200);
+            } else {
+                form.find('#withholding_rate_container').slideUp(200);
+            }
+        }
+        $(document).on('change', '#is_tax_withholding_agent', function() {
+            toggleWithholdingRate($(this).closest('form'));
+        });
 
         // Sincronizar preset de términos de pago
         $(document).on('change', '#contact_pay_term_preset', function() {

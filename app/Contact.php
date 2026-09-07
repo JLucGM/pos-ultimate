@@ -26,6 +26,8 @@ class Contact extends Authenticatable
      */
     protected $casts = [
         'shipping_custom_field_details' => 'array',
+        'is_tax_withholding_agent' => 'boolean',
+        'tax_withholding_rate' => 'decimal:2',
     ];
 
     /**
