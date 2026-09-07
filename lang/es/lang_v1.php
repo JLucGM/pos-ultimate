@@ -1298,7 +1298,7 @@ return [
     'denomination' => 'Denominación',
     'count' => 'Contar',
     'denomination_add_help_text' => 'Agregue denominaciones en Configuración -> Configuración comercial -> POS -> Denominaciones de efectivo',
-    'order_dates' => 'Fechas de pedido',
+    'order_dates' => 'Fecha del pedido',
     'by_category' => 'Por categoria',
     'by_brand' => 'Por marca',
     'no_brand' => 'Sin marca',

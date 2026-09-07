@@ -979,6 +979,38 @@ class TransactionUtil extends Util
         $transaction = Transaction::find($transaction_id);
         $transaction_type = $transaction->type;
 
+        $translate_default = function($val, $fallback = '') {
+            if (empty($val)) {
+                return $fallback;
+            }
+            if (app()->getLocale() == 'es') {
+                $map = [
+                    'Product' => 'Producto',
+                    'Products' => 'Productos',
+                    'Quantity' => 'Cantidad',
+                    'Unit Price' => 'Precio unitario',
+                    'Subtotal' => 'Subtotal',
+                    'Invoice' => 'Factura',
+                    'Invoice No.' => 'Factura Nº',
+                    'Total' => 'Total',
+                    'Total Due' => 'Total adeudado',
+                    'Total Paid' => 'Total pagado',
+                    'Customer' => 'Cliente',
+                    'Date' => 'Fecha',
+                    'Discount' => 'Descuento',
+                    'Tax' => 'Impuesto',
+                    'Payment Methods' => 'Métodos de pago',
+                    'Amount' => 'Monto',
+                    'Paid' => 'Pagado',
+                    'Due' => 'Pendiente',
+                ];
+                if (isset($map[trim($val)])) {
+                    return $map[trim($val)];
+                }
+            }
+            return $val;
+        };
+
         $output = [
             'header_text' => isset($il->header_text) ? $il->header_text : '',
             'business_name' => ($il->show_business_name == 1) ? $business_details->name : '',
@@ -988,10 +1020,10 @@ class TransactionUtil extends Util
             'sub_heading_line3' => trim($il->sub_heading_line3),
             'sub_heading_line4' => trim($il->sub_heading_line4),
             'sub_heading_line5' => trim($il->sub_heading_line5),
-            'table_product_label' => $il->table_product_label,
-            'table_qty_label' => $il->table_qty_label,
-            'table_unit_price_label' => $il->table_unit_price_label,
-            'table_subtotal_label' => $il->table_subtotal_label,
+            'table_product_label' => $translate_default($il->table_product_label, __('sale.product')),
+            'table_qty_label' => $translate_default($il->table_qty_label, __('sale.qty')),
+            'table_unit_price_label' => $translate_default($il->table_unit_price_label, __('sale.unit_price')),
+            'table_subtotal_label' => $translate_default($il->table_subtotal_label, __('sale.subtotal')),
         ];
 
         //Display name
@@ -1015,13 +1047,46 @@ class TransactionUtil extends Util
         }
 
         if ($il->show_letter_head == 1) {
-            $output['letter_head'] = ! empty($il->letter_head) &&
-            file_exists(public_path('uploads/invoice_logos/'.$il->letter_head)) ?
-            asset('uploads/invoice_logos/'.$il->letter_head) : null;
+            $letter_head_path = null;
+            if (! empty($il->letter_head) && file_exists(public_path('uploads/invoice_logos/'.$il->letter_head))) {
+                $letter_head_path = public_path('uploads/invoice_logos/'.$il->letter_head);
+            }
+            if ($letter_head_path) {
+                $lh_data = @file_get_contents($letter_head_path);
+                if ($lh_data !== false) {
+                    $mime_type = function_exists('mime_content_type') ? (mime_content_type($letter_head_path) ?: 'image/png') : 'image/png';
+                    $output['letter_head'] = 'data:'.$mime_type.';base64,'.base64_encode($lh_data);
+                } else {
+                    $output['letter_head'] = asset('uploads/invoice_logos/'.$il->letter_head);
+                }
+            } else {
+                $output['letter_head'] = null;
+            }
         }
 
         //Logo
-        $output['logo'] = $il->show_logo != 0 && ! empty($il->logo) && file_exists(public_path('uploads/invoice_logos/'.$il->logo)) ? asset('uploads/invoice_logos/'.$il->logo) : false;
+        $logo_url = false;
+        if ($il->show_logo != 0) {
+            $found_logo_path = null;
+            if (! empty($il->logo) && file_exists(public_path('uploads/invoice_logos/'.$il->logo))) {
+                $found_logo_path = public_path('uploads/invoice_logos/'.$il->logo);
+            } elseif (! empty($business_details->logo) && file_exists(public_path('uploads/business_logos/'.$business_details->logo))) {
+                $found_logo_path = public_path('uploads/business_logos/'.$business_details->logo);
+            } elseif (! empty($business_details->logo) && file_exists(public_path('storage/business_logos/'.$business_details->logo))) {
+                $found_logo_path = public_path('storage/business_logos/'.$business_details->logo);
+            }
+
+            if ($found_logo_path) {
+                $image_data = @file_get_contents($found_logo_path);
+                if ($image_data !== false) {
+                    $mime_type = function_exists('mime_content_type') ? (mime_content_type($found_logo_path) ?: 'image/png') : 'image/png';
+                    $logo_url = 'data:'.$mime_type.';base64,'.base64_encode($image_data);
+                } else {
+                    $logo_url = asset('uploads/invoice_logos/'.($il->logo ?: $business_details->logo));
+                }
+            }
+        }
+        $output['logo'] = $logo_url;
 
         //Address
         $output['address'] = '';
@@ -1527,19 +1592,19 @@ class TransactionUtil extends Util
                             }
                         } elseif ($value['method'] == 'card') {
                             $output['payments'][] =
-                                ['method' => $method.(! empty($value['card_transaction_number']) ? (', Transaction Number:'.$value['card_transaction_number']) : ''),
+                                ['method' => $method.(! empty($value['card_transaction_number']) ? (', '.__('lang_v1.transaction_no').': '.$value['card_transaction_number']) : ''),
                                     'amount' => $this->num_f($value['amount'], $show_currency, $business_details),
                                     'date' => $this->format_date($value['paid_on'], false, $business_details),
                                 ];
                         } elseif ($value['method'] == 'cheque') {
                             $output['payments'][] =
-                                ['method' => $method.(! empty($value['cheque_number']) ? (', Cheque Number:'.$value['cheque_number']) : ''),
+                                ['method' => $method.(! empty($value['cheque_number']) ? (', '.__('lang_v1.cheque_no').': '.$value['cheque_number']) : ''),
                                     'amount' => $this->num_f($value['amount'], $show_currency, $business_details),
                                     'date' => $this->format_date($value['paid_on'], false, $business_details),
                                 ];
                         } elseif ($value['method'] == 'bank_transfer') {
                             $output['payments'][] =
-                                ['method' => $method.(! empty($value['bank_account_number']) ? (', Account Number:'.$value['bank_account_number']) : ''),
+                                ['method' => $method.(! empty($value['bank_account_number']) ? (', '.__('lang_v1.bank_account_number').': '.$value['bank_account_number']) : ''),
                                     'amount' => $this->num_f($value['amount'], $show_currency, $business_details),
                                     'date' => $this->format_date($value['paid_on'], false, $business_details),
                                 ];
@@ -6304,7 +6369,10 @@ class TransactionUtil extends Util
             'autoArabic' => true,
             'margin_top' => 8,
             'margin_bottom' => 8,
+            'margin_left' => 8,
+            'margin_right' => 8,
             'format' => 'A4',
+            'orientation' => 'P',
         ]);
 
         $mpdf->useSubstitutions = true;

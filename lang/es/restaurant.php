@@ -40,7 +40,7 @@ return [
     'mark_as_cooked' => 'Marcar como atendido',
     'manage_your_kitchen' => 'Gestiona tu cocina',
     'all_orders' => 'Todas los solicitudes',
-    'order_no' => 'Nº de solicitud.',
+    'order_no' => 'Nº de pedido',
     'order_statuses' => [
         'received' => 'Recibido',
         'cooked' => 'En consulta',

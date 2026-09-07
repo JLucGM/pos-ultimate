@@ -724,10 +724,18 @@
 .f-8 {
 	font-size: 8px !important;
 }
+@page {
+	size: portrait;
+	margin: 5mm;
+}
 body {
 	color: #000000;
 }
 @media print {
+	@page {
+		size: portrait;
+		margin: 5mm;
+	}
 	* {
     	font-size: 12px;
     	font-family: 'Times New Roman';

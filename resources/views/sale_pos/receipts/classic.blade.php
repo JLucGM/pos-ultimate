@@ -674,3 +674,31 @@
 		</div>
 	@endif
 </div>
+
+<style type="text/css">
+    @page {
+        size: portrait;
+        margin: 8mm;
+    }
+    body {
+        color: #000000;
+    }
+    @media print {
+        @page {
+            size: portrait;
+            margin: 8mm;
+        }
+        body, html {
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        table {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+        tr, td {
+            page-break-inside: auto !important;
+        }
+    }
+</style>

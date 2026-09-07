@@ -3121,7 +3121,10 @@ class SellPosController extends Controller
             'autoArabic' => true,
             'margin_top' => 8,
             'margin_bottom' => 8,
+            'margin_left' => 8,
+            'margin_right' => 8,
             'format' => 'A4',
+            'orientation' => 'P',
         ]);
 
         $mpdf->useSubstitutions = true;
@@ -3160,7 +3163,10 @@ class SellPosController extends Controller
             'autoArabic' => true,
             'margin_top' => 8,
             'margin_bottom' => 8,
+            'margin_left' => 8,
+            'margin_right' => 8,
             'format' => 'A4',
+            'orientation' => 'P',
         ]);
 
         $mpdf->useSubstitutions = true;
@@ -3199,7 +3205,10 @@ class SellPosController extends Controller
             'autoArabic' => true,
             'margin_top' => 8,
             'margin_bottom' => 8,
+            'margin_left' => 8,
+            'margin_right' => 8,
             'format' => 'A4',
+            'orientation' => 'P',
         ]);
 
         $mpdf->useSubstitutions = true;

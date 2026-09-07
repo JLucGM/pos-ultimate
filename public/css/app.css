@@ -700,12 +700,26 @@ tr.details td.details-control {
 }
 
 /*CSS to print receipts*/
+@page {
+    size: portrait;
+    margin: 8mm;
+}
 .print_section{
     display: none;
 }
 @media print{
+    @page {
+        size: portrait;
+        margin: 8mm;
+    }
     .print_section{
         display: inline !important;
+        width: 100% !important;
+    }
+    #receipt_section {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
     }
     .modal-xl{
         width: 100% !important;
