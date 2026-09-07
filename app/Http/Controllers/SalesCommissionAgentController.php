@@ -90,8 +90,29 @@ class SalesCommissionAgentController extends Controller
         }
 
         try {
-            $input = $request->only(['surname', 'first_name', 'last_name', 'email', 'address', 'contact_no', 'cmmsn_percent']);
-            $input['cmmsn_percent'] = $this->commonUtil->num_uf($input['cmmsn_percent']);
+            $input = $request->only(['surname', 'first_name', 'last_name', 'email', 'address', 'contact_no', 'cmmsn_percent', 'cmmsn_type']);
+            
+            $cmmsn_type = $request->input('cmmsn_type', 'fixed');
+            $input['cmmsn_type'] = in_array($cmmsn_type, ['fixed', 'tiered']) ? $cmmsn_type : 'fixed';
+
+            if ($input['cmmsn_type'] === 'tiered' && $request->has('cmmsn_tiered_rules')) {
+                $rules = [];
+                foreach ($request->input('cmmsn_tiered_rules', []) as $rule) {
+                    if (isset($rule['percent']) && $rule['percent'] !== '') {
+                        $rules[] = [
+                            'min_days' => isset($rule['min_days']) && $rule['min_days'] !== '' ? (int)$rule['min_days'] : 0,
+                            'max_days' => isset($rule['max_days']) && $rule['max_days'] !== '' && $rule['max_days'] !== null ? (int)$rule['max_days'] : null,
+                            'percent' => (float)$rule['percent'],
+                        ];
+                    }
+                }
+                $input['cmmsn_tiered_rules'] = $rules;
+                $input['cmmsn_percent'] = !empty($rules) ? $rules[0]['percent'] : 0;
+            } else {
+                $input['cmmsn_tiered_rules'] = null;
+                $input['cmmsn_percent'] = !empty($input['cmmsn_percent']) ? $this->commonUtil->num_uf($input['cmmsn_percent']) : 0;
+            }
+
             $business_id = $request->session()->get('user.business_id');
             $input['business_id'] = $business_id;
             $input['allow_login'] = 0;
@@ -146,8 +167,29 @@ class SalesCommissionAgentController extends Controller
 
         if (request()->ajax()) {
             try {
-                $input = $request->only(['surname', 'first_name', 'last_name', 'email', 'address', 'contact_no', 'cmmsn_percent']);
-                $input['cmmsn_percent'] = $this->commonUtil->num_uf($input['cmmsn_percent']);
+                $input = $request->only(['surname', 'first_name', 'last_name', 'email', 'address', 'contact_no', 'cmmsn_percent', 'cmmsn_type']);
+                
+                $cmmsn_type = $request->input('cmmsn_type', 'fixed');
+                $input['cmmsn_type'] = in_array($cmmsn_type, ['fixed', 'tiered']) ? $cmmsn_type : 'fixed';
+
+                if ($input['cmmsn_type'] === 'tiered' && $request->has('cmmsn_tiered_rules')) {
+                    $rules = [];
+                    foreach ($request->input('cmmsn_tiered_rules', []) as $rule) {
+                        if (isset($rule['percent']) && $rule['percent'] !== '') {
+                            $rules[] = [
+                                'min_days' => isset($rule['min_days']) && $rule['min_days'] !== '' ? (int)$rule['min_days'] : 0,
+                                'max_days' => isset($rule['max_days']) && $rule['max_days'] !== '' && $rule['max_days'] !== null ? (int)$rule['max_days'] : null,
+                                'percent' => (float)$rule['percent'],
+                            ];
+                        }
+                    }
+                    $input['cmmsn_tiered_rules'] = $rules;
+                    $input['cmmsn_percent'] = !empty($rules) ? $rules[0]['percent'] : 0;
+                } else {
+                    $input['cmmsn_tiered_rules'] = null;
+                    $input['cmmsn_percent'] = !empty($input['cmmsn_percent']) ? $this->commonUtil->num_uf($input['cmmsn_percent']) : 0;
+                }
+
                 $business_id = $request->session()->get('user.business_id');
 
                 $user = User::where('id', $id)

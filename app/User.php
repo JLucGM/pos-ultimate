@@ -35,14 +35,69 @@ class User extends Authenticatable
         'password', 'remember_token', 'active_session_id',
     ];
 
-    // change api guard to web
-    protected $guard_name = 'web';
-
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast.
      *
      * @var array
      */
+    protected $casts = [
+        'cmmsn_tiered_rules' => 'array',
+        'cmmsn_percent' => 'float',
+    ];
+
+    /**
+     * Obtener el porcentaje de comisión aplicable según los días transcurridos
+     *
+     * @param int $days
+     * @return float
+     */
+    public function getCommissionPercentageForDays($days = 0): float
+    {
+        if ($this->cmmsn_type === 'tiered' && !empty($this->cmmsn_tiered_rules) && is_array($this->cmmsn_tiered_rules)) {
+            foreach ($this->cmmsn_tiered_rules as $rule) {
+                $min = isset($rule['min_days']) && $rule['min_days'] !== '' ? (int)$rule['min_days'] : 0;
+                $max = isset($rule['max_days']) && $rule['max_days'] !== '' && $rule['max_days'] !== null ? (int)$rule['max_days'] : null;
+                $pct = isset($rule['percent']) ? (float)$rule['percent'] : 0;
+
+                if ($days >= $min && ($max === null || $days <= $max)) {
+                    return $pct;
+                }
+            }
+        }
+
+        return (float) ($this->cmmsn_percent ?? 0);
+    }
+
+    /**
+     * Calcular monto de comisión para un pago según los días
+     *
+     * @param int $days
+     * @param float $amount
+     * @return array ['percentage' => float, 'commission_amount' => float]
+     */
+    public function calculateCommissionForPayment($days = 0, $amount = 0): array
+    {
+        $percentage = $this->getCommissionPercentageForDays($days);
+        $commission_amount = ($amount * $percentage) / 100;
+
+        return [
+            'percentage' => $percentage,
+            'commission_amount' => $commission_amount,
+        ];
+    }
+
+    /**
+     * Calcular solo el monto numérico de comisión para un pago
+     *
+     * @param int $days
+     * @param float $amount
+     * @return float
+     */
+    public function calculateCommissionAmount($days = 0, $amount = 0): float
+    {
+        $percentage = $this->getCommissionPercentageForDays($days);
+        return (float) (($amount * $percentage) / 100);
+    }
 
     /**
      * Get the business that owns the user.

@@ -1613,10 +1613,31 @@ class Util
         $user_details = $request->only([
             'surname', 'first_name', 'last_name', 'email',
             'user_type', 'crm_contact_id', 'allow_login', 'username', 'password',
-            'cmmsn_percent', 'max_sales_discount_percent', 'dob', 'gender', 'marital_status', 'blood_group', 'contact_number', 'alt_number', 'family_number', 'fb_link',
+            'cmmsn_percent', 'cmmsn_type', 'max_sales_discount_percent', 'dob', 'gender', 'marital_status', 'blood_group', 'contact_number', 'alt_number', 'family_number', 'fb_link',
             'twitter_link', 'social_media_1', 'social_media_2', 'custom_field_1',
             'custom_field_2', 'custom_field_3', 'custom_field_4', 'guardian_name', 'id_proof_name', 'id_proof_number', 'permanent_address', 'current_address', 'bank_details', 'selected_contacts', 'is_enable_service_staff_pin', 'service_staff_pin',
         ]);
+
+        $cmmsn_type = $request->input('cmmsn_type', 'fixed');
+        $user_details['cmmsn_type'] = in_array($cmmsn_type, ['fixed', 'tiered']) ? $cmmsn_type : 'fixed';
+
+        if ($user_details['cmmsn_type'] === 'tiered' && $request->has('cmmsn_tiered_rules')) {
+            $rules = [];
+            foreach ($request->input('cmmsn_tiered_rules', []) as $rule) {
+                if (isset($rule['percent']) && $rule['percent'] !== '') {
+                    $rules[] = [
+                        'min_days' => isset($rule['min_days']) && $rule['min_days'] !== '' ? (int)$rule['min_days'] : 0,
+                        'max_days' => isset($rule['max_days']) && $rule['max_days'] !== '' && $rule['max_days'] !== null ? (int)$rule['max_days'] : null,
+                        'percent' => (float)$rule['percent'],
+                    ];
+                }
+            }
+            $user_details['cmmsn_tiered_rules'] = $rules;
+            $user_details['cmmsn_percent'] = !empty($rules) ? $rules[0]['percent'] : 0;
+        } else {
+            $user_details['cmmsn_tiered_rules'] = null;
+            $user_details['cmmsn_percent'] = !empty($user_details['cmmsn_percent']) ? $this->num_uf($user_details['cmmsn_percent']) : 0;
+        }
 
         $user_details['status'] = ! empty($request->input('is_active')) ? $request->input('is_active') : 'inactive';
         $user_details['user_type'] = ! empty($user_details['user_type']) ? $user_details['user_type'] : 'user';

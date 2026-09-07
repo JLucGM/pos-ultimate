@@ -250,7 +250,7 @@ class ManageUserController extends Controller
                 'blood_group', 'contact_number', 'fb_link', 'twitter_link', 'social_media_1',
                 'social_media_2', 'permanent_address', 'current_address',
                 'guardian_name', 'custom_field_1', 'custom_field_2',
-                'custom_field_3', 'custom_field_4', 'id_proof_name', 'id_proof_number', 'cmmsn_percent', 'gender', 'max_sales_discount_percent', 'family_number', 'alt_number', 'is_enable_service_staff_pin']);
+                'custom_field_3', 'custom_field_4', 'id_proof_name', 'id_proof_number', 'cmmsn_percent', 'cmmsn_type', 'gender', 'max_sales_discount_percent', 'family_number', 'alt_number', 'is_enable_service_staff_pin']);
 
             $user_data['status'] = ! empty($request->input('is_active')) ? 'active' : 'inactive';
 
@@ -280,8 +280,27 @@ class ManageUserController extends Controller
             }
             
 
-            //Sales commission percentage
-            $user_data['cmmsn_percent'] = ! empty($user_data['cmmsn_percent']) ? $this->moduleUtil->num_uf($user_data['cmmsn_percent']) : 0;
+            //Sales commission percentage & tiered rules
+            $cmmsn_type = $request->input('cmmsn_type', 'fixed');
+            $user_data['cmmsn_type'] = in_array($cmmsn_type, ['fixed', 'tiered']) ? $cmmsn_type : 'fixed';
+
+            if ($user_data['cmmsn_type'] === 'tiered' && $request->has('cmmsn_tiered_rules')) {
+                $rules = [];
+                foreach ($request->input('cmmsn_tiered_rules', []) as $rule) {
+                    if (isset($rule['percent']) && $rule['percent'] !== '') {
+                        $rules[] = [
+                            'min_days' => isset($rule['min_days']) && $rule['min_days'] !== '' ? (int)$rule['min_days'] : 0,
+                            'max_days' => isset($rule['max_days']) && $rule['max_days'] !== '' && $rule['max_days'] !== null ? (int)$rule['max_days'] : null,
+                            'percent' => (float)$rule['percent'],
+                        ];
+                    }
+                }
+                $user_data['cmmsn_tiered_rules'] = $rules;
+                $user_data['cmmsn_percent'] = !empty($rules) ? $rules[0]['percent'] : 0;
+            } else {
+                $user_data['cmmsn_tiered_rules'] = null;
+                $user_data['cmmsn_percent'] = ! empty($user_data['cmmsn_percent']) ? $this->moduleUtil->num_uf($user_data['cmmsn_percent']) : 0;
+            }
 
             $user_data['max_sales_discount_percent'] = ! is_null($user_data['max_sales_discount_percent']) ? $this->moduleUtil->num_uf($user_data['max_sales_discount_percent']) : null;
 

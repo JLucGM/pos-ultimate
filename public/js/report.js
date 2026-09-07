@@ -462,15 +462,21 @@ $(document).ready(function() {
                 columns: [
                     { data: 'payment_ref_no', name: 'payment_ref_no' },
                     { data: 'paid_on', name: 'paid_on' },
-                    { data: 'amount', name: 'transaction_payments.amount' },
+                    { data: 'transaction_date', name: 't.transaction_date' },
+                    { data: 'days_elapsed', name: 'days_elapsed', orderable: false, searchable: false },
+                    { data: 'invoice_no', name: 't.invoice_no' },
                     { data: 'customer', orderable: false, searchable: false },
                     { data: 'method', name: 'method' },
-                    { data: 'invoice_no', name: 't.invoice_no' },
+                    { data: 'amount', name: 'transaction_payments.amount' },
+                    { data: 'commission_percent', name: 'commission_percent', orderable: false, searchable: false },
+                    { data: 'commission_amount', name: 'commission_amount', orderable: false, searchable: false },
                     { data: 'action', orderable: false, searchable: false },
                 ],
                 fnDrawCallback: function(oSettings) {
                     var total_amount = sum_table_col($('#sr_payments_with_commission_table'), 'paid-amount');
                     $('#footer_total_amount').text(total_amount);
+                    var total_commission = sum_table_col($('#sr_payments_with_commission_table'), 'commission-amount');
+                    $('#footer_total_commission').text(total_commission);
                     __currency_convert_recursively($('#sr_payments_with_commission_table'));
                 }
             });

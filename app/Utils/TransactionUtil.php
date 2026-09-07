@@ -4073,6 +4073,67 @@ class TransactionUtil extends Util
     }
 
     /**
+     * Calculate total commission for tiered commission agents based on individual payments
+     *
+     * @param int $business_id
+     * @param string|null $start_date
+     * @param string|null $end_date
+     * @param int|null $location_id
+     * @param \App\User $user
+     * @return float
+     */
+    public function getTotalTieredPaymentCommission($business_id, $start_date = null, $end_date = null, $location_id = null, $user = null)
+    {
+        if (empty($user)) {
+            return 0;
+        }
+
+        $query = TransactionPayment::join('transactions as t', 'transaction_payments.transaction_id', '=', 't.id')
+            ->where('t.business_id', $business_id)
+            ->where('t.type', 'sell')
+            ->where('t.status', 'final')
+            ->where('t.commission_agent', $user->id)
+            ->select(
+                'transaction_payments.amount',
+                'transaction_payments.is_return',
+                'transaction_payments.paid_on',
+                't.transaction_date'
+            );
+
+        $permitted_locations = auth()->user()->permitted_locations();
+        if ($permitted_locations != 'all') {
+            $query->whereIn('t.location_id', $permitted_locations);
+        }
+
+        if (! empty($start_date) && ! empty($end_date)) {
+            $query->whereBetween(DB::raw('date(paid_on)'), [$start_date, $end_date]);
+        }
+
+        if (! empty($location_id)) {
+            $query->where('t.location_id', $location_id);
+        }
+
+        $payments = $query->get();
+        $total_commission = 0;
+
+        foreach ($payments as $payment) {
+            $amount = $payment->is_return == 1 ? -1 * $payment->amount : $payment->amount;
+            $days = 0;
+            if (!empty($payment->transaction_date) && !empty($payment->paid_on)) {
+                $sale_date = \Carbon\Carbon::parse($payment->transaction_date)->startOfDay();
+                $paid_date = \Carbon\Carbon::parse($payment->paid_on)->startOfDay();
+                $days = $sale_date->diffInDays($paid_date, false);
+                if ($days < 0) {
+                    $days = 0;
+                }
+            }
+            $total_commission += $user->calculateCommissionAmount($days, $amount);
+        }
+
+        return $total_commission;
+    }
+
+    /**
      * Add Sell transaction
      *
      * @param  int  $business_id

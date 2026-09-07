@@ -797,6 +797,7 @@
                                                 <tr>
                                                     <th>@lang('contact.customer')</th>
                                                     <th>@lang('sale.invoice_no')</th>
+                                                    <th>@lang('lang_v1.days')</th>
                                                     <th>@lang('home.due_amount')</th>
                                                     <th>@lang('messages.action')</th>
                                                 </tr>

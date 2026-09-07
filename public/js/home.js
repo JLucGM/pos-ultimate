@@ -101,6 +101,13 @@ $(document).ready(function() {
                 }
             }
         },
+        columns: [
+            { data: 'customer', name: 'c.name' },
+            { data: 'invoice_no', name: 'transactions.invoice_no' },
+            { data: 'days_elapsed', name: 'days_elapsed', orderable: false, searchable: false },
+            { data: 'due', name: 'due', orderable: false, searchable: false },
+            { data: 'action', name: 'action', orderable: false, searchable: false }
+        ],
         fnDrawCallback: function(oSettings) {
             __currency_convert_recursively($('#sales_payment_dues_table'));
         },

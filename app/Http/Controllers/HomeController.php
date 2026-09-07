@@ -702,6 +702,7 @@ class HomeController extends Controller
                 'c.name as customer',
                 'c.supplier_business_name',
                 'transactions.invoice_no',
+                'transactions.transaction_date',
                 'final_total',
                 DB::raw('SUM(tp.amount) as total_paid')
             )
@@ -714,6 +715,19 @@ class HomeController extends Controller
 
                     return '<span class="display_currency" data-currency_symbol="true">'.
                     $due.'</span>';
+                })
+                ->addColumn('days_elapsed', function ($row) {
+                    if (!empty($row->transaction_date)) {
+                        $days = \Carbon\Carbon::parse($row->transaction_date)->startOfDay()->diffInDays(\Carbon\Carbon::now()->startOfDay());
+                        $color = '#28a745';
+                        if ($days > 30) {
+                            $color = '#dc3545';
+                        } elseif ($days > 10) {
+                            $color = '#f39c12';
+                        }
+                        return '<span class="badge" style="background-color: '.$color.'; color: white; padding: 3px 7px; border-radius: 4px; font-weight: bold;">'.$days.' '.__('lang_v1.days').'</span>';
+                    }
+                    return '-';
                 })
                 ->editColumn('invoice_no', function ($row) {
                     if (auth()->user()->can('sell.view')) {
@@ -729,7 +743,8 @@ class HomeController extends Controller
                 ->removeColumn('id')
                 ->removeColumn('final_total')
                 ->removeColumn('total_paid')
-                ->rawColumns([0, 1, 2, 3])
+                ->removeColumn('transaction_date')
+                ->rawColumns(['customer', 'invoice_no', 'days_elapsed', 'due', 'action', 0, 1, 2, 3, 4])
                 ->make(false);
         }
     }

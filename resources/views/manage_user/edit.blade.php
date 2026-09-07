@@ -155,12 +155,7 @@
         <div class="col-md-12">
             @component('components.widget', ['title' => __('sale.sells')])
 
-            <div class="col-md-4">
-                <div class="form-group">
-                  {!! Form::label('cmmsn_percent', __( 'lang_v1.cmmsn_percent' ) . ':') !!} @show_tooltip(__('lang_v1.commsn_percent_help'))
-                    {!! Form::text('cmmsn_percent', !empty($user->cmmsn_percent) ? @num_format($user->cmmsn_percent) : 0, ['class' => 'form-control input_number', 'placeholder' => __( 'lang_v1.cmmsn_percent' )]); !!}
-                </div>
-            </div>
+            @include('sales_commission_agent.partials.commission_tier_fields')
 
             <div class="col-md-4">
                 <div class="form-group">

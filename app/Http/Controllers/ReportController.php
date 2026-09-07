@@ -1331,13 +1331,29 @@ class ReportController extends Controller
 
             $commsn_calculation_type = empty($pos_settings['cmmsn_calculation_type']) || $pos_settings['cmmsn_calculation_type'] == 'invoice_value' ? 'invoice_value' : $pos_settings['cmmsn_calculation_type'];
 
-            $commission_percentage = User::find($commission_agent)->cmmsn_percent;
+            $user = User::find($commission_agent);
+            $commission_percentage = $user ? $user->cmmsn_percent : 0;
 
             if ($commsn_calculation_type == 'payment_received') {
+                if ($user && $user->cmmsn_type === 'tiered') {
+                    $total_commission = $this->transactionUtil->getTotalTieredPaymentCommission(
+                        $business_id, $start_date, $end_date, $location_id, $user
+                    );
+                    $payment_details = $this->transactionUtil->getTotalPaymentWithCommission(
+                        $business_id, $start_date, $end_date, $location_id, $commission_agent
+                    );
+
+                    return [
+                        'total_payment_with_commission' => $payment_details['total_payment_with_commission'] ?? 0,
+                        'total_commission' => $total_commission,
+                        'commission_percentage' => 'Escalonada',
+                    ];
+                }
+
                 $payment_details = $this->transactionUtil->getTotalPaymentWithCommission($business_id, $start_date, $end_date, $location_id, $commission_agent);
 
                 //Get Commision
-                $total_commission = $commission_percentage * $payment_details['total_payment_with_commission'] / 100;
+                $total_commission = $commission_percentage * ($payment_details['total_payment_with_commission'] ?? 0) / 100;
 
                 return ['total_payment_with_commission' => $payment_details['total_payment_with_commission'] ?? 0,
                     'total_commission' => $total_commission,
@@ -1348,9 +1364,9 @@ class ReportController extends Controller
             $sell_details = $this->transactionUtil->getTotalSellCommission($business_id, $start_date, $end_date, $location_id, $commission_agent);
 
             //Get Commision
-            $total_commission = $commission_percentage * $sell_details['total_sales_with_commission'] / 100;
+            $total_commission = $commission_percentage * ($sell_details['total_sales_with_commission'] ?? 0) / 100;
 
-            return ['total_sales_with_commission' => $sell_details['total_sales_with_commission'],
+            return ['total_sales_with_commission' => $sell_details['total_sales_with_commission'] ?? 0,
                 'total_commission' => $total_commission,
                 'commission_percentage' => $commission_percentage,
             ];
@@ -2457,7 +2473,7 @@ class ReportController extends Controller
             })
                 ->leftjoin('contacts as c', 't.contact_id', '=', 'c.id')
                 ->leftjoin('customer_groups AS CG', 'c.customer_group_id', '=', 'CG.id')
-
+                ->leftjoin('users as agent', 't.commission_agent', '=', 'agent.id')
             
             //     DB::raw("IF(transaction_payments.transaction_id IS NULL, 
             //     (SELECT c.name FROM transactions as ts
@@ -2482,10 +2498,10 @@ class ReportController extends Controller
                              FROM transactions as ts
                              JOIN contacts as c ON ts.contact_id = c.id 
                              WHERE ts.id = (
-                                SELECT tps.transaction_id 
-                                FROM transaction_payments as tps 
-                                WHERE tps.parent_id = tp.id 
-                                LIMIT 1
+                                 SELECT tps.transaction_id 
+                                 FROM transaction_payments as tps 
+                                 WHERE tps.parent_id = tp.id 
+                                 LIMIT 1
                              )
                             ), 
                             CONCAT(COALESCE(CONCAT(c.supplier_business_name, '<br>'), ''), c.name)
@@ -2509,6 +2525,11 @@ class ReportController extends Controller
                     'transaction_payments.document',
                     'transaction_payments.transaction_no',
                     't.invoice_no',
+                    't.transaction_date',
+                    't.commission_agent',
+                    'agent.cmmsn_type',
+                    'agent.cmmsn_percent',
+                    'agent.cmmsn_tiered_rules',
                     'c.contact_id',
                     't.id as transaction_id',
                     'cheque_number',
@@ -2554,6 +2575,81 @@ class ReportController extends Controller
                          return '';
                      }
                  })
+                ->addColumn('transaction_date', function ($row) {
+                    return !empty($row->transaction_date) ? $this->transactionUtil->format_date($row->transaction_date) : '';
+                })
+                ->addColumn('days_elapsed', function ($row) {
+                    if (!empty($row->transaction_date) && !empty($row->paid_on)) {
+                        $sale_date = \Carbon\Carbon::parse($row->transaction_date)->startOfDay();
+                        $paid_date = \Carbon\Carbon::parse($row->paid_on)->startOfDay();
+                        $days = $sale_date->diffInDays($paid_date, false);
+                        if ($days < 0) {
+                            $days = 0;
+                        }
+                        $color = '#28a745';
+                        if ($days > 30) {
+                            $color = '#dc3545';
+                        } elseif ($days > 10) {
+                            $color = '#f39c12';
+                        }
+                        return '<span class="badge" style="background-color: '.$color.'; color: white; padding: 3px 7px; border-radius: 4px; font-weight: bold;">'.$days.' '.__('lang_v1.days').'</span>';
+                    }
+                    return '-';
+                })
+                ->addColumn('commission_percent', function ($row) {
+                    $applied_percent = 0;
+                    if ($row->cmmsn_type === 'tiered' && !empty($row->cmmsn_tiered_rules)) {
+                        $rules = is_array($row->cmmsn_tiered_rules) ? $row->cmmsn_tiered_rules : json_decode($row->cmmsn_tiered_rules, true);
+                        if (!empty($rules) && is_array($rules)) {
+                            $days = 0;
+                            if (!empty($row->transaction_date) && !empty($row->paid_on)) {
+                                $sale_date = \Carbon\Carbon::parse($row->transaction_date)->startOfDay();
+                                $paid_date = \Carbon\Carbon::parse($row->paid_on)->startOfDay();
+                                $days = max(0, $sale_date->diffInDays($paid_date, false));
+                            }
+                            foreach ($rules as $rule) {
+                                $min = isset($rule['min_days']) && $rule['min_days'] !== '' ? (int)$rule['min_days'] : 0;
+                                $max = isset($rule['max_days']) && $rule['max_days'] !== '' && $rule['max_days'] !== null ? (int)$rule['max_days'] : null;
+                                $pct = isset($rule['percent']) ? (float)$rule['percent'] : 0;
+                                if ($days >= $min && ($max === null || $days <= $max)) {
+                                    $applied_percent = $pct;
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
+                        $applied_percent = (float)($row->cmmsn_percent ?? 0);
+                    }
+                    return $this->transactionUtil->num_f($applied_percent) . ' %';
+                })
+                ->addColumn('commission_amount', function ($row) {
+                    $amount = $row->is_return == 1 ? -1 * $row->amount : $row->amount;
+                    $applied_percent = 0;
+                    if ($row->cmmsn_type === 'tiered' && !empty($row->cmmsn_tiered_rules)) {
+                        $rules = is_array($row->cmmsn_tiered_rules) ? $row->cmmsn_tiered_rules : json_decode($row->cmmsn_tiered_rules, true);
+                        if (!empty($rules) && is_array($rules)) {
+                            $days = 0;
+                            if (!empty($row->transaction_date) && !empty($row->paid_on)) {
+                                $sale_date = \Carbon\Carbon::parse($row->transaction_date)->startOfDay();
+                                $paid_date = \Carbon\Carbon::parse($row->paid_on)->startOfDay();
+                                $days = max(0, $sale_date->diffInDays($paid_date, false));
+                            }
+                            foreach ($rules as $rule) {
+                                $min = isset($rule['min_days']) && $rule['min_days'] !== '' ? (int)$rule['min_days'] : 0;
+                                $max = isset($rule['max_days']) && $rule['max_days'] !== '' && $rule['max_days'] !== null ? (int)$rule['max_days'] : null;
+                                $pct = isset($rule['percent']) ? (float)$rule['percent'] : 0;
+                                if ($days >= $min && ($max === null || $days <= $max)) {
+                                    $applied_percent = $pct;
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
+                        $applied_percent = (float)($row->cmmsn_percent ?? 0);
+                    }
+                    $comm_amount = ($amount * $applied_percent) / 100;
+                    return '<span class="commission-amount" data-orig-value="'.$comm_amount.'">'.$this->transactionUtil->num_f($comm_amount, true).'</span>';
+                })
                 ->editColumn('paid_on', '{{@format_datetime($paid_on)}}')
                 ->editColumn('method', function ($row) use ($payment_types) {
                     $method = ! empty($payment_types[$row->method]) ? $payment_types[$row->method] : '';
@@ -2584,7 +2680,7 @@ class ReportController extends Controller
                 })
                 ->addColumn('action', '<button type="button" class="tw-dw-btn tw-dw-btn-xs tw-dw-btn-outline  tw-dw-btn-primary view_payment" data-href="{{ action([\App\Http\Controllers\TransactionPaymentController::class, \'viewPayment\'], [$DT_RowId]) }}">@lang("messages.view")
                     </button> @if(!empty($document))<a href="{{asset("/uploads/documents/" . $document)}}" class="tw-dw-btn tw-dw-btn-xs tw-dw-btn-outline  tw-dw-btn-accent" download=""><i class="fa fa-download"></i> @lang("purchase.download_document")</a>@endif')
-                ->rawColumns(['invoice_no', 'amount', 'method', 'action', 'customer'])
+                ->rawColumns(['invoice_no', 'amount', 'method', 'action', 'customer', 'days_elapsed', 'commission_amount'])
                 ->make(true);
         }
         $business_locations = BusinessLocation::forDropdown($business_id);
