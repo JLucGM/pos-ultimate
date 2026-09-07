@@ -1651,17 +1651,8 @@ class ContactController extends Controller
             $due = $this->transactionUtil->getContactDue($contact_id, $business_id);
 
             if ($due != 0) {
-                $rate = 1;
-                $today = \Carbon::now()->format('Y-m-d');
-                $exchange_rate = \App\ExchangeRate::where('business_id', $business_id)
-                    ->where('source_currency', 'USD')
-                    ->where('target_currency', 'VES')
-                    ->whereDate('rate_date', '<=', $today)
-                    ->orderBy('rate_date', 'desc')
-                    ->first();
-                if ($exchange_rate && $exchange_rate->rate > 0) {
-                    $rate = (float) $exchange_rate->rate;
-                }
+                $exchangeRateService = new \App\Services\ExchangeRateService();
+                $rate = $exchangeRateService->getCachedRate($business_id) ?? 1;
 
                 $due_usd = number_format($due, 2, '.', ',');
                 $due_bs = number_format($due * $rate, 2, ',', '.');

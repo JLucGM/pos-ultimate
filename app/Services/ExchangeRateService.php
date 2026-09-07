@@ -135,8 +135,16 @@ class ExchangeRateService
             ]);
         }
 
-        // Limpiar caché
+        // Actualizar campo p_exchange_rate en la tabla business para compatibilidad nativa
+        try {
+            \DB::table('business')->where('id', $business_id)->update(['p_exchange_rate' => $rate]);
+        } catch (\Throwable $e) {
+            Log::warning("No se pudo actualizar p_exchange_rate para business {$business_id}: " . $e->getMessage());
+        }
+
+        // Limpiar caché en ambas direcciones
         Cache::forget("exchange_rate_{$business_id}_{$usd->id}_{$ves->id}");
+        Cache::forget("exchange_rate_{$business_id}_{$ves->id}_{$usd->id}");
 
         return [
             'success' => true,
@@ -156,7 +164,10 @@ class ExchangeRateService
     public function updateAllBusinesses(string $source = 'oficial'): array
     {
         $businesses = \DB::table('business')
-            ->where('is_active', 1)
+            ->where(function($query) {
+                $query->where('is_active', 1)
+                      ->orWhereNull('is_active');
+            })
             ->pluck('id');
 
         $results = [];

@@ -33,12 +33,12 @@ class Kernel extends ConsoleKernel
 
         }
 
-        // Actualizar tasa de cambio USD/Bs cada hora (todos los entornos excepto demo)
+        // Sincronización automática de tasa de cambio USD/Bs (BCV) cada 30 minutos
         if ($env !== 'demo') {
             $schedule->command('exchange:update --source=oficial')
-                ->hourly()
-                ->between('6:00', '22:00')
-                ->withoutOverlapping();
+                ->everyThirtyMinutes()
+                ->withoutOverlapping()
+                ->runInBackground();
         }
 
         if ($env === 'demo') {
