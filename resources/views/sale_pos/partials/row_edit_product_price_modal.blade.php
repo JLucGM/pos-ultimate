@@ -7,12 +7,25 @@
 		<div class="modal-body">
 			<div class="row">
 				@php
-					$modal_is_estimated = !empty($product->enable_estimated_weight) 
-						|| (!empty($product->estimated_weight) && (float)$product->estimated_weight > 0)
-						|| (!empty($product->product_estimated_weight) && (float)$product->product_estimated_weight > 0)
-						|| (!empty($so_line) && (!empty($so_line->pieces_quantity) || !empty($so_line->estimated_weight)));
-					$modal_est_weight = !empty($product->estimated_weight) ? $product->estimated_weight : (!empty($product->product_estimated_weight) ? $product->product_estimated_weight : (!empty($so_line->estimated_weight) ? $so_line->estimated_weight : 0));
-					$modal_pieces_qty = !empty($product->pieces_quantity) ? $product->pieces_quantity : (!empty($so_line->pieces_quantity) ? $so_line->pieces_quantity : ( ($modal_est_weight > 0 && !empty($product->quantity_ordered)) ? round($product->quantity_ordered / $modal_est_weight, 2) : 1 ));
+					$modal_so_pieces = !empty($so_line) ? (float)($so_line->pieces_quantity ?? 0) : 0;
+					$modal_so_est_weight = !empty($so_line) ? (float)($so_line->estimated_weight ?? 0) : 0;
+					$modal_prod_est_weight = (float)($product->estimated_weight ?? ($product->product_estimated_weight ?? 0));
+					$modal_effective_est_weight = $modal_so_est_weight > 0 ? $modal_so_est_weight : ($modal_prod_est_weight > 0 ? $modal_prod_est_weight : 0);
+
+					$modal_is_estimated = (!empty($product->enable_estimated_weight) && $product->enable_estimated_weight == 1) 
+						|| $modal_effective_est_weight > 0
+						|| $modal_so_pieces > 0;
+
+					$modal_pieces_val = (float)($product->pieces_quantity ?? 0);
+					if ($modal_pieces_val <= 0 && $modal_so_pieces > 0) {
+						$modal_pieces_val = $modal_so_pieces;
+					}
+					if ($modal_pieces_val <= 0 && $modal_effective_est_weight > 0 && !empty($product->quantity_ordered)) {
+						$modal_pieces_val = round((float)$product->quantity_ordered / $modal_effective_est_weight, 2);
+					}
+					if ($modal_pieces_val <= 0) {
+						$modal_pieces_val = 1;
+					}
 				@endphp
 
 				@if($modal_is_estimated)
@@ -28,7 +41,7 @@
 										<span class="input-group-addon" style="background: #FFFFFF; font-size: 11px; font-weight: 700;">Pzas</span>
 										<input type="text" class="form-control modal_pieces_quantity input_number" 
 											data-row_index="{{$row_count}}" 
-											value="{{ @format_quantity($modal_pieces_qty) }}" 
+											value="{{ @format_quantity($modal_pieces_val) }}" 
 											placeholder="Piezas">
 									</div>
 								</div>
@@ -42,10 +55,10 @@
 											placeholder="Peso real">
 									</div>
 								</div>
-								@if($modal_est_weight > 0)
+								@if($modal_effective_est_weight > 0)
 									<div class="col-xs-12" style="margin-top: 6px;">
 										<small style="color: #64748B; font-weight: 600;">
-											⚖️ Peso promedio estimado: <strong>{{ @format_quantity($modal_est_weight) }} {{$product->unit}}/pieza</strong>. Modifique las piezas o el peso real pesado en balanza.
+											⚖️ Peso promedio estimado: <strong>{{ @format_quantity($modal_effective_est_weight) }} {{$product->unit}}/pieza</strong>. Modifique las piezas o el peso real pesado en balanza.
 										</small>
 									</div>
 								@endif

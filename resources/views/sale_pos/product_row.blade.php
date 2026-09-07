@@ -227,16 +227,28 @@
         	@endif
         @endforeach
 		@php
-			$is_estimated_weight_item = !empty($product->enable_estimated_weight) 
-				|| (!empty($product->estimated_weight) && (float)$product->estimated_weight > 0)
-				|| (!empty($product->product_estimated_weight) && (float)$product->product_estimated_weight > 0)
-				|| (!empty($so_line) && (!empty($so_line->pieces_quantity) || !empty($so_line->estimated_weight)));
+			$row_so_pieces = !empty($so_line) ? (float)($so_line->pieces_quantity ?? 0) : 0;
+			$row_so_est_weight = !empty($so_line) ? (float)($so_line->estimated_weight ?? 0) : 0;
+			$row_prod_est_weight = (float)($product->estimated_weight ?? ($product->product_estimated_weight ?? 0));
+			$row_effective_est_weight = $row_so_est_weight > 0 ? $row_so_est_weight : ($row_prod_est_weight > 0 ? $row_prod_est_weight : 0);
+
+			$is_estimated_weight_item = (!empty($product->enable_estimated_weight) && $product->enable_estimated_weight == 1)
+				|| $row_effective_est_weight > 0
+				|| $row_so_pieces > 0;
 		@endphp
 
 		@if($is_estimated_weight_item)
 			@php
-				$row_estimated_weight = !empty($product->estimated_weight) ? $product->estimated_weight : (!empty($product->product_estimated_weight) ? $product->product_estimated_weight : (!empty($so_line->estimated_weight) ? $so_line->estimated_weight : 0));
-				$row_pieces_quantity = !empty($product->pieces_quantity) ? $product->pieces_quantity : (!empty($so_line->pieces_quantity) ? $so_line->pieces_quantity : ( ($row_estimated_weight > 0 && !empty($product->quantity_ordered)) ? round($product->quantity_ordered / $row_estimated_weight, 2) : 1 ));
+				$row_pieces_val = (float)($product->pieces_quantity ?? 0);
+				if ($row_pieces_val <= 0 && $row_so_pieces > 0) {
+					$row_pieces_val = $row_so_pieces;
+				}
+				if ($row_pieces_val <= 0 && $row_effective_est_weight > 0 && !empty($product->quantity_ordered)) {
+					$row_pieces_val = round((float)$product->quantity_ordered / $row_effective_est_weight, 2);
+				}
+				if ($row_pieces_val <= 0) {
+					$row_pieces_val = 1;
+				}
 			@endphp
 			<div style="display: flex; flex-direction: column; gap: 4px; min-width: 140px;">
 				<!-- Control de Piezas -->
@@ -248,7 +260,7 @@
 						</button>
 						<input type="text" data-min="1" style="height: 24px; border: none; text-align: center; font-weight: 800; font-size: 11.5px; padding: 0 2px; width: 40px; background: transparent; box-shadow: none; outline: none; flex: 1; min-width: 0;"
 							class="form-control pos_pieces_quantity input_number" 
-							value="{{ @format_quantity($row_pieces_quantity) }}" 
+							value="{{ @format_quantity($row_pieces_val) }}" 
 							name="products[{{$row_count}}][pieces_quantity]"
 						>
 						<button type="button" class="pieces-up" style="height: 24px; width: 24px; padding: 0; margin: 0; display: inline-flex; align-items: center; justify-content: center; border: none; background: #F8FAFC; border-left: 1px solid #E2E8F0; cursor: pointer; flex-shrink: 0;">
@@ -273,14 +285,14 @@
 				</div>
 
 				<!-- Indicador de Peso Estimado -->
-				@if($row_estimated_weight > 0)
+				@if($row_effective_est_weight > 0)
 				<div style="font-size: 9.5px; color: #64748B; font-weight: 700; line-height: 1.1;">
-					⚖️ Est: {{ @format_quantity($row_estimated_weight) }} {{$product->unit}}/pza
+					⚖️ Est: {{ @format_quantity($row_effective_est_weight) }} {{$product->unit}}/pza
 				</div>
 				@endif
 			</div>
 			<input type="hidden" class="row_enable_estimated_weight" name="products[{{$row_count}}][enable_estimated_weight]" value="1">
-			<input type="hidden" class="row_estimated_weight" name="products[{{$row_count}}][estimated_weight]" value="{{$row_estimated_weight}}">
+			<input type="hidden" class="row_estimated_weight" name="products[{{$row_count}}][estimated_weight]" value="{{$row_effective_est_weight}}">
 			<input type="hidden" name="products[{{$row_count}}][product_unit_id]" value="{{$product->unit_id}}">
 		@else
 			<div style="display: inline-flex; align-items: center; gap: 4px;">

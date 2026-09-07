@@ -314,17 +314,11 @@ $(document).ready(function() {
     }
 
     //Update line total and check for quantity not greater than max quantity
-    $('table#pos_table tbody').on('change', 'input.pos_quantity', function() {
-        // comment line becouse it validate form at increment and decrement item
-        // if (sell_form_validator) {
-        //     sell_form.valid();
-        // }
+    $('table#pos_table tbody').on('change keyup input', 'input.pos_quantity', function() {
         if (pos_form_validator) {
             pos_form_validator.element($(this));
         }
-        // var max_qty = parseFloat($(this).data('rule-max'));
         var entered_qty = __read_number($(this));
-
         var tr = $(this).parents('tr');
 
         var unit_price_inc_tax = __read_number(tr.find('input.pos_unit_price_inc_tax'));
@@ -342,17 +336,15 @@ $(document).ready(function() {
         });
 
         pos_total_row();
-
         adjustComboQty(tr);
     });
 
     //Update weight and line total when pieces quantity changes for estimated weight products
-    $('table#pos_table tbody').on('change', 'input.pos_pieces_quantity', function() {
+    $('table#pos_table tbody').on('change keyup input', 'input.pos_pieces_quantity', function(e) {
         var tr = $(this).closest('tr');
         var pieces = __read_number($(this));
         if (isNaN(pieces) || pieces < 0) {
             pieces = 1;
-            __write_number($(this), pieces);
         }
         var est_weight = parseFloat(tr.find('input.row_estimated_weight').val()) || 0;
         if (est_weight > 0) {
@@ -365,13 +357,12 @@ $(document).ready(function() {
     });
 
     // Sync modal pieces and weight inputs with table row
-    $(document).on('change', 'input.modal_pieces_quantity', function() {
+    $(document).on('change keyup input', 'input.modal_pieces_quantity', function() {
         var row_index = $(this).data('row_index');
         var tr = $('table#pos_table tbody').find('tr[data-row_index="' + row_index + '"]');
         var pieces = __read_number($(this));
         if (isNaN(pieces) || pieces < 0) {
             pieces = 1;
-            __write_number($(this), pieces);
         }
         if (tr.length > 0) {
             var row_pieces = tr.find('input.pos_pieces_quantity');
@@ -383,13 +374,12 @@ $(document).ready(function() {
         }
     });
 
-    $(document).on('change', 'input.modal_weight_quantity', function() {
+    $(document).on('change keyup input', 'input.modal_weight_quantity', function() {
         var row_index = $(this).data('row_index');
         var tr = $('table#pos_table tbody').find('tr[data-row_index="' + row_index + '"]');
         var weight = __read_number($(this));
         if (isNaN(weight) || weight < 0) {
             weight = 0;
-            __write_number($(this), weight);
         }
         if (tr.length > 0) {
             var row_qty = tr.find('input.pos_quantity');
