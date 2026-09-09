@@ -280,13 +280,29 @@
     font-weight: 700;
 }
 
-/* Input nativo oculto visualmente pero accesible para el formulario */
+/* Contenedor con espacio para sticky bar */
+.role-permissions-wrapper {
+    padding-bottom: 90px;
+}
+
+/* Input nativo que cubre toda la tarjeta para clic 100% confiable */
 .permission-item-card input[type="checkbox"],
 .permission-item-card input[type="radio"] {
     position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     opacity: 0;
-    pointer-events: none;
+    cursor: pointer;
     margin: 0;
+    z-index: 2;
+}
+
+.permission-custom-checkbox,
+.permission-custom-radio,
+.permission-item-label {
+    pointer-events: none;
 }
 
 /* Sticky Bottom Action Bar */
@@ -1666,35 +1682,17 @@ $(document).ready(function() {
     $('input#name').on('input change', updateStickyRoleName);
     updateStickyRoleName();
 
-    // Evento de clic en tarjeta de permiso individual
-    $(document).on('click', '.permission-item-card', function(e) {
-        if (e.target.tagName.toLowerCase() !== 'input') {
-            var $input = $(this).find('input[type="checkbox"], input[type="radio"]');
-            if ($input.is(':radio')) {
-                var radioName = $input.attr('name');
-                $('input[name="' + radioName + '"]').prop('checked', false).closest('.permission-item-card').removeClass('is-checked');
-                $input.prop('checked', true);
-            } else {
-                $input.prop('checked', !$input.is(':checked'));
-            }
-        } else {
-            var $input = $(this).find('input[type="checkbox"], input[type="radio"]');
-            if ($input.is(':radio')) {
-                var radioName = $input.attr('name');
-                $('input[name="' + radioName + '"]').not($input).prop('checked', false).closest('.permission-item-card').removeClass('is-checked');
-            }
-        }
-        updateCardState($(this));
+    // Escuchar el evento change en los inputs (cubren toda la tarjeta con z-index 2)
+    $(document).on('change', '.permission-item-card input[type="checkbox"]', function() {
+        updateCardState($(this).closest('.permission-item-card'));
         updateAllCounts();
     });
 
-    $(document).on('change', '.permission-item-card input', function() {
-        var $input = $(this);
-        if ($input.is(':radio')) {
-            var radioName = $input.attr('name');
-            $('input[name="' + radioName + '"]').not($input).closest('.permission-item-card').removeClass('is-checked');
-        }
-        updateCardState($input.closest('.permission-item-card'));
+    $(document).on('change', '.permission-item-card input[type="radio"]', function() {
+        var radioName = $(this).attr('name');
+        $('input[name="' + radioName + '"]').each(function() {
+            updateCardState($(this).closest('.permission-item-card'));
+        });
         updateAllCounts();
     });
 
