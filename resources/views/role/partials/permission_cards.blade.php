@@ -9,6 +9,7 @@
 /* Estilos modernos para el panel de Permisos y Roles */
 .role-permissions-wrapper {
     margin-top: 10px;
+    padding-bottom: 90px;
     font-family: inherit;
 }
 
@@ -34,6 +35,7 @@
     transform: translateY(-50%);
     color: #94A3B8;
     font-size: 16px;
+    pointer-events: none;
 }
 
 .role-search-input {
@@ -172,38 +174,6 @@
     padding-bottom: 4px;
 }
 
-/* Reglas nativas puras con :has(input:checked) para respuesta instantanea */
-.permission-item-card:has(input:checked) {
-    background: #F0FDF4 !important;
-    border-color: #10B981 !important;
-    box-shadow: 0 1px 3px rgba(16, 185, 129, 0.15) !important;
-}
-
-.permission-item-card:has(input:checked) .permission-custom-checkbox {
-    background: #10B981 !important;
-    border-color: #10B981 !important;
-    color: #FFFFFF !important;
-}
-
-.permission-item-card:has(input:checked) .permission-custom-checkbox i {
-    opacity: 1 !important;
-    transform: scale(1) !important;
-}
-
-.permission-item-card:has(input:checked) .permission-custom-radio {
-    border-color: #10B981 !important;
-}
-
-.permission-item-card:has(input:checked) .permission-custom-radio-dot {
-    opacity: 1 !important;
-    transform: scale(1) !important;
-}
-
-.permission-item-card:has(input:checked) .permission-item-label {
-    color: #065F46 !important;
-    font-weight: 700 !important;
-}
-
 /* Tarjeta individual de permiso */
 .permission-item-card {
     border: 1.5px solid #E2E8F0;
@@ -226,30 +196,42 @@
     transform: translateY(-1px);
 }
 
+/* Reglas nativas con :has(input:checked) y clase .is-checked */
+.permission-item-card:has(input:checked),
 .permission-item-card.is-checked {
-    background: #F0FDF4;
-    border-color: #10B981;
-    box-shadow: 0 1px 2px rgba(16, 185, 129, 0.1);
+    background: #F0FDF4 !important;
+    border-color: #10B981 !important;
+    box-shadow: 0 1px 3px rgba(16, 185, 129, 0.15) !important;
 }
 
+.permission-item-card:has(input:checked) .permission-custom-checkbox,
 .permission-item-card.is-checked .permission-custom-checkbox {
-    background: #10B981;
-    border-color: #10B981;
-    color: #FFFFFF;
+    background: #10B981 !important;
+    border-color: #10B981 !important;
+    color: #FFFFFF !important;
 }
 
+.permission-item-card:has(input:checked) .permission-custom-checkbox i,
 .permission-item-card.is-checked .permission-custom-checkbox i {
-    opacity: 1;
-    transform: scale(1);
+    opacity: 1 !important;
+    transform: scale(1) !important;
 }
 
+.permission-item-card:has(input:checked) .permission-custom-radio,
 .permission-item-card.is-checked .permission-custom-radio {
-    border-color: #10B981;
+    border-color: #10B981 !important;
 }
 
+.permission-item-card:has(input:checked) .permission-custom-radio-dot,
 .permission-item-card.is-checked .permission-custom-radio-dot {
-    opacity: 1;
-    transform: scale(1);
+    opacity: 1 !important;
+    transform: scale(1) !important;
+}
+
+.permission-item-card:has(input:checked) .permission-item-label,
+.permission-item-card.is-checked .permission-item-label {
+    color: #065F46 !important;
+    font-weight: 700 !important;
 }
 
 /* Checkbox visual personalizado */
@@ -266,6 +248,7 @@
     color: transparent;
     font-size: 12px;
     transition: all 0.15s ease;
+    pointer-events: none;
 }
 
 .permission-custom-checkbox i {
@@ -286,6 +269,7 @@
     align-items: center;
     justify-content: center;
     transition: all 0.15s ease;
+    pointer-events: none;
 }
 
 .permission-custom-radio-dot {
@@ -305,16 +289,7 @@
     line-height: 1.35;
     margin: 0;
     flex-grow: 1;
-}
-
-.permission-item-card.is-checked .permission-item-label {
-    color: #065F46;
-    font-weight: 700;
-}
-
-/* Contenedor con espacio para sticky bar */
-.role-permissions-wrapper {
-    padding-bottom: 90px;
+    pointer-events: none;
 }
 
 /* Input nativo que cubre toda la tarjeta para clic 100% confiable */
@@ -329,12 +304,6 @@
     cursor: pointer;
     margin: 0;
     z-index: 2;
-}
-
-.permission-custom-checkbox,
-.permission-custom-radio,
-.permission-item-label {
-    pointer-events: none;
 }
 
 /* Sticky Bottom Action Bar */
@@ -375,7 +344,7 @@
             <div class="col-md-6 col-sm-12" style="margin-bottom: 10px;">
                 <div class="role-search-input-box">
                     <i class="fa fa-search"></i>
-                    <input type="text" id="permission_search_input" class="role-search-input" placeholder="Buscar permiso (ej: ventas, compras, caja, reportes, precios, descuentos, comisiones...)" autocomplete="off">
+                    <input type="text" id="permission_search_input" class="role-search-input" placeholder="Buscar permiso (ej: ventas, compras, caja, reportes, precios, descuentos, stock...)" autocomplete="off">
                 </div>
             </div>
             <div class="col-md-6 col-sm-12 text-right" style="display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap;">
@@ -411,7 +380,7 @@
     <div id="permissions_cards_container">
 
         {{-- 1. OTROS / GENERAL --}}
-        <div class="permission-module-card" data-module="otros general service staff export botones">
+        <div class="permission-module-card" data-module="otros general service staff export botones notificaciones">
             <div class="permission-module-header">
                 <div class="permission-module-title-group">
                     <div class="permission-module-icon"><i class="fa fa-cube"></i></div>
@@ -634,11 +603,11 @@
         </div>
 
         {{-- 6. PRODUCTOS E INVENTARIO --}}
-        <div class="permission-module-card" data-module="productos inventario stock product precio compra ver crear editar eliminar apertura">
+        <div class="permission-module-card" data-module="productos inventario stock product precio compra ver crear editar eliminar apertura inicial">
             <div class="permission-module-header">
                 <div class="permission-module-title-group">
                     <div class="permission-module-icon"><i class="fa fa-boxes"></i></div>
-                    <h4 class="permission-module-name">@lang('product.product')</h4>
+                    <h4 class="permission-module-name">@lang('business.product')</h4>
                 </div>
                 <div class="permission-module-actions">
                     <span class="permission-module-badge">0 / 0</span>
@@ -653,7 +622,7 @@
                         'product.create' => 'role.product.create',
                         'product.update' => 'role.product.update',
                         'product.delete' => 'role.product.delete',
-                        'product.opening_stock' => 'role.product.opening_stock',
+                        'product.opening_stock' => 'lang_v1.add_opening_stock',
                         'view_purchase_price' => 'lang_v1.view_purchase_price'
                     ] as $p_val => $p_lang)
                         <label class="permission-item-card {{ in_array($p_val, $role_permissions) ? 'is-checked' : '' }}">
@@ -666,12 +635,12 @@
             </div>
         </div>
 
-        {{-- 7. COMPRAS Y AJUSTES DE STOCK --}}
-        <div class="permission-module-card" data-module="compras purchase ajuste stock pagos status ver crear editar eliminar">
+        {{-- 7. COMPRAS Y AJUSTES DE EXISTENCIAS --}}
+        <div class="permission-module-card" data-module="compras purchase compras y ajuste de existencias ajuste stock pagos status ver crear editar eliminar">
             <div class="permission-module-header">
                 <div class="permission-module-title-group">
                     <div class="permission-module-icon"><i class="fa fa-shopping-bag"></i></div>
-                    <h4 class="permission-module-name">@lang('purchase.purchase_n_stock_adjustment')</h4>
+                    <h4 class="permission-module-name">@lang('role.purchase')</h4>
                 </div>
                 <div class="permission-module-actions">
                     <span class="permission-module-badge">0 / 0</span>
@@ -681,7 +650,7 @@
             </div>
             <div class="permission-module-body">
                 <div class="permission-grid">
-                    <div class="permission-subgroup-title">Visualización de Compras (Exclusivo)</div>
+                    <div class="permission-subgroup-title">Visualización de Compras y Ajustes (Exclusivo)</div>
                     @php
                         $pur_own_checked = in_array('view_own_purchase', $role_permissions);
                         $pur_all_checked = $is_edit ? in_array('purchase.view', $role_permissions) : !$pur_own_checked;
@@ -689,16 +658,16 @@
                     <label class="permission-item-card {{ $pur_all_checked ? 'is-checked' : '' }}">
                         <input type="radio" name="radio_option[purchase_view]" value="purchase.view" {{ $pur_all_checked ? 'checked' : '' }}>
                         <div class="permission-custom-radio"><div class="permission-custom-radio-dot"></div></div>
-                        <span class="permission-item-label">{{ __('purchase.view_all_purchase') }}</span>
+                        <span class="permission-item-label">{{ __('lang_v1.view_all_purchase_n_stock_adjustment') }}</span>
                     </label>
 
                     <label class="permission-item-card {{ $pur_own_checked ? 'is-checked' : '' }}">
                         <input type="radio" name="radio_option[purchase_view]" value="view_own_purchase" {{ $pur_own_checked ? 'checked' : '' }}>
                         <div class="permission-custom-radio"><div class="permission-custom-radio-dot"></div></div>
-                        <span class="permission-item-label">{{ __('purchase.view_own_purchase') }}</span>
+                        <span class="permission-item-label">{{ __('lang_v1.view_own_purchase_n_stock_adjustment') }}</span>
                     </label>
 
-                    <div class="permission-subgroup-title">Acciones y Pagos de Compras</div>
+                    <div class="permission-subgroup-title">Acciones, Pagos y Estado de Compras</div>
                     @foreach([
                         'purchase.create' => 'role.purchase.create',
                         'purchase.update' => 'role.purchase.update',
@@ -706,7 +675,7 @@
                         'purchase.payments' => 'lang_v1.add_purchase_payment',
                         'edit_purchase_payment' => 'lang_v1.edit_purchase_payment',
                         'delete_purchase_payment' => 'lang_v1.delete_purchase_payment',
-                        'purchase.update_status' => 'lang_v1.update_purchase_status'
+                        'purchase.update_status' => 'lang_v1.update_status'
                     ] as $p_val => $p_lang)
                         <label class="permission-item-card {{ in_array($p_val, $role_permissions) ? 'is-checked' : '' }}">
                             <input type="checkbox" name="permissions[]" value="{{ $p_val }}" {{ in_array($p_val, $role_permissions) ? 'checked' : '' }}>
@@ -718,7 +687,56 @@
             </div>
         </div>
 
-        {{-- 8. ÓRDENES DE COMPRA (PURCHASE ORDER) --}}
+        {{-- 8. REQUISICIONES DE COMPRA (PURCHASE REQUISITION) --}}
+        @if(in_array('purchase_requisition', $enabled_modules))
+        <div class="permission-module-card" data-module="requisiciones compra purchase requisition crear ver eliminar">
+            <div class="permission-module-header">
+                <div class="permission-module-title-group">
+                    <div class="permission-module-icon"><i class="fa fa-clipboard-list"></i></div>
+                    <h4 class="permission-module-name">@lang('lang_v1.purchase_requisition')</h4>
+                </div>
+                <div class="permission-module-actions">
+                    <span class="permission-module-badge">0 / 0</span>
+                    <button type="button" class="btn btn-xs btn-default module-toggle-all-btn" style="border-radius: 4px; font-weight: 700;">Marcar Módulo</button>
+                    <i class="fa fa-chevron-up toggle-collapse-icon" style="color: #94A3B8; margin-left: 5px;"></i>
+                </div>
+            </div>
+            <div class="permission-module-body">
+                <div class="permission-grid">
+                    <div class="permission-subgroup-title">Visualización de Requisiciones (Exclusivo)</div>
+                    @php
+                        $pr_own_checked = in_array('purchase_requisition.view_own', $role_permissions);
+                        $pr_all_checked = $is_edit ? in_array('purchase_requisition.view_all', $role_permissions) : !$pr_own_checked;
+                    @endphp
+                    <label class="permission-item-card {{ $pr_all_checked ? 'is-checked' : '' }}">
+                        <input type="radio" name="radio_option[purchase_requisition_view]" value="purchase_requisition.view_all" {{ $pr_all_checked ? 'checked' : '' }}>
+                        <div class="permission-custom-radio"><div class="permission-custom-radio-dot"></div></div>
+                        <span class="permission-item-label">{{ __('lang_v1.view_all_purchase_requisition') }}</span>
+                    </label>
+
+                    <label class="permission-item-card {{ $pr_own_checked ? 'is-checked' : '' }}">
+                        <input type="radio" name="radio_option[purchase_requisition_view]" value="purchase_requisition.view_own" {{ $pr_own_checked ? 'checked' : '' }}>
+                        <div class="permission-custom-radio"><div class="permission-custom-radio-dot"></div></div>
+                        <span class="permission-item-label">{{ __('lang_v1.view_own_purchase_requisition') }}</span>
+                    </label>
+
+                    <div class="permission-subgroup-title">Acciones de Requisiciones</div>
+                    @foreach([
+                        'purchase_requisition.create' => 'lang_v1.create_purchase_requisition',
+                        'purchase_requisition.delete' => 'lang_v1.delete_purchase_requisition'
+                    ] as $p_val => $p_lang)
+                        <label class="permission-item-card {{ in_array($p_val, $role_permissions) ? 'is-checked' : '' }}">
+                            <input type="checkbox" name="permissions[]" value="{{ $p_val }}" {{ in_array($p_val, $role_permissions) ? 'checked' : '' }}>
+                            <div class="permission-custom-checkbox"><i class="fa fa-check"></i></div>
+                            <span class="permission-item-label">{{ __($p_lang) }}</span>
+                        </label>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        @endif
+
+        {{-- 9. ÓRDENES DE COMPRA (PURCHASE ORDER) --}}
         @if(in_array('purchase_order', $enabled_modules))
         <div class="permission-module-card" data-module="ordenes de compra purchase order po crear editar ver eliminar">
             <div class="permission-module-header">
@@ -768,55 +786,6 @@
         </div>
         @endif
 
-        {{-- 9. REQUISICIONES DE COMPRA (PURCHASE REQUISITION) --}}
-        @if(in_array('purchase_requisition', $enabled_modules))
-        <div class="permission-module-card" data-module="requisiciones compra purchase requisition crear ver eliminar">
-            <div class="permission-module-header">
-                <div class="permission-module-title-group">
-                    <div class="permission-module-icon"><i class="fa fa-clipboard-list"></i></div>
-                    <h4 class="permission-module-name">@lang('lang_v1.purchase_requisition')</h4>
-                </div>
-                <div class="permission-module-actions">
-                    <span class="permission-module-badge">0 / 0</span>
-                    <button type="button" class="btn btn-xs btn-default module-toggle-all-btn" style="border-radius: 4px; font-weight: 700;">Marcar Módulo</button>
-                    <i class="fa fa-chevron-up toggle-collapse-icon" style="color: #94A3B8; margin-left: 5px;"></i>
-                </div>
-            </div>
-            <div class="permission-module-body">
-                <div class="permission-grid">
-                    <div class="permission-subgroup-title">Visualización de Requisiciones (Exclusivo)</div>
-                    @php
-                        $pr_own_checked = in_array('purchase_requisition.view_own', $role_permissions);
-                        $pr_all_checked = $is_edit ? in_array('purchase_requisition.view_all', $role_permissions) : !$pr_own_checked;
-                    @endphp
-                    <label class="permission-item-card {{ $pr_all_checked ? 'is-checked' : '' }}">
-                        <input type="radio" name="radio_option[purchase_requisition_view]" value="purchase_requisition.view_all" {{ $pr_all_checked ? 'checked' : '' }}>
-                        <div class="permission-custom-radio"><div class="permission-custom-radio-dot"></div></div>
-                        <span class="permission-item-label">{{ __('lang_v1.view_all_purchase_requisition') }}</span>
-                    </label>
-
-                    <label class="permission-item-card {{ $pr_own_checked ? 'is-checked' : '' }}">
-                        <input type="radio" name="radio_option[purchase_requisition_view]" value="purchase_requisition.view_own" {{ $pr_own_checked ? 'checked' : '' }}>
-                        <div class="permission-custom-radio"><div class="permission-custom-radio-dot"></div></div>
-                        <span class="permission-item-label">{{ __('lang_v1.view_own_purchase_requisition') }}</span>
-                    </label>
-
-                    <div class="permission-subgroup-title">Acciones de Requisiciones</div>
-                    @foreach([
-                        'purchase_requisition.create' => 'lang_v1.create_purchase_requisition',
-                        'purchase_requisition.delete' => 'lang_v1.delete_purchase_requisition'
-                    ] as $p_val => $p_lang)
-                        <label class="permission-item-card {{ in_array($p_val, $role_permissions) ? 'is-checked' : '' }}">
-                            <input type="checkbox" name="permissions[]" value="{{ $p_val }}" {{ in_array($p_val, $role_permissions) ? 'checked' : '' }}>
-                            <div class="permission-custom-checkbox"><i class="fa fa-check"></i></div>
-                            <span class="permission-item-label">{{ __($p_lang) }}</span>
-                        </label>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-        @endif
-
         {{-- 10. PUNTO DE VENTA (POS) --}}
         @if(in_array('pos_sale', $enabled_modules))
         <div class="permission-module-card" data-module="pos punto de venta pos_sale pantalla caja ticket precio descuento cobrar tarjeta credito suspender imprimir factura cotizacion borrador ver crear editar eliminar">
@@ -854,7 +823,7 @@
                         'edit_pos_payment' => 'lang_v1.edit_pos_payment',
                         'disable_discount' => 'lang_v1.disable_discount',
                         'disable_draft' => 'lang_v1.disable_draft',
-                        'disable_credit_sale' => 'lang_v1.disable_credit_sale',
+                        'disable_credit_sale' => 'lang_v1.disable_credit_sale_button',
                         'disable_suspend_sale' => 'lang_v1.disable_suspend_sale',
                         'disable_card' => 'lang_v1.disable_card',
                         'disable_pay_checkout' => 'lang_v1.disable_pay_checkout',
@@ -896,13 +865,13 @@
                     <label class="permission-item-card {{ $sell_all_checked ? 'is-checked' : '' }}">
                         <input type="radio" name="radio_option[sell_view]" value="direct_sell.view" {{ $sell_all_checked ? 'checked' : '' }}>
                         <div class="permission-custom-radio"><div class="permission-custom-radio-dot"></div></div>
-                        <span class="permission-item-label">{{ __('lang_v1.view_all_sells') }}</span>
+                        <span class="permission-item-label">{{ __('lang_v1.view_all_sale') }}</span>
                     </label>
 
                     <label class="permission-item-card {{ $sell_own_checked ? 'is-checked' : '' }}">
                         <input type="radio" name="radio_option[sell_view]" value="view_own_sell_only" {{ $sell_own_checked ? 'checked' : '' }}>
                         <div class="permission-custom-radio"><div class="permission-custom-radio-dot"></div></div>
-                        <span class="permission-item-label">{{ __('lang_v1.view_own_sells_only') }}</span>
+                        <span class="permission-item-label">{{ __('lang_v1.view_own_sell_only') }}</span>
                     </label>
 
                     <div class="permission-subgroup-title">Filtros de Estado de Cobro de Ventas</div>
@@ -1195,8 +1164,8 @@
             </div>
         </div>
 
-        {{-- 18. TASAS DE IMPUESTOS (TAX RATES) --}}
-        <div class="permission-module-card" data-module="impuestos tax iva tasas tributos crear editar ver eliminar">
+        {{-- 18. TASAS DE IMPUESTOS (TAX RATES / SENIAT) --}}
+        <div class="permission-module-card" data-module="impuestos tax iva tasas tributos seniat crear editar ver eliminar">
             <div class="permission-module-header">
                 <div class="permission-module-title-group">
                     <div class="permission-module-icon"><i class="fa fa-percent"></i></div>
@@ -1288,8 +1257,8 @@
             </div>
         </div>
 
-        {{-- 21. REPORTES --}}
-        <div class="permission-module-card" data-module="reportes report ganancias perdidas stock valor gastos ventas compras caja representantes">
+        {{-- 21. INFORMES Y REPORTES --}}
+        <div class="permission-module-card" data-module="informes reportes report ganancias perdidas stock valor gastos ventas compras caja representantes">
             <div class="permission-module-header">
                 <div class="permission-module-title-group">
                     <div class="permission-module-icon"><i class="fa fa-chart-line"></i></div>
@@ -1326,7 +1295,7 @@
         </div>
 
         {{-- 22. CONFIGURACIÓN DEL SISTEMA --}}
-        <div class="permission-module-card" data-module="configuracion settings negocio empresa codigo barras facturas impresoras sucursales">
+        <div class="permission-module-card" data-module="configuracion configuraciones settings negocio empresa codigo barras facturas impresoras sucursales">
             <div class="permission-module-header">
                 <div class="permission-module-title-group">
                     <div class="permission-module-icon"><i class="fa fa-cogs"></i></div>
@@ -1407,7 +1376,7 @@
         </div>
         @endif
 
-        {{-- 24. TASAS DE CAMBIO Y MONEDAS (EXCHANGE RATES) --}}
+        {{-- 24. TASAS DE CAMBIO Y DIVISAS (EXCHANGE RATES) --}}
         <div class="permission-module-card" data-module="tasas cambio dolar bcv exchange rate oficial paralelo bsf divisas monedas ver crear editar eliminar">
             <div class="permission-module-header">
                 <div class="permission-module-title-group">
@@ -1510,7 +1479,7 @@
             </div>
             <div class="permission-module-body">
                 <div class="permission-grid">
-                    <div class="permission-subgroup-title">Gestión de Reservas (Exclusivo)</div>
+                    <div class="permission-subgroup-title">Gestión de Citas y Reservas (Exclusivo)</div>
                     @php
                         $book_own_checked = in_array('crud_own_bookings', $role_permissions);
                         $book_all_checked = $is_edit ? in_array('crud_all_bookings', $role_permissions) : !$book_own_checked;
