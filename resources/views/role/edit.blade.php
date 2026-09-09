@@ -51,3 +51,7 @@
 </section>
 <!-- /.content -->
 @endsection
+
+@section('javascript')
+    @include('role.partials.permission_cards_js')
+@endsection
