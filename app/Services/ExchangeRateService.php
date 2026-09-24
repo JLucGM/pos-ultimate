@@ -95,6 +95,50 @@ class ExchangeRateService
     }
 
     /**
+     * Obtener la moneda de Venezuela (VES / Bs) de forma 100% segura e inequívoca
+     */
+    public static function getVenezuelaCurrency()
+    {
+        // 1. Buscar primero por país Venezuela o código VES
+        $ves = \DB::table('currencies')
+            ->where('country', 'like', '%Venezuela%')
+            ->orWhere('code', 'VES')
+            ->orWhere('code', 'VEF')
+            ->first();
+
+        if ($ves) {
+            return $ves;
+        }
+
+        // 2. Si no, buscar por símbolo Bs o nombre Bolívares excluyendo Bolivia (BOB) explícitamente
+        return \DB::table('currencies')
+            ->where('code', '!=', 'BOB')
+            ->where('country', 'not like', '%Bolivia%')
+            ->where(function($q) {
+                $q->where('currency', 'like', '%Bolivar%')
+                  ->orWhere('currency', 'like', '%Bolívares%')
+                  ->orWhere('symbol', 'Bs');
+            })
+            ->first();
+    }
+
+    /**
+     * Obtener la moneda de USD de forma segura
+     */
+    public static function getUsdCurrency()
+    {
+        $usd = \DB::table('currencies')->whereIn(\DB::raw('UPPER(code)'), ['USD', 'US$'])->first();
+        if ($usd) {
+            return $usd;
+        }
+
+        return \DB::table('currencies')
+            ->where('country', 'like', '%United States%')
+            ->orWhere('country', 'like', '%America%')
+            ->first();
+    }
+
+    /**
      * Actualizar la tasa de cambio en la base de datos para un negocio.
      * Usa la tasa BCV oficial por defecto.
      *
@@ -110,7 +154,7 @@ class ExchangeRateService
         if (!$apiData) {
             return [
                 'success' => false,
-                'message' => 'No se pudo obtener la tasa desde el servicio del BCV/DolarApi. Verifique la conexión a internet.',
+                'message' => 'No se pudo obtener la tasa desde el servicio del BCV (DolarApi). Verifique la conexión a internet.',
                 'rate' => null,
             ];
         }
@@ -131,18 +175,14 @@ class ExchangeRateService
             $business_id = \DB::table('business')->value('id') ?? 1;
         }
 
-        // Buscar IDs de monedas USD y VES/VEF
-        $usd = \DB::table('currencies')->whereIn(\DB::raw('UPPER(code)'), ['USD', 'US$'])->first();
-        $ves = \DB::table('currencies')
-            ->whereIn(\DB::raw('UPPER(code)'), ['VES', 'VEF', 'BS', 'BS.', 'VEB'])
-            ->orWhere('currency', 'like', '%Boliv%')
-            ->orWhere('currency', 'like', '%boliv%')
-            ->first();
+        // Buscar IDs de monedas USD y Venezuela (VES / Bs)
+        $usd = self::getUsdCurrency();
+        $ves = self::getVenezuelaCurrency();
 
         if (!$usd || !$ves) {
             return [
                 'success' => false,
-                'message' => 'No se encontraron las monedas USD o VES/Bs en el catálogo de monedas. Verifique la tabla currencies.',
+                'message' => 'No se encontraron las monedas USD o Bolívares (VES) en el catálogo de monedas. Verifique la tabla currencies.',
                 'rate' => null,
             ];
         }
@@ -228,11 +268,8 @@ class ExchangeRateService
      */
     public function getCachedRate(int $business_id): ?float
     {
-        $usd = \DB::table('currencies')->where('code', 'USD')->first();
-        $ves = \DB::table('currencies')->where('code', 'VES')
-            ->orWhere('code', 'VEF')
-            ->orWhere('code', 'Bs')
-            ->first();
+        $usd = self::getUsdCurrency();
+        $ves = self::getVenezuelaCurrency();
 
         if (!$usd || !$ves) {
             return null;

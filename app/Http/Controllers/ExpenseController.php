@@ -372,10 +372,7 @@ class ExpenseController extends Controller
             $currencies_dropdown[$currency->id] = $currency->currency . ' (' . $currency->code . ')';
         }
 
-        $ves_currency = \App\Models\Currency::where('code', 'VES')
-            ->orWhere('code', 'VEF')
-            ->orWhere('code', 'Bs')
-            ->first();
+        $ves_currency = \App\Services\ExchangeRateService::getVenezuelaCurrency();
 
         $current_bcv_rate = 1.0;
         if ($base_currency && $ves_currency) {
@@ -521,10 +518,7 @@ class ExpenseController extends Controller
             $currencies_dropdown[$currency->id] = $currency->currency . ' (' . $currency->code . ')';
         }
 
-        $ves_currency = \App\Models\Currency::where('code', 'VES')
-            ->orWhere('code', 'VEF')
-            ->orWhere('code', 'Bs')
-            ->first();
+        $ves_currency = \App\Services\ExchangeRateService::getVenezuelaCurrency();
 
         // Historical exchange rate from the transaction, or current BCV rate if not set
         $historical_rate = floatval($expense->exchange_rate ?? 1.0);

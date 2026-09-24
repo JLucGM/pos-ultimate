@@ -247,7 +247,7 @@ class SellPosController extends Controller
         // Tasa BCV Oficial para dualidad de monedas
         $exchangeRateService = new \App\Services\ExchangeRateService();
         $bcv_rate = $exchangeRateService->getCachedRate($business_id) ?? 1;
-        $secondary_currency = \DB::table('currencies')->whereIn('code', ['VES', 'VEF', 'Bs'])->first();
+        $secondary_currency = \App\Services\ExchangeRateService::getVenezuelaCurrency();
 
         // Preparar dropdown de monedas
         $currencies_dropdown = [];

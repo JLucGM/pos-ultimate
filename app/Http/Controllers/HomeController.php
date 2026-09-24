@@ -451,10 +451,8 @@ class HomeController extends Controller
         $base_code = config('constants.base_currency_code', 'USD');
         $local_code = config('constants.local_currency_code', 'VEF');
 
-        $usd_currency = $currencies->firstWhere('code', $base_code);
-        $local_currency = $currencies->firstWhere('code', $local_code)
-            ?? $currencies->firstWhere('code', 'VES')
-            ?? $currencies->firstWhere('code', 'Bs');
+        $usd_currency = \App\Services\ExchangeRateService::getUsdCurrency();
+        $local_currency = \App\Services\ExchangeRateService::getVenezuelaCurrency();
 
         $data['tasa_cambio'] = null;
 
