@@ -44,7 +44,7 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        if (! auth()->user()->can('all_expense.access') && ! auth()->user()->can('view_own_expense')) {
+        if (! auth()->user()->can('all_expense.access') && ! auth()->user()->can('view_own_expense') && ! auth()->user()->can('expense.access')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -183,13 +183,16 @@ class ExpenseController extends Controller
                 ->addColumn(
                     'action',
                     function ($row) {
+                        $can_edit = auth()->user()->can('expense.edit') || auth()->user()->can('expense.access') || auth()->user()->can('all_expense.access');
+                        $can_delete = auth()->user()->can('expense.delete') || auth()->user()->can('expense.access') || auth()->user()->can('all_expense.access');
+
                         $html = '<div class="btn-group">
-                            <button type="button" class="tw-dw-btn tw-dw-btn-xs tw-dw-btn-outline tw-dw-btn-info tw-w-max dropdown-toggle" 
-                                data-toggle="dropdown" aria-expanded="false">' . __('messages.actions') . '<span class="caret"></span><span class="sr-only">Toggle Dropdown</span>
+                            <button type="button" class="btn btn-info dropdown-toggle btn-xs tw-dw-btn tw-dw-btn-xs tw-dw-btn-outline tw-dw-btn-info tw-w-max" 
+                                data-toggle="dropdown" aria-expanded="false">' . __('messages.actions') . ' <span class="caret"></span><span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-left" role="menu">';
 
-                        if (auth()->user()->can('expense.edit')) {
+                        if ($can_edit) {
                             $html .= '<li><a href="' . action([\App\Http\Controllers\ExpenseController::class, 'edit'], [$row->id]) . '"><i class="glyphicon glyphicon-edit"></i> ' . __('messages.edit') . '</a></li>';
                         }
                         if ($row->document) {
@@ -198,7 +201,7 @@ class ExpenseController extends Controller
                                 $html .= '<li><a href="#" data-href="' . url('uploads/documents/' . $row->document) . '" class="view_uploaded_document"><i class="fas fa-file-image" aria-hidden="true"></i> ' . __('lang_v1.view_document') . '</a></li>';
                             }
                         }
-                        if (auth()->user()->can('expense.delete')) {
+                        if ($can_delete) {
                             $html .= '<li><a href="#" data-href="' . action([\App\Http\Controllers\ExpenseController::class, 'destroy'], [$row->id]) . '" class="delete_expense"><i class="glyphicon glyphicon-trash"></i> ' . __('messages.delete') . '</a></li>';
                         }
                         $html .= '<li class="divider"></li>';
@@ -328,7 +331,7 @@ class ExpenseController extends Controller
      */
     public function create()
     {
-        if (! auth()->user()->can('expense.add')) {
+        if (! auth()->user()->can('expense.add') && ! auth()->user()->can('expense.access') && ! auth()->user()->can('all_expense.access')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -401,7 +404,7 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
-        if (! auth()->user()->can('expense.add')) {
+        if (! auth()->user()->can('expense.add') && ! auth()->user()->can('expense.access') && ! auth()->user()->can('all_expense.access')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -474,7 +477,7 @@ class ExpenseController extends Controller
      */
     public function edit($id)
     {
-        if (! auth()->user()->can('expense.edit')) {
+        if (! auth()->user()->can('expense.edit') && ! auth()->user()->can('expense.access') && ! auth()->user()->can('all_expense.access')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -542,7 +545,7 @@ class ExpenseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (!auth()->user()->can('expense.edit')) {
+        if (!auth()->user()->can('expense.edit') && !auth()->user()->can('expense.access') && !auth()->user()->can('all_expense.access')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -587,7 +590,7 @@ class ExpenseController extends Controller
      */
     public function destroy($id)
     {
-        if (!auth()->user()->can('expense.delete')) {
+        if (!auth()->user()->can('expense.delete') && !auth()->user()->can('expense.access') && !auth()->user()->can('all_expense.access')) {
             abort(403, 'Unauthorized action.');
         }
 

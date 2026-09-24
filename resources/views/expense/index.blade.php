@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-md-12">
             @component('components.filters', ['title' => __('report.filters')])
-                @if(auth()->user()->can('all_expense.access'))
+                @if(auth()->user()->can('all_expense.access') || auth()->user()->can('expense.access'))
                     <div class="col-md-3">
                         <div class="form-group">
                             {!! Form::label('location_id',  __('purchase.business_location') . ':') !!}
@@ -76,7 +76,7 @@
     <div class="row">
         <div class="col-md-12">
             @component('components.widget', ['class' => 'box-primary', 'title' => __('expense.all_expenses')])
-                @can('expense.add')
+                @if(auth()->user()->can('expense.add') || auth()->user()->can('expense.access') || auth()->user()->can('all_expense.access'))
                     @slot('tool')
                         <div class="box-tools">
                             {{-- <a class="btn btn-block btn-primary" href="{{action([\App\Http\Controllers\ExpenseController::class, 'create'])}}">
@@ -103,7 +103,7 @@
                         </a>
                         </div>
                     @endslot
-                @endcan
+                @endif
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped" id="expense_table">
                         <thead>
