@@ -388,7 +388,7 @@ class ExchangeRateController extends Controller
     public function syncFromApi(Request $request)
     {
         try {
-            $business_id = $request->session()->get('user.business_id') ?: 1;
+            $business_id = $request->session()->get('user.business_id') ?: (auth()->check() && auth()->user()->business_id ? auth()->user()->business_id : 1);
             $source = $request->input('source', 'oficial');
 
             $service = new \App\Services\ExchangeRateService();
@@ -410,7 +410,7 @@ class ExchangeRateController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Error al sincronizar tasa: ' . $e->getMessage()
-                ], 500);
+                ], 200);
             }
 
             return redirect()->route('exchange-rates.index')->with('status', [

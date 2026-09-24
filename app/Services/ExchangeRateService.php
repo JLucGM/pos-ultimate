@@ -10,56 +10,88 @@ use Illuminate\Support\Facades\Cache;
 class ExchangeRateService
 {
     /**
-     * URL de la API de DolarApi.com para Venezuela
+     * URLs de las APIs para Venezuela
      */
     const API_URL = 'https://ve.dolarapi.com/v1/dolares';
+    const API_URL_OFICIAL = 'https://ve.dolarapi.com/v1/dolares/oficial';
 
     /**
-     * Obtener tasas desde DolarApi.com (BCV oficial + paralelo)
+     * Obtener tasas desde DolarApi.com (BCV oficial + paralelo) con fallback
      *
      * @return array|null ['oficial' => float, 'paralelo' => float, 'fecha' => string]
      */
     public function fetchFromApi(): ?array
     {
+        $headers = [
+            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept' => 'application/json',
+        ];
+
+        // 1. Intentar endpoint general (todos los dólares)
         try {
-            $response = Http::timeout(10)->get(self::API_URL);
+            $response = Http::withoutVerifying()
+                ->withHeaders($headers)
+                ->timeout(12)
+                ->get(self::API_URL);
 
-            if (!$response->successful()) {
-                Log::warning('DolarApi: respuesta no exitosa', [
-                    'status' => $response->status(),
-                ]);
-                return null;
-            }
+            if ($response->successful()) {
+                $data = $response->json();
+                if (is_array($data) && !empty($data)) {
+                    $result = [
+                        'oficial' => null,
+                        'paralelo' => null,
+                        'fecha' => now()->toDateString(),
+                    ];
 
-            $data = $response->json();
-
-            $result = [
-                'oficial' => null,
-                'paralelo' => null,
-                'fecha' => now()->toDateString(),
-            ];
-
-            foreach ($data as $item) {
-                if ($item['fuente'] === 'oficial') {
-                    $result['oficial'] = (float) $item['promedio'];
-                    if (!empty($item['fechaActualizacion'])) {
-                        $result['fecha'] = substr($item['fechaActualizacion'], 0, 10);
+                    foreach ($data as $item) {
+                        if (isset($item['fuente']) && $item['fuente'] === 'oficial') {
+                            $result['oficial'] = (float) ($item['promedio'] ?? $item['precio'] ?? $item['monto'] ?? 0);
+                            if (!empty($item['fechaActualizacion'])) {
+                                $result['fecha'] = substr($item['fechaActualizacion'], 0, 10);
+                            }
+                        } elseif (isset($item['fuente']) && $item['fuente'] === 'paralelo') {
+                            $result['paralelo'] = (float) ($item['promedio'] ?? $item['precio'] ?? $item['monto'] ?? 0);
+                        }
                     }
-                } elseif ($item['fuente'] === 'paralelo') {
-                    $result['paralelo'] = (float) $item['promedio'];
+
+                    if (!empty($result['oficial']) && $result['oficial'] > 0) {
+                        Log::info('DolarApi (lista): tasa obtenida con éxito', $result);
+                        return $result;
+                    }
                 }
             }
-
-            Log::info('DolarApi: tasas obtenidas', $result);
-
-            return $result;
-
         } catch (\Exception $e) {
-            Log::error('DolarApi: error al consultar API', [
-                'error' => $e->getMessage(),
-            ]);
-            return null;
+            Log::warning('DolarApi (lista) falló: ' . $e->getMessage());
         }
+
+        // 2. Intentar endpoint directo de oficial
+        try {
+            $response = Http::withoutVerifying()
+                ->withHeaders($headers)
+                ->timeout(12)
+                ->get(self::API_URL_OFICIAL);
+
+            if ($response->successful()) {
+                $item = $response->json();
+                if (is_array($item)) {
+                    $rate = (float) ($item['promedio'] ?? $item['precio'] ?? $item['monto'] ?? 0);
+                    $fecha = !empty($item['fechaActualizacion']) ? substr($item['fechaActualizacion'], 0, 10) : now()->toDateString();
+                    if ($rate > 0) {
+                        $result = [
+                            'oficial' => $rate,
+                            'paralelo' => null,
+                            'fecha' => $fecha,
+                        ];
+                        Log::info('DolarApi (oficial directo): tasa obtenida', $result);
+                        return $result;
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error('DolarApi (oficial directo) falló: ' . $e->getMessage());
+        }
+
+        return null;
     }
 
     /**
@@ -78,12 +110,12 @@ class ExchangeRateService
         if (!$apiData) {
             return [
                 'success' => false,
-                'message' => 'No se pudo obtener la tasa desde DolarApi.com',
+                'message' => 'No se pudo obtener la tasa desde el servicio del BCV/DolarApi. Verifique la conexión a internet.',
                 'rate' => null,
             ];
         }
 
-        $rate = $apiData[$source] ?? null;
+        $rate = $apiData[$source] ?? ($apiData['oficial'] ?? null);
 
         if (!$rate || $rate <= 0) {
             return [
@@ -93,17 +125,24 @@ class ExchangeRateService
             ];
         }
 
+        // Asegurar que el business_id exista
+        $businessExists = \DB::table('business')->where('id', $business_id)->exists();
+        if (!$businessExists) {
+            $business_id = \DB::table('business')->value('id') ?? 1;
+        }
+
         // Buscar IDs de monedas USD y VES/VEF
-        $usd = \DB::table('currencies')->where('code', 'USD')->first();
-        $ves = \DB::table('currencies')->where('code', 'VES')
-            ->orWhere('code', 'VEF')
-            ->orWhere('code', 'Bs')
+        $usd = \DB::table('currencies')->whereIn(\DB::raw('UPPER(code)'), ['USD', 'US$'])->first();
+        $ves = \DB::table('currencies')
+            ->whereIn(\DB::raw('UPPER(code)'), ['VES', 'VEF', 'BS', 'BS.', 'VEB'])
+            ->orWhere('currency', 'like', '%Boliv%')
+            ->orWhere('currency', 'like', '%boliv%')
             ->first();
 
         if (!$usd || !$ves) {
             return [
                 'success' => false,
-                'message' => 'No se encontraron las monedas USD o VES/Bs en el sistema. Verifica la tabla currencies.',
+                'message' => 'No se encontraron las monedas USD o VES/Bs en el catálogo de monedas. Verifique la tabla currencies.',
                 'rate' => null,
             ];
         }
@@ -120,7 +159,7 @@ class ExchangeRateService
         if ($existing) {
             $existing->update([
                 'rate' => $rate,
-                'notes' => "Actualizado automáticamente desde DolarApi.com ({$source})",
+                'notes' => "Actualizado automáticamente desde BCV/DolarApi ({$source})",
                 'created_by' => $user_id,
             ]);
         } else {
@@ -131,7 +170,7 @@ class ExchangeRateService
                 'rate' => $rate,
                 'effective_date' => $today,
                 'created_by' => $user_id,
-                'notes' => "Obtenido automáticamente desde DolarApi.com ({$source})",
+                'notes' => "Obtenido automáticamente desde BCV/DolarApi ({$source})",
             ]);
         }
 
@@ -146,9 +185,11 @@ class ExchangeRateService
         Cache::forget("exchange_rate_{$business_id}_{$usd->id}_{$ves->id}");
         Cache::forget("exchange_rate_{$business_id}_{$ves->id}_{$usd->id}");
 
+        $formatted_rate = number_format($rate, 4, ',', '.');
+
         return [
             'success' => true,
-            'message' => "Tasa {$source} actualizada: 1 USD = {$rate} Bs (fecha: {$today})",
+            'message' => "Tasa {$source} sincronizada con éxito: 1 USD = {$formatted_rate} Bs (fecha: {$today})",
             'rate' => $rate,
             'source' => $source,
             'date' => $today,
