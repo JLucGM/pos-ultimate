@@ -227,6 +227,19 @@ class AdminSidebarMenu
                                 __('lang_v1.update_product_price'),
                                 ['icon' => '', 'active' => request()->segment(1) == 'update-product-price']
                             );
+                            $sub->url(
+                                action([\App\Http\Controllers\ImportProductsController::class, 'index']),
+                                __('product.import_products'),
+                                ['icon' => '', 'active' => request()->segment(1) == 'import-products']
+                            );
+                        }
+
+                        if (auth()->user()->can('product.opening_stock')) {
+                            $sub->url(
+                                action([\App\Http\Controllers\ImportOpeningStockController::class, 'index']),
+                                __('lang_v1.import_opening_stock'),
+                                ['icon' => '', 'active' => request()->segment(1) == 'import-opening-stock']
+                            );
                         }
 
                         if (auth()->user()->can('product.view')) {
