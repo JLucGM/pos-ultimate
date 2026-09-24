@@ -1,10 +1,10 @@
 {
-    "name": "twf/superadmin",
-    "description": "",
+    "name": "kubre/superadmin",
+    "description": "Superadmin SaaS Module for Kubre",
     "authors": [
         {
-            "name": "The Web Fosters",
-            "email": "thewebfosters@gmail.com"
+            "name": "Kubre",
+            "email": "soporte@kubre.site"
         }
     ],
     "extra": {

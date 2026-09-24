@@ -151,30 +151,6 @@
                     </td>
                 </tr>
             @endforeach
-
-            <tr>
-                <td colspan="3">&nbsp;</td>
-            </tr>
-            @php
-                $mods = unserialize($mods);
-                
-            @endphp
-
-            @foreach($mods as $mod)
-                @if(!isset($modules[$mod->n]))
-                    <tr>
-                        <td><i class="fas fa-hand-point-right fa-2x"></i></td>
-                        <td>
-                            <strong>{{$mod->dn}}</strong> <br/>
-                            <button onclick="window.open('{{$mod->u}}', '_blank')" 
-                            class="tw-dw-btn tw-dw-btn-xs tw-dw-btn-outline tw-dw-btn-accent"><i class="fas fa-money-bill"></i> Buy</button>
-                        </td>
-                        <td>
-                            {{$mod->d}}
-                        </td>
-                    </tr>
-                @endif
-            @endforeach
         </table>
         @endcomponent()
     </div>
