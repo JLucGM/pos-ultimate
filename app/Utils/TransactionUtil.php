@@ -3105,11 +3105,11 @@ class TransactionUtil extends Util
     public function getTotalPaid($transaction_id)
     {
         $total_paid = TransactionPayment::where('transaction_id', $transaction_id)
-                ->select(DB::raw('SUM(IF( is_return = 0, amount, amount*-1))as total_paid'))
+                ->select(DB::raw('SUM(IF( is_return = 0, COALESCE(amount_in_base_currency, IF(payment_exchange_rate > 1, amount / payment_exchange_rate, amount)), COALESCE(amount_in_base_currency, IF(payment_exchange_rate > 1, amount / payment_exchange_rate, amount))*-1)) as total_paid'))
                 ->first()
                 ->total_paid;
 
-        return $total_paid;
+        return floatval($total_paid ?? 0);
     }
 
     /**
@@ -3124,13 +3124,16 @@ class TransactionUtil extends Util
         $total_paid = $this->getTotalPaid($transaction_id);
 
         if (is_null($final_amount)) {
-            $final_amount = Transaction::find($transaction_id)->final_total;
+            $transaction = Transaction::find($transaction_id);
+            $final_amount = $transaction ? $transaction->final_total : 0;
         }
 
+        $final_amount = floatval($final_amount);
+
         $status = 'due';
-        if ($final_amount <= $total_paid) {
+        if ($total_paid >= ($final_amount - 0.005)) {
             $status = 'paid';
-        } elseif ($total_paid > 0 && $final_amount > $total_paid) {
+        } elseif ($total_paid > 0.005 && $final_amount > $total_paid) {
             $status = 'partial';
         }
 
@@ -6045,8 +6048,8 @@ class TransactionUtil extends Util
         if (! empty($transaction_currency_id) && $transaction_currency_id != $base_currency_id && $exchange_rate > 1) {
             foreach ($payments as $k => $p) {
                 if (! empty($p['amount'])) {
-                    $p_amount = $format_data ? $this->num_uf($p['amount']) : $p['amount'];
-                    if (abs($p_amount - $entered_final_total) < 0.01 || empty($p['payment_currency_id']) || $p['payment_currency_id'] == $transaction_currency_id) {
+                    $p_amount = $format_data ? $this->num_uf($p['amount']) : floatval($p['amount']);
+                    if ($p_amount > 0) {
                         $payments[$k]['amount'] = round($p_amount / $exchange_rate, 4);
                         $payments[$k]['payment_currency_id'] = $transaction_currency_id;
                         $payments[$k]['payment_exchange_rate'] = $exchange_rate;

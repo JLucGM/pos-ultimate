@@ -92,7 +92,7 @@ class ExpenseController extends Controller
                             'bl.name as location_name',
                             DB::raw("CONCAT(COALESCE(U.surname, ''),' ',COALESCE(U.first_name, ''),' ',COALESCE(U.last_name,'')) as expense_for"),
                             DB::raw("CONCAT(tr.name ,' (', tr.amount ,' )') as tax"),
-                            DB::raw('SUM(TP.amount) as amount_paid'),
+                            DB::raw('SUM(IF(TP.is_return = 1, -1, 1) * COALESCE(TP.amount_in_base_currency, IF(TP.payment_exchange_rate > 1, TP.amount / TP.payment_exchange_rate, TP.amount))) as amount_paid'),
                             DB::raw("CONCAT(COALESCE(usr.surname, ''),' ',COALESCE(usr.first_name, ''),' ',COALESCE(usr.last_name,'')) as added_by"),
                             'transactions.recur_parent_id',
                             'c.name as contact_name',
@@ -268,10 +268,26 @@ class ExpenseController extends Controller
                         </span></a>'
                 )
                 ->addColumn('payment_due', function ($row) {
-                    $due = $row->final_total - $row->amount_paid;
+                    if ($row->payment_status == 'paid') {
+                        $due = 0;
+                    } else {
+                        $paid = !empty($row->amount_paid) ? floatval($row->amount_paid) : 0;
+                        $exchange_rate = floatval($row->exchange_rate ?? 1);
 
-                    if ($row->type == 'expense_refund') {
-                        $due = -1 * $due;
+                        // Si amount_paid quedó en Bs (mayor que final_total * 1.5 y exchange_rate > 1)
+                        if ($exchange_rate > 1 && $paid > ($row->final_total * 1.5)) {
+                            $paid = $paid / $exchange_rate;
+                        }
+
+                        $due = $row->final_total - $paid;
+
+                        if ($row->type == 'expense_refund') {
+                            $due = -1 * $due;
+                        }
+
+                        if ($due <= 0.005) {
+                            $due = 0;
+                        }
                     }
 
                     $formatted_due = $this->transactionUtil->num_f($due, true);
@@ -279,7 +295,7 @@ class ExpenseController extends Controller
                     $html .= '<span class="display_currency payment_due" data-currency_symbol="true" data-orig-value="' . $due . '">' . $formatted_due . '</span>';
                     
                     $exchange_rate = floatval($row->exchange_rate ?? 1);
-                    if ($exchange_rate > 1 && abs($due) > 0.001) {
+                    if ($exchange_rate > 1 && $due > 0.001) {
                         $bs_due = $due * $exchange_rate;
                         $formatted_bs_due = number_format($bs_due, 2, ',', '.');
                         $html .= '<div style="font-size: 11px; font-weight: 600; color: #DC2626; margin-top: 2px;">Bs. ' . $formatted_bs_due . '</div>';
