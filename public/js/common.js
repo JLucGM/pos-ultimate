@@ -568,7 +568,10 @@ function urlSearchParam(param) {
 // Smart Viewport-Aware Dropdown Engine for Tables, Modals & Mobile Screens
 // ==========================================================================
 (function() {
+    var lastDropdownOpenedAt = 0;
+
     $(document).on('shown.bs.dropdown', function(e) {
+        lastDropdownOpenedAt = Date.now();
         var $dropdown = $(e.target);
         var $menu = $dropdown.children('.dropdown-menu');
         var $btn = $dropdown.children('.dropdown-toggle');
@@ -635,6 +638,7 @@ function urlSearchParam(param) {
 
     // Close fixed dropdowns on window/container scroll to keep UX crisp
     $(window).on('scroll', function() {
+        if (Date.now() - lastDropdownOpenedAt < 400) return;
         $('.btn-group.open, .dropdown.open').each(function() {
             if ($(this).closest('.table-responsive, .dataTables_wrapper, table').length > 0) {
                 $(this).removeClass('open').trigger('hidden.bs.dropdown');
@@ -643,6 +647,7 @@ function urlSearchParam(param) {
     });
 
     $('#scrollable-container').on('scroll', function() {
+        if (Date.now() - lastDropdownOpenedAt < 400) return;
         $('.btn-group.open, .dropdown.open').each(function() {
             if ($(this).closest('.table-responsive, .dataTables_wrapper, table').length > 0) {
                 $(this).removeClass('open').trigger('hidden.bs.dropdown');

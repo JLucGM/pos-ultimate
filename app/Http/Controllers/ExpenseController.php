@@ -186,30 +186,42 @@ class ExpenseController extends Controller
                         $can_edit = auth()->user()->can('expense.edit') || auth()->user()->can('expense.access') || auth()->user()->can('all_expense.access');
                         $can_delete = auth()->user()->can('expense.delete') || auth()->user()->can('expense.access') || auth()->user()->can('all_expense.access');
 
-                        $html = '<div class="btn-group">
-                            <button type="button" class="btn btn-info dropdown-toggle btn-xs tw-dw-btn tw-dw-btn-xs tw-dw-btn-outline tw-dw-btn-info tw-w-max" 
-                                data-toggle="dropdown" aria-expanded="false">' . __('messages.actions') . ' <span class="caret"></span><span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-left" role="menu">';
+                        $html = '<div class="btn-group" style="display: inline-flex; gap: 4px; align-items: center; white-space: nowrap;">';
 
                         if ($can_edit) {
-                            $html .= '<li><a href="' . action([\App\Http\Controllers\ExpenseController::class, 'edit'], [$row->id]) . '"><i class="glyphicon glyphicon-edit"></i> ' . __('messages.edit') . '</a></li>';
+                            $html .= '<a href="' . action([\App\Http\Controllers\ExpenseController::class, 'edit'], [$row->id]) . '" class="btn btn-xs btn-primary" title="' . __('messages.edit') . '" style="border-radius: 6px; font-weight: 600; padding: 4px 8px; display: inline-flex; align-items: center; gap: 4px;">';
+                            $html .= '<i class="glyphicon glyphicon-edit"></i> ' . __('messages.edit');
+                            $html .= '</a>';
                         }
+
                         if ($row->document) {
-                            $html .= '<li><a href="' . url('uploads/documents/' . $row->document) . '" download=""><i class="fa fa-download" aria-hidden="true"></i> ' . __('purchase.download_document') . '</a></li>';
+                            $html .= '<a href="' . url('uploads/documents/' . $row->document) . '" download="" class="btn btn-xs btn-default" title="' . __('purchase.download_document') . '" style="border-radius: 6px; padding: 4px 8px;">';
+                            $html .= '<i class="fa fa-download"></i>';
+                            $html .= '</a>';
                             if (isFileImage($row->document)) {
-                                $html .= '<li><a href="#" data-href="' . url('uploads/documents/' . $row->document) . '" class="view_uploaded_document"><i class="fas fa-file-image" aria-hidden="true"></i> ' . __('lang_v1.view_document') . '</a></li>';
+                                $html .= '<button type="button" data-href="' . url('uploads/documents/' . $row->document) . '" class="btn btn-xs btn-default view_uploaded_document" title="' . __('lang_v1.view_document') . '" style="border-radius: 6px; padding: 4px 8px;">';
+                                $html .= '<i class="fas fa-file-image"></i>';
+                                $html .= '</button>';
                             }
                         }
-                        if ($can_delete) {
-                            $html .= '<li><a href="#" data-href="' . action([\App\Http\Controllers\ExpenseController::class, 'destroy'], [$row->id]) . '" class="delete_expense"><i class="glyphicon glyphicon-trash"></i> ' . __('messages.delete') . '</a></li>';
-                        }
-                        $html .= '<li class="divider"></li>';
+
                         if ($row->payment_status != 'paid') {
-                            $html .= '<li><a href="' . action([\App\Http\Controllers\TransactionPaymentController::class, 'addPayment'], [$row->id]) . '" class="add_payment_modal"><i class="fas fa-money-bill-alt" aria-hidden="true"></i> ' . __('purchase.add_payment') . '</a></li>';
+                            $html .= '<button type="button" data-href="' . action([\App\Http\Controllers\TransactionPaymentController::class, 'addPayment'], [$row->id]) . '" class="btn btn-xs btn-success add_payment_modal" title="' . __('purchase.add_payment') . '" style="border-radius: 6px; font-weight: 600; padding: 4px 8px; display: inline-flex; align-items: center; gap: 4px;">';
+                            $html .= '<i class="fas fa-plus"></i> ' . __('purchase.add_payment');
+                            $html .= '</button>';
                         }
-                        $html .= '<li><a href="' . action([\App\Http\Controllers\TransactionPaymentController::class, 'show'], [$row->id]) . '" class="view_payment_modal"><i class="fas fa-money-bill-alt" aria-hidden="true"></i> ' . __('purchase.view_payments') . '</a></li>';
-                        $html .= '</ul></div>';
+
+                        $html .= '<button type="button" data-href="' . action([\App\Http\Controllers\TransactionPaymentController::class, 'show'], [$row->id]) . '" class="btn btn-xs btn-info view_payment_modal" title="' . __('purchase.view_payments') . '" style="border-radius: 6px; font-weight: 600; padding: 4px 8px; display: inline-flex; align-items: center; gap: 4px;">';
+                        $html .= '<i class="fas fa-money-bill-alt"></i> ' . __('purchase.view_payments');
+                        $html .= '</button>';
+
+                        if ($can_delete) {
+                            $html .= '<button type="button" data-href="' . action([\App\Http\Controllers\ExpenseController::class, 'destroy'], [$row->id]) . '" class="btn btn-xs btn-danger delete_expense" title="' . __('messages.delete') . '" style="border-radius: 6px; padding: 4px 8px;">';
+                            $html .= '<i class="glyphicon glyphicon-trash"></i>';
+                            $html .= '</button>';
+                        }
+
+                        $html .= '</div>';
 
                         return $html;
                     }
