@@ -5976,9 +5976,29 @@ class TransactionUtil extends Util
         $transaction_data['type'] = ! empty($request->input('is_refund')) && $request->input('is_refund') == 1 ? 'expense_refund' : 'expense';
         $transaction_data['status'] = 'final';
         $transaction_data['payment_status'] = 'due';
-        $transaction_data['final_total'] = $format_data ? $this->num_uf(
+
+        $business = Business::find($business_id);
+        $base_currency_id = $business ? $business->currency_id : null;
+        
+        $transaction_currency_id = ! empty($request->input('transaction_currency_id')) ? $request->input('transaction_currency_id') : $base_currency_id;
+        $exchange_rate = ! empty($request->input('exchange_rate')) ? ($format_data ? $this->num_uf($request->input('exchange_rate')) : $request->input('exchange_rate')) : 1.0;
+        $exchange_rate = floatval($exchange_rate) > 0 ? floatval($exchange_rate) : 1.0;
+
+        $entered_final_total = $format_data ? $this->num_uf(
                 $transaction_data['final_total']
             ) : $transaction_data['final_total'];
+
+        // Si se ingresó en una moneda distinta a la base (ej. VES) y con tasa > 1, convertir a moneda base (USD)
+        if (! empty($transaction_currency_id) && $transaction_currency_id != $base_currency_id && $exchange_rate > 1) {
+            $transaction_data['final_total'] = round($entered_final_total / $exchange_rate, 4);
+            $transaction_data['exchange_rate'] = $exchange_rate;
+            $transaction_data['transaction_currency_id'] = $transaction_currency_id;
+        } else {
+            $transaction_data['final_total'] = $entered_final_total;
+            $transaction_data['exchange_rate'] = $exchange_rate;
+            $transaction_data['transaction_currency_id'] = $transaction_currency_id;
+        }
+
         if ($request->has('transaction_date')) {
             $transaction_data['transaction_date'] = $format_data ? $this->uf_date($transaction_data['transaction_date'], true) : $transaction_data['transaction_date'];
         } else {
@@ -6020,6 +6040,21 @@ class TransactionUtil extends Util
         $transaction = Transaction::create($transaction_data);
 
         $payments = ! empty($request->input('payment')) ? $request->input('payment') : [];
+        
+        // Ajustar monto de pagos si se registró en moneda secundaria (VES)
+        if (! empty($transaction_currency_id) && $transaction_currency_id != $base_currency_id && $exchange_rate > 1) {
+            foreach ($payments as $k => $p) {
+                if (! empty($p['amount'])) {
+                    $p_amount = $format_data ? $this->num_uf($p['amount']) : $p['amount'];
+                    if (abs($p_amount - $entered_final_total) < 0.01 || empty($p['payment_currency_id']) || $p['payment_currency_id'] == $transaction_currency_id) {
+                        $payments[$k]['amount'] = round($p_amount / $exchange_rate, 4);
+                        $payments[$k]['payment_currency_id'] = $transaction_currency_id;
+                        $payments[$k]['payment_exchange_rate'] = $exchange_rate;
+                    }
+                }
+            }
+        }
+
         //add expense payment
         $this->createOrUpdatePaymentLines($transaction, $payments, $business_id);
 
@@ -6034,6 +6069,9 @@ class TransactionUtil extends Util
         $transaction_data = [];
         $transaction = Transaction::where('business_id', $business_id)
                                 ->findOrFail($id);
+
+        $business = Business::find($business_id);
+        $base_currency_id = $business ? $business->currency_id : null;
 
         if ($request->has('ref_no')) {
             $transaction_data['ref_no'] = $request->input('ref_no');
@@ -6061,21 +6099,36 @@ class TransactionUtil extends Util
         if ($request->has('expense_category_id')) {
             $transaction_data['expense_category_id'] = $request->input('expense_category_id');
         }
+
+        // Multicurrency & historical exchange rate handling
+        $transaction_currency_id = $request->has('transaction_currency_id') ? $request->input('transaction_currency_id') : $transaction->transaction_currency_id;
+        $exchange_rate = $request->has('exchange_rate') ? ($format_data ? $this->num_uf($request->input('exchange_rate')) : $request->input('exchange_rate')) : $transaction->exchange_rate;
+        $exchange_rate = floatval($exchange_rate) > 0 ? floatval($exchange_rate) : 1.0;
+
+        $transaction_data['transaction_currency_id'] = $transaction_currency_id ?? $base_currency_id;
+        $transaction_data['exchange_rate'] = $exchange_rate;
+
         $final_total = $request->has('final_total') ? $request->input('final_total') : $transaction->final_total;
         if ($request->has('final_total')) {
-            $transaction_data['final_total'] = $format_data ? $this->num_uf(
+            $entered_final_total = $format_data ? $this->num_uf(
                 $final_total
             ) : $final_total;
+
+            if (! empty($transaction_currency_id) && $transaction_currency_id != $base_currency_id && $exchange_rate > 1) {
+                $transaction_data['final_total'] = round($entered_final_total / $exchange_rate, 4);
+            } else {
+                $transaction_data['final_total'] = $entered_final_total;
+            }
             $final_total = $transaction_data['final_total'];
         }
 
-        $transaction_data['total_before_tax'] = $transaction_data['final_total'];
+        $transaction_data['total_before_tax'] = $transaction_data['final_total'] ?? $transaction->final_total;
         $tax_id = ! empty($request->input('tax_id')) ? $request->input('tax_id') : $transaction->tax_id;
         if (! empty($tax_id)) {
             $transaction_data['tax_id'] = $tax_id;
             $tax_details = TaxRate::find($tax_id);
-            $transaction_data['total_before_tax'] = $this->calc_percentage_base($final_total, $tax_details->amount);
-            $transaction_data['tax_amount'] = $final_total - $transaction_data['total_before_tax'];
+            $transaction_data['total_before_tax'] = $this->calc_percentage_base($transaction_data['final_total'], $tax_details->amount);
+            $transaction_data['tax_amount'] = $transaction_data['final_total'] - $transaction_data['total_before_tax'];
         } else {
             $transaction_data['tax_id'] = null;
             $transaction_data['tax_amount'] = 0;

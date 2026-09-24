@@ -1487,7 +1487,7 @@ $(document).ready(function() {
         },
     });
 
-    $('select#location_id, select#expense_for, select#created_by, select#select#expense_contact_filter, \
+    $('select#location_id, select#expense_for, select#created_by, select#expense_contact_filter, \
         select#expense_category_id, select#expense_payment_status, \
         select#expense_sub_category_id_filter').on(
         'change',

@@ -88,10 +88,61 @@
                 </div>
             </div>
         </div>
+        <div class="clearfix"></div>
+
+        @php
+            $is_diff_currency = (!empty($expense->transaction_currency_id) && $expense->transaction_currency_id != $base_currency->id) || (!empty($expense->exchange_rate) && $expense->exchange_rate > 1);
+            $selected_curr_id = $expense->transaction_currency_id ?? ($is_diff_currency && !empty($ves_currency) ? $ves_currency->id : $base_currency->id);
+            $display_rate = !empty($expense->exchange_rate) && $expense->exchange_rate > 0 ? $expense->exchange_rate : $current_bcv_rate;
+            $display_amount = ($is_diff_currency && $display_rate > 1) ? ($expense->final_total * $display_rate) : $expense->final_total;
+        @endphp
+
+        <!-- Selector de Moneda -->
+        <div class="col-sm-4">
+          <div class="form-group">
+            {!! Form::label('transaction_currency_id', __('lang_v1.currency') . ':*') !!}
+            <div class="input-group">
+              <span class="input-group-addon">
+                <i class="fas fa-coins"></i>
+              </span>
+              {!! Form::select('transaction_currency_id', $currencies_dropdown, $selected_curr_id, ['class' => 'form-control select2', 'id' => 'expense_currency_id', 'style' => 'width:100%;']); !!}
+            </div>
+            <small class="text-muted">Moneda del gasto</small>
+          </div>
+        </div>
+
+        <!-- Tasa de Cambio Histórica Congelada -->
+        <div class="col-sm-4" id="expense_exchange_rate_div">
+          <div class="form-group">
+            {!! Form::label('exchange_rate', __('purchase.p_exchange_rate') . ' (Tasa congelada):*') !!}
+            @show_tooltip('Tasa de cambio fijada en la fecha del gasto. Modifíquela solo si requiere corregir la tasa histórica.')
+            <div class="input-group">
+              <span class="input-group-addon">
+                <i class="fas fa-exchange-alt"></i>
+              </span>
+              {!! Form::text('exchange_rate', @num_format($display_rate), ['class' => 'form-control input_number', 'id' => 'expense_exchange_rate', 'required']); !!}
+            </div>
+            <small class="help-block text-muted" id="exchange_rate_help">
+              <i class="fas fa-lock tw-text-emerald-600"></i> <span id="exchange_rate_text">1 USD = {{ @num_format($display_rate) }} Bs.</span>
+            </small>
+          </div>
+        </div>
+
         <div class="col-sm-4">
           <div class="form-group">
             {!! Form::label('final_total', __('sale.total_amount') . ':*') !!}
-            {!! Form::text('final_total', @num_format($expense->final_total), ['class' => 'form-control input_number', 'placeholder' => __('sale.total_amount'), 'required']); !!}
+            <div class="input-group">
+              <span class="input-group-addon">
+                <i class="fas fa-money-bill-wave"></i>
+              </span>
+              {!! Form::text('final_total', @num_format($display_amount), ['class' => 'form-control input_number', 'placeholder' => __('sale.total_amount'), 'required', 'id' => 'final_total']); !!}
+            </div>
+            <div id="expense_amount_converted_preview" class="tw-mt-1.5" style="display: none;">
+              <span class="tw-inline-flex tw-items-center tw-gap-1.5 tw-text-xs tw-font-semibold tw-text-emerald-800 tw-bg-emerald-50 tw-px-2 tw-py-1 tw-rounded-md tw-border tw-border-emerald-200">
+                <i class="fas fa-calculator tw-text-emerald-600"></i>
+                <span id="converted_amount_text">≈ $ 0.00 USD</span>
+              </span>
+            </div>
           </div>
         </div>
         <div class="clearfix"></div>
@@ -114,6 +165,54 @@
 @stop
 @section('javascript')
 <script type="text/javascript">
+  var base_currency_id = {{ $base_currency ? $base_currency->id : 1 }};
+  var base_currency_code = '{{ $base_currency ? $base_currency->code : "USD" }}';
+
+  $(document).ready(function() {
+    updateExpenseRateAndPreview();
+  });
+
   __page_leave_confirmation('#add_expense_form');
+
+  function updateExpenseRateAndPreview() {
+    var selected_currency_id = $('#expense_currency_id').val();
+    var amount = __read_number($('input#final_total'));
+    var rate = __read_number($('#expense_exchange_rate')) || 1.0;
+
+    if (selected_currency_id == base_currency_id) {
+      $('#expense_exchange_rate_div').hide();
+      if (amount > 0 && rate > 1) {
+        var bs_equiv = amount * rate;
+        $('#converted_amount_text').text('≈ Bs. ' + __currency_trans_from_en(bs_equiv, false, false) + ' (@ ' + __currency_trans_from_en(rate, false, false) + ' Bs/$)');
+        $('#expense_amount_converted_preview').show();
+      } else {
+        $('#expense_amount_converted_preview').hide();
+      }
+    } else {
+      $('#expense_exchange_rate_div').show();
+      if (amount > 0 && rate > 0) {
+        var usd_equiv = amount / rate;
+        $('#converted_amount_text').text('≈ $ ' + __currency_trans_from_en(usd_equiv, false, false) + ' ' + base_currency_code + ' (Moneda Base)');
+        $('#expense_amount_converted_preview').show();
+      } else {
+        $('#expense_amount_converted_preview').hide();
+      }
+    }
+  }
+
+  $(document).on('change', '#expense_currency_id', function() {
+    var selected_currency_id = $(this).val();
+    if (selected_currency_id == base_currency_id) {
+      $('#expense_exchange_rate_div').hide();
+      updateExpenseRateAndPreview();
+    } else {
+      $('#expense_exchange_rate_div').show();
+      updateExpenseRateAndPreview();
+    }
+  });
+
+  $(document).on('input change', 'input#final_total, #expense_exchange_rate', function() {
+    updateExpenseRateAndPreview();
+  });
 </script>
 @endsection

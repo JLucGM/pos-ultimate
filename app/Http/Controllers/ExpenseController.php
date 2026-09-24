@@ -82,6 +82,8 @@ class ExpenseController extends Controller
                             'payment_status',
                             'additional_notes',
                             'final_total',
+                            'transactions.exchange_rate',
+                            'transactions.transaction_currency_id',
                             'transactions.is_recurring',
                             'transactions.recur_interval',
                             'transactions.recur_interval_type',
@@ -180,37 +182,56 @@ class ExpenseController extends Controller
             return Datatables::of($expenses)
                 ->addColumn(
                     'action',
-                    '<div class="btn-group">
-                        <button type="button" class="tw-dw-btn tw-dw-btn-xs tw-dw-btn-outline  tw-dw-btn-info tw-w-max dropdown-toggle" 
-                            data-toggle="dropdown" aria-expanded="false"> @lang("messages.actions")<span class="caret"></span><span class="sr-only">Toggle Dropdown
-                                </span>
-                        </button>
-                    <ul class="dropdown-menu dropdown-menu-left" role="menu">
-                    @if(auth()->user()->can("expense.edit"))
-                        <li><a href="{{action(\'App\Http\Controllers\ExpenseController@edit\', [$id])}}"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</a></li>
-                    @endif
-                    @if($document)
-                        <li><a href="{{ url(\'uploads/documents/\' . $document)}}" 
-                        download=""><i class="fa fa-download" aria-hidden="true"></i> @lang("purchase.download_document")</a></li>
-                        @if(isFileImage($document))
-                            <li><a href="#" data-href="{{ url(\'uploads/documents/\' . $document)}}" class="view_uploaded_document"><i class="fas fa-file-image" aria-hidden="true"></i>@lang("lang_v1.view_document")</a></li>
-                        @endif
-                    @endif
-                    @if(auth()->user()->can("expense.delete"))
-                        <li>
-                        <a href="#" data-href="{{action(\'App\Http\Controllers\ExpenseController@destroy\', [$id])}}" class="delete_expense"><i class="glyphicon glyphicon-trash"></i> @lang("messages.delete")</a></li>
-                    @endif
-                    <li class="divider"></li> 
-                    @if($payment_status != "paid")
-                        <li><a href="{{action([\App\Http\Controllers\TransactionPaymentController::class, \'addPayment\'], [$id])}}" class="add_payment_modal"><i class="fas fa-money-bill-alt" aria-hidden="true"></i> @lang("purchase.add_payment")</a></li>
-                    @endif
-                    <li><a href="{{action([\App\Http\Controllers\TransactionPaymentController::class, \'show\'], [$id])}}" class="view_payment_modal"><i class="fas fa-money-bill-alt" aria-hidden="true" ></i> @lang("purchase.view_payments")</a></li>
-                    </ul></div>'
+                    function ($row) {
+                        $html = '<div class="btn-group">
+                            <button type="button" class="tw-dw-btn tw-dw-btn-xs tw-dw-btn-outline tw-dw-btn-info tw-w-max dropdown-toggle" 
+                                data-toggle="dropdown" aria-expanded="false">' . __('messages.actions') . '<span class="caret"></span><span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-left" role="menu">';
+
+                        if (auth()->user()->can('expense.edit')) {
+                            $html .= '<li><a href="' . action([\App\Http\Controllers\ExpenseController::class, 'edit'], [$row->id]) . '"><i class="glyphicon glyphicon-edit"></i> ' . __('messages.edit') . '</a></li>';
+                        }
+                        if ($row->document) {
+                            $html .= '<li><a href="' . url('uploads/documents/' . $row->document) . '" download=""><i class="fa fa-download" aria-hidden="true"></i> ' . __('purchase.download_document') . '</a></li>';
+                            if (isFileImage($row->document)) {
+                                $html .= '<li><a href="#" data-href="' . url('uploads/documents/' . $row->document) . '" class="view_uploaded_document"><i class="fas fa-file-image" aria-hidden="true"></i> ' . __('lang_v1.view_document') . '</a></li>';
+                            }
+                        }
+                        if (auth()->user()->can('expense.delete')) {
+                            $html .= '<li><a href="#" data-href="' . action([\App\Http\Controllers\ExpenseController::class, 'destroy'], [$row->id]) . '" class="delete_expense"><i class="glyphicon glyphicon-trash"></i> ' . __('messages.delete') . '</a></li>';
+                        }
+                        $html .= '<li class="divider"></li>';
+                        if ($row->payment_status != 'paid') {
+                            $html .= '<li><a href="' . action([\App\Http\Controllers\TransactionPaymentController::class, 'addPayment'], [$row->id]) . '" class="add_payment_modal"><i class="fas fa-money-bill-alt" aria-hidden="true"></i> ' . __('purchase.add_payment') . '</a></li>';
+                        }
+                        $html .= '<li><a href="' . action([\App\Http\Controllers\TransactionPaymentController::class, 'show'], [$row->id]) . '" class="view_payment_modal"><i class="fas fa-money-bill-alt" aria-hidden="true"></i> ' . __('purchase.view_payments') . '</a></li>';
+                        $html .= '</ul></div>';
+
+                        return $html;
+                    }
                 )
                 ->removeColumn('id')
                 ->editColumn(
                     'final_total',
-                    '<span class="display_currency final-total" data-currency_symbol="true" data-orig-value="@if($type=="expense_refund"){{-1 * $final_total}}@else{{$final_total}}@endif">@if($type=="expense_refund") - @endif @format_currency($final_total)</span>'
+                    function ($row) {
+                        $formatted_total = $this->transactionUtil->num_f($row->final_total, true);
+                        if ($row->type == 'expense_refund') {
+                            $formatted_total = '-' . $formatted_total;
+                        }
+                        $html = '<span class="display_currency final-total" data-currency_symbol="true" data-orig-value="' . ($row->type == 'expense_refund' ? -1 * $row->final_total : $row->final_total) . '">' . $formatted_total . '</span>';
+                        
+                        // Si se registró con tasa de cambio congelada (> 1)
+                        $exchange_rate = floatval($row->exchange_rate ?? 1);
+                        if ($exchange_rate > 1) {
+                            $bs_amount = $row->final_total * $exchange_rate;
+                            $formatted_bs = number_format($bs_amount, 2, ',', '.');
+                            $formatted_rate = number_format($exchange_rate, 2, ',', '.');
+                            $html .= '<br><span class="tw-inline-flex tw-items-center tw-gap-1 tw-text-[11px] tw-font-semibold tw-text-emerald-700 tw-bg-emerald-50 tw-px-1.5 tw-py-0.5 tw-rounded tw-border tw-border-emerald-200" title="Tasa histórica congelada: ' . $formatted_rate . ' Bs/$">Bs. ' . $formatted_bs . ' <span class="tw-text-[9.5px] tw-text-gray-500 tw-font-normal">(@ ' . $formatted_rate . ')</span></span>';
+                        }
+
+                        return $html;
+                    }
                 )
                 ->editColumn(
                     'contact_name',
@@ -343,13 +364,36 @@ class ExpenseController extends Controller
             $accounts = Account::forDropdown($business_id, true, false, true);
         }
 
+        $business = \App\Business::find($business_id);
+        $base_currency = \App\Models\Currency::find($business->currency_id);
+        $currencies = \App\Models\Currency::all();
+        $currencies_dropdown = [];
+        foreach ($currencies as $currency) {
+            $currencies_dropdown[$currency->id] = $currency->currency . ' (' . $currency->code . ')';
+        }
+
+        $ves_currency = \App\Models\Currency::where('code', 'VES')
+            ->orWhere('code', 'VEF')
+            ->orWhere('code', 'Bs')
+            ->first();
+
+        $current_bcv_rate = 1.0;
+        if ($base_currency && $ves_currency) {
+            $rate = \App\Models\ExchangeRate::getRate($business_id, $base_currency->id, $ves_currency->id);
+            if (!empty($rate) && $rate > 0) {
+                $current_bcv_rate = floatval($rate);
+            } else {
+                $current_bcv_rate = floatval($business->p_exchange_rate ?? 1.0);
+            }
+        }
+
         if (request()->ajax()) {
             return view('expense.add_expense_modal')
-                ->with(compact('expense_categories', 'business_locations', 'users', 'taxes', 'payment_line', 'payment_types', 'accounts', 'bl_attributes', 'contacts'));
+                ->with(compact('expense_categories', 'business_locations', 'users', 'taxes', 'payment_line', 'payment_types', 'accounts', 'bl_attributes', 'contacts', 'currencies_dropdown', 'base_currency', 'current_bcv_rate', 'ves_currency'));
         }
 
         return view('expense.create')
-            ->with(compact('expense_categories', 'business_locations', 'users', 'taxes', 'payment_line', 'payment_types', 'accounts', 'bl_attributes', 'contacts'));
+            ->with(compact('expense_categories', 'business_locations', 'users', 'taxes', 'payment_line', 'payment_types', 'accounts', 'bl_attributes', 'contacts', 'currencies_dropdown', 'base_currency', 'current_bcv_rate', 'ves_currency'));
     }
 
     /**
@@ -469,8 +513,30 @@ class ExpenseController extends Controller
                 ->toArray();
         }
 
+        $business = \App\Business::find($business_id);
+        $base_currency = \App\Models\Currency::find($business->currency_id);
+        $currencies = \App\Models\Currency::all();
+        $currencies_dropdown = [];
+        foreach ($currencies as $currency) {
+            $currencies_dropdown[$currency->id] = $currency->currency . ' (' . $currency->code . ')';
+        }
+
+        $ves_currency = \App\Models\Currency::where('code', 'VES')
+            ->orWhere('code', 'VEF')
+            ->orWhere('code', 'Bs')
+            ->first();
+
+        // Historical exchange rate from the transaction, or current BCV rate if not set
+        $historical_rate = floatval($expense->exchange_rate ?? 1.0);
+        if ($historical_rate <= 1 && $base_currency && $ves_currency) {
+            $rate = \App\Models\ExchangeRate::getRate($business_id, $base_currency->id, $ves_currency->id);
+            $current_bcv_rate = (!empty($rate) && $rate > 0) ? floatval($rate) : floatval($business->p_exchange_rate ?? 1.0);
+        } else {
+            $current_bcv_rate = $historical_rate;
+        }
+
         return view('expense.edit')
-            ->with(compact('expense', 'expense_categories', 'business_locations', 'users', 'taxes', 'contacts', 'sub_categories'));
+            ->with(compact('expense', 'expense_categories', 'business_locations', 'users', 'taxes', 'contacts', 'sub_categories', 'currencies_dropdown', 'base_currency', 'current_bcv_rate', 'ves_currency'));
     }
 
     /**

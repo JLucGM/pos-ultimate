@@ -330,12 +330,35 @@ class ExchangeRateController extends Controller
                 ], 400);
             }
             
+            $from_curr = Currency::find($request->from_currency_id);
+            $to_curr = Currency::find($request->to_currency_id);
+
             $rate = ExchangeRate::getRate(
                 $business_id,
                 $request->from_currency_id,
                 $request->to_currency_id,
                 $request->date
             );
+
+            if ($rate === null) {
+                // Check reverse rate
+                $reverse_rate = ExchangeRate::getRate(
+                    $business_id,
+                    $request->to_currency_id,
+                    $request->from_currency_id,
+                    $request->date
+                );
+                if ($reverse_rate !== null && $reverse_rate > 0) {
+                    $rate = $reverse_rate;
+                }
+            }
+
+            if ($rate === null) {
+                $business = \App\Business::find($business_id);
+                if (!empty($business->p_exchange_rate) && $business->p_exchange_rate > 0) {
+                    $rate = $business->p_exchange_rate;
+                }
+            }
 
             if ($rate === null) {
                 return response()->json([
@@ -346,7 +369,9 @@ class ExchangeRateController extends Controller
 
             return response()->json([
                 'success' => true,
-                'rate' => $rate
+                'rate' => (float) $rate,
+                'from_currency_code' => $from_curr ? $from_curr->code : '',
+                'to_currency_code' => $to_curr ? $to_curr->code : ''
             ]);
         } catch (\Exception $e) {
             \Log::error('Error getting exchange rate: ' . $e->getMessage());
