@@ -234,7 +234,8 @@ class ExpenseController extends Controller
                         if ($row->type == 'expense_refund') {
                             $formatted_total = '-' . $formatted_total;
                         }
-                        $html = '<span class="display_currency final-total" data-currency_symbol="true" data-orig-value="' . ($row->type == 'expense_refund' ? -1 * $row->final_total : $row->final_total) . '">' . $formatted_total . '</span>';
+                        $html = '<div style="white-space: nowrap;">';
+                        $html .= '<span class="display_currency final-total font-weight-bold" data-currency_symbol="true" data-orig-value="' . ($row->type == 'expense_refund' ? -1 * $row->final_total : $row->final_total) . '">' . $formatted_total . '</span>';
                         
                         // Si se registró con tasa de cambio congelada (> 1)
                         $exchange_rate = floatval($row->exchange_rate ?? 1);
@@ -242,8 +243,9 @@ class ExpenseController extends Controller
                             $bs_amount = $row->final_total * $exchange_rate;
                             $formatted_bs = number_format($bs_amount, 2, ',', '.');
                             $formatted_rate = number_format($exchange_rate, 2, ',', '.');
-                            $html .= '<br><span class="tw-inline-flex tw-items-center tw-gap-1 tw-text-[11px] tw-font-semibold tw-text-emerald-700 tw-bg-emerald-50 tw-px-1.5 tw-py-0.5 tw-rounded tw-border tw-border-emerald-200" title="Tasa histórica congelada: ' . $formatted_rate . ' Bs/$">Bs. ' . $formatted_bs . ' <span class="tw-text-[9.5px] tw-text-gray-500 tw-font-normal">(@ ' . $formatted_rate . ')</span></span>';
+                            $html .= '<div style="font-size: 11px; font-weight: 600; color: #059669; margin-top: 2px;" title="Tasa histórica: ' . $formatted_rate . ' Bs/$">Bs. ' . $formatted_bs . '</div>';
                         }
+                        $html .= '</div>';
 
                         return $html;
                     }
@@ -272,7 +274,19 @@ class ExpenseController extends Controller
                         $due = -1 * $due;
                     }
 
-                    return '<span class="display_currency payment_due" data-currency_symbol="true" data-orig-value="'.$due.'">'.$this->transactionUtil->num_f($due, true).'</span>';
+                    $formatted_due = $this->transactionUtil->num_f($due, true);
+                    $html = '<div style="white-space: nowrap;">';
+                    $html .= '<span class="display_currency payment_due" data-currency_symbol="true" data-orig-value="' . $due . '">' . $formatted_due . '</span>';
+                    
+                    $exchange_rate = floatval($row->exchange_rate ?? 1);
+                    if ($exchange_rate > 1 && abs($due) > 0.001) {
+                        $bs_due = $due * $exchange_rate;
+                        $formatted_bs_due = number_format($bs_due, 2, ',', '.');
+                        $html .= '<div style="font-size: 11px; font-weight: 600; color: #DC2626; margin-top: 2px;">Bs. ' . $formatted_bs_due . '</div>';
+                    }
+                    $html .= '</div>';
+
+                    return $html;
                 })
                 ->addColumn('recur_details', function ($row) {
                     $details = '<small>';
