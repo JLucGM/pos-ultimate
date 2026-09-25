@@ -1111,10 +1111,14 @@ $(document).ready(function() {
         pos_total_row();
     });
     //Datetime picker
-    $('#transaction_date').datetimepicker({
+    var dt_options = {
         format: moment_date_format + ' ' + moment_time_format,
         ignoreReadonly: true,
-    });
+    };
+    if (!$('#allow_backdated_sales').length) {
+        dt_options.minDate = moment().startOf('day');
+    }
+    $('#transaction_date').datetimepicker(dt_options);
 
     //Direct sell submit
     sell_form = $('form#add_sell_form');

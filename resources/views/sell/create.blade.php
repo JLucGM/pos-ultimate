@@ -25,6 +25,9 @@
 @if(!empty($pos_settings['allow_overselling']))
 	<input type="hidden" id="is_overselling_allowed">
 @endif
+@if(!empty($pos_settings['allow_backdated_sales']))
+	<input type="hidden" id="allow_backdated_sales" value="1">
+@endif
 @if(session('business.enable_rp') == 1)
     <input type="hidden" id="reward_point_enabled">
 @endif
@@ -962,14 +965,23 @@
     			if ($('#transaction_date').data('DateTimePicker')) {
     				$('#transaction_date').data('DateTimePicker').destroy();
     			}
-    			$('#transaction_date').on('focus mousedown click', function(e) {
-    				$(this).blur();
-    			});
+    			var dt_options = {
+    				format: moment_date_format + ' ' + moment_time_format,
+    				ignoreReadonly: true,
+    			};
+    			if (!$('#allow_backdated_sales').length) {
+    				dt_options.minDate = moment().startOf('day');
+    			}
+    			$('#transaction_date').datetimepicker(dt_options);
     		}
-    		$('.paid_on').datetimepicker({
+    		var paid_on_options = {
                 format: moment_date_format + ' ' + moment_time_format,
                 ignoreReadonly: true,
-            });
+            };
+            if (!$('#allow_backdated_sales').length) {
+                paid_on_options.minDate = moment().startOf('day');
+            }
+    		$('.paid_on').datetimepicker(paid_on_options);
 
             $('#shipping_documents').fileinput({
 		        showUpload: false,

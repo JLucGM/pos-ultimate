@@ -13,9 +13,11 @@
 <!-- Main content -->
 <section class="content">
 <input type="hidden" id="amount_rounding_method" value="{{$pos_settings['amount_rounding_method'] ?? ''}}">
-<input type="hidden" id="amount_rounding_method" value="{{$pos_settings['amount_rounding_method'] ?? 'none'}}">
 @if(!empty($pos_settings['allow_overselling']))
 	<input type="hidden" id="is_overselling_allowed">
+@endif
+@if(!empty($pos_settings['allow_backdated_sales']))
+	<input type="hidden" id="allow_backdated_sales" value="1">
 @endif
 @if(session('business.enable_rp') == 1)
     <input type="hidden" id="reward_point_enabled">
@@ -951,10 +953,14 @@
     				$('#payment_rows_div').addClass('hide');
     			}
     		});
-    		$('.paid_on').datetimepicker({
+    		var paid_on_options = {
                 format: moment_date_format + ' ' + moment_time_format,
                 ignoreReadonly: true,
-            });
+            };
+            if (!$('#allow_backdated_sales').length) {
+                paid_on_options.minDate = moment().startOf('day');
+            }
+    		$('.paid_on').datetimepicker(paid_on_options);
 
 			$('#toggle_shipping_box').on('click', function() {
 				$('#shipping_box_wrapper').slideToggle();

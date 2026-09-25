@@ -112,6 +112,16 @@
             </div>
         </div>
 
+        <div class="col-sm-4">
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                    {!! Form::checkbox('pos_settings[allow_backdated_sales]', 1, !empty($pos_settings['allow_backdated_sales']) , [ 'class' => 'input-icheck', 'id' => 'allow_backdated_sales']); !!} {{ __( 'lang_v1.allow_backdated_sales' ) }}
+                    </label>
+                  @show_tooltip(__('lang_v1.allow_backdated_sales_help'))
+                </div>
+            </div>
+        </div>
     </div>
     <hr>
     <div class="row">

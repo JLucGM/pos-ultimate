@@ -8,6 +8,9 @@
         @if (!empty($pos_settings['allow_overselling']))
             <input type="hidden" id="is_overselling_allowed">
         @endif
+        @if (!empty($pos_settings['allow_backdated_sales']))
+            <input type="hidden" id="allow_backdated_sales" value="1">
+        @endif
         @if (session('business.enable_rp') == 1)
             <input type="hidden" id="reward_point_enabled">
         @endif

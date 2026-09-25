@@ -386,10 +386,18 @@ class SellPosController extends Controller
 
                 DB::beginTransaction();
 
+                $pos_settings = !empty($request->session()->get('business.pos_settings')) ? json_decode($request->session()->get('business.pos_settings'), true) : [];
+
                 if (empty($request->input('transaction_date'))) {
                     $input['transaction_date'] = \Carbon::now();
                 } else {
                     $input['transaction_date'] = $this->productUtil->uf_date($request->input('transaction_date'), true);
+                    if (empty($pos_settings['allow_backdated_sales'])) {
+                        $parsed_date = \Carbon::parse($input['transaction_date']);
+                        if ($parsed_date->lt(\Carbon::today())) {
+                            $input['transaction_date'] = \Carbon::now();
+                        }
+                    }
                 }
                 if ($is_direct_sale) {
                     $input['is_direct_sale'] = 1;
@@ -1248,6 +1256,14 @@ class SellPosController extends Controller
 
                 if (!empty($request->input('transaction_date'))) {
                     $input['transaction_date'] = $this->productUtil->uf_date($request->input('transaction_date'), true);
+                    $pos_settings = !empty($request->session()->get('business.pos_settings')) ? json_decode($request->session()->get('business.pos_settings'), true) : [];
+                    if (empty($pos_settings['allow_backdated_sales'])) {
+                        $parsed_date = \Carbon::parse($input['transaction_date']);
+                        if ($parsed_date->lt(\Carbon::today())) {
+                            $orig_date = \Carbon::parse($transaction->transaction_date);
+                            $input['transaction_date'] = $orig_date->lt(\Carbon::today()) ? $transaction->transaction_date : \Carbon::now();
+                        }
+                    }
                 }
 
                 $input['commission_agent'] = !empty($request->input('commission_agent')) ? $request->input('commission_agent') : null;
