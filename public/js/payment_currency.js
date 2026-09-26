@@ -1,6 +1,6 @@
 /**
  * Audaz POS - Motor de Dualidad Multimoneda (Venezuela USD / Bs BCV)
- * Sincroniza precios duales, conversiones en tiempo real y opciones de pago rápidas.
+ * Sincroniza precios duales, conversiones en tiempo real, tasas históricas por fecha y edición manual en pagos.
  */
 (function($) {
     'use strict';
@@ -86,7 +86,7 @@
     }
 
     /**
-     * Actualizar totales duales en modal de pago
+     * Actualizar totales duales en modal de pago POS
      */
     function updatePaymentModalDualTotals() {
         var totalPayable = __read_number($('#total_payable_input')) || 0;
@@ -105,7 +105,7 @@
     }
 
     /**
-     * Actualizar equivalencia debajo de cada fila de pago
+     * Actualizar equivalencia debajo de cada fila de pago POS
      */
     function updateEquivalent(rowIndex) {
         var $currencySelect = $('#payment_currency_' + rowIndex);
@@ -115,7 +115,6 @@
 
         if (!$currencySelect.length || !$amountInput.length) return;
 
-        var selectedCurrencyId = $currencySelect.val();
         var selectedText = $currencySelect.find('option:selected').text();
         var amount = __read_number($amountInput) || 0;
 
@@ -150,6 +149,110 @@
         });
     }
 
+    /**
+     * Actualizar equivalencia en tiempo real en modales de pagos de compras, ventas y proveedores
+     */
+    function updateInvoicePaymentModalEquiv($container) {
+        if (!$container || !$container.length) $container = $(document);
+
+        var $currencySelect = $container.find('.modal_payment_currency, #modal_payment_currency');
+        var $amountInput = $container.find('.modal_payment_amount, #modal_payment_amount, .payment_amount');
+        var $rateInput = $container.find('.modal_payment_exchange_rate, #modal_payment_exchange_rate');
+        var $equivBox = $container.find('.modal_equiv_box');
+        var $equivText = $container.find('.modal_equiv_text');
+
+        if (!$amountInput.length || !$rateInput.length) return;
+
+        var currencyText = $currencySelect.length ? ($currencySelect.find('option:selected').text() || '') : '';
+        var isBs = /VES|VEF|Bolívar|Bs/i.test(currencyText);
+
+        var amount = 0;
+        if (typeof __read_number !== 'undefined') {
+            amount = __read_number($amountInput) || 0;
+        } else {
+            var raw = $amountInput.val() || '0';
+            amount = parseFloat(raw.replace(/,/g, '')) || 0;
+        }
+
+        var rate = 1;
+        if (typeof __read_number !== 'undefined') {
+            rate = __read_number($rateInput) || 0;
+        } else {
+            var rawRate = $rateInput.val() || '1';
+            rate = parseFloat(rawRate.replace(/,/g, '')) || 1;
+        }
+
+        if (rate <= 0) rate = 1;
+
+        if (isBs) {
+            if (rate > 1 && amount > 0) {
+                var usd = amount / rate;
+                $equivText.html(
+                    'Pago en Bolívares: <strong>Bs. ' + formatBs(amount) + '</strong> &nbsp;&bull;&nbsp; ' +
+                    'Equivale a: <strong>$' + usd.toFixed(2) + ' USD</strong> &nbsp;&bull;&nbsp; ' +
+                    '(Tasa aplicada: <strong>' + formatBs(rate) + ' Bs/$</strong>)'
+                );
+                $equivBox.removeClass('alert-info').addClass('alert-success').slideDown(150);
+            } else {
+                $equivBox.slideUp(150);
+            }
+        } else {
+            if (rate > 1 && amount > 0) {
+                var bs = amount * rate;
+                $equivText.html(
+                    'Pago en Dólares: <strong>$' + amount.toFixed(2) + ' USD</strong> &nbsp;&bull;&nbsp; ' +
+                    'Equivale a: <strong>Bs. ' + formatBs(bs) + '</strong> &nbsp;&bull;&nbsp; ' +
+                    '(Tasa de referencia: <strong>' + formatBs(rate) + ' Bs/$</strong>)'
+                );
+                $equivBox.removeClass('alert-success').addClass('alert-info').slideDown(150);
+            } else {
+                $equivBox.slideUp(150);
+            }
+        }
+    }
+
+    /**
+     * Consultar tasa de cambio por fecha para el modal de pago
+     */
+    function fetchRateForPaymentDate($container, dateStr, callback) {
+        if (!dateStr) {
+            if (callback) callback(null);
+            return;
+        }
+
+        var $rateInput = $container.find('.modal_payment_exchange_rate, #modal_payment_exchange_rate');
+        var $dateLabel = $container.find('.modal_rate_date_label');
+        var $refreshBtn = $container.find('.btn_refresh_modal_rate');
+
+        $refreshBtn.find('i').addClass('fa-spin');
+
+        $.ajax({
+            url: '/get-exchange-rate',
+            data: { date: dateStr },
+            dataType: 'json',
+            success: function(res) {
+                $refreshBtn.find('i').removeClass('fa-spin');
+                if (res.success && res.rate) {
+                    var rateVal = parseFloat(res.rate);
+                    if (typeof __write_number !== 'undefined') {
+                        __write_number($rateInput, rateVal);
+                    } else {
+                        $rateInput.val(rateVal);
+                    }
+                    if ($dateLabel.length && res.date) {
+                        $dateLabel.text(res.date);
+                    }
+                    updateInvoicePaymentModalEquiv($container);
+                    if (callback) callback(rateVal);
+                }
+            },
+            error: function() {
+                $refreshBtn.find('i').removeClass('fa-spin');
+                if (callback) callback(null);
+            }
+        });
+    }
+
     // === EVENT LISTENERS ===
 
     // Observar cambios en el total a pagar
@@ -173,7 +276,7 @@
             updateDualPayable();
         });
 
-        // Eventos en campos de pago
+        // Eventos en campos de pago POS
         $(document).on('change', '.payment-currency-select', function() {
             var rowIndex = $(this).data('row');
             updateEquivalent(rowIndex);
@@ -182,18 +285,48 @@
         $(document).on('input change keyup', '.payment-amount', function() {
             var $row = $(this).closest('.payment_row');
             var rowIndex = $row.find('.payment_row_index').val();
-            updateEquivalent(rowIndex);
-            setTimeout(updatePaymentModalDualTotals, 100);
+            if (rowIndex !== undefined && rowIndex !== null) {
+                updateEquivalent(rowIndex);
+                setTimeout(updatePaymentModalDualTotals, 100);
+            }
         });
 
-        // Botón Cobro Rápido en Dólares ($ USD)
+        // Eventos en inputs de modales de pagos de transacciones (compras/ventas/proveedores)
+        $(document).on('input change keyup', '.modal_payment_amount, #modal_payment_amount, .modal_payment_exchange_rate, #modal_payment_exchange_rate', function() {
+            var $modal = $(this).closest('.modal, form');
+            updateInvoicePaymentModalEquiv($modal);
+        });
+
+        $(document).on('change', '.modal_payment_currency, #modal_payment_currency', function() {
+            var $modal = $(this).closest('.modal, form');
+            updateInvoicePaymentModalEquiv($modal);
+        });
+
+        // Botón de refrescar tasa de la fecha seleccionada
+        $(document).on('click', '.btn_refresh_modal_rate', function(e) {
+            e.preventDefault();
+            var $modal = $(this).closest('.modal, form');
+            var $dateInput = $modal.find('.modal_paid_on, #paid_on, input[name="paid_on"]');
+            var dateVal = $dateInput.val() || '';
+            fetchRateForPaymentDate($modal, dateVal);
+        });
+
+        // Al cambiar la fecha del pago (bootstrap datetimepicker o input nativo)
+        $(document).on('dp.change change', '.modal_paid_on, #paid_on, input[name="paid_on"]', function(e) {
+            var $modal = $(this).closest('.modal, form');
+            if ($modal.find('.modal_payment_exchange_rate, #modal_payment_exchange_rate').length) {
+                var dateVal = $(this).val() || '';
+                fetchRateForPaymentDate($modal, dateVal);
+            }
+        });
+
+        // Botón Cobro Rápido en Dólares ($ USD) POS
         $(document).on('click', '#quick_pay_usd_btn', function() {
             var totalUsd = __read_number($('#total_payable_input')) || 0;
             var $firstAmount = $('#amount_0');
             var $firstCurrency = $('#payment_currency_0');
 
             if ($firstCurrency.length) {
-                // Seleccionar USD si existe en el dropdown
                 $firstCurrency.find('option').each(function() {
                     if ($(this).text().indexOf('USD') !== -1 || $(this).text().indexOf('Dólar') !== -1) {
                         $firstCurrency.val($(this).val()).trigger('change');
@@ -208,7 +341,7 @@
             }
         });
 
-        // Botón Cobro Rápido en Bolívares (Bs VES)
+        // Botón Cobro Rápido en Bolívares (Bs VES) POS
         $(document).on('click', '#quick_pay_bs_btn', function() {
             var totalUsd = __read_number($('#total_payable_input')) || 0;
             var $firstAmount = $('#amount_0');
@@ -218,7 +351,6 @@
                 var totalBs = totalUsd * (rate > 1 ? rate : 1);
 
                 if ($firstCurrency.length) {
-                    // Seleccionar VES/Bs en el dropdown
                     $firstCurrency.find('option').each(function() {
                         if ($(this).text().indexOf('VES') !== -1 || $(this).text().indexOf('VEF') !== -1 || $(this).text().indexOf('Bolívar') !== -1 || $(this).text().indexOf('Bs') !== -1) {
                             $firstCurrency.val($(this).val()).trigger('change');
@@ -234,14 +366,24 @@
             });
         });
 
-        // Al abrir modal de pago, actualizar totales duales
+        // Al abrir modal de pago POS, actualizar totales duales
         $('#modal_payment').on('shown.bs.modal', function() {
             updatePaymentModalDualTotals();
             $('.payment-amount').each(function() {
                 var $row = $(this).closest('.payment_row');
                 var rowIndex = $row.find('.payment_row_index').val();
-                updateEquivalent(rowIndex);
+                if (rowIndex !== undefined && rowIndex !== null) {
+                    updateEquivalent(rowIndex);
+                }
             });
+        });
+
+        // Al abrir cualquier modal de pago estándar
+        $(document).on('shown.bs.modal', '.payment_modal, .edit_payment_modal, .pay_contact_due_modal', function() {
+            var $modal = $(this);
+            setTimeout(function() {
+                updateInvoicePaymentModalEquiv($modal);
+            }, 150);
         });
     });
 

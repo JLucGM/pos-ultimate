@@ -74,10 +74,20 @@ class TransactionPaymentController extends Controller
             if ($transaction->payment_status != 'paid') {
                 $inputs = $request->only(['amount', 'method', 'note', 'card_number', 'card_holder_name',
                     'card_transaction_number', 'card_type', 'card_month', 'card_year', 'card_security',
-                    'cheque_number', 'bank_account_number', ]);
+                    'cheque_number', 'bank_account_number', 'payment_currency_id', 'payment_exchange_rate', ]);
                 $inputs['paid_on'] = $this->transactionUtil->uf_date($request->input('paid_on'), true);
                 $inputs['transaction_id'] = $transaction->id;
                 $inputs['amount'] = $this->transactionUtil->num_uf($inputs['amount']);
+                if (! empty($inputs['payment_exchange_rate'])) {
+                    $inputs['payment_exchange_rate'] = $this->transactionUtil->num_uf($inputs['payment_exchange_rate']);
+                }
+
+                if (! empty($inputs['payment_currency_id']) && ! empty($inputs['payment_exchange_rate']) && $inputs['payment_exchange_rate'] > 1) {
+                    $inputs['amount_in_base_currency'] = round($inputs['amount'] / $inputs['payment_exchange_rate'], 4);
+                } else {
+                    $inputs['amount_in_base_currency'] = $inputs['amount'];
+                }
+
                 $inputs['created_by'] = auth()->user()->id;
                 $inputs['payment_for'] = $transaction->contact_id;
 
@@ -190,6 +200,32 @@ class TransactionPaymentController extends Controller
         }
     }
 
+    private function getCurrencyData($business_id, $paid_on_date = null)
+    {
+        $business = \App\Business::where('id', $business_id)->with('currency')->first();
+        $base_currency = $business->currency ?? null;
+        $ves_currency = \App\Services\ExchangeRateService::getVenezuelaCurrency();
+
+        $currencies = \App\Models\Currency::all();
+        $currencies_dropdown = [];
+        foreach ($currencies as $curr) {
+            $currencies_dropdown[$curr->id] = $curr->currency . ' (' . $curr->code . ')';
+        }
+
+        $date = !empty($paid_on_date) ? \Carbon::parse($paid_on_date)->toDateString() : now()->toDateString();
+        $current_bcv_rate = 1.0;
+        if ($base_currency && $ves_currency) {
+            $rate = \App\Models\ExchangeRate::getRate($business_id, $base_currency->id, $ves_currency->id, $date);
+            if (!empty($rate) && $rate > 0) {
+                $current_bcv_rate = floatval($rate);
+            } else {
+                $current_bcv_rate = floatval($business->p_exchange_rate ?? 1.0);
+            }
+        }
+
+        return compact('currencies_dropdown', 'base_currency', 'ves_currency', 'current_bcv_rate');
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -217,8 +253,16 @@ class TransactionPaymentController extends Controller
             //Accounts
             $accounts = $this->moduleUtil->accountsDropdown($business_id, true, false, true);
 
+            $currency_data = $this->getCurrencyData($business_id, $payment_line->paid_on);
+            $currencies_dropdown = $currency_data['currencies_dropdown'];
+            $base_currency = $currency_data['base_currency'];
+            $ves_currency = $currency_data['ves_currency'];
+            $current_bcv_rate = !empty($payment_line->payment_exchange_rate) && $payment_line->payment_exchange_rate > 0 
+                ? floatval($payment_line->payment_exchange_rate) 
+                : $currency_data['current_bcv_rate'];
+
             return view('transaction_payment.edit_payment_row')
-                        ->with(compact('transaction', 'payment_types', 'payment_line', 'accounts'));
+                        ->with(compact('transaction', 'payment_types', 'payment_line', 'accounts', 'currencies_dropdown', 'base_currency', 'ves_currency', 'current_bcv_rate'));
         }
     }
 
@@ -240,9 +284,19 @@ class TransactionPaymentController extends Controller
 
             $inputs = $request->only(['amount', 'method', 'note', 'card_number', 'card_holder_name',
                 'card_transaction_number', 'card_type', 'card_month', 'card_year', 'card_security',
-                'cheque_number', 'bank_account_number', ]);
+                'cheque_number', 'bank_account_number', 'payment_currency_id', 'payment_exchange_rate', ]);
             $inputs['paid_on'] = $this->transactionUtil->uf_date($request->input('paid_on'), true);
             $inputs['amount'] = $this->transactionUtil->num_uf($inputs['amount']);
+
+            if (! empty($inputs['payment_exchange_rate'])) {
+                $inputs['payment_exchange_rate'] = $this->transactionUtil->num_uf($inputs['payment_exchange_rate']);
+            }
+
+            if (! empty($inputs['payment_currency_id']) && ! empty($inputs['payment_exchange_rate']) && $inputs['payment_exchange_rate'] > 1) {
+                $inputs['amount_in_base_currency'] = round($inputs['amount'] / $inputs['payment_exchange_rate'], 4);
+            } else {
+                $inputs['amount_in_base_currency'] = $inputs['amount'];
+            }
 
             if ($inputs['method'] == 'custom_pay_1') {
                 $inputs['transaction_no'] = $request->input('transaction_no_1');
@@ -412,8 +466,14 @@ class TransactionPaymentController extends Controller
                 //Accounts
                 $accounts = $this->moduleUtil->accountsDropdown($business_id, true, false, true);
 
+                $currency_data = $this->getCurrencyData($business_id, $payment_line->paid_on);
+                $currencies_dropdown = $currency_data['currencies_dropdown'];
+                $base_currency = $currency_data['base_currency'];
+                $ves_currency = $currency_data['ves_currency'];
+                $current_bcv_rate = $currency_data['current_bcv_rate'];
+
                 $view = view('transaction_payment.payment_row')
-                ->with(compact('transaction', 'payment_types', 'payment_line', 'amount_formated', 'accounts'))->render();
+                ->with(compact('transaction', 'payment_types', 'payment_line', 'amount_formated', 'accounts', 'currencies_dropdown', 'base_currency', 'ves_currency', 'current_bcv_rate'))->render();
 
                 $output = ['status' => 'due',
                     'view' => $view, ];
@@ -524,8 +584,14 @@ class TransactionPaymentController extends Controller
             //Accounts
             $accounts = $this->moduleUtil->accountsDropdown($business_id, true);
 
+            $currency_data = $this->getCurrencyData($business_id, $payment_line->paid_on);
+            $currencies_dropdown = $currency_data['currencies_dropdown'];
+            $base_currency = $currency_data['base_currency'];
+            $ves_currency = $currency_data['ves_currency'];
+            $current_bcv_rate = $currency_data['current_bcv_rate'];
+
             return view('transaction_payment.pay_supplier_due_modal')
-                        ->with(compact('contact_details', 'payment_types', 'payment_line', 'due_payment_type', 'ob_due', 'amount_formated', 'accounts'));
+                        ->with(compact('contact_details', 'payment_types', 'payment_line', 'due_payment_type', 'ob_due', 'amount_formated', 'accounts', 'currencies_dropdown', 'base_currency', 'ves_currency', 'current_bcv_rate'));
         }
     }
 

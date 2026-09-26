@@ -64,7 +64,18 @@
               <span class="input-group-addon">
                 <i class="fa fa-calendar"></i>
               </span>
-              {!! Form::text('paid_on', @format_datetime($payment_line->paid_on), ['class' => 'form-control', 'readonly', 'required']); !!}
+              {!! Form::text('paid_on', @format_datetime($payment_line->paid_on), ['class' => 'form-control modal_paid_on', 'readonly', 'required', 'id' => 'paid_on']); !!}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            {!! Form::label("payment_currency_id" , __('business.currency') . ':') !!}
+            <div class="input-group">
+              <span class="input-group-addon">
+                <i class="fas fa-coins"></i>
+              </span>
+              {!! Form::select("payment_currency_id", $currencies_dropdown ?? [], !empty($payment_line->payment_currency_id) ? $payment_line->payment_currency_id : ($base_currency->id ?? null), ['class' => 'form-control select2 modal_payment_currency', 'style' => 'width:100%;', 'id' => 'modal_payment_currency']); !!}
             </div>
           </div>
         </div>
@@ -75,8 +86,31 @@
               <span class="input-group-addon">
                 <i class="fas fa-money-bill-alt"></i>
               </span>
-              {!! Form::text("amount", @num_format($payment_line->amount), ['class' => 'form-control input_number payment_amount', 'required', 'placeholder' => 'Amount']); !!}
+              {!! Form::text("amount", @num_format($payment_line->amount), ['class' => 'form-control input_number payment_amount modal_payment_amount', 'required', 'placeholder' => 'Amount', 'id' => 'modal_payment_amount']); !!}
             </div>
+          </div>
+        </div>
+        <div class="col-md-4 modal_exchange_rate_container">
+          <div class="form-group">
+            {!! Form::label("payment_exchange_rate" , __('lang_v1.exchange_rate') . ' (BCV/Tasa):') !!}
+            <div class="input-group">
+              <span class="input-group-addon">
+                <i class="fa fa-line-chart"></i>
+              </span>
+              {!! Form::text("payment_exchange_rate", @num_format($current_bcv_rate ?? 1.0), ['class' => 'form-control input_number modal_payment_exchange_rate', 'id' => 'modal_payment_exchange_rate', 'placeholder' => 'Tasa']); !!}
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default btn-flat btn_refresh_modal_rate" title="Obtener tasa según la fecha seleccionada"><i class="fa fa-refresh"></i></button>
+              </span>
+            </div>
+            <small class="text-muted modal_rate_date_text" style="display:block; margin-top:2px;">
+              <i class="fa fa-calendar-check-o"></i> Tasa para: <span class="modal_rate_date_label">{{ @format_date($payment_line->paid_on) }}</span>
+            </small>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="modal_equiv_box alert alert-info" style="padding: 8px 15px; margin-bottom: 12px; display: none; border-radius: 4px;">
+            <i class="fa fa-info-circle"></i> <span class="modal_equiv_text"></span>
           </div>
         </div>
          @php

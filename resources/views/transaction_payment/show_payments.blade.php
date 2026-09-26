@@ -185,7 +185,20 @@
                             <tr>
                               <td>{{ @format_datetime($payment->paid_on) }}</td>
                               <td>{{ $payment->payment_ref_no }}</td>
-                              <td><span class="display_currency" data-currency_symbol="true">{{ $payment->amount }}</span></td>
+                              <td>
+                                <span class="display_currency" data-currency_symbol="true">{{ $payment->amount }}</span>
+                                @if(!empty($payment->payment_exchange_rate) && $payment->payment_exchange_rate > 1)
+                                  <br>
+                                  <small class="text-muted">
+                                    @if(!empty($payment->amount_in_base_currency))
+                                      ≈ ${{ @num_format($payment->amount_in_base_currency) }} USD
+                                    @else
+                                      ≈ ${{ @num_format($payment->amount / $payment->payment_exchange_rate) }} USD
+                                    @endif
+                                    <br>(Tasa: {{ @num_format($payment->payment_exchange_rate) }})
+                                  </small>
+                                @endif
+                              </td>
                               <td>{{ $payment_types[$payment->method] ?? '' }}</td>
                               <td>@if(!empty($payment->gateway)){{$payment->gateway}} - @endif {{ $payment->note }}</td>
                               @if($accounts_enabled)

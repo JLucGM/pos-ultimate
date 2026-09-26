@@ -3222,7 +3222,8 @@ class TransactionUtil extends Util
                                 ->orderBy('transaction_date', 'asc')
                                 ->get();
 
-        $total_amount = $parent_payment->amount;
+        $exchange_rate = !empty($parent_payment->payment_exchange_rate) && $parent_payment->payment_exchange_rate > 1 ? floatval($parent_payment->payment_exchange_rate) : 1;
+        $total_amount = !empty($parent_payment->amount_in_base_currency) ? $parent_payment->amount_in_base_currency : ($exchange_rate > 1 ? ($parent_payment->amount / $exchange_rate) : $parent_payment->amount);
 
         $tranaction_payments = [];
         if ($due_transactions->count()) {
@@ -3256,6 +3257,8 @@ class TransactionUtil extends Util
                         'created_by' => $parent_payment->created_by,
                         'payment_for' => $parent_payment->payment_for,
                         'parent_id' => $parent_payment->id,
+                        'payment_currency_id' => $parent_payment->payment_currency_id,
+                        'payment_exchange_rate' => $parent_payment->payment_exchange_rate,
                         'created_at' => $now,
                         'updated_at' => $now,
                     ];
@@ -3270,7 +3273,8 @@ class TransactionUtil extends Util
                     $array['payment_ref_no'] = $payment_ref_no;
 
                     if ($due <= $total_amount) {
-                        $array['amount'] = $due;
+                        $array['amount_in_base_currency'] = $due;
+                        $array['amount'] = $exchange_rate > 1 ? round($due * $exchange_rate, 4) : $due;
                         $tranaction_payments[] = $array;
 
                         //Update transaction status to paid
@@ -3286,7 +3290,8 @@ class TransactionUtil extends Util
 
                         $this->activityLog($transaction, 'payment_edited', $transaction_before);
                     } else {
-                        $array['amount'] = $total_amount;
+                        $array['amount_in_base_currency'] = $total_amount;
+                        $array['amount'] = $exchange_rate > 1 ? round($total_amount * $exchange_rate, 4) : $total_amount;
                         $tranaction_payments[] = $array;
 
                         //Update transaction status to partial
@@ -5116,8 +5121,8 @@ class TransactionUtil extends Util
                         'transactions.pay_term_number',
                         'transactions.pay_term_type',
                         'PR.id as return_transaction_id',
-                        DB::raw('SUM(TP.amount) as amount_paid'),
-                        DB::raw('(SELECT SUM(TP2.amount) FROM transaction_payments AS TP2 WHERE
+                        DB::raw('SUM(COALESCE(TP.amount_in_base_currency, IF(TP.payment_exchange_rate > 1, TP.amount / TP.payment_exchange_rate, TP.amount))) as amount_paid'),
+                        DB::raw('(SELECT SUM(COALESCE(TP2.amount_in_base_currency, IF(TP2.payment_exchange_rate > 1, TP2.amount / TP2.payment_exchange_rate, TP2.amount))) FROM transaction_payments AS TP2 WHERE
                         TP2.transaction_id=PR.id ) as return_paid'),
                         DB::raw('COUNT(PR.id) as return_exists'),
                         DB::raw('COALESCE(PR.final_total, 0) as amount_return'),
@@ -5264,11 +5269,11 @@ class TransactionUtil extends Util
                     'transactions.custom_field_4',
                     DB::raw('DATE_FORMAT(transactions.transaction_date, "%Y/%m/%d") as sale_date'),
                     DB::raw("CONCAT(COALESCE(u.surname, ''),' ',COALESCE(u.first_name, ''),' ',COALESCE(u.last_name,'')) as added_by"),
-                    DB::raw('(SELECT SUM(IF(TP.is_return = 1,-1*TP.amount,TP.amount)) FROM transaction_payments AS TP WHERE
+                    DB::raw('(SELECT SUM(IF(TP.is_return = 1, -1 * COALESCE(TP.amount_in_base_currency, IF(TP.payment_exchange_rate > 1, TP.amount / TP.payment_exchange_rate, TP.amount)), COALESCE(TP.amount_in_base_currency, IF(TP.payment_exchange_rate > 1, TP.amount / TP.payment_exchange_rate, TP.amount)))) FROM transaction_payments AS TP WHERE
                         TP.transaction_id=transactions.id) as total_paid'),
                     'bl.name as business_location',
                     DB::raw('COUNT(SR.id) as return_exists'),
-                    DB::raw('(SELECT SUM(TP2.amount) FROM transaction_payments AS TP2 WHERE
+                    DB::raw('(SELECT SUM(COALESCE(TP2.amount_in_base_currency, IF(TP2.payment_exchange_rate > 1, TP2.amount / TP2.payment_exchange_rate, TP2.amount))) FROM transaction_payments AS TP2 WHERE
                         TP2.transaction_id=SR.id ) as return_paid'),
                     DB::raw('COALESCE(SR.final_total, 0) as amount_return'),
                     'SR.id as return_transaction_id',
@@ -6186,7 +6191,7 @@ class TransactionUtil extends Util
         $business_id = auth()->user()->business_id;
         $inputs = $request->only(['amount', 'method', 'note', 'card_number', 'card_holder_name',
             'card_transaction_number', 'card_type', 'card_month', 'card_year', 'card_security',
-            'cheque_number', 'bank_account_number', ]);
+            'cheque_number', 'bank_account_number', 'payment_currency_id', 'payment_exchange_rate', ]);
 
         //payment type option is available on pay contact modal
         $is_reverse = $request->has('is_reverse') && $request->input('is_reverse') == 1 ? true : false;
@@ -6200,6 +6205,15 @@ class TransactionUtil extends Util
         if ($format_data) {
             $inputs['paid_on'] = $this->uf_date($inputs['paid_on'], true);
             $inputs['amount'] = $this->num_uf($inputs['amount']);
+            if (! empty($inputs['payment_exchange_rate'])) {
+                $inputs['payment_exchange_rate'] = $this->num_uf($inputs['payment_exchange_rate']);
+            }
+        }
+
+        if (! empty($inputs['payment_currency_id']) && ! empty($inputs['payment_exchange_rate']) && $inputs['payment_exchange_rate'] > 1) {
+            $inputs['amount_in_base_currency'] = round($inputs['amount'] / $inputs['payment_exchange_rate'], 4);
+        } else {
+            $inputs['amount_in_base_currency'] = $inputs['amount'];
         }
 
         $inputs['created_by'] = auth()->user()->id;

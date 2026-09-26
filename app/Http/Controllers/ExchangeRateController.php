@@ -323,53 +323,71 @@ class ExchangeRateController extends Controller
                 ], 400);
             }
             
-            if (!$request->from_currency_id || !$request->to_currency_id) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Faltan parámetros requeridos: from_currency_id y to_currency_id'
-                ], 400);
+            $date = $request->input('date');
+            if (!empty($date)) {
+                try {
+                    $date = \Carbon::parse($date)->toDateString();
+                } catch (\Exception $e) {
+                    $date = now()->toDateString();
+                }
+            } else {
+                $date = now()->toDateString();
             }
-            
-            $from_curr = Currency::find($request->from_currency_id);
-            $to_curr = Currency::find($request->to_currency_id);
 
-            $rate = ExchangeRate::getRate(
-                $business_id,
-                $request->from_currency_id,
-                $request->to_currency_id,
-                $request->date
-            );
+            $from_currency_id = $request->input('from_currency_id');
+            $to_currency_id = $request->input('to_currency_id');
 
-            if ($rate === null) {
-                // Check reverse rate
-                $reverse_rate = ExchangeRate::getRate(
+            $business = \App\Business::where('id', $business_id)->with('currency')->first();
+            $base_currency = $business->currency ?? null;
+            $ves_currency = \App\Services\ExchangeRateService::getVenezuelaCurrency();
+
+            if (empty($from_currency_id) && $base_currency) {
+                $from_currency_id = $base_currency->id;
+            }
+            if (empty($to_currency_id) && $ves_currency) {
+                $to_currency_id = $ves_currency->id;
+            }
+
+            $from_curr = Currency::find($from_currency_id);
+            $to_curr = Currency::find($to_currency_id);
+
+            $rate = null;
+            if (!empty($from_currency_id) && !empty($to_currency_id)) {
+                $rate = ExchangeRate::getRate(
                     $business_id,
-                    $request->to_currency_id,
-                    $request->from_currency_id,
-                    $request->date
+                    $from_currency_id,
+                    $to_currency_id,
+                    $date
                 );
-                if ($reverse_rate !== null && $reverse_rate > 0) {
-                    $rate = $reverse_rate;
+
+                if ($rate === null) {
+                    // Check reverse rate
+                    $reverse_rate = ExchangeRate::getRate(
+                        $business_id,
+                        $to_currency_id,
+                        $from_currency_id,
+                        $date
+                    );
+                    if ($reverse_rate !== null && $reverse_rate > 0) {
+                        $rate = $reverse_rate;
+                    }
                 }
             }
 
-            if ($rate === null) {
-                $business = \App\Business::find($business_id);
+            if ($rate === null && $business) {
                 if (!empty($business->p_exchange_rate) && $business->p_exchange_rate > 0) {
                     $rate = $business->p_exchange_rate;
                 }
             }
 
             if ($rate === null) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No se encontró tasa de cambio para estas monedas en la fecha especificada'
-                ], 404);
+                $rate = 1.0;
             }
 
             return response()->json([
                 'success' => true,
                 'rate' => (float) $rate,
+                'date' => $date,
                 'from_currency_code' => $from_curr ? $from_curr->code : '',
                 'to_currency_code' => $to_curr ? $to_curr->code : ''
             ]);

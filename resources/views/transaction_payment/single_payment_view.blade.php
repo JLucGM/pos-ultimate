@@ -143,7 +143,19 @@
           <br>
           <div class="col-xs-6">
             <strong>@lang('purchase.amount') :</strong>
-            @format_currency($single_payment_line->amount)<br>
+            @format_currency($single_payment_line->amount)
+            @if(!empty($single_payment_line->payment_exchange_rate) && $single_payment_line->payment_exchange_rate > 1)
+              <br>
+              <small class="text-muted">
+                @if(!empty($single_payment_line->amount_in_base_currency))
+                  ≈ ${{ @num_format($single_payment_line->amount_in_base_currency) }} USD
+                @else
+                  ≈ ${{ @num_format($single_payment_line->amount / $single_payment_line->payment_exchange_rate) }} USD
+                @endif
+                (Tasa de cambio: {{ @num_format($single_payment_line->payment_exchange_rate) }})
+              </small>
+            @endif
+            <br>
             <strong>@lang('lang_v1.payment_method') :</strong>
             {{ $payment_types[$single_payment_line->method] ?? '' }}<br>
             @if($single_payment_line->method == "card")
