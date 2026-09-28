@@ -531,3 +531,14 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone'])
     Route::get('/sells/invoice-url/{id}', [SellPosController::class, 'showInvoiceUrl']);
     Route::get('/show-notification/{id}', [HomeController::class, 'showNotification']);
 });
+
+// Error & Maintenance page preview routes
+Route::get('/errors/404', function () {
+    return response()->view('errors.404', [], 404);
+});
+Route::get('/maintenance', function () {
+    return response()->view('errors.503', [], 503);
+});
+Route::get('/errors/503', function () {
+    return response()->view('errors.503', [], 503);
+});
