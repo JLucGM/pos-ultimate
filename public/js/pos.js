@@ -564,9 +564,10 @@ $(document).ready(function() {
     );
 
     //Remove row on click on remove row
-    $('table#pos_table tbody').on('click', 'i.pos_remove_row', function() {
+    $('table#pos_table tbody').on('click', '.pos_remove_row, i.pos_remove_row, button.pos_remove_row', function(e) {
+        e.preventDefault();
         $(this)
-            .parents('tr')
+            .closest('tr')
             .remove();
         pos_total_row();
     });

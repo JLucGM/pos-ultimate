@@ -469,7 +469,7 @@
 	</td>
 	<td class="text-center v-center" style="width: 32px; padding: 4px 6px !important;">
 		<button type="button" class="pos_remove_row cursor-pointer" style="border: none; background: #FEE2E2; color: #EF4444; width: 24px; height: 24px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s ease;" title="Eliminar de la venta">
-			<i class="fa fa-times" style="font-size: 10px;"></i>
+			<i class="fa fa-times pos_remove_row" style="font-size: 10px; pointer-events: none;"></i>
 		</button>
 	</td>
 </tr>
