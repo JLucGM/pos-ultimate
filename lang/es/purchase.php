@@ -21,10 +21,10 @@
     'payment_added_success' => 'Pago agregado con éxito',
     'payment_updated_success' => 'Pago actualizado con éxito',
     'payment_deleted_success' => 'Pago eliminado con éxito',
-    'view_payments' => 'View Payments',
+    'view_payments' => 'Ver pagos',
     'amount' => 'Cantidad',
     'payment_method' => 'Método de pago',
-    'no_records_found' => 'No se encontrarón archivos',
+    'no_records_found' => 'No se encontraron registros',
     'payment_due' => 'Saldo pendiente',
     'purchase_total' => 'Total compra', /* modified */
     'location' => 'Ubicación',

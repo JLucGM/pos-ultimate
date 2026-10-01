@@ -24,8 +24,8 @@ return [
     'sku' => "Id único de Producto o Unidad de stock de mantenimiento <br> <br> manténgalo en blanco para generar automáticamente sku. <br> <small class='text-muted'> Puede modificar el prefijo sku en Configuración de empresa . </small> ", /* modified */
     'enable_stock' => 'Habilitar o deshabilitar la gestión de stocks para un Producto.',
     'alert_quantity' => "Manténgase alerta cuando el stock del Producto llegue o baje de la cantidad especificada. <br> <br> <small class='text-muted'> Los Productos con poco stock se mostrarán en el panel de control - Sección de alerta de stock del Producto. </small>", /* modified */
-    'product_type' => '<b> Producto único </ b>: Producto sin variaciones. <br> <b> Producto variable </ b>: Producto con variaciones como tamaño, color, etc.
-    <br><b>Combo product</b>: A combination of multiple products, also called bundle product',
+    'product_type' => '<b> Producto único </b>: Producto sin variaciones. <br> <b> Producto variable </b>: Producto con variaciones como tamaño, color, etc.
+    <br><b>Producto combinado</b>: Una combinación de múltiples productos, también llamado paquete de productos',
     'profit_percent' => "Margen de beneficio predeterminado para el Producto. <br> <small class='text-muted'> (<i> Puede administrar el margen de beneficio predeterminado en Configuración comercial. </i>) </small>",
     'pay_term' => "Pagos pendientes por compras dentro del período de tiempo determinado. <br/> <small class='text-muted'> Todos los pagos vencidos o adeudados se mostrarán en el panel de control - Sección de pago vencido </small>", /* modified */
     'order_status' => 'Los Productos en esta compra estarán disponibles para la venta solo si el <b> Estado del pedido </ b> es <b> Elementos recibidos </ b>.',
@@ -63,6 +63,6 @@ return [
     'accounting_method' => 'Método de contabilidad',
     'transaction_edit_days' => 'Número de días desde la Fecha de transacción hasta la cual se puede editar una transacción',
     'stock_expiry_alert' => "Lista de existencias con vencimiento en :days días <br> <small class ='text-muted'> Puede establecer el número de días en Configuración empresarial </small>",
-    'sub_sku' => 'Sku is optional. <br><br><small>Déjelo en blanco para generar SKU automáticamente.<small>',
+    'sub_sku' => 'El SKU es opcional. <br><br><small>Déjelo en blanco para generar el SKU automáticamente.</small>',
     'shipping' => 'Establezca los detalles y los cargos de envío. Haga clic en el icono de edición a continuación para agregar o actualizar los detalles y cargos de envío.',
 ];

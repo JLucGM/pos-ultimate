@@ -72,37 +72,45 @@ class TransactionPayment extends Model
         //Update parent payment if exists
         if (! empty($payment->parent_id)) {
             $parent_payment = TransactionPayment::find($payment->parent_id);
-            $parent_payment->amount -= $payment->amount;
+            if (! empty($parent_payment)) {
+                $parent_payment->amount -= $payment->amount;
 
-            if ($parent_payment->amount <= 0) {
-                $parent_payment->delete();
-                event(new TransactionPaymentDeleted($parent_payment));
-            } else {
-                $parent_payment->save();
-                //Add event to update parent payment account transaction
-                event(new TransactionPaymentUpdated($parent_payment, null));
+                if ($parent_payment->amount <= 0) {
+                    $parent_payment->delete();
+                    event(new TransactionPaymentDeleted($parent_payment));
+                } else {
+                    $parent_payment->save();
+                    //Add event to update parent payment account transaction
+                    event(new TransactionPaymentUpdated($parent_payment, null));
+                }
             }
         }
+
+        $transaction_id = $payment->transaction_id;
+        $payment_id = $payment->id;
+        $payment_ref_no = $payment->payment_ref_no;
 
         $payment->delete();
 
         $transactionUtil = new \App\Utils\TransactionUtil();
 
-        if (! empty($payment->transaction_id)) {
+        if (! empty($transaction_id)) {
             //update payment status
-            $transaction = $payment->load('transaction')->transaction;
-            $transaction_before = $transaction->replicate();
+            $transaction = Transaction::find($transaction_id);
+            if (! empty($transaction)) {
+                $transaction_before = $transaction->replicate();
 
-            $payment_status = $transactionUtil->updatePaymentStatus($payment->transaction_id);
+                $payment_status = $transactionUtil->updatePaymentStatus($transaction_id);
 
-            $transaction->payment_status = $payment_status;
+                $transaction->payment_status = $payment_status;
 
-            $transactionUtil->activityLog($transaction, 'payment_edited', $transaction_before);
+                $transactionUtil->activityLog($transaction, 'payment_edited', $transaction_before);
+            }
         }
 
         $log_properities = [
-            'id' => $payment->id,
-            'ref_no' => $payment->payment_ref_no,
+            'id' => $payment_id,
+            'ref_no' => $payment_ref_no,
         ];
         $transactionUtil->activityLog($payment, 'payment_deleted', null, $log_properities);
 

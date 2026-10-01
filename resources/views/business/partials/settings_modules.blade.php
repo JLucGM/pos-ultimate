@@ -206,7 +206,8 @@
                         <span style="font-size: 12px; color: #94A3B8;">Función Avanzada de AudazPOS</span>
                     </div>
                 </div>
-                   <div class="modal-body" style="padding: 24px;">
+            </div>
+            <div class="modal-body" style="padding: 24px;">
                 <input type="hidden" id="modal_module_key" value="">
                 <div style="background: #FEF3C7; border: 1px solid #FCD34D; border-radius: 10px; padding: 14px 16px; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 12px;">
                     <i class="fa fa-lock text-warning" style="font-size: 20px; color: #D97706; margin-top: 2px;"></i>

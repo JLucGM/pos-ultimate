@@ -18,6 +18,6 @@
     'payment_dues' => 'Cuotas de pago',
     'due_amount' => 'Monto adeudado',
     'stock_expiry_alert' => 'Alerta de stock por vencer',
-    'todays_profit' => "Ganancias de hoy",
-    'todays_profit' => 'Beneficio de hoy',
+    'dashboard' => 'Panel de control',
+    'todays_profit' => 'Ganancias de hoy',
 ];

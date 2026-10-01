@@ -40,7 +40,6 @@ return [
     'variation_name' => 'Nombre de variación',
     'variation_values' => 'Valores de variación',
     'use_template' => 'Usar plantilla',
-    'variation_values' => 'Variation Values',
     'add_variation' => 'Agregar variación',
     'product_added_success' => 'Producto agregado con éxito',
     'product_updated_success' => 'Producto actualizado con éxito',
