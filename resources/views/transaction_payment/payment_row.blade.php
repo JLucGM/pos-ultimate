@@ -108,7 +108,7 @@
         </div>
         <div class="col-md-4 modal_exchange_rate_container">
           <div class="form-group">
-            {!! Form::label("payment_exchange_rate" , __('lang_v1.exchange_rate') . ' (BCV/Tasa):') !!}
+            {!! Form::label("payment_exchange_rate" , __('lang_v1.exchange_rate') . ' (BCV):') !!}
             <div class="input-group">
               <span class="input-group-addon">
                 <i class="fa fa-line-chart"></i>

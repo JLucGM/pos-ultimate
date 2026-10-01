@@ -396,6 +396,7 @@ return [
     'pay_term_period_ins' => 'Opciones disponibles: días y meses',
     'your_username_will_be' => 'Tu nombre de usuario será',
     'currency_exchange_rate' => 'Tasa de cambio de moneda',
+    'exchange_rate' => 'Tasa de cambio',
     'select_all' => 'Seleccionar todo',
     'deselect_all' => 'Deseleccionar todo',
     'duplicate_product' => 'Producto duplicado',
