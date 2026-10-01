@@ -71,6 +71,7 @@ class BaseController extends Controller
         ];
 
         $manual_gateways = ['offline', 'pagomovil', 'bank_transfer', 'zelle', 'binance', 'paypal'];
+        $is_trial = ($gateway == 'trial' || ($package->price == 0 && !empty($package->trial_days) && $package->trial_days > 0));
         if ($package->price != 0 && (in_array($gateway, $manual_gateways) && ! $is_superadmin)) {
             //If offline/manual report then dates will be decided when approved by superadmin
             $subscription['start_date'] = null;
@@ -82,7 +83,7 @@ class BaseController extends Controller
 
             $subscription['start_date'] = $dates['start'];
             $subscription['end_date'] = $dates['end'];
-            $subscription['trial_end_date'] = $dates['trial'];
+            $subscription['trial_end_date'] = $is_trial ? $dates['trial'] : null;
             $subscription['status'] = 'approved';
         }
 
@@ -150,22 +151,27 @@ class BaseController extends Controller
      */
     protected function _get_package_dates($business_id, $package)
     {
-        $output = ['start' => '', 'end' => '', 'trial' => ''];
+        $output = ['start' => '', 'end' => '', 'trial' => null];
 
         //calculate start date
         $start_date = Subscription::end_date($business_id);
         $output['start'] = $start_date->toDateString();
 
-        //Calculate end date
+        //Calculate end date using clone/copy to avoid modifying start_date
         if ($package->interval == 'days') {
-            $output['end'] = $start_date->addDays($package->interval_count)->toDateString();
+            $output['end'] = $start_date->copy()->addDays($package->interval_count)->toDateString();
         } elseif ($package->interval == 'months') {
-            $output['end'] = $start_date->addMonths($package->interval_count)->toDateString();
+            $output['end'] = $start_date->copy()->addMonths($package->interval_count)->toDateString();
         } elseif ($package->interval == 'years') {
-            $output['end'] = $start_date->addYears($package->interval_count)->toDateString();
+            $output['end'] = $start_date->copy()->addYears($package->interval_count)->toDateString();
         }
 
-        $output['trial'] = $start_date->addDays($package->trial_days);
+        // Only calculate trial end date if the package is free/trial
+        if ((float) $package->price == 0 && ! empty($package->trial_days) && $package->trial_days > 0) {
+            $output['trial'] = $start_date->copy()->addDays($package->trial_days)->toDateString();
+        } else {
+            $output['trial'] = null;
+        }
 
         return $output;
     }

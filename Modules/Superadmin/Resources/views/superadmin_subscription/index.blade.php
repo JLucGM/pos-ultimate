@@ -179,6 +179,7 @@
             $(document).on('shown.bs.modal', '.view_modal', function() {
                 $('.edit-subscription-modal .datepicker').datepicker({
                     autoclose: true,
+                    clearBtn: true,
                     format: datepicker_date_format
                 });
                 $("form#edit_subscription_form").submit(function(e) {

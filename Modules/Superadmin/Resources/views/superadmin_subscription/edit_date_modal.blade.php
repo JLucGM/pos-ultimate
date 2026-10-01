@@ -22,8 +22,15 @@
 
               <div class="form-group">
                 {!! Form::label('trial_end_date', __("superadmin::lang.trial_end_date"))!!}
-
-                {!! Form::text('trial_end_date', !empty($subscription->trial_end_date) ? @format_date($subscription->trial_end_date) : null, ['class' => 'form-control datepicker', 'readonly']);!!}
+                <div class="input-group">
+                    {!! Form::text('trial_end_date', !empty($subscription->trial_end_date) ? @format_date($subscription->trial_end_date) : null, ['class' => 'form-control datepicker', 'id' => 'modal_trial_end_date', 'readonly']);!!}
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" onclick="$('#modal_trial_end_date').val('');" title="Eliminar / Dejar sin período de prueba">
+                            <i class="fa fa-times text-danger"></i>
+                        </button>
+                    </span>
+                </div>
+                <p class="help-block" style="font-size: 11px; margin-top: 4px; color: #64748b;">Dejar en blanco para planes pagos sin período de prueba.</p>
               </div>
       </div>
 
