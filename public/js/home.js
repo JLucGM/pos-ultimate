@@ -1,7 +1,7 @@
 $(document).ready(function() {
     if ($('#dashboard_date_filter').length == 1) {
-        dateRangeSettings.startDate = moment();
-        dateRangeSettings.endDate = moment();
+        dateRangeSettings.startDate = financial_year.start;
+        dateRangeSettings.endDate = financial_year.end;
         $('#dashboard_date_filter').daterangepicker(dateRangeSettings, function(start, end) {
             $('#dashboard_date_filter span').html(
                 start.format(moment_date_format) + ' ~ ' + end.format(moment_date_format)
@@ -12,7 +12,11 @@ $(document).ready(function() {
             }
         });
 
-        update_statistics(moment().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
+        $('#dashboard_date_filter span').html(
+            financial_year.start.format(moment_date_format) + ' ~ ' + financial_year.end.format(moment_date_format)
+        );
+
+        update_statistics(financial_year.start.format('YYYY-MM-DD'), financial_year.end.format('YYYY-MM-DD'));
     }
 
     $('#dashboard_location').change( function(e) {
