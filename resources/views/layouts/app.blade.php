@@ -51,12 +51,15 @@
 
 </head>
 <body
-    class="tw-font-sans tw-antialiased tw-text-gray-900 tw-bg-gray-100 @if ($pos_layout) hold-transition lockscreen @else hold-transition skin-@if (!empty(session('business.theme_color'))){{ session('business.theme_color') }}@else{{ 'blue-light' }} @endif sidebar-mini @endif" >
+    class="tw-font-sans tw-antialiased tw-text-gray-900 tw-bg-gray-100 @if ($pos_layout) hold-transition lockscreen @else hold-transition skin-@if (!empty(session('business.theme_color'))){{ session('business.theme_color') }}@else{{ 'blue-light' }} @endif sidebar-mini sidebar-collapse @endif" >
     <div class="tw-flex thetop">
         <script type="text/javascript">
-            if (localStorage.getItem("upos_sidebar_collapse") == 'true') {
+            if (localStorage.getItem("upos_sidebar_collapse") === 'false') {
                 var body = document.getElementsByTagName("body")[0];
-                body.className += " sidebar-collapse";
+                body.classList.remove("sidebar-collapse");
+            } else {
+                var body = document.getElementsByTagName("body")[0];
+                body.classList.add("sidebar-collapse");
             }
         </script>
         @if (!$pos_layout && $request->segment(1) != 'customer-display')
@@ -150,7 +153,10 @@
             @endforeach
         @endif
 
+        @include('layouts.partials.os_dock')
+        @include('layouts.partials.os_launchpad')
         @include('layouts.partials.bottom_nav')
+        <script src="{{ asset('js/kubre-os.js?v=' . $asset_v) }}"></script>
         <script src="{{ asset('js/pwa-install.js?v=' . $asset_v) }}"></script>
 
         <div class="overlay tw-hidden"></div>

@@ -222,8 +222,11 @@
             $('#view_todays_profit').trigger('click');
         });
 
-        $('.side-bar-collapse').click(function() {
-            $('.side-bar').toggle('slow');
+        $(document).on('click', '.side-bar-collapse', function(e) {
+            e.preventDefault();
+            $('body').toggleClass('sidebar-collapse');
+            var isCollapsed = $('body').hasClass('sidebar-collapse');
+            localStorage.setItem('upos_sidebar_collapse', isCollapsed ? 'true' : 'false');
         });
 
         $('.dt-buttons.btn-group').find('a.btn').removeClass('btn-default');

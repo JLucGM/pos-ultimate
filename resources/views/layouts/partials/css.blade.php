@@ -26,6 +26,9 @@
 <!-- AudazPOS DataTables & Admin Modules Pro -->
 <link rel="stylesheet" href="{{ asset('css/admin-datatables-modern.css?v='.$asset_v) }}">
 
+<!-- Kubre OS Modern Desktop Dock & Command Center Framework -->
+<link rel="stylesheet" href="{{ asset('css/kubre-os.css?v='.$asset_v) }}">
+
 @if(isset($pos_layout) && $pos_layout)
 	<style type="text/css">
 		.content{

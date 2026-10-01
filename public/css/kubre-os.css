@@ -1,0 +1,727 @@
+/**
+ * Kubre OS - ERP Modern Desktop & Mobile UI Framework
+ * macOS-Style Floating Dock, App Squircles with Sub-Dock Decks, Glassmorphism, and Command Launchpad
+ */
+
+/* ==========================================================================
+   1. KUBRE OS DOCK (FLOATING MACOS STYLE WITH OVERFLOW FREEDOM)
+   ========================================================================== */
+#kubre-os-dock-container {
+    position: fixed;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    pointer-events: none;
+    z-index: 1040;
+    padding: 0 16px;
+    overflow: visible !important;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+.kubre-os-dock {
+    pointer-events: auto;
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    padding: 8px 14px 6px 14px;
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(28px) saturate(190%);
+    -webkit-backdrop-filter: blur(28px) saturate(190%);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 24px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45), 
+                0 0 0 1px rgba(0, 0, 0, 0.25), 
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    position: relative;
+    max-width: 98vw;
+    overflow: visible !important; /* Allow icons to pop out of the dock! */
+}
+
+/* App Item Wrapper */
+.kubre-dock-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    text-decoration: none !important;
+    outline: none;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-drag: none;
+    padding: 2px 4px;
+    border-radius: 14px;
+    transform-origin: bottom center;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Hover Magnification: Pops freely outside the dock boundary! */
+.kubre-dock-item:hover {
+    transform: translateY(-14px) scale(1.18);
+    z-index: 100;
+}
+
+.kubre-dock-item.has-subdock-open {
+    transform: translateY(-10px) scale(1.12);
+    z-index: 110;
+}
+
+.kubre-dock-item:active {
+    transform: translateY(-4px) scale(1.04);
+}
+
+/* App Squircle Tile */
+.kubre-app-tile {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: #FFFFFF;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.kubre-dock-item:hover .kubre-app-tile,
+.kubre-dock-item.has-subdock-open .kubre-app-tile {
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), 0 0 18px rgba(251, 76, 10, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    border-color: rgba(255, 255, 255, 0.45);
+}
+
+.kubre-app-tile svg,
+.kubre-app-tile i {
+    width: 22px;
+    height: 22px;
+    font-size: 20px;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+    transition: transform 0.2s ease;
+}
+
+.kubre-dock-item:hover .kubre-app-tile svg,
+.kubre-dock-item:hover .kubre-app-tile i {
+    transform: scale(1.08);
+}
+
+/* App Label Below Tile (Legible & Crisp) */
+.kubre-dock-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #CBD5E1;
+    margin-top: 4px;
+    white-space: nowrap;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+    letter-spacing: 0.2px;
+    line-height: 1;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.kubre-dock-item:hover .kubre-dock-label,
+.kubre-dock-item.has-subdock-open .kubre-dock-label {
+    color: #FFFFFF;
+    font-weight: 700;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 1), 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+/* Specific App Gradients */
+.tile-kubre-logo {
+    background: linear-gradient(135deg, #FF6B35 0%, #FB4C0A 50%, #D83600 100%);
+    box-shadow: 0 4px 16px rgba(251, 76, 10, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.tile-dashboard {
+    background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+}
+
+.tile-sales {
+    background: linear-gradient(135deg, #818CF8 0%, #4F46E5 100%);
+}
+
+.tile-products {
+    background: linear-gradient(135deg, #34D399 0%, #059669 100%);
+}
+
+.tile-purchases {
+    background: linear-gradient(135deg, #FBBF24 0%, #D97706 100%);
+}
+
+.tile-finance {
+    background: linear-gradient(135deg, #10B981 0%, #047857 100%);
+}
+
+.tile-expenses {
+    background: linear-gradient(135deg, #F87171 0%, #DC2626 100%);
+}
+
+.tile-contacts {
+    background: linear-gradient(135deg, #38BDF8 0%, #0284C7 100%);
+}
+
+.tile-consultorio {
+    background: linear-gradient(135deg, #2DD4BF 0%, #0D9488 100%);
+}
+
+.tile-manufacturing {
+    background: linear-gradient(135deg, #94A3B8 0%, #475569 100%);
+}
+
+.tile-reports {
+    background: linear-gradient(135deg, #C084FC 0%, #7E22CE 100%);
+}
+
+.tile-settings {
+    background: linear-gradient(135deg, #64748B 0%, #334155 100%);
+}
+
+.tile-pos {
+    background: linear-gradient(135deg, #FB923C 0%, #EA580C 100%);
+}
+
+.tile-superadmin {
+    background: linear-gradient(135deg, #E879F9 0%, #A21CAF 100%);
+}
+
+/* Active Dot Indicator */
+.kubre-dock-item .active-dot {
+    width: 4px;
+    height: 4px;
+    background: #FB4C0A;
+    border-radius: 50%;
+    margin-top: 2px;
+    box-shadow: 0 0 6px #FB4C0A;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform: scale(0.5);
+}
+
+.kubre-dock-item.is-active .active-dot {
+    opacity: 1;
+    transform: scale(1);
+    background: #FFFFFF;
+    box-shadow: 0 0 8px #FFFFFF, 0 0 12px rgba(251, 76, 10, 0.8);
+}
+
+/* Dock Divider */
+.kubre-dock-divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.15);
+    margin: 0 3px;
+    align-self: center;
+}
+
+/* ==========================================================================
+   2. FLOATING CONTEXTUAL SUB-DOCK (FLYOUT DECK PER MODULE)
+   ========================================================================== */
+.kubre-subdock-deck {
+    position: absolute;
+    bottom: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%) translateY(10px) scale(0.95);
+    width: 250px;
+    background: rgba(15, 23, 42, 0.94);
+    backdrop-filter: blur(28px) saturate(190%);
+    -webkit-backdrop-filter: blur(28px) saturate(190%);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 18px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 
+                0 0 0 1px rgba(0, 0, 0, 0.3), 
+                inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
+                visibility 0.22s ease;
+    z-index: 1080;
+}
+
+/* Bottom Pointer Arrow */
+.kubre-subdock-deck::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: rgba(15, 23, 42, 0.94) transparent transparent transparent;
+    z-index: 2;
+}
+
+/* Invisible Bridge to prevent mouse loss between dock and subdock */
+.kubre-subdock-deck::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: transparent;
+    z-index: 1;
+}
+
+/* While Sub-Dock is open, LOCK the scale and position so moving cursor doesn't shift links */
+.kubre-dock-item.has-subdock-open,
+.kubre-dock-item.has-subdock-open:hover {
+    transform: translateY(-10px) scale(1.12) !important;
+    z-index: 1090 !important;
+}
+
+.kubre-dock-item.has-subdock-open .kubre-subdock-deck {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto !important;
+    transform: translateX(-50%) translateY(0) scale(1);
+}
+
+/* Sub-dock Header */
+.kubre-subdock-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px 8px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 4px;
+}
+
+.kubre-subdock-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #F8FAFC;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.kubre-subdock-mainlink {
+    font-size: 11px;
+    color: #FB4C0A;
+    font-weight: 600;
+    text-decoration: none !important;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: rgba(251, 76, 10, 0.1);
+    transition: all 0.15s ease;
+}
+
+.kubre-subdock-mainlink:hover {
+    background: #FB4C0A;
+    color: #FFFFFF;
+}
+
+/* Sub-dock Option Links */
+.kubre-subdock-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    color: #E2E8F0;
+    text-decoration: none !important;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.15s ease;
+    background: transparent;
+}
+
+.kubre-subdock-link:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
+    transform: translateX(3px);
+}
+
+.kubre-subdock-link.is-active-sub {
+    background: rgba(251, 76, 10, 0.18);
+    color: #FF8F6B;
+    font-weight: 600;
+    border: 1px solid rgba(251, 76, 10, 0.25);
+}
+
+.kubre-subdock-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #94A3B8;
+    transition: color 0.15s ease;
+}
+
+.kubre-subdock-link:hover .kubre-subdock-icon {
+    color: #FB4C0A;
+}
+
+/* ==========================================================================
+   3. KUBRE LAUNCHPAD / COMMAND CENTER (SPOTLIGHT & APP HUB)
+   ========================================================================== */
+#kubre-launchpad-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(11, 15, 29, 0.78);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s ease;
+    padding: 24px;
+}
+
+#kubre-launchpad-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.kubre-launchpad-modal {
+    width: 100%;
+    max-width: 880px;
+    max-height: 88vh;
+    background: rgba(15, 23, 42, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 28px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: scale(0.94) translateY(10px);
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#kubre-launchpad-overlay.is-open .kubre-launchpad-modal {
+    transform: scale(1) translateY(0);
+}
+
+/* Launchpad Header */
+.kubre-launchpad-header {
+    padding: 20px 28px 16px 28px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.kubre-launchpad-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.kubre-search-container {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.kubre-search-container svg {
+    position: absolute;
+    left: 16px;
+    width: 18px;
+    height: 18px;
+    color: #94A3B8;
+    pointer-events: none;
+}
+
+.kubre-search-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 12px 18px 12px 46px;
+    font-size: 15px;
+    color: #F8FAFC;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.kubre-search-input:focus {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #FB4C0A;
+    box-shadow: 0 0 0 3px rgba(251, 76, 10, 0.25);
+}
+
+.kubre-search-input::placeholder {
+    color: #64748B;
+}
+
+.kubre-close-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94A3B8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.kubre-close-btn:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: #FFFFFF;
+}
+
+/* Launchpad Body */
+.kubre-launchpad-body {
+    padding: 24px 28px;
+    overflow-y: auto;
+    max-height: calc(88vh - 150px);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Quick Actions Strip */
+.kubre-quick-actions-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.kubre-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #64748B;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.kubre-quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+.kubre-quick-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    color: #E2E8F0;
+    text-decoration: none !important;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.kubre-quick-btn:hover {
+    background: rgba(251, 76, 10, 0.12);
+    border-color: rgba(251, 76, 10, 0.35);
+    color: #FFFFFF;
+    transform: translateY(-2px);
+}
+
+.kubre-quick-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+}
+
+/* Apps Grid */
+.kubre-apps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 16px;
+    padding: 4px 0;
+}
+
+.kubre-app-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    padding: 12px 8px;
+    border-radius: 16px;
+    text-decoration: none !important;
+    transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: transparent;
+}
+
+.kubre-app-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-4px);
+}
+
+.kubre-app-card .kubre-app-tile {
+    width: 54px;
+    height: 54px;
+    border-radius: 14px;
+}
+
+.kubre-app-card .kubre-app-tile svg,
+.kubre-app-card .kubre-app-tile i {
+    width: 26px;
+    height: 26px;
+    font-size: 24px;
+}
+
+.kubre-app-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #CBD5E1;
+    line-height: 1.25;
+    transition: color 0.2s ease;
+}
+
+.kubre-app-card:hover .kubre-app-label {
+    color: #FFFFFF;
+}
+
+/* Launchpad Footer */
+.kubre-launchpad-footer {
+    padding: 14px 28px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    font-size: 12px;
+    color: #64748B;
+}
+
+.kubre-footer-shortcuts {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+}
+
+.kubre-shortcut-badge {
+    background: rgba(255, 255, 255, 0.18);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    color: #E2E8F0;
+}
+
+.kubre-footer-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #94A3B8;
+}
+
+.kubre-user-avatar-mini {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FB4C0A, #D83600);
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ==========================================================================
+   4. LAYOUT RESPONSIVENESS & ADJUSTMENTS
+   ========================================================================== */
+
+/* Full Canvas Padding: prevent dock from overlapping buttons at bottom */
+@media (min-width: 768px) {
+    #scrollable-container {
+        padding-bottom: 90px !important;
+    }
+}
+
+/* Mobile Screens (< 768px): Hide Desktop Dock and rely on upgraded Bottom Nav */
+@media (max-width: 767px) {
+    #kubre-os-dock-container {
+        display: none !important;
+    }
+    
+    .kubre-launchpad-modal {
+        max-height: 94vh;
+        border-radius: 20px;
+    }
+    
+    .kubre-launchpad-header {
+        padding: 16px;
+    }
+    
+    .kubre-launchpad-body {
+        padding: 16px;
+        gap: 18px;
+    }
+    
+    .kubre-apps-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+    
+    .kubre-quick-actions-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================================
+   5. SIDEBAR FULL-CANVAS MODE (HIDDEN BY DEFAULT)
+   ========================================================================== */
+body.sidebar-collapse .side-bar {
+    display: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    overflow: hidden !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body:not(.sidebar-collapse) .side-bar {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 256px !important;
+    min-width: 256px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transition: width 0.25s ease, opacity 0.2s ease;
+}
+
+/* Print Cleanliness */
+@media print {
+    #kubre-os-dock-container,
+    #kubre-launchpad-overlay {
+        display: none !important;
+    }
+}

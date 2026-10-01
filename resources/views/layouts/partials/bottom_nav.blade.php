@@ -96,17 +96,16 @@
             </a>
         @endif
 
-        <!-- 5. Menú Lateral Toggle -->
+        <!-- 5. Menú / Launchpad Toggle -->
         <a href="javascript:void(0);" 
-           class="audaz-bottom-nav-item small-view-button" 
+           class="audaz-bottom-nav-item small-view-button kubre-open-launchpad" 
            id="audazBottomMenuToggle" 
-           data-toggle="push-menu" 
            role="button" 
-           title="Abrir Menú">
+           title="Centro de Módulos">
             <div class="nav-icon-wrapper">
-                <i class="fas fa-bars"></i>
+                <i class="fas fa-th-large"></i>
             </div>
-            <span class="nav-label">Menú</span>
+            <span class="nav-label">Módulos</span>
         </a>
     </nav>
 @endif
