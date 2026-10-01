@@ -83,6 +83,20 @@ class SyncPaymentStatus extends Command
 
         $this->info("Analizando {$transactions->count()} transacciones...");
 
+        // Reparación de pagos cuya moneda es la moneda base pero tenían monto convertido erróneamente
+        $all_payments = \App\TransactionPayment::whereIn('transaction_id', $transactions->pluck('id'))->get();
+        foreach ($all_payments as $p) {
+            $biz = \App\Business::find($p->business_id);
+            $base_curr = $biz->currency_id ?? null;
+            $is_base = empty($p->payment_currency_id) || ($base_curr && $p->payment_currency_id == $base_curr);
+            if ($is_base && $p->amount_in_base_currency != $p->amount) {
+                if (!$is_dry_run) {
+                    $p->amount_in_base_currency = $p->amount;
+                    $p->save();
+                }
+            }
+        }
+
         $discrepancies = [];
         $fixed_count = 0;
 

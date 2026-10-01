@@ -82,7 +82,11 @@ class TransactionPaymentController extends Controller
                     $inputs['payment_exchange_rate'] = $this->transactionUtil->num_uf($inputs['payment_exchange_rate']);
                 }
 
-                if (! empty($inputs['payment_currency_id']) && ! empty($inputs['payment_exchange_rate']) && $inputs['payment_exchange_rate'] > 1) {
+                $business = \App\Business::find($business_id);
+                $base_currency_id = $business->currency_id ?? null;
+                $is_base_currency = empty($inputs['payment_currency_id']) || ($base_currency_id && $inputs['payment_currency_id'] == $base_currency_id);
+
+                if (! $is_base_currency && ! empty($inputs['payment_currency_id']) && ! empty($inputs['payment_exchange_rate']) && $inputs['payment_exchange_rate'] > 1) {
                     $inputs['amount_in_base_currency'] = round($inputs['amount'] / $inputs['payment_exchange_rate'], 4);
                 } else {
                     $inputs['amount_in_base_currency'] = $inputs['amount'];
@@ -183,7 +187,7 @@ class TransactionPaymentController extends Controller
             $transaction = Transaction::where('id', $id)
                                         ->with(['contact', 'business', 'transaction_for'])
                                         ->first();
-            $payments_query = TransactionPayment::where('transaction_id', $id);
+            $payments_query = TransactionPayment::where('transaction_id', $id)->with(['payment_currency']);
 
             $accounts_enabled = false;
             if ($this->moduleUtil->isModuleEnabled('account')) {
@@ -194,9 +198,10 @@ class TransactionPaymentController extends Controller
             $payments = $payments_query->get();
             $location_id = ! empty($transaction->location_id) ? $transaction->location_id : null;
             $payment_types = $this->transactionUtil->payment_types($location_id, true);
+            $business_currency_id = $transaction->business->currency_id ?? null;
 
             return view('transaction_payment.show_payments')
-                    ->with(compact('transaction', 'payments', 'payment_types', 'accounts_enabled'));
+                    ->with(compact('transaction', 'payments', 'payment_types', 'accounts_enabled', 'business_currency_id'));
         }
     }
 
@@ -292,7 +297,11 @@ class TransactionPaymentController extends Controller
                 $inputs['payment_exchange_rate'] = $this->transactionUtil->num_uf($inputs['payment_exchange_rate']);
             }
 
-            if (! empty($inputs['payment_currency_id']) && ! empty($inputs['payment_exchange_rate']) && $inputs['payment_exchange_rate'] > 1) {
+            $business = \App\Business::find($business_id);
+            $base_currency_id = $business->currency_id ?? null;
+            $is_base_currency = empty($inputs['payment_currency_id']) || ($base_currency_id && $inputs['payment_currency_id'] == $base_currency_id);
+
+            if (! $is_base_currency && ! empty($inputs['payment_currency_id']) && ! empty($inputs['payment_exchange_rate']) && $inputs['payment_exchange_rate'] > 1) {
                 $inputs['amount_in_base_currency'] = round($inputs['amount'] / $inputs['payment_exchange_rate'], 4);
             } else {
                 $inputs['amount_in_base_currency'] = $inputs['amount'];
@@ -672,7 +681,7 @@ class TransactionPaymentController extends Controller
 
         if (request()->ajax()) {
             $business_id = request()->session()->get('business.id');
-            $single_payment_line = TransactionPayment::findOrFail($payment_id);
+            $single_payment_line = TransactionPayment::with(['payment_currency'])->findOrFail($payment_id);
 
             $transaction = null;
             if (! empty($single_payment_line->transaction_id)) {

@@ -775,7 +775,11 @@ class TransactionUtil extends Util
                     ];
 
                     // Calcular monto en moneda base si se pagó en otra moneda
-                    if (! empty($payment_data['payment_currency_id']) && ! empty($payment_data['payment_exchange_rate']) && $payment_data['payment_exchange_rate'] > 1) {
+                    $business_obj = \App\Business::find($transaction->business_id);
+                    $base_curr_id = $business_obj->currency_id ?? null;
+                    $is_base_curr = empty($payment_data['payment_currency_id']) || ($base_curr_id && $payment_data['payment_currency_id'] == $base_curr_id);
+
+                    if (! $is_base_curr && ! empty($payment_data['payment_currency_id']) && ! empty($payment_data['payment_exchange_rate']) && $payment_data['payment_exchange_rate'] > 1) {
                         $payment_data['amount_in_base_currency'] = $payment_amount / $payment_data['payment_exchange_rate'];
                     } else {
                         $payment_data['amount_in_base_currency'] = $payment_amount;
@@ -6210,7 +6214,11 @@ class TransactionUtil extends Util
             }
         }
 
-        if (! empty($inputs['payment_currency_id']) && ! empty($inputs['payment_exchange_rate']) && $inputs['payment_exchange_rate'] > 1) {
+        $business_obj = \App\Business::find($business_id);
+        $base_curr_id = $business_obj->currency_id ?? null;
+        $is_base_curr = empty($inputs['payment_currency_id']) || ($base_curr_id && $inputs['payment_currency_id'] == $base_curr_id);
+
+        if (! $is_base_curr && ! empty($inputs['payment_currency_id']) && ! empty($inputs['payment_exchange_rate']) && $inputs['payment_exchange_rate'] > 1) {
             $inputs['amount_in_base_currency'] = round($inputs['amount'] / $inputs['payment_exchange_rate'], 4);
         } else {
             $inputs['amount_in_base_currency'] = $inputs['amount'];

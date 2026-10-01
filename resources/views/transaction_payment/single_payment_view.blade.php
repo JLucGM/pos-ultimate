@@ -143,17 +143,21 @@
           <br>
           <div class="col-xs-6">
             <strong>@lang('purchase.amount') :</strong>
-            @format_currency($single_payment_line->amount)
-            @if(!empty($single_payment_line->payment_exchange_rate) && $single_payment_line->payment_exchange_rate > 1)
-              <br>
-              <small class="text-muted">
-                @if(!empty($single_payment_line->amount_in_base_currency))
-                  ≈ ${{ @num_format($single_payment_line->amount_in_base_currency) }} USD
-                @else
-                  ≈ ${{ @num_format($single_payment_line->amount / $single_payment_line->payment_exchange_rate) }} USD
-                @endif
-                (Tasa de cambio: {{ @num_format($single_payment_line->payment_exchange_rate) }})
-              </small>
+            @php
+              $curr_id = !empty($transaction) && !empty($transaction->business) ? $transaction->business->currency_id : session('business.currency_id');
+              $is_foreign = !empty($single_payment_line->payment_currency_id) && !empty($curr_id) && ($single_payment_line->payment_currency_id != $curr_id);
+            @endphp
+            @if($is_foreign && !empty($single_payment_line->payment_currency))
+              {{ $single_payment_line->payment_currency->symbol ?? $single_payment_line->payment_currency->code }} {{ @num_format($single_payment_line->amount) }}
+              @if(!empty($single_payment_line->payment_exchange_rate) && $single_payment_line->payment_exchange_rate > 1)
+                <br>
+                <small class="text-muted">
+                  ≈ ${{ @num_format(!empty($single_payment_line->amount_in_base_currency) ? $single_payment_line->amount_in_base_currency : ($single_payment_line->amount / $single_payment_line->payment_exchange_rate)) }} USD
+                  (Tasa de cambio: {{ @num_format($single_payment_line->payment_exchange_rate) }})
+                </small>
+              @endif
+            @else
+              @format_currency($single_payment_line->amount)
             @endif
             <br>
             <strong>@lang('lang_v1.payment_method') :</strong>

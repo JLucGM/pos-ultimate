@@ -186,17 +186,21 @@
                               <td>{{ @format_datetime($payment->paid_on) }}</td>
                               <td>{{ $payment->payment_ref_no }}</td>
                               <td>
-                                <span class="display_currency" data-currency_symbol="true">{{ $payment->amount }}</span>
-                                @if(!empty($payment->payment_exchange_rate) && $payment->payment_exchange_rate > 1)
-                                  <br>
-                                  <small class="text-muted">
-                                    @if(!empty($payment->amount_in_base_currency))
-                                      ≈ ${{ @num_format($payment->amount_in_base_currency) }} USD
-                                    @else
-                                      ≈ ${{ @num_format($payment->amount / $payment->payment_exchange_rate) }} USD
-                                    @endif
-                                    <br>(Tasa: {{ @num_format($payment->payment_exchange_rate) }})
-                                  </small>
+                                @php
+                                  $curr_id = $business_currency_id ?? ($transaction->business->currency_id ?? session('business.currency_id'));
+                                  $is_foreign = !empty($payment->payment_currency_id) && !empty($curr_id) && ($payment->payment_currency_id != $curr_id);
+                                @endphp
+                                @if($is_foreign && !empty($payment->payment_currency))
+                                  <span class="tw-font-bold">{{ $payment->payment_currency->symbol ?? $payment->payment_currency->code }} {{ @num_format($payment->amount) }}</span>
+                                  @if(!empty($payment->payment_exchange_rate) && $payment->payment_exchange_rate > 1)
+                                    <br>
+                                    <small class="text-muted">
+                                      ≈ ${{ @num_format(!empty($payment->amount_in_base_currency) ? $payment->amount_in_base_currency : ($payment->amount / $payment->payment_exchange_rate)) }} USD
+                                      <br>(Tasa: {{ @num_format($payment->payment_exchange_rate) }})
+                                    </small>
+                                  @endif
+                                @else
+                                  <span class="display_currency" data-currency_symbol="true">{{ $payment->amount }}</span>
                                 @endif
                               </td>
                               <td>{{ $payment_types[$payment->method] ?? '' }}</td>

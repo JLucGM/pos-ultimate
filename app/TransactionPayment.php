@@ -24,6 +24,14 @@ class TransactionPayment extends Model
     }
 
     /**
+     * Get the currency related to this payment.
+     */
+    public function payment_currency()
+    {
+        return $this->belongsTo(\App\Currency::class, 'payment_currency_id');
+    }
+
+    /**
      * Get the transaction related to this payment.
      */
     public function transaction()
