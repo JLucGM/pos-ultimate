@@ -37,9 +37,14 @@ $(document).ready(function() {
     $(document).on('click', '.btn-modal', function(e) {
         e.preventDefault();
         var container = $(this).data('container');
+        var url = $(this).data('href') || $(this).attr('href');
+
+        if (!url || url === '#' || url === 'javascript:void(0);') {
+            return;
+        }
 
         $.ajax({
-            url: $(this).data('href'),
+            url: url,
             dataType: 'html',
             success: function(result) {
                 $(container)

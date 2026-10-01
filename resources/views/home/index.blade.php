@@ -208,7 +208,7 @@
                                             <br><small class="tw-text-rose-500 font-weight-bold" style="font-family: ui-monospace, monospace;">Bs. {{ number_format($inv['due_amount_bs'], 2) }}</small>
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ action([\App\Http\Controllers\SellController::class, 'show'], [$inv['id']]) }}" class="btn btn-xs btn-default btn-modal" data-container=".view_modal" style="border-radius: 6px;" title="Ver Detalle de Factura">
+                                            <a href="#" data-href="{{ action([\App\Http\Controllers\SellController::class, 'show'], [$inv['id']]) }}" class="btn btn-xs btn-default btn-modal" data-container=".view_modal" style="border-radius: 6px;" title="Ver Detalle de Factura">
                                                 <i class="fas fa-eye"></i> Ver
                                             </a>
                                         </td>
@@ -298,7 +298,7 @@
                                                     <i class="fas fa-file-invoice-dollar"></i> Facturar
                                                 </a>
                                             @else
-                                                <a href="{{ action([\App\Http\Controllers\SellController::class, 'show'], [$order->id]) }}" class="btn btn-xs btn-default btn-modal" data-container=".view_modal" style="border-radius: 6px;">
+                                                <a href="#" data-href="{{ action([\App\Http\Controllers\SellController::class, 'show'], [$order->id]) }}" class="btn btn-xs btn-default btn-modal" data-container=".view_modal" style="border-radius: 6px;">
                                                     <i class="fas fa-eye"></i> Ver
                                                 </a>
                                             @endif
