@@ -168,6 +168,7 @@
                     </div>
                 </div>
 
+                <a href="{{ url('/#experiencia') }}" class="nav-link"><i class="fas fa-sparkles" style="color: #FB4C0A; margin-right: 4px; font-size: 11px;"></i> Interfaz OS</a>
                 <a href="{{ url('/#features') }}" class="nav-link">Características</a>
                 <a href="{{ route('pricing') }}" class="nav-link">Precios</a>
                 <a href="{{ url('/#testimonials') }}" class="nav-link">Testimonios</a>

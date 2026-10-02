@@ -49,7 +49,9 @@
             </div>
         </div>
         <div class="hero-image" data-aos="fade-left" data-aos-delay="400">
-            <img src="{{ asset('images/landing/dashboard-preview.png') }}" alt="Dashboard Preview" class="dashboard-img" onerror="this.style.display='none'">
+            <div class="hero-image-frame" style="position: relative; border-radius: 24px; overflow: hidden; box-shadow: 0 30px 70px rgba(0,0,0,0.65); border: 1px solid rgba(255,255,255,0.14);">
+                <img src="{{ asset('images/landing/Capture_dashboard.jpg') }}" alt="Kubre OS Dashboard Principal" class="dashboard-img" onerror="this.src='{{ asset('images/landing/dashboard-preview.png') }}'">
+            </div>
             <div class="floating-card card-1">
                 <i class="fas fa-coins" style="color: #10B981;"></i>
                 <span>Tasa Multimoneda en Vivo</span>
@@ -273,6 +275,201 @@
     </div>
 </section>
 
+<!-- Kubre OS UI Experience & Live Captures Showcase -->
+<section class="ui-showcase-section" id="experiencia">
+    <div class="container">
+        <div class="section-header text-center" data-aos="fade-up">
+            <span class="section-badge" style="background: rgba(251, 76, 10, 0.15); color: #FB4C0A; border-color: rgba(251, 76, 10, 0.3);">Nueva Experiencia Kubre OS</span>
+            <h2 class="section-title">Diseñado para Operar a la Velocidad de tu Negocio</h2>
+            <p class="section-subtitle">Descubre una interfaz ultra-moderna, con barra flotante de accesos directos, analítica financiera en tiempo real y navegación ergonómica en cada pantalla.</p>
+        </div>
+
+        <!-- Showcase Navigation Tabs -->
+        <div class="ui-showcase-nav" data-aos="fade-up">
+            <button type="button" class="ui-showcase-tab active" data-target="#ui-tab-dashboard">
+                <i class="fas fa-desktop"></i> Dashboard Ejecutivo
+            </button>
+            <button type="button" class="ui-showcase-tab" data-target="#ui-tab-graphics">
+                <i class="fas fa-chart-line"></i> Gráficos & Analítica
+            </button>
+            <button type="button" class="ui-showcase-tab" data-target="#ui-tab-dock">
+                <i class="fas fa-thumbtack"></i> Dock & Sub-Módulos
+            </button>
+            <button type="button" class="ui-showcase-tab" data-target="#ui-tab-menu">
+                <i class="fas fa-bars"></i> Menú ERP Completo
+            </button>
+            <button type="button" class="ui-showcase-tab" data-target="#ui-tab-tools">
+                <i class="fas fa-search"></i> Centro de Comando (Ctrl+K)
+            </button>
+        </div>
+
+        <!-- Showcase Tabs Panes -->
+        <div class="ui-showcase-panes" data-aos="fade-up" data-aos-delay="100">
+            
+            <!-- 1. Dashboard Ejecutivo -->
+            <div class="ui-showcase-pane active" id="ui-tab-dashboard">
+                <div class="ui-showcase-card">
+                    <div class="ui-window-bar">
+                        <div class="ui-window-dots">
+                            <span class="ui-dot red"></span>
+                            <span class="ui-dot yellow"></span>
+                            <span class="ui-dot green"></span>
+                        </div>
+                        <div class="ui-window-url">
+                            <i class="fas fa-lock" style="font-size: 10px; color: #10B981;"></i> kubre.site/home &bull; Dashboard Ejecutivo
+                        </div>
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.4); font-size: 11px; padding: 4px 10px; border-radius: 20px;">En Vivo</span>
+                    </div>
+                    <div class="ui-showcase-content">
+                        <div class="ui-image-wrap">
+                            <img src="{{ asset('images/landing/Capture_dashboard.jpg') }}" alt="Dashboard Principal Kubre OS" loading="lazy">
+                        </div>
+                        <div class="ui-info-box">
+                            <span class="ui-info-pill" style="background: rgba(251, 76, 10, 0.15); color: #FB4C0A;">Control Financiero & Operativo</span>
+                            <h3 class="ui-info-title">Métricas Clave al Instante en un Solo Vistazo</h3>
+                            <p class="ui-info-desc">Monitorea tus ingresos brutos, cuentas por cobrar, estado de caja y compras sin perder tiempo revisando múltiples planillas.</p>
+                            <ul class="ui-feature-list">
+                                <li><i class="fas fa-check-circle" style="color: #FB4C0A;"></i> <strong>Facturación Bimoneda:</strong> Visualización simultánea en USD y moneda local.</li>
+                                <li><i class="fas fa-check-circle" style="color: #FB4C0A;"></i> <strong>Ranking de Vendedores:</strong> Cartera de cobros y saldos pendientes por vendedor.</li>
+                                <li><i class="fas fa-check-circle" style="color: #FB4C0A;"></i> <strong>Alertas de Stock:</strong> Notificación inmediata de productos con existencias críticas.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Gráficos & Analítica -->
+            <div class="ui-showcase-pane" id="ui-tab-graphics">
+                <div class="ui-showcase-card">
+                    <div class="ui-window-bar">
+                        <div class="ui-window-dots">
+                            <span class="ui-dot red"></span>
+                            <span class="ui-dot yellow"></span>
+                            <span class="ui-dot green"></span>
+                        </div>
+                        <div class="ui-window-url">
+                            <i class="fas fa-chart-pie" style="font-size: 10px; color: #6366F1;"></i> kubre.site/reports &bull; Rendimiento & Tendencias
+                        </div>
+                        <span class="badge" style="background: rgba(99, 102, 241, 0.2); color: #818CF8; border: 1px solid rgba(99, 102, 241, 0.4); font-size: 11px; padding: 4px 10px; border-radius: 20px;">Analítica Inteligente</span>
+                    </div>
+                    <div class="ui-showcase-content">
+                        <div class="ui-image-wrap">
+                            <img src="{{ asset('images/landing/Capture_dashboard_grafics.jpg') }}" alt="Gráficos y Estadísticas Kubre OS" loading="lazy">
+                        </div>
+                        <div class="ui-info-box">
+                            <span class="ui-info-pill" style="background: rgba(99, 102, 241, 0.15); color: #818CF8;">Analítica y Reportes</span>
+                            <h3 class="ui-info-title">Gráficos Interactivos de Ventas y Flujo de Caja</h3>
+                            <p class="ui-info-desc">Toma decisiones basadas en datos reales. Compara períodos, analiza el crecimiento de tus sucursales y detecta tendencias comerciales.</p>
+                            <ul class="ui-feature-list">
+                                <li><i class="fas fa-check-circle" style="color: #818CF8;"></i> <strong>Evolución de Ventas:</strong> Comparativas mensuales y anuales con gráficos dinámicos.</li>
+                                <li><i class="fas fa-check-circle" style="color: #818CF8;"></i> <strong>Top Productos:</strong> Descubre qué artículos generan mayor rentabilidad y rotación.</li>
+                                <li><i class="fas fa-check-circle" style="color: #818CF8;"></i> <strong>Control de Gastos:</strong> Balances de egresos por categoría y centros de costos.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Dock Flotante con Submenús -->
+            <div class="ui-showcase-pane" id="ui-tab-dock">
+                <div class="ui-showcase-card">
+                    <div class="ui-window-bar">
+                        <div class="ui-window-dots">
+                            <span class="ui-dot red"></span>
+                            <span class="ui-dot yellow"></span>
+                            <span class="ui-dot green"></span>
+                        </div>
+                        <div class="ui-window-url">
+                            <i class="fas fa-rocket" style="font-size: 10px; color: #10B981;"></i> kubre.site &bull; Dock Inteligente Estilo macOS
+                        </div>
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.4); font-size: 11px; padding: 4px 10px; border-radius: 20px;">Acceso en 1 Clic</span>
+                    </div>
+                    <div class="ui-showcase-content">
+                        <div class="ui-image-wrap">
+                            <img src="{{ asset('images/landing/Capture_dashboard_sub-menu.jpg') }}" alt="Dock Flotante con Sub-Módulos Kubre OS" loading="lazy">
+                        </div>
+                        <div class="ui-info-box">
+                            <span class="ui-info-pill" style="background: rgba(16, 185, 129, 0.15); color: #10B981;">Productividad Sin Fricciones</span>
+                            <h3 class="ui-info-title">Barra Inferior Flotante con Submenús Instantáneos</h3>
+                            <p class="ui-info-desc">Olvida los menús tradicionales lentos y engorrosos. Pasa el cursor sobre cualquier aplicación del Dock para abrir opciones clave al instante.</p>
+                            <ul class="ui-feature-list">
+                                <li><i class="fas fa-check-circle" style="color: #10B981;"></i> <strong>Sub-Docks Rápidos:</strong> Crea ventas, cotizaciones o compras directamente en 1 clic.</li>
+                                <li><i class="fas fa-check-circle" style="color: #10B981;"></i> <strong>Personalización Total:</strong> Ancla o desancla los módulos según las necesidades de cada usuario.</li>
+                                <li><i class="fas fa-check-circle" style="color: #10B981;"></i> <strong>100% Espacio en Pantalla:</strong> Tu área de trabajo se mantiene despejada y amplia.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Menú ERP Completo -->
+            <div class="ui-showcase-pane" id="ui-tab-menu">
+                <div class="ui-showcase-card">
+                    <div class="ui-window-bar">
+                        <div class="ui-window-dots">
+                            <span class="ui-dot red"></span>
+                            <span class="ui-dot yellow"></span>
+                            <span class="ui-dot green"></span>
+                        </div>
+                        <div class="ui-window-url">
+                            <i class="fas fa-bars" style="font-size: 10px; color: #EC4899;"></i> kubre.site &bull; Arquitectura Modular ERP
+                        </div>
+                        <span class="badge" style="background: rgba(236, 72, 153, 0.2); color: #EC4899; border: 1px solid rgba(236, 72, 153, 0.4); font-size: 11px; padding: 4px 10px; border-radius: 20px;">Multimódulo</span>
+                    </div>
+                    <div class="ui-showcase-content">
+                        <div class="ui-image-wrap">
+                            <img src="{{ asset('images/landing/Capture_dashboard_with_menu.jpg') }}" alt="Menú Lateral Extendido Kubre OS" loading="lazy">
+                        </div>
+                        <div class="ui-info-box">
+                            <span class="ui-info-pill" style="background: rgba(236, 72, 153, 0.15); color: #EC4899;">Control Estructurado</span>
+                            <h3 class="ui-info-title">Organización Total de Cada Área de tu Empresa</h3>
+                            <p class="ui-info-desc">Cuando necesitas explorar la profundidad de tu negocio, despliega el panel lateral para administrar sucursales, permisos y configuraciones avanzadas.</p>
+                            <ul class="ui-feature-list">
+                                <li><i class="fas fa-check-circle" style="color: #EC4899;"></i> <strong>Acceso a Todos los Módulos:</strong> Inventario, CRM, Gastos, Manufactura, Citas y Ajustes.</li>
+                                <li><i class="fas fa-check-circle" style="color: #EC4899;"></i> <strong>Control por Roles:</strong> Permisos granulares para cajeros, vendedores, administradores y contadores.</li>
+                                <li><i class="fas fa-check-circle" style="color: #EC4899;"></i> <strong>Diseño Adaptativo:</strong> Funciona con máxima fluidez tanto en computadoras como en tablets.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Centro de Comando / Herramientas -->
+            <div class="ui-showcase-pane" id="ui-tab-tools">
+                <div class="ui-showcase-card">
+                    <div class="ui-window-bar">
+                        <div class="ui-window-dots">
+                            <span class="ui-dot red"></span>
+                            <span class="ui-dot yellow"></span>
+                            <span class="ui-dot green"></span>
+                        </div>
+                        <div class="ui-window-url">
+                            <i class="fas fa-search" style="font-size: 10px; color: #F59E0B;"></i> kubre.site &bull; Centro de Comando & Atajos (Ctrl+K)
+                        </div>
+                        <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.4); font-size: 11px; padding: 4px 10px; border-radius: 20px;">Spotlight Universal</span>
+                    </div>
+                    <div class="ui-showcase-content">
+                        <div class="ui-image-wrap">
+                            <img src="{{ asset('images/landing/Capture_tools.jpg') }}" alt="Centro de Comando y Herramientas Kubre OS" loading="lazy">
+                        </div>
+                        <div class="ui-info-box">
+                            <span class="ui-info-pill" style="background: rgba(245, 158, 11, 0.15); color: #F59E0B;">Búsqueda y Atajos</span>
+                            <h3 class="ui-info-title">Buscador Universal y Personalizador a tu Medida</h3>
+                            <p class="ui-info-desc">Encuentra clientes, números de factura o funciones en milisegundos con solo presionar <kbd style="background: #1E293B; border: 1px solid #475569; padding: 2px 8px; border-radius: 6px; color: #F8FAFC; font-weight: 700;">Ctrl + K</kbd>.</p>
+                            <ul class="ui-feature-list">
+                                <li><i class="fas fa-check-circle" style="color: #F59E0B;"></i> <strong>Spotlight Inteligente:</strong> Búsqueda en vivo de contactos, productos, facturas y reportes.</li>
+                                <li><i class="fas fa-check-circle" style="color: #F59E0B;"></i> <strong>Personalizador de Dock:</strong> Activa o desactiva módulos con switches instantáneos.</li>
+                                <li><i class="fas fa-check-circle" style="color: #F59E0B;"></i> <strong>Accesos Directos Globales:</strong> Navega todo el sistema sin tocar el ratón.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
 <!-- Features Section -->
 <section id="features" class="features-section">
     <div class="container">
@@ -339,7 +536,9 @@
     <div class="container">
         <div class="benefits-content">
             <div class="benefits-image" data-aos="fade-right">
-                <img src="{{ asset('images/landing/pos-interface.png') }}" alt="POS Interface">
+                <div style="border-radius: 24px; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.12);">
+                    <img src="{{ asset('images/landing/Capture_dashboard_grafics.jpg') }}" alt="Kubre OS Analítica Financiera y Gráficos" style="width: 100%; height: auto; display: block;">
+                </div>
             </div>
             <div class="benefits-text" data-aos="fade-left">
                 <span class="section-badge">Beneficios</span>
@@ -693,6 +892,28 @@ window.addEventListener('load', function() {
                 this.classList.add('active');
                 
                 solutionPanes.forEach(function(p) { p.classList.remove('active'); });
+                targetPane.classList.add('active');
+            }
+        });
+    });
+
+    // Kubre OS UI Showcase Tabs Switcher
+    var uiShowcaseTabs = document.querySelectorAll('.ui-showcase-tab');
+    var uiShowcasePanes = document.querySelectorAll('.ui-showcase-pane');
+
+    uiShowcaseTabs.forEach(function(tab) {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var targetId = this.getAttribute('data-target');
+            var targetPane = document.querySelector(targetId);
+
+            if (targetPane) {
+                uiShowcaseTabs.forEach(function(t) { t.classList.remove('active'); });
+                this.classList.add('active');
+
+                uiShowcasePanes.forEach(function(p) { p.classList.remove('active'); });
                 targetPane.classList.add('active');
             }
         });
