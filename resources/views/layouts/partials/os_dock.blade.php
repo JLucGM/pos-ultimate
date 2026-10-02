@@ -554,7 +554,7 @@
     </div>
 
     <!-- Modal de Personalización de Dock (Kubre OS Dock Settings) -->
-    <div id="kubre-dock-customizer-modal" class="no-print" role="dialog" aria-modal="true" aria-label="Personalizar Kubre Dock">
+    <div id="kubre-dock-customizer-modal" class="no-print" role="dialog" aria-modal="true" aria-label="Personalizar Kubre Dock" style="display: none;">
         <div class="kubre-customizer-card">
             
             <div class="kubre-customizer-header">

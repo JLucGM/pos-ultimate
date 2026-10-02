@@ -17,7 +17,7 @@
 
 @if ($is_logged_in)
     <!-- Kubre OS Launchpad / Command Center -->
-    <div id="kubre-launchpad-overlay" class="no-print" role="dialog" aria-modal="true" aria-label="Centro de Comando Kubre OS">
+    <div id="kubre-launchpad-overlay" class="no-print" role="dialog" aria-modal="true" aria-label="Centro de Comando Kubre OS" style="display: none;">
         <div class="kubre-launchpad-modal">
             
             <!-- 1. Header con Buscador Universal -->

@@ -128,7 +128,10 @@
         function openCustomizerModal() {
             closeAllSubdocks();
             if (customizerModal) {
-                customizerModal.classList.add('is-open');
+                customizerModal.style.display = 'flex';
+                requestAnimationFrame(() => {
+                    customizerModal.classList.add('is-open');
+                });
                 document.body.style.overflow = 'hidden';
             }
         }
@@ -136,6 +139,11 @@
         function closeCustomizerModal() {
             if (customizerModal) {
                 customizerModal.classList.remove('is-open');
+                setTimeout(() => {
+                    if (!customizerModal.classList.contains('is-open')) {
+                        customizerModal.style.display = 'none';
+                    }
+                }, 250);
                 if (!launchpadOverlay || !launchpadOverlay.classList.contains('is-open')) {
                     document.body.style.overflow = '';
                 }
@@ -301,24 +309,36 @@
         function openLaunchpad() {
             closeAllSubdocks();
             closeCustomizerModal();
-            launchpadOverlay.classList.add('is-open');
-            document.body.style.overflow = 'hidden';
-            if (launchpadSearch) {
-                setTimeout(() => {
-                    launchpadSearch.focus();
-                    launchpadSearch.select();
-                }, 100);
+            if (launchpadOverlay) {
+                launchpadOverlay.style.display = 'flex';
+                requestAnimationFrame(() => {
+                    launchpadOverlay.classList.add('is-open');
+                });
+                document.body.style.overflow = 'hidden';
+                if (launchpadSearch) {
+                    setTimeout(() => {
+                        launchpadSearch.focus();
+                        launchpadSearch.select();
+                    }, 100);
+                }
             }
         }
 
         function closeLaunchpad() {
-            launchpadOverlay.classList.remove('is-open');
-            if (!customizerModal || !customizerModal.classList.contains('is-open')) {
-                document.body.style.overflow = '';
-            }
-            if (launchpadSearch) {
-                launchpadSearch.value = '';
-                filterItems('');
+            if (launchpadOverlay) {
+                launchpadOverlay.classList.remove('is-open');
+                setTimeout(() => {
+                    if (!launchpadOverlay.classList.contains('is-open')) {
+                        launchpadOverlay.style.display = 'none';
+                    }
+                }, 250);
+                if (!customizerModal || !customizerModal.classList.contains('is-open')) {
+                    document.body.style.overflow = '';
+                }
+                if (launchpadSearch) {
+                    launchpadSearch.value = '';
+                    filterItems('');
+                }
             }
         }
 

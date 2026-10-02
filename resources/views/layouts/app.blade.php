@@ -120,6 +120,7 @@
             <section class="invoice print_section" id="receipt_section">
             </section>
         </main>
+    </div> <!-- /.thetop -->
 
         @include('home.todays_profit_modal')
         <!-- /.content-wrapper -->
