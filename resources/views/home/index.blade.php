@@ -139,7 +139,100 @@
                 </div>
             </div>
 
-            {{-- 2. Tabla de Cuentas por Cobrar / Facturas Pendientes de Cobro con Alerta de Días --}}
+            {{-- ========================================================================= --}}
+            {{-- 2. Cartera de Cobranza por Vendedor (Ranking de Saldos Pendientes)        --}}
+            {{-- ========================================================================= --}}
+            @if(!empty($seller_metrics['sellers_due_ranking']) && count($seller_metrics['sellers_due_ranking']) > 0)
+                <div class="audaz-card-modern tw-mb-8">
+                    <div class="tw-flex tw-flex-col sm:tw-flex-row sm:tw-items-center sm:tw-justify-between tw-gap-2 tw-mb-4">
+                        <div>
+                            <h3 class="tw-text-base tw-font-extrabold tw-text-slate-800 tw-flex tw-items-center tw-gap-2">
+                                <i class="fas fa-users-cog tw-text-indigo-600"></i>
+                                Cartera de Cobranza por Vendedor / Asesor
+                            </h3>
+                            <p class="tw-text-xs tw-text-slate-500 tw-mt-0.5">
+                                Distribución de saldos pendientes por cobrar ordenados por mayor volumen de deuda comercial.
+                            </p>
+                        </div>
+                        <span class="tw-text-xs tw-font-bold tw-text-indigo-700 tw-bg-indigo-50 tw-border tw-border-indigo-200 tw-px-3 tw-py-1 tw-rounded-full tw-w-fit">
+                            <i class="fas fa-user-tie"></i> {{ count($seller_metrics['sellers_due_ranking']) }} asesores con saldos activos
+                        </span>
+                    </div>
+
+                    <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4">
+                        @foreach($seller_metrics['sellers_due_ranking'] as $index => $seller)
+                            <div class="tw-bg-slate-50 tw-border {{ $index === 0 ? 'tw-border-rose-300 tw-bg-rose-50/20' : 'tw-border-slate-200' }} tw-rounded-2xl tw-p-4 tw-relative tw-transition-all hover:tw-shadow-md">
+                                <div class="tw-flex tw-items-start tw-justify-between tw-gap-3 tw-mb-3">
+                                    <div class="tw-flex tw-items-center tw-gap-3">
+                                        <div class="tw-w-10 tw-h-10 tw-rounded-xl {{ $index === 0 ? 'tw-bg-rose-600 tw-text-white' : ($index === 1 ? 'tw-bg-amber-500 tw-text-white' : 'tw-bg-indigo-600 tw-text-white') }} tw-font-bold tw-flex tw-items-center tw-justify-center tw-text-sm tw-shadow-sm">
+                                            #{{ $index + 1 }}
+                                        </div>
+                                        <div>
+                                            <h4 class="tw-font-bold tw-text-slate-900 tw-text-sm tw-leading-tight">
+                                                {{ $seller['seller_name'] }}
+                                            </h4>
+                                            <span class="tw-text-[11px] tw-text-slate-500 tw-flex tw-items-center tw-gap-1 tw-mt-0.5">
+                                                <i class="fas fa-users tw-text-[10px]"></i> {{ $seller['customers_count'] }} {{ $seller['customers_count'] == 1 ? 'cliente' : 'clientes' }} con deuda
+                                            </span>
+                                        </div>
+                                    </div>
+                                    @if($index === 0)
+                                        <span class="tw-bg-rose-100 tw-text-rose-700 tw-font-bold tw-text-[10px] tw-px-2 tw-py-0.5 tw-rounded-full tw-border tw-border-rose-200" title="Mayor volumen adeudado">
+                                            <i class="fas fa-fire tw-text-rose-600"></i> Mayor Cartera
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <div class="tw-bg-white tw-border tw-border-slate-100 tw-rounded-xl tw-p-3 tw-mb-3">
+                                    <div class="tw-flex tw-justify-between tw-items-baseline tw-mb-1">
+                                        <span class="tw-text-xs tw-font-semibold tw-text-slate-500">Saldo Pendiente:</span>
+                                        <span class="tw-font-extrabold tw-text-base {{ $index === 0 ? 'tw-text-rose-600' : 'tw-text-slate-800' }}">
+                                            $ {{ number_format($seller['total_due_usd'], 2) }}
+                                        </span>
+                                    </div>
+                                    <div class="tw-flex tw-justify-between tw-items-center tw-text-xs">
+                                        <span class="tw-text-slate-400">Equivalente BCV:</span>
+                                        <span class="tw-font-bold tw-text-slate-600" style="font-family: ui-monospace, monospace;">
+                                            Bs. {{ number_format($seller['total_due_bs'], 2) }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {{-- Barra de Porcentaje respecto al total --}}
+                                <div class="tw-mb-3">
+                                    <div class="tw-flex tw-justify-between tw-items-center tw-text-[11px] tw-text-slate-500 tw-mb-1">
+                                        <span>Participación de Cartera:</span>
+                                        <span class="tw-font-bold tw-text-slate-700">{{ $seller['percentage'] }}%</span>
+                                    </div>
+                                    <div class="tw-w-full tw-h-2 tw-bg-slate-200 tw-rounded-full tw-overflow-hidden">
+                                        <div class="tw-h-full {{ $index === 0 ? 'tw-bg-rose-500' : 'tw-bg-indigo-500' }} tw-rounded-full" style="width: {{ min(100, max(5, $seller['percentage'])) }}%;"></div>
+                                    </div>
+                                </div>
+
+                                <div class="tw-flex tw-items-center tw-justify-between tw-pt-2 tw-border-t tw-border-slate-200/60 tw-text-xs">
+                                    <div class="tw-flex tw-items-center tw-gap-2">
+                                        <span class="tw-text-slate-600">
+                                            <strong>{{ $seller['invoices_count'] }}</strong> {{ $seller['invoices_count'] == 1 ? 'factura' : 'facturas' }}
+                                        </span>
+                                        @if($seller['max_days_pending'] > 10)
+                                            <span class="tw-text-rose-600 tw-font-bold tw-text-[11px] tw-flex tw-items-center tw-gap-0.5" title="Días máximos de atraso">
+                                                <i class="fas fa-clock"></i> {{ $seller['max_days_pending'] }}d máx
+                                            </span>
+                                        @endif
+                                    </div>
+                                    @if(!empty($seller['seller_id']))
+                                        <a href="{{ action([\App\Http\Controllers\SellController::class, 'index']) }}?sales_cmsn_agnt={{ $seller['seller_id'] }}&payment_status=due" class="tw-text-indigo-600 hover:tw-text-indigo-800 tw-font-bold tw-inline-flex tw-items-center tw-gap-1">
+                                            Ver cartera &rarr;
+                                        </a>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            {{-- 3. Tabla de Cuentas por Cobrar / Facturas Pendientes de Cobro con Alerta de Días --}}
             <div class="audaz-card-modern tw-mb-8">
                 <div class="tw-flex tw-flex-col sm:tw-flex-row sm:tw-items-center sm:tw-justify-between tw-gap-2 tw-mb-4">
                     <div>
@@ -162,6 +255,7 @@
                             <tr style="background: #F8FAFC; color: #475569; font-size: 11px; text-transform: uppercase;">
                                 <th>No. Factura</th>
                                 <th>Cliente</th>
+                                <th>Vendedor / Asesor</th>
                                 <th>Fecha Emisión</th>
                                 <th class="text-center">Días Pendiente</th>
                                 <th class="text-right">Total Factura</th>
@@ -184,6 +278,11 @@
                                             @if(!empty($inv['contact_mobile']))
                                                 <br><small class="tw-text-slate-400"><i class="fas fa-phone tw-text-[10px]"></i> {{ $inv['contact_mobile'] }}</small>
                                             @endif
+                                        </td>
+                                        <td>
+                                            <span class="label" style="background-color: #EEF2FF; color: #4338CA; border: 1px solid #C7D2FE; font-weight: 700; font-size: 11px; padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">
+                                                <i class="fas fa-user-tie tw-text-indigo-600"></i> {{ $inv['seller_name'] }}
+                                            </span>
                                         </td>
                                         <td>
                                             <span class="tw-text-xs tw-text-slate-600">{{ @format_datetime($inv['transaction_date']) }}</span>
@@ -216,7 +315,7 @@
                                 @endforeach
                             @else
                                 <tr>
-                                    <td colspan="7" class="text-center tw-py-8 tw-text-slate-400">
+                                    <td colspan="8" class="text-center tw-py-8 tw-text-slate-400">
                                         <div class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-2">
                                             <i class="fas fa-check-circle tw-text-emerald-500 tw-text-3xl"></i>
                                             <span class="tw-font-bold tw-text-slate-700">¡Al día! No hay facturas pendientes por cobrar en este momento.</span>

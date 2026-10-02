@@ -256,6 +256,14 @@ class ContactController extends Controller
                 }
             })
             ->editColumn('created_at', '{{@format_date($created_at)}}')
+            ->addColumn('seller_name', function ($row) {
+                if (!empty(trim($row->assigned_to_users ?? ''))) {
+                    return '<span class="label" style="background-color: #3b82f6; color: #fff; font-weight: 600; font-size: 11px; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;"><i class="fas fa-user-tie"></i> ' . e($row->assigned_to_users) . '</span>';
+                } elseif (!empty(trim($row->created_by_user ?? ''))) {
+                    return '<span class="label" style="background-color: #64748b; color: #fff; font-weight: 500; font-size: 11px; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;"><i class="fas fa-user"></i> ' . e($row->created_by_user) . '</span>';
+                }
+                return '<span class="text-muted" style="font-size: 11px; font-style: italic;">Sin asignar</span>';
+            })
             ->removeColumn('opening_balance_paid')
             ->removeColumn('type')
             ->removeColumn('id')
@@ -274,7 +282,7 @@ class ContactController extends Controller
                     ->orWhereRaw("CONCAT(COALESCE(address_line_1, ''), ', ', COALESCE(address_line_2, ''), ', ', COALESCE(city, ''), ', ', COALESCE(state, ''), ', ', COALESCE(country, '') ) like ?", ["%{$keyword}%"]);
                 });
             })
-            ->rawColumns(['action', 'opening_balance', 'pay_term', 'due', 'return_due', 'name', 'balance'])
+            ->rawColumns(['action', 'opening_balance', 'pay_term', 'due', 'return_due', 'name', 'balance', 'seller_name'])
             ->make(true);
     }
 
@@ -498,6 +506,14 @@ class ContactController extends Controller
             })
             ->editColumn('total_rp', '{{$total_rp ?? 0}}')
             ->editColumn('created_at', '{{@format_date($created_at)}}')
+            ->addColumn('seller_name', function ($row) {
+                if (!empty(trim($row->assigned_to_users ?? ''))) {
+                    return '<span class="label" style="background-color: #3b82f6; color: #fff; font-weight: 600; font-size: 11px; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;"><i class="fas fa-user-tie"></i> ' . e($row->assigned_to_users) . '</span>';
+                } elseif (!empty(trim($row->created_by_user ?? ''))) {
+                    return '<span class="label" style="background-color: #64748b; color: #fff; font-weight: 500; font-size: 11px; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;"><i class="fas fa-user"></i> ' . e($row->created_by_user) . '</span>';
+                }
+                return '<span class="text-muted" style="font-size: 11px; font-style: italic;">Sin asignar</span>';
+            })
             ->removeColumn('total_invoice')
             ->removeColumn('opening_balance_paid')
             ->removeColumn('invoice_received')
@@ -525,7 +541,7 @@ class ContactController extends Controller
             $contacts->removeColumn('total_rp');
         }
 
-        return $contacts->rawColumns(['action', 'opening_balance', 'credit_limit', 'pay_term', 'due', 'return_due', 'name', 'balance'])
+        return $contacts->rawColumns(['action', 'opening_balance', 'credit_limit', 'pay_term', 'due', 'return_due', 'name', 'balance', 'seller_name'])
                         ->make(true);
     }
 

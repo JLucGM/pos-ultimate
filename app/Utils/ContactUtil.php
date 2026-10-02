@@ -215,6 +215,9 @@ class ContactUtil extends Util
     {
         $query = Contact::leftjoin('transactions AS t', 'contacts.id', '=', 't.contact_id')
                     ->leftjoin('customer_groups AS cg', 'contacts.customer_group_id', '=', 'cg.id')
+                    ->leftjoin('user_contact_access AS uca', 'contacts.id', '=', 'uca.contact_id')
+                    ->leftjoin('users AS u_assigned', 'uca.user_id', '=', 'u_assigned.id')
+                    ->leftjoin('users AS u_creator', 'contacts.created_by', '=', 'u_creator.id')
                     ->where('contacts.business_id', $business_id);
 
         if ($type == 'supplier') {
@@ -233,6 +236,8 @@ class ContactUtil extends Util
         $query->select([
             'contacts.*',
             'cg.name as customer_group',
+            DB::raw("GROUP_CONCAT(DISTINCT CONCAT(COALESCE(u_assigned.first_name, ''), ' ', COALESCE(u_assigned.last_name, '')) SEPARATOR ', ') as assigned_to_users"),
+            DB::raw("CONCAT(COALESCE(u_creator.first_name, ''), ' ', COALESCE(u_creator.last_name, '')) as created_by_user"),
             DB::raw("SUM(IF(t.type = 'opening_balance', final_total, 0)) as opening_balance"),
             DB::raw("SUM(IF(t.type = 'opening_balance', (SELECT SUM(IF(is_return = 1,-1*amount,amount)) FROM transaction_payments WHERE transaction_payments.transaction_id=t.id), 0)) as opening_balance_paid"),
             DB::raw('MAX(DATE(transaction_date)) as max_transaction_date'),

@@ -271,7 +271,7 @@ class HomeController extends Controller
                 ->where('type', 'sell')
                 ->where('status', 'final')
                 ->where('payment_status', '!=', 'paid')
-                ->with(['contact', 'payment_lines'])
+                ->with(['contact', 'payment_lines', 'sales_person', 'sale_commission_agent'])
                 ->orderBy('transaction_date', 'asc');
 
             if (! $is_admin) {
@@ -284,6 +284,7 @@ class HomeController extends Controller
             $due_transactions = $due_query->get();
             $total_due = 0;
             $pending_due_invoices = [];
+            $sellers_due = [];
             $now = \Carbon::now();
 
             foreach ($due_transactions as $t) {
@@ -298,9 +299,15 @@ class HomeController extends Controller
                     $t_date = !empty($t->transaction_date) ? \Carbon::parse($t->transaction_date) : $now;
                     $days_pending = (int) $t_date->diffInDays($now);
 
+                    $seller_user = $t->sale_commission_agent ?: $t->sales_person;
+                    $seller_id = $seller_user->id ?? 0;
+                    $seller_name = $seller_user ? $seller_user->user_full_name : 'Sin Asignar';
+                    $contact_id = $t->contact_id ?? 0;
+
                     $pending_due_invoices[] = [
                         'id' => $t->id,
                         'invoice_no' => $t->invoice_no,
+                        'contact_id' => $contact_id,
                         'contact_name' => $t->contact->name ?? 'Cliente General',
                         'contact_business' => $t->contact->supplier_business_name ?? null,
                         'contact_mobile' => $t->contact->mobile ?? null,
@@ -312,10 +319,50 @@ class HomeController extends Controller
                         'due_amount' => $due,
                         'due_amount_bs' => $due * $bcv_rate,
                         'payment_status' => $t->payment_status,
+                        'seller_id' => $seller_id,
+                        'seller_name' => $seller_name,
                     ];
+
+                    // Agrupación por Vendedor para Ranking de Cartera por Cobrar
+                    if (!isset($sellers_due[$seller_id])) {
+                        $sellers_due[$seller_id] = [
+                            'seller_id' => $seller_id,
+                            'seller_name' => $seller_name,
+                            'total_due_usd' => 0,
+                            'total_due_bs' => 0,
+                            'invoices_count' => 0,
+                            'contacts' => [],
+                            'max_days_pending' => 0,
+                            'overdue_invoices_count' => 0,
+                        ];
+                    }
+
+                    $sellers_due[$seller_id]['total_due_usd'] += $due;
+                    $sellers_due[$seller_id]['total_due_bs'] += ($due * $bcv_rate);
+                    $sellers_due[$seller_id]['invoices_count'] += 1;
+                    $sellers_due[$seller_id]['contacts'][$contact_id] = true;
+                    if ($days_pending > 10) {
+                        $sellers_due[$seller_id]['overdue_invoices_count'] += 1;
+                    }
+                    if ($days_pending > $sellers_due[$seller_id]['max_days_pending']) {
+                        $sellers_due[$seller_id]['max_days_pending'] = $days_pending;
+                    }
                 }
             }
             $count_due_invoices = count($pending_due_invoices);
+
+            $sellers_due_ranking = [];
+            foreach ($sellers_due as $s_id => $data) {
+                $data['customers_count'] = count($data['contacts']);
+                unset($data['contacts']);
+                $data['percentage'] = $total_due > 0 ? round(($data['total_due_usd'] / $total_due) * 100, 1) : 0;
+                $sellers_due_ranking[] = $data;
+            }
+
+            // Ordenar de mayor a menor cartera adeudada (quien tiene la cartera mas alta)
+            usort($sellers_due_ranking, function ($a, $b) {
+                return $b['total_due_usd'] <=> $a['total_due_usd'];
+            });
 
             // 5. Total de Clientes Activos
             $contacts_query = \App\Contact::where('business_id', $business_id)
@@ -363,6 +410,7 @@ class HomeController extends Controller
                 'due_bs' => $total_due * $bcv_rate,
                 'due_count' => $count_due_invoices,
                 'pending_due_invoices' => $pending_due_invoices,
+                'sellers_due_ranking' => $sellers_due_ranking,
                 'customers_count' => $total_customers,
                 'recent_orders' => $recent_orders,
             ];

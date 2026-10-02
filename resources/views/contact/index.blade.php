@@ -149,6 +149,7 @@
                                 @if ($type == 'supplier')
                                     <th>@lang('business.business_name')</th>
                                     <th>@lang('contact.name')</th>
+                                    <th>@lang('sale.sales_person')</th>
                                     <th>@lang('business.email')</th>
                                     <th>@lang('contact.tax_no')</th>
                                     <th>@lang('contact.pay_term')</th>
@@ -162,6 +163,7 @@
                                 @elseif($type == 'customer')
                                     <th>@lang('business.business_name')</th>
                                     <th>@lang('user.name')</th>
+                                    <th>@lang('sale.sales_person')</th>
                                     <th>@lang('business.email')</th>
                                     <th>@lang('contact.tax_no')</th>
                                     <th>@lang('lang_v1.credit_limit')</th>
@@ -194,12 +196,12 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td @if ($type == 'supplier') colspan="6"
+                                <td @if ($type == 'supplier') colspan="7"
                             @elseif($type == 'customer')
                                 @if ($reward_enabled)
-                                    colspan="9"
+                                    colspan="10"
                                 @else
-                                    colspan="8" @endif
+                                    colspan="9" @endif
                                     @endif>
                                     <strong>
                                         @lang('sale.total'):

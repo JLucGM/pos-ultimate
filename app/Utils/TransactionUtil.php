@@ -5210,6 +5210,7 @@ class TransactionUtil extends Util
                         ->whereNull('tsl.parent_sell_line_id');
                 })
                 ->leftJoin('users as u', 'transactions.created_by', '=', 'u.id')
+                ->leftJoin('users as ca', 'transactions.commission_agent', '=', 'ca.id')
                 ->leftJoin('users as ss', 'transactions.res_waiter_id', '=', 'ss.id')
                 ->leftJoin('users as dp', 'transactions.delivery_person', '=', 'dp.id')
                 ->leftJoin('res_tables as tables', 'transactions.res_table_id', '=', 'tables.id')
@@ -5272,7 +5273,7 @@ class TransactionUtil extends Util
                     'transactions.custom_field_3',
                     'transactions.custom_field_4',
                     DB::raw('DATE_FORMAT(transactions.transaction_date, "%Y/%m/%d") as sale_date'),
-                    DB::raw("CONCAT(COALESCE(u.surname, ''),' ',COALESCE(u.first_name, ''),' ',COALESCE(u.last_name,'')) as added_by"),
+                    DB::raw("IF(ca.id IS NOT NULL, CONCAT(COALESCE(ca.first_name, ''),' ',COALESCE(ca.last_name,'')), CONCAT(COALESCE(u.first_name, ''),' ',COALESCE(u.last_name,''))) as added_by"),
                     DB::raw('(SELECT SUM(IF(TP.is_return = 1, -1 * COALESCE(TP.amount_in_base_currency, IF(TP.payment_exchange_rate > 1, TP.amount / TP.payment_exchange_rate, TP.amount)), COALESCE(TP.amount_in_base_currency, IF(TP.payment_exchange_rate > 1, TP.amount / TP.payment_exchange_rate, TP.amount)))) FROM transaction_payments AS TP WHERE
                         TP.transaction_id=transactions.id) as total_paid'),
                     'bl.name as business_location',
