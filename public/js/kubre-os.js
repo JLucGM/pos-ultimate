@@ -1,12 +1,33 @@
 /**
  * Kubre OS - ERP Modern Desktop & Mobile UI Framework
- * Interactive Dock Controller, Instant Sub-Docks & Universal Search
+ * Interactive Dock Controller, Instant Sub-Docks, Pin/Unpin Engine & Universal Search
  */
 
 (function() {
     'use strict';
 
+    const STORAGE_KEY = 'kubre_os_unpinned_modules';
+
+    // 1. Storage Helpers for Dock Customization
+    function getUnpinnedModules() {
+        try {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            return stored ? JSON.parse(stored) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveUnpinnedModules(modules) {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(modules));
+        } catch (e) {
+            console.error('Error saving dock preferences', e);
+        }
+    }
+
     function initKubreOS() {
+        // Elements
         const launchpadOverlay = document.getElementById('kubre-launchpad-overlay');
         const launchpadSearch = document.getElementById('kubre-launchpad-search');
         const launchpadClose = document.getElementById('kubre-launchpad-close');
@@ -15,10 +36,182 @@
         const quickBtns = document.querySelectorAll('.kubre-quick-btn');
         const subdockItems = document.querySelectorAll('.kubre-has-subdock');
         const subdockLinks = document.querySelectorAll('.kubre-subdock-link, .kubre-subdock-mainlink');
+        
+        // Customizer Elements
+        const customizerModal = document.getElementById('kubre-dock-customizer-modal');
+        const customizerClose = document.getElementById('kubre-customizer-close');
+        const customizerDoneBtn = document.getElementById('kubre-done-dock-btn');
+        const customizerResetBtn = document.getElementById('kubre-reset-dock-btn');
+        const openCustomizerBtns = document.querySelectorAll('.kubre-open-customizer');
+        const dockToggles = document.querySelectorAll('.kubre-dock-toggle[data-app]');
+        const unpinBtns = document.querySelectorAll('.kubre-subdock-unpin-btn[data-unpin]');
+        const pinToggleBtns = document.querySelectorAll('.kubre-app-pin-btn[data-pin-toggle]');
 
         let subdockTimer = null;
 
-        // 1. Close all open sub-docks
+        // 2. Apply Dock Preferences (Pin / Unpin state)
+        function applyDockPreferences() {
+            const unpinned = getUnpinnedModules();
+            
+            // A. Update Dock Items visibility
+            const dockItems = document.querySelectorAll('.kubre-dock-item[data-dock-app]');
+            dockItems.forEach(item => {
+                const appId = item.getAttribute('data-dock-app');
+                if (unpinned.includes(appId)) {
+                    item.classList.add('is-unpinned');
+                } else {
+                    item.classList.remove('is-unpinned');
+                }
+            });
+
+            // B. Update Customizer Modal Switches
+            dockToggles.forEach(toggle => {
+                const appId = toggle.getAttribute('data-app');
+                toggle.checked = !unpinned.includes(appId);
+            });
+
+            // C. Update Launchpad App Pin Badges
+            pinToggleBtns.forEach(btn => {
+                const appId = btn.getAttribute('data-pin-toggle');
+                const isPinned = !unpinned.includes(appId);
+                if (isPinned) {
+                    btn.classList.add('is-pinned');
+                    btn.setAttribute('title', 'Desanclar del Dock');
+                } else {
+                    btn.classList.remove('is-pinned');
+                    btn.setAttribute('title', 'Fijar en el Dock');
+                }
+            });
+        }
+
+        // 3. Pin & Unpin Actions
+        function unpinModule(appId) {
+            if (!appId) return;
+            let unpinned = getUnpinnedModules();
+            if (!unpinned.includes(appId)) {
+                unpinned.push(appId);
+                saveUnpinnedModules(unpinned);
+                applyDockPreferences();
+                closeAllSubdocks();
+            }
+        }
+
+        function pinModule(appId) {
+            if (!appId) return;
+            let unpinned = getUnpinnedModules();
+            if (unpinned.includes(appId)) {
+                unpinned = unpinned.filter(id => id !== appId);
+                saveUnpinnedModules(unpinned);
+                applyDockPreferences();
+            }
+        }
+
+        function togglePinModule(appId) {
+            if (!appId) return;
+            let unpinned = getUnpinnedModules();
+            if (unpinned.includes(appId)) {
+                pinModule(appId);
+            } else {
+                unpinModule(appId);
+            }
+        }
+
+        function resetDockPreferences() {
+            saveUnpinnedModules([]);
+            applyDockPreferences();
+        }
+
+        // Apply initial preferences immediately
+        applyDockPreferences();
+
+        // 4. Customizer Modal Controls
+        function openCustomizerModal() {
+            closeAllSubdocks();
+            if (customizerModal) {
+                customizerModal.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeCustomizerModal() {
+            if (customizerModal) {
+                customizerModal.classList.remove('is-open');
+                if (!launchpadOverlay || !launchpadOverlay.classList.contains('is-open')) {
+                    document.body.style.overflow = '';
+                }
+            }
+        }
+
+        openCustomizerBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                openCustomizerModal();
+            });
+        });
+
+        if (customizerClose) {
+            customizerClose.addEventListener('click', function(e) {
+                e.preventDefault();
+                closeCustomizerModal();
+            });
+        }
+
+        if (customizerDoneBtn) {
+            customizerDoneBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                closeCustomizerModal();
+            });
+        }
+
+        if (customizerResetBtn) {
+            customizerResetBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                resetDockPreferences();
+            });
+        }
+
+        if (customizerModal) {
+            customizerModal.addEventListener('click', function(e) {
+                if (e.target === customizerModal) {
+                    closeCustomizerModal();
+                }
+            });
+        }
+
+        // Switch toggles inside customizer modal
+        dockToggles.forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const appId = this.getAttribute('data-app');
+                if (this.checked) {
+                    pinModule(appId);
+                } else {
+                    unpinModule(appId);
+                }
+            });
+        });
+
+        // Unpin buttons in Subdock headers
+        unpinBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const appId = this.getAttribute('data-unpin');
+                unpinModule(appId);
+            });
+        });
+
+        // Pin/Unpin buttons on Launchpad app cards
+        pinToggleBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const appId = this.getAttribute('data-pin-toggle');
+                togglePinModule(appId);
+            });
+        });
+
+        // 5. Sub-dock Open/Close Controls
         function closeAllSubdocks() {
             if (subdockTimer) {
                 clearTimeout(subdockTimer);
@@ -29,7 +222,6 @@
             });
         }
 
-        // 2. Open specific sub-dock
         function openSubdock(item) {
             if (subdockTimer) {
                 clearTimeout(subdockTimer);
@@ -43,7 +235,7 @@
             item.classList.add('has-subdock-open');
         }
 
-        // 3. Direct, instant navigation on subdock link click (ZERO lag, 1st click guaranteed)
+        // Direct navigation on subdock link click (ZERO lag, 1st click guaranteed)
         subdockLinks.forEach(link => {
             link.addEventListener('click', function(e) {
                 e.stopPropagation();
@@ -54,11 +246,11 @@
             });
         });
 
-        // 4. Sub-dock click & hover handling on dock items
+        // Sub-dock click & hover handling on dock items
         subdockItems.forEach(item => {
             // Click Handler on dock icon
             item.addEventListener('click', function(e) {
-                // If clicked inside the subdock panel/links, do not toggle dock
+                // If clicked inside the subdock panel/links/unpin buttons, do not toggle dock
                 if (e.target.closest('.kubre-subdock-deck')) {
                     return;
                 }
@@ -98,16 +290,17 @@
 
         // Close sub-docks on clicking outside
         document.addEventListener('click', function(e) {
-            if (!e.target.closest('.kubre-has-subdock')) {
+            if (!e.target.closest('.kubre-has-subdock') && !e.target.closest('#kubre-dock-customizer-modal')) {
                 closeAllSubdocks();
             }
         });
 
         if (!launchpadOverlay) return;
 
-        // 5. Open Launchpad
+        // 6. Launchpad Open/Close Controls
         function openLaunchpad() {
             closeAllSubdocks();
+            closeCustomizerModal();
             launchpadOverlay.classList.add('is-open');
             document.body.style.overflow = 'hidden';
             if (launchpadSearch) {
@@ -118,17 +311,17 @@
             }
         }
 
-        // 6. Close Launchpad
         function closeLaunchpad() {
             launchpadOverlay.classList.remove('is-open');
-            document.body.style.overflow = '';
+            if (!customizerModal || !customizerModal.classList.contains('is-open')) {
+                document.body.style.overflow = '';
+            }
             if (launchpadSearch) {
                 launchpadSearch.value = '';
                 filterItems('');
             }
         }
 
-        // 7. Toggle Launchpad
         function toggleLaunchpad() {
             if (launchpadOverlay.classList.contains('is-open')) {
                 closeLaunchpad();
@@ -137,7 +330,7 @@
             }
         }
 
-        // 8. Attach Click Events to Launcher Buttons & Top Global Search Bar
+        // Attach Click Events to Launcher Buttons & Top Global Search Bar
         launcherBtns.forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -158,7 +351,6 @@
             });
         }
 
-        // Close on close button click
         if (launchpadClose) {
             launchpadClose.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -166,14 +358,13 @@
             });
         }
 
-        // Close on clicking backdrop
         launchpadOverlay.addEventListener('click', function(e) {
             if (e.target === launchpadOverlay) {
                 closeLaunchpad();
             }
         });
 
-        // 9. Global Keyboard Shortcuts: Ctrl+K, Cmd+K, Alt+Space, Escape
+        // 7. Global Keyboard Shortcuts: Ctrl+K, Cmd+K, Alt+Space, Escape
         document.addEventListener('keydown', function(e) {
             if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
                 e.preventDefault();
@@ -182,7 +373,10 @@
                 e.preventDefault();
                 toggleLaunchpad();
             } else if (e.key === 'Escape') {
-                if (launchpadOverlay.classList.contains('is-open')) {
+                if (customizerModal && customizerModal.classList.contains('is-open')) {
+                    e.preventDefault();
+                    closeCustomizerModal();
+                } else if (launchpadOverlay.classList.contains('is-open')) {
                     e.preventDefault();
                     closeLaunchpad();
                 } else {
@@ -191,7 +385,7 @@
             }
         });
 
-        // 10. Live Search Filtering
+        // 8. Live Search Filtering
         function filterItems(query) {
             const cleanQuery = query.toLowerCase().trim();
 
@@ -222,7 +416,7 @@
             });
         }
 
-        // 11. Mobile Bottom Nav Integration: Connect Mobile "Módulos" toggle to Launchpad
+        // 9. Mobile Bottom Nav Integration: Connect Mobile "Módulos" toggle to Launchpad
         const mobileMenuToggle = document.getElementById('audazBottomMenuToggle');
         if (mobileMenuToggle) {
             mobileMenuToggle.addEventListener('click', function(e) {

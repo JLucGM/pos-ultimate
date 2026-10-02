@@ -42,7 +42,7 @@
         <nav class="kubre-os-dock" aria-label="Kubre OS Dock">
             
             <!-- 1. Kubre Launcher Button -->
-            <div class="kubre-dock-item kubre-open-launchpad" title="Kubre OS • Centro de Comando">
+            <div class="kubre-dock-item kubre-open-launchpad" title="Kubre OS • Centro de Comando (Ctrl+K)">
                 <div class="kubre-app-tile tile-kubre-logo">
                     <img src="{{ asset('images/landing/icono.png') }}" alt="Kubre" style="width: 22px; height: 22px; object-fit: contain; filter: brightness(0) invert(1);" />
                 </div>
@@ -54,7 +54,7 @@
 
             <!-- 2. Dashboard Ejecutivo -->
             <a href="{{ action([\App\Http\Controllers\HomeController::class, 'index']) }}" 
-               class="kubre-dock-item {{ $is_home ? 'is-active' : '' }}">
+               class="kubre-dock-item {{ $is_home ? 'is-active' : '' }}" data-dock-app="dashboard">
                 <div class="kubre-app-tile tile-dashboard">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="3" width="7" height="9" rx="1.5"></rect>
@@ -69,7 +69,7 @@
 
             <!-- 3. Ventas & Facturación (con Sub-Dock Flotante) -->
             @if ($can_access_sales)
-                <div class="kubre-dock-item {{ $is_sales ? 'is-active' : '' }} kubre-has-subdock" data-module="sales">
+                <div class="kubre-dock-item {{ $is_sales ? 'is-active' : '' }} kubre-has-subdock" data-dock-app="sales">
                     <div class="kubre-app-tile tile-sales">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -87,7 +87,12 @@
                             <span class="kubre-subdock-title">
                                 <i class="fas fa-file-invoice-dollar" style="color: #818CF8;"></i> Ventas & Facturación
                             </span>
-                            <a href="{{ action([\App\Http\Controllers\SellController::class, 'index']) }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            <div class="kubre-subdock-header-actions">
+                                <button type="button" class="kubre-subdock-unpin-btn" data-unpin="sales" title="Desanclar del Dock">
+                                    <i class="fas fa-thumbtack"></i> Desanclar
+                                </button>
+                                <a href="{{ action([\App\Http\Controllers\SellController::class, 'index']) }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            </div>
                         </div>
                         <a href="{{ action([\App\Http\Controllers\SellController::class, 'create']) }}" class="kubre-subdock-link">
                             <span class="kubre-subdock-icon"><i class="fas fa-plus-circle"></i></span>
@@ -115,7 +120,7 @@
 
             <!-- 4. Inventario & Productos (con Sub-Dock Flotante) -->
             @if ($can_access_products)
-                <div class="kubre-dock-item {{ $is_products ? 'is-active' : '' }} kubre-has-subdock" data-module="products">
+                <div class="kubre-dock-item {{ $is_products ? 'is-active' : '' }} kubre-has-subdock" data-dock-app="products">
                     <div class="kubre-app-tile tile-products">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
@@ -132,7 +137,12 @@
                             <span class="kubre-subdock-title">
                                 <i class="fas fa-boxes" style="color: #34D399;"></i> Inventario & Stock
                             </span>
-                            <a href="{{ action([\App\Http\Controllers\ProductController::class, 'index']) }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            <div class="kubre-subdock-header-actions">
+                                <button type="button" class="kubre-subdock-unpin-btn" data-unpin="products" title="Desanclar del Dock">
+                                    <i class="fas fa-thumbtack"></i> Desanclar
+                                </button>
+                                <a href="{{ action([\App\Http\Controllers\ProductController::class, 'index']) }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            </div>
                         </div>
                         <a href="{{ action([\App\Http\Controllers\ProductController::class, 'index']) }}" class="kubre-subdock-link {{ request()->is('products') ? 'is-active-sub' : '' }}">
                             <span class="kubre-subdock-icon"><i class="fas fa-cubes"></i></span>
@@ -160,11 +170,11 @@
 
             <!-- 5. Compras & Abastecimiento (con Sub-Dock Flotante) -->
             @if ($can_access_purchases)
-                <div class="kubre-dock-item {{ $is_purchases ? 'is-active' : '' }} kubre-has-subdock" data-module="purchases">
+                <div class="kubre-dock-item {{ $is_purchases ? 'is-active' : '' }} kubre-has-subdock" data-dock-app="purchases">
                     <div class="kubre-app-tile tile-purchases">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="1" y="3" width="15" height="13" rx="2"></rect>
-                            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                            <polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon>
                             <circle cx="5.5" cy="18.5" r="2.5"></circle>
                             <circle cx="18.5" cy="18.5" r="2.5"></circle>
                         </svg>
@@ -178,7 +188,12 @@
                             <span class="kubre-subdock-title">
                                 <i class="fas fa-truck-loading" style="color: #FBBF24;"></i> Compras & Abasto
                             </span>
-                            <a href="{{ action([\App\Http\Controllers\PurchaseController::class, 'index']) }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            <div class="kubre-subdock-header-actions">
+                                <button type="button" class="kubre-subdock-unpin-btn" data-unpin="purchases" title="Desanclar del Dock">
+                                    <i class="fas fa-thumbtack"></i> Desanclar
+                                </button>
+                                <a href="{{ action([\App\Http\Controllers\PurchaseController::class, 'index']) }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            </div>
                         </div>
                         <a href="{{ action([\App\Http\Controllers\PurchaseController::class, 'index']) }}" class="kubre-subdock-link {{ request()->is('purchases') ? 'is-active-sub' : '' }}">
                             <span class="kubre-subdock-icon"><i class="fas fa-list-alt"></i></span>
@@ -202,7 +217,7 @@
 
             <!-- 6. Finanzas & Tesorería (con Sub-Dock Flotante) -->
             @if ($can_access_finance)
-                <div class="kubre-dock-item {{ $is_finance ? 'is-active' : '' }} kubre-has-subdock" data-module="finance">
+                <div class="kubre-dock-item {{ $is_finance ? 'is-active' : '' }} kubre-has-subdock" data-dock-app="finance">
                     <div class="kubre-app-tile tile-finance">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="5" width="20" height="14" rx="2"></rect>
@@ -219,7 +234,12 @@
                             <span class="kubre-subdock-title">
                                 <i class="fas fa-university" style="color: #34D399;"></i> Finanzas & Tesorería
                             </span>
-                            <a href="{{ action([\App\Http\Controllers\AccountController::class, 'index']) }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            <div class="kubre-subdock-header-actions">
+                                <button type="button" class="kubre-subdock-unpin-btn" data-unpin="finance" title="Desanclar del Dock">
+                                    <i class="fas fa-thumbtack"></i> Desanclar
+                                </button>
+                                <a href="{{ action([\App\Http\Controllers\AccountController::class, 'index']) }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            </div>
                         </div>
                         <a href="{{ action([\App\Http\Controllers\AccountController::class, 'index']) }}" class="kubre-subdock-link {{ request()->is('account/account') ? 'is-active-sub' : '' }}">
                             <span class="kubre-subdock-icon"><i class="fas fa-wallet"></i></span>
@@ -243,7 +263,7 @@
 
             <!-- 7. Gastos & Egresos (con Sub-Dock Flotante) -->
             @if ($can_access_expenses)
-                <div class="kubre-dock-item {{ $is_expenses ? 'is-active' : '' }} kubre-has-subdock" data-module="expenses">
+                <div class="kubre-dock-item {{ $is_expenses ? 'is-active' : '' }} kubre-has-subdock" data-dock-app="expenses">
                     <div class="kubre-app-tile tile-expenses">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="12" y1="1" x2="12" y2="23"></line>
@@ -259,7 +279,12 @@
                             <span class="kubre-subdock-title">
                                 <i class="fas fa-arrow-circle-down" style="color: #F87171;"></i> Gastos & Egresos
                             </span>
-                            <a href="{{ action([\App\Http\Controllers\ExpenseController::class, 'index']) }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            <div class="kubre-subdock-header-actions">
+                                <button type="button" class="kubre-subdock-unpin-btn" data-unpin="expenses" title="Desanclar del Dock">
+                                    <i class="fas fa-thumbtack"></i> Desanclar
+                                </button>
+                                <a href="{{ action([\App\Http\Controllers\ExpenseController::class, 'index']) }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            </div>
                         </div>
                         <a href="{{ action([\App\Http\Controllers\ExpenseController::class, 'index']) }}" class="kubre-subdock-link {{ request()->is('expenses') ? 'is-active-sub' : '' }}">
                             <span class="kubre-subdock-icon"><i class="fas fa-list"></i></span>
@@ -279,7 +304,7 @@
 
             <!-- 8. Contactos & CRM (con Sub-Dock Flotante) -->
             @if ($can_access_contacts)
-                <div class="kubre-dock-item {{ $is_contacts ? 'is-active' : '' }} kubre-has-subdock" data-module="contacts">
+                <div class="kubre-dock-item {{ $is_contacts ? 'is-active' : '' }} kubre-has-subdock" data-dock-app="contacts">
                     <div class="kubre-app-tile tile-contacts">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -297,7 +322,12 @@
                             <span class="kubre-subdock-title">
                                 <i class="fas fa-users" style="color: #38BDF8;"></i> Contactos & CRM
                             </span>
-                            <a href="{{ action([\App\Http\Controllers\ContactController::class, 'index'], ['type' => 'customer']) }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            <div class="kubre-subdock-header-actions">
+                                <button type="button" class="kubre-subdock-unpin-btn" data-unpin="contacts" title="Desanclar del Dock">
+                                    <i class="fas fa-thumbtack"></i> Desanclar
+                                </button>
+                                <a href="{{ action([\App\Http\Controllers\ContactController::class, 'index'], ['type' => 'customer']) }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            </div>
                         </div>
                         <a href="{{ action([\App\Http\Controllers\ContactController::class, 'index'], ['type' => 'customer']) }}" class="kubre-subdock-link {{ request()->get('type') == 'customer' ? 'is-active-sub' : '' }}">
                             <span class="kubre-subdock-icon"><i class="fas fa-user-friends"></i></span>
@@ -321,7 +351,7 @@
 
             <!-- 9. Módulo Consultorio (Si está habilitado) -->
             @if (\Module::has('Consultorio') && \Module::isEnabled('Consultorio'))
-                <div class="kubre-dock-item {{ $is_consultorio ? 'is-active' : '' }} kubre-has-subdock" data-module="consultorio">
+                <div class="kubre-dock-item {{ $is_consultorio ? 'is-active' : '' }} kubre-has-subdock" data-dock-app="consultorio">
                     <div class="kubre-app-tile tile-consultorio">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
@@ -336,7 +366,12 @@
                             <span class="kubre-subdock-title">
                                 <i class="fas fa-stethoscope" style="color: #2DD4BF;"></i> Consultorio Médico
                             </span>
-                            <a href="{{ route('consultorio.appointments.index') }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            <div class="kubre-subdock-header-actions">
+                                <button type="button" class="kubre-subdock-unpin-btn" data-unpin="consultorio" title="Desanclar del Dock">
+                                    <i class="fas fa-thumbtack"></i> Desanclar
+                                </button>
+                                <a href="{{ route('consultorio.appointments.index') }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            </div>
                         </div>
                         <a href="{{ route('consultorio.appointments.index') }}" class="kubre-subdock-link">
                             <span class="kubre-subdock-icon"><i class="fas fa-calendar-check"></i></span>
@@ -356,11 +391,11 @@
 
             <!-- 10. Módulo Manufactura (Si está habilitado) -->
             @if (\Module::has('Manufacturing') && \Module::isEnabled('Manufacturing'))
-                <div class="kubre-dock-item {{ $is_manufacturing ? 'is-active' : '' }} kubre-has-subdock" data-module="manufacturing">
+                <div class="kubre-dock-item {{ $is_manufacturing ? 'is-active' : '' }} kubre-has-subdock" data-dock-app="manufacturing">
                     <div class="kubre-app-tile tile-manufacturing">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="3"></circle>
-                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                         </svg>
                     </div>
                     <span class="kubre-dock-label">Producción</span>
@@ -372,7 +407,12 @@
                             <span class="kubre-subdock-title">
                                 <i class="fas fa-industry" style="color: #94A3B8;"></i> Manufactura & Producción
                             </span>
-                            <a href="{{ route('manufacturing.production_orders.index') }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            <div class="kubre-subdock-header-actions">
+                                <button type="button" class="kubre-subdock-unpin-btn" data-unpin="manufacturing" title="Desanclar del Dock">
+                                    <i class="fas fa-thumbtack"></i> Desanclar
+                                </button>
+                                <a href="{{ route('manufacturing.production_orders.index') }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            </div>
                         </div>
                         <a href="{{ route('manufacturing.production_orders.index') }}" class="kubre-subdock-link">
                             <span class="kubre-subdock-icon"><i class="fas fa-tasks"></i></span>
@@ -388,7 +428,7 @@
 
             <!-- 11. Reportes & Auditoría (con Sub-Dock Flotante) -->
             @if ($can_access_reports)
-                <div class="kubre-dock-item {{ $is_reports ? 'is-active' : '' }} kubre-has-subdock" data-module="reports">
+                <div class="kubre-dock-item {{ $is_reports ? 'is-active' : '' }} kubre-has-subdock" data-dock-app="reports">
                     <div class="kubre-app-tile tile-reports">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="18" y1="20" x2="18" y2="10"></line>
@@ -405,7 +445,12 @@
                             <span class="kubre-subdock-title">
                                 <i class="fas fa-chart-line" style="color: #C084FC;"></i> Reportes & Analítica
                             </span>
-                            <a href="{{ action([\App\Http\Controllers\ReportController::class, 'getProfitLoss']) }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            <div class="kubre-subdock-header-actions">
+                                <button type="button" class="kubre-subdock-unpin-btn" data-unpin="reports" title="Desanclar del Dock">
+                                    <i class="fas fa-thumbtack"></i> Desanclar
+                                </button>
+                                <a href="{{ action([\App\Http\Controllers\ReportController::class, 'getProfitLoss']) }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            </div>
                         </div>
                         <a href="{{ action([\App\Http\Controllers\ReportController::class, 'getProfitLoss']) }}" class="kubre-subdock-link">
                             <span class="kubre-subdock-icon"><i class="fas fa-dollar-sign"></i></span>
@@ -435,7 +480,7 @@
 
             <!-- 12. Configuración ERP (con Sub-Dock Flotante) -->
             @if ($can_access_settings)
-                <div class="kubre-dock-item {{ $is_settings ? 'is-active' : '' }} kubre-has-subdock" data-module="settings">
+                <div class="kubre-dock-item {{ $is_settings ? 'is-active' : '' }} kubre-has-subdock" data-dock-app="settings">
                     <div class="kubre-app-tile tile-settings">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="4" y1="21" x2="4" y2="14"></line>
@@ -458,7 +503,12 @@
                             <span class="kubre-subdock-title">
                                 <i class="fas fa-cogs" style="color: #94A3B8;"></i> Configuración ERP
                             </span>
-                            <a href="{{ action([\App\Http\Controllers\BusinessController::class, 'getBusinessSettings']) }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            <div class="kubre-subdock-header-actions">
+                                <button type="button" class="kubre-subdock-unpin-btn kubre-open-customizer" title="Personalizar Dock">
+                                    <i class="fas fa-sliders-h"></i> Dock
+                                </button>
+                                <a href="{{ action([\App\Http\Controllers\BusinessController::class, 'getBusinessSettings']) }}" class="kubre-subdock-mainlink">Ver Todo &rarr;</a>
+                            </div>
                         </div>
                         <a href="{{ action([\App\Http\Controllers\BusinessController::class, 'getBusinessSettings']) }}" class="kubre-subdock-link">
                             <span class="kubre-subdock-icon"><i class="fas fa-building"></i></span>
@@ -476,6 +526,10 @@
                             <span class="kubre-subdock-icon"><i class="fas fa-user-shield"></i></span>
                             <span>Usuarios & Roles</span>
                         </a>
+                        <a href="javascript:void(0);" class="kubre-subdock-link kubre-open-customizer" style="color: #FB4C0A; border-top: 1px dashed rgba(255,255,255,0.1); margin-top: 4px;">
+                            <span class="kubre-subdock-icon" style="color: #FB4C0A;"><i class="fas fa-thumbtack"></i></span>
+                            <span>Personalizar este Dock...</span>
+                        </a>
                     </div>
                 </div>
             @endif
@@ -483,7 +537,7 @@
             <!-- 13. Caja Rápida / Mostrador (POS) -->
             @if ($can_access_pos)
                 <a href="{{ action([\App\Http\Controllers\SellPosController::class, 'create']) }}" 
-                   class="kubre-dock-item {{ $is_pos ? 'is-active' : '' }}" target="_blank" title="Caja Rápida (Punto de Venta)">
+                   class="kubre-dock-item {{ $is_pos ? 'is-active' : '' }}" target="_blank" title="Caja Rápida (Punto de Venta)" data-dock-app="pos">
                     <div class="kubre-app-tile tile-pos">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="3" width="20" height="14" rx="2"></rect>
@@ -497,5 +551,304 @@
             @endif
 
         </nav>
+    </div>
+
+    <!-- Modal de Personalización de Dock (Kubre OS Dock Settings) -->
+    <div id="kubre-dock-customizer-modal" class="no-print" role="dialog" aria-modal="true" aria-label="Personalizar Kubre Dock">
+        <div class="kubre-customizer-card">
+            
+            <div class="kubre-customizer-header">
+                <div>
+                    <h3 class="kubre-customizer-title">
+                        <i class="fas fa-thumbtack" style="color: #FB4C0A;"></i> Personalizar mi Dock
+                    </h3>
+                    <p class="kubre-customizer-subtitle">
+                        Elige qué aplicaciones deseas mantener visibles en tu barra inferior.
+                    </p>
+                </div>
+                <button type="button" class="kubre-close-btn" id="kubre-customizer-close" title="Cerrar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="kubre-customizer-body">
+                
+                <!-- Dashboard -->
+                <div class="kubre-customizer-item" data-custom-item="dashboard">
+                    <div class="kubre-customizer-item-info">
+                        <div class="kubre-app-tile tile-dashboard" style="width: 36px; height: 36px; border-radius: 10px;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                                <rect x="3" y="3" width="7" height="9" rx="1.5"></rect>
+                                <rect x="14" y="3" width="7" height="5" rx="1.5"></rect>
+                                <rect x="14" y="12" width="7" height="9" rx="1.5"></rect>
+                                <rect x="3" y="16" width="7" height="5" rx="1.5"></rect>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="kubre-customizer-item-name">Dashboard Ejecutivo</div>
+                            <div class="kubre-customizer-item-desc">Métricas, gráficos y resumen del negocio</div>
+                        </div>
+                    </div>
+                    <label class="kubre-switch">
+                        <input type="checkbox" class="kubre-dock-toggle" data-app="dashboard" checked>
+                        <span class="kubre-switch-slider"></span>
+                    </label>
+                </div>
+
+                <!-- Ventas -->
+                @if ($can_access_sales)
+                    <div class="kubre-customizer-item" data-custom-item="sales">
+                        <div class="kubre-customizer-item-info">
+                            <div class="kubre-app-tile tile-sales" style="width: 36px; height: 36px; border-radius: 10px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="kubre-customizer-item-name">Ventas & Facturación</div>
+                                <div class="kubre-customizer-item-desc">Cotizaciones, facturas, pedidos y cobros</div>
+                            </div>
+                        </div>
+                        <label class="kubre-switch">
+                            <input type="checkbox" class="kubre-dock-toggle" data-app="sales" checked>
+                            <span class="kubre-switch-slider"></span>
+                        </label>
+                    </div>
+                @endif
+
+                <!-- Inventario -->
+                @if ($can_access_products)
+                    <div class="kubre-customizer-item" data-custom-item="products">
+                        <div class="kubre-customizer-item-info">
+                            <div class="kubre-app-tile tile-products" style="width: 36px; height: 36px; border-radius: 10px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="kubre-customizer-item-name">Inventario & Stock</div>
+                                <div class="kubre-customizer-item-desc">Catálogo, lotes, traslados y ajustes</div>
+                            </div>
+                        </div>
+                        <label class="kubre-switch">
+                            <input type="checkbox" class="kubre-dock-toggle" data-app="products" checked>
+                            <span class="kubre-switch-slider"></span>
+                        </label>
+                    </div>
+                @endif
+
+                <!-- Compras -->
+                @if ($can_access_purchases)
+                    <div class="kubre-customizer-item" data-custom-item="purchases">
+                        <div class="kubre-customizer-item-info">
+                            <div class="kubre-app-tile tile-purchases" style="width: 36px; height: 36px; border-radius: 10px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                                    <rect x="1" y="3" width="15" height="13" rx="2"></rect>
+                                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="kubre-customizer-item-name">Compras & Abastecimiento</div>
+                                <div class="kubre-customizer-item-desc">Recepción, órdenes y proveedores</div>
+                            </div>
+                        </div>
+                        <label class="kubre-switch">
+                            <input type="checkbox" class="kubre-dock-toggle" data-app="purchases" checked>
+                            <span class="kubre-switch-slider"></span>
+                        </label>
+                    </div>
+                @endif
+
+                <!-- Finanzas -->
+                @if ($can_access_finance)
+                    <div class="kubre-customizer-item" data-custom-item="finance">
+                        <div class="kubre-customizer-item-info">
+                            <div class="kubre-app-tile tile-finance" style="width: 36px; height: 36px; border-radius: 10px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                                    <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                                    <line x1="2" y1="10" x2="22" y2="10"></line>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="kubre-customizer-item-name">Finanzas & Tesorería</div>
+                                <div class="kubre-customizer-item-desc">Bancos, tasas bimoneda y flujo de caja</div>
+                            </div>
+                        </div>
+                        <label class="kubre-switch">
+                            <input type="checkbox" class="kubre-dock-toggle" data-app="finance" checked>
+                            <span class="kubre-switch-slider"></span>
+                        </label>
+                    </div>
+                @endif
+
+                <!-- Gastos -->
+                @if ($can_access_expenses)
+                    <div class="kubre-customizer-item" data-custom-item="expenses">
+                        <div class="kubre-customizer-item-info">
+                            <div class="kubre-app-tile tile-expenses" style="width: 36px; height: 36px; border-radius: 10px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="kubre-customizer-item-name">Gastos & Egresos</div>
+                                <div class="kubre-customizer-item-desc">Control de egresos y centros de costo</div>
+                            </div>
+                        </div>
+                        <label class="kubre-switch">
+                            <input type="checkbox" class="kubre-dock-toggle" data-app="expenses" checked>
+                            <span class="kubre-switch-slider"></span>
+                        </label>
+                    </div>
+                @endif
+
+                <!-- Contactos -->
+                @if ($can_access_contacts)
+                    <div class="kubre-customizer-item" data-custom-item="contacts">
+                        <div class="kubre-customizer-item-info">
+                            <div class="kubre-app-tile tile-contacts" style="width: 36px; height: 36px; border-radius: 10px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="kubre-customizer-item-name">Contactos & CRM</div>
+                                <div class="kubre-customizer-item-desc">Directorio de clientes y proveedores</div>
+                            </div>
+                        </div>
+                        <label class="kubre-switch">
+                            <input type="checkbox" class="kubre-dock-toggle" data-app="contacts" checked>
+                            <span class="kubre-switch-slider"></span>
+                        </label>
+                    </div>
+                @endif
+
+                <!-- Consultorio -->
+                @if (\Module::has('Consultorio') && \Module::isEnabled('Consultorio'))
+                    <div class="kubre-customizer-item" data-custom-item="consultorio">
+                        <div class="kubre-customizer-item-info">
+                            <div class="kubre-app-tile tile-consultorio" style="width: 36px; height: 36px; border-radius: 10px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="kubre-customizer-item-name">Salud & Consultorio</div>
+                                <div class="kubre-customizer-item-desc">Agenda médica, citas e historias clínicas</div>
+                            </div>
+                        </div>
+                        <label class="kubre-switch">
+                            <input type="checkbox" class="kubre-dock-toggle" data-app="consultorio" checked>
+                            <span class="kubre-switch-slider"></span>
+                        </label>
+                    </div>
+                @endif
+
+                <!-- Manufactura -->
+                @if (\Module::has('Manufacturing') && \Module::isEnabled('Manufacturing'))
+                    <div class="kubre-customizer-item" data-custom-item="manufacturing">
+                        <div class="kubre-customizer-item-info">
+                            <div class="kubre-app-tile tile-manufacturing" style="width: 36px; height: 36px; border-radius: 10px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="kubre-customizer-item-name">Manufactura & Producción</div>
+                                <div class="kubre-customizer-item-desc">Órdenes de producción y recetas</div>
+                            </div>
+                        </div>
+                        <label class="kubre-switch">
+                            <input type="checkbox" class="kubre-dock-toggle" data-app="manufacturing" checked>
+                            <span class="kubre-switch-slider"></span>
+                        </label>
+                    </div>
+                @endif
+
+                <!-- Reportes -->
+                @if ($can_access_reports)
+                    <div class="kubre-customizer-item" data-custom-item="reports">
+                        <div class="kubre-customizer-item-info">
+                            <div class="kubre-app-tile tile-reports" style="width: 36px; height: 36px; border-radius: 10px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="kubre-customizer-item-name">Reportes & Analítica</div>
+                                <div class="kubre-customizer-item-desc">Balances, libros fiscales y ventas</div>
+                            </div>
+                        </div>
+                        <label class="kubre-switch">
+                            <input type="checkbox" class="kubre-dock-toggle" data-app="reports" checked>
+                            <span class="kubre-switch-slider"></span>
+                        </label>
+                    </div>
+                @endif
+
+                <!-- Configuración -->
+                @if ($can_access_settings)
+                    <div class="kubre-customizer-item" data-custom-item="settings">
+                        <div class="kubre-customizer-item-info">
+                            <div class="kubre-app-tile tile-settings" style="width: 36px; height: 36px; border-radius: 10px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                                    <line x1="4" y1="21" x2="4" y2="14"></line>
+                                    <line x1="4" y1="10" x2="4" y2="3"></line>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="kubre-customizer-item-name">Configuración ERP</div>
+                                <div class="kubre-customizer-item-desc">Ajustes, sucursales y permisos</div>
+                            </div>
+                        </div>
+                        <label class="kubre-switch">
+                            <input type="checkbox" class="kubre-dock-toggle" data-app="settings" checked>
+                            <span class="kubre-switch-slider"></span>
+                        </label>
+                    </div>
+                @endif
+
+                <!-- POS -->
+                @if ($can_access_pos)
+                    <div class="kubre-customizer-item" data-custom-item="pos">
+                        <div class="kubre-customizer-item-info">
+                            <div class="kubre-app-tile tile-pos" style="width: 36px; height: 36px; border-radius: 10px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                                    <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="kubre-customizer-item-name">Caja Rápida (POS)</div>
+                                <div class="kubre-customizer-item-desc">Terminal de venta de mostrador</div>
+                            </div>
+                        </div>
+                        <label class="kubre-switch">
+                            <input type="checkbox" class="kubre-dock-toggle" data-app="pos" checked>
+                            <span class="kubre-switch-slider"></span>
+                        </label>
+                    </div>
+                @endif
+
+            </div>
+
+            <div class="kubre-customizer-footer">
+                <button type="button" class="kubre-btn-reset-dock" id="kubre-reset-dock-btn">
+                    <i class="fas fa-undo"></i> Restablecer Todo
+                </button>
+                <button type="button" class="kubre-btn-done-dock" id="kubre-done-dock-btn">
+                    Listo
+                </button>
+            </div>
+
+        </div>
     </div>
 @endif

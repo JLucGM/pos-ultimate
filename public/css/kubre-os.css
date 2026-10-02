@@ -304,6 +304,12 @@
     gap: 6px;
 }
 
+.kubre-subdock-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
 .kubre-subdock-mainlink {
     font-size: 11px;
     color: #FB4C0A;
@@ -321,6 +327,25 @@
 .kubre-subdock-mainlink:hover {
     background: #FB4C0A;
     color: #FFFFFF;
+}
+
+.kubre-subdock-unpin-btn {
+    background: transparent;
+    border: none;
+    color: #64748B;
+    font-size: 11px;
+    padding: 3px 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.kubre-subdock-unpin-btn:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: #F87171;
 }
 
 /* Sub-dock Option Links */
@@ -718,10 +743,305 @@ body:not(.sidebar-collapse) .side-bar {
     transition: width 0.25s ease, opacity 0.2s ease;
 }
 
+/* ==========================================================================
+   6. DOCK CUSTOMIZER MODAL & PIN/UNPIN SYSTEM
+   ========================================================================== */
+#kubre-dock-customizer-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(11, 15, 29, 0.8);
+    backdrop-filter: blur(28px) saturate(190%);
+    -webkit-backdrop-filter: blur(28px) saturate(190%);
+    z-index: 2100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s ease;
+    padding: 20px;
+}
+
+#kubre-dock-customizer-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.kubre-customizer-card {
+    width: 100%;
+    max-width: 580px;
+    max-height: 85vh;
+    background: rgba(15, 23, 42, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 24px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: scale(0.94) translateY(12px);
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#kubre-dock-customizer-modal.is-open .kubre-customizer-card {
+    transform: scale(1) translateY(0);
+}
+
+.kubre-customizer-header {
+    padding: 20px 24px 16px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.kubre-customizer-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #F8FAFC;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.kubre-customizer-subtitle {
+    font-size: 12px;
+    color: #64748B;
+    margin: 2px 0 0 0;
+}
+
+.kubre-customizer-body {
+    padding: 18px 24px;
+    overflow-y: auto;
+    max-height: calc(85vh - 140px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.kubre-customizer-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    transition: all 0.2s ease;
+}
+
+.kubre-customizer-item:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.14);
+}
+
+.kubre-customizer-item-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.kubre-customizer-item-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #F8FAFC;
+}
+
+.kubre-customizer-item-desc {
+    font-size: 11px;
+    color: #64748B;
+}
+
+/* iOS / macOS Style Toggle Switch */
+.kubre-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.kubre-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.kubre-switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.14);
+    transition: .25s ease;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.kubre-switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.kubre-switch input:checked + .kubre-switch-slider {
+    background-color: #FB4C0A;
+    border-color: #FB4C0A;
+}
+
+.kubre-switch input:checked + .kubre-switch-slider:before {
+    transform: translateX(20px);
+}
+
+/* Customizer Footer */
+.kubre-customizer-footer {
+    padding: 14px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.kubre-btn-reset-dock {
+    background: rgba(255, 255, 255, 0.08);
+    color: #94A3B8;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.kubre-btn-reset-dock:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+}
+
+.kubre-btn-done-dock {
+    background: linear-gradient(135deg, #FB4C0A 0%, #D83600 100%);
+    color: #FFFFFF;
+    border: none;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(251, 76, 10, 0.35);
+    transition: all 0.2s ease;
+}
+
+.kubre-btn-done-dock:hover {
+    box-shadow: 0 6px 16px rgba(251, 76, 10, 0.5);
+    transform: translateY(-1px);
+}
+
+/* Pin Badges on Launchpad Apps */
+.kubre-app-card {
+    position: relative;
+}
+
+.kubre-app-pin-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #64748B;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.kubre-app-card:hover .kubre-app-pin-btn {
+    opacity: 1;
+}
+
+.kubre-app-pin-btn:hover {
+    background: rgba(251, 76, 10, 0.25);
+    color: #FB4C0A;
+    border-color: rgba(251, 76, 10, 0.4);
+}
+
+.kubre-dock-item.is-unpinned {
+    display: none !important;
+}
+
+.kubre-header-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94A3B8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.kubre-header-btn:hover {
+    background: rgba(251, 76, 10, 0.2);
+    color: #FB4C0A;
+}
+
+.kubre-footer-link-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    color: #94A3B8;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.kubre-footer-link-btn:hover {
+    background: rgba(251, 76, 10, 0.2);
+    color: #FB4C0A;
+}
+
+.kubre-app-pin-btn.is-pinned {
+    color: #FB4C0A;
+    background: rgba(251, 76, 10, 0.15);
+    border-color: rgba(251, 76, 10, 0.3);
+    opacity: 0.85;
+}
+
 /* Print Cleanliness */
 @media print {
     #kubre-os-dock-container,
-    #kubre-launchpad-overlay {
+    #kubre-launchpad-overlay,
+    #kubre-dock-customizer-modal {
         display: none !important;
     }
 }
