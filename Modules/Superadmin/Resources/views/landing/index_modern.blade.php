@@ -1,5 +1,5 @@
 @extends('superadmin::layouts.landing_modern')
-@section('title', 'Sistema POS para Pequeñas Empresas')
+@section('title', 'Audaz POS')
 
 @section('content')
 <!-- Hero Section -->

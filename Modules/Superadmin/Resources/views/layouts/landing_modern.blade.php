@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Primary Meta Tags -->
-    <title>@yield('title', 'Sistema POS para Pequeñas Empresas | Audaz POS') - {{ config('app.name') }}</title>
+    <title>@yield('title', 'Sistema') - {{ config('app.name') }}</title>
     <meta name="title" content="@yield('meta_title', 'Sistema POS para Pequeñas Empresas | Audaz POS - Software de Punto de Venta en la Nube')">
     <meta name="description" content="@yield('meta_description', 'Sistema POS completo en la nube para restaurantes, tiendas, consultorios y pequeñas empresas. Control de ventas, inventario, citas y reportes desde cualquier lugar. Prueba gratis.')">
     <meta name="keywords" content="sistema pos, punto de venta, software pos, pos en la nube, sistema de ventas, control de inventario, pos para restaurantes, pos para tiendas, pos venezuela, software facturación, sistema citas, pos consultorio, audaz pos">
