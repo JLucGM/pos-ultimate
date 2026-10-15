@@ -54,8 +54,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Font Awesome (v6.5.2) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <!-- AOS Animation -->
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
@@ -1178,25 +1178,25 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h4>{{ config('app.name') }}</h4>
-                    <p>Sistema POS completo para pequeñas y medianas empresas. Gestiona tu negocio desde cualquier lugar.</p>
+                    <h4>{{ config('app.name', 'Kubre') }}</h4>
+                    <p>Plataforma de gestión empresarial y control operativo en la nube para organizaciones y comercios en crecimiento.</p>
                 </div>
                 
                 <div class="footer-section">
                     <h4>Producto</h4>
                     <ul>
                         <li><a href="{{ route('pricing') }}">Precios</a></li>
-                        <li><a href="#">Características</a></li>
-                        <li><a href="#">Integraciones</a></li>
+                        <li><a href="/#features">Características</a></li>
+                        <li><a href="/#experiencia">Interfaz OS</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-section">
                     <h4>Soporte</h4>
                     <ul>
-                        <li><a href="#">Centro de Ayuda</a></li>
-                        <li><a href="#">Documentación</a></li>
-                        <li><a href="#">Contacto</a></li>
+                        <li><a href="{{ route('contact.page') }}">Contacto</a></li>
+                        <li><a href="mailto:soporte@kubre.site">soporte@kubre.site</a></li>
+                        <li><a href="https://wa.me/584242909870?text=Hola!%20Necesito%20soporte%20sobre%20Kubre" target="_blank" rel="noopener">WhatsApp Soporte</a></li>
                     </ul>
                 </div>
                 
@@ -1211,13 +1211,13 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; {{ date('Y') }} {{ config('app.name') }}. Todos los derechos reservados.</p>
+                <p>&copy; {{ date('Y') }} {{ config('app.name', 'Kubre') }}. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
 
     <!-- WhatsApp Float -->
-    <a href="https://wa.me/584242909870?text=Hola!%20Estoy%20interesado%20en%20el%20sistema%20POS" 
+    <a href="https://wa.me/584242909870?text=Hola!%20Deseo%20informaci%C3%B3n%20sobre%20la%20plataforma%20Kubre" 
        class="whatsapp-float" 
        target="_blank"
        rel="noopener noreferrer">
@@ -1285,7 +1285,7 @@
     {
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
-        "name": "Audaz POS",
+        "name": "Kubre",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Web, Windows, macOS, Linux, iOS, Android",
         "offers": {
@@ -1307,22 +1307,22 @@
             "bestRating": "5",
             "worstRating": "1"
         },
-        "description": "Sistema POS completo en la nube para restaurantes, tiendas, consultorios y pequeñas empresas. Control de ventas, inventario, clientes y reportes desde cualquier lugar.",
+        "description": "Plataforma de gestión empresarial y punto de venta en la nube para restaurantes, tiendas, distribuidores y empresas. Control de ventas, inventario multialmacén, finanzas y reportes en tiempo real.",
         "featureList": [
-            "Sistema de Ventas Rápido",
-            "Control de Inventario",
+            "Sistema de Ventas Rápido POS",
+            "Control de Inventario Multialmacén",
+            "Facturación Multimoneda",
             "Gestión de Citas",
             "Reportes Inteligentes",
             "Multi-Sucursal",
-            "Módulo Restaurante",
-            "Facturación Electrónica",
-            "Soporte 24/7"
+            "Módulo Restaurante & KDS",
+            "Soporte Continuo"
         ],
         "screenshot": "{{ asset('images/landing/dashboard-preview.png') }}",
         "softwareVersion": "2.0",
         "author": {
             "@type": "Organization",
-            "name": "Audaz POS",
+            "name": "Kubre",
             "url": "{{ url('/') }}"
         },
         "provider": {
@@ -1355,14 +1355,15 @@
         "contactPoint": {
             "@type": "ContactPoint",
             "telephone": "+58-424-290-9870",
+            "email": "soporte@kubre.site",
             "contactType": "Customer Service",
             "availableLanguage": ["Spanish"],
             "areaServed": "VE"
         },
         "sameAs": [
-            "https://www.facebook.com/audazpos",
-            "https://www.instagram.com/audazpos",
-            "https://twitter.com/audazpos"
+            "https://www.facebook.com/kubre",
+            "https://www.instagram.com/kubre",
+            "https://twitter.com/kubre"
         ]
     }
     </script>
@@ -1371,7 +1372,7 @@
     {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "name": "Audaz POS",
+        "name": "Kubre",
         "url": "{{ url('/') }}",
         "potentialAction": {
             "@type": "SearchAction",
@@ -1385,12 +1386,12 @@
     {
         "@context": "https://schema.org",
         "@type": "Product",
-        "name": "Audaz POS - Sistema de Punto de Venta",
+        "name": "Kubre - Sistema de Gestión Comercial y POS",
         "image": "{{ asset('images/landing/dashboard-preview.png') }}",
-        "description": "Sistema POS completo en la nube para gestionar ventas, inventario, clientes y reportes. Perfecto para restaurantes, tiendas, consultorios y pequeñas empresas.",
+        "description": "Plataforma integral en la nube para gestionar ventas, inventario multialmacén, compras, facturación y reportes. Diseñada para comercios, restaurantes, mayoristas y servicios.",
         "brand": {
             "@type": "Brand",
-            "name": "Audaz POS"
+            "name": "Kubre"
         },
         "offers": [
             {
@@ -1451,18 +1452,18 @@
         "mainEntity": [
             {
                 "@type": "Question",
-                "name": "¿Qué es Audaz POS?",
+                "name": "¿Qué es Kubre?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Audaz POS es un sistema de punto de venta completo en la nube que permite gestionar ventas, inventario, clientes y reportes desde cualquier lugar. Es perfecto para restaurantes, tiendas, consultorios y pequeñas empresas."
+                    "text": "Kubre es una plataforma de gestión empresarial y punto de venta en la nube que permite gestionar ventas, inventario multialmacén, finanzas, clientes y reportes desde cualquier lugar. Es perfecto para restaurantes, tiendas, comercios mayoristas y pequeñas/medianas empresas."
                 }
             },
             {
                 "@type": "Question",
-                "name": "¿Cuánto cuesta Audaz POS?",
+                "name": "¿Cuánto cuesta Kubre?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Audaz POS ofrece planes desde $8/mes (Plan Basic) hasta $28/mes (Plan Business). Todos los planes incluyen soporte técnico y actualizaciones gratuitas."
+                    "text": "Kubre ofrece planes flexibles desde $8/mes (Plan Basic) hasta $28/mes (Plan Business). Todos los planes incluyen soporte técnico, actualizaciones continuas y 14 días de prueba gratuita."
                 }
             },
             {
@@ -1470,15 +1471,15 @@
                 "name": "¿Necesito instalar software?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "No, Audaz POS es 100% en la nube. Solo necesitas un navegador web y conexión a internet para acceder desde cualquier dispositivo."
+                    "text": "No, Kubre es 100% en la nube. Solo necesitas un navegador web y conexión a internet para acceder desde computadoras, tablets o teléfonos móviles."
                 }
             },
             {
                 "@type": "Question",
-                "name": "¿Puedo probar Audaz POS gratis?",
+                "name": "¿Puedo probar Kubre gratis?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Sí, ofrecemos una prueba gratuita para que puedas conocer todas las funcionalidades del sistema antes de contratar un plan."
+                    "text": "Sí, ofrecemos una prueba gratuita de 14 días para que puedas explorar todas las funcionalidades del sistema sin compromiso."
                 }
             }
         ]

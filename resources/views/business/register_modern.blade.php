@@ -9,9 +9,9 @@
         <div class="auth-brand-header">
             <a href="{{ url('/') }}" class="auth-brand-logo-wrap">
                 <div class="auth-brand-logo-icon">
-                    <img src="{{ asset('images/landing/logo_full.png') }}" alt="{{ config('app.name', 'AudazPOS') }}" />
+                    <img src="{{ asset('img/logo_v2_full.png') }}" alt="{{ config('app.name', 'Kubre') }}" style="max-height: 48px; width: auto;" />
                 </div>
-                <span class="auth-brand-name">{{ config('app.name', 'AudazPOS') }}</span>
+                <span class="auth-brand-name">{{ config('app.name', 'Kubre') }}</span>
             </a>
             
             <div style="font-size: 13px; font-weight: 700; color: #10B981; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 5px 14px; border-radius: 25px;">
@@ -27,7 +27,7 @@
             </div>
 
             <h1 class="auth-hero-title">
-                Impulsa y automatiza tu negocio con <span class="gradient-highlight">AudazPOS</span>
+                Impulsa y automatiza tu negocio con <span class="gradient-highlight">Kubre</span>
             </h1>
 
             <p class="auth-hero-subtitle">
@@ -154,7 +154,7 @@
 
         <!-- Footer Derecho -->
         <div class="auth-form-footer" style="padding-top: 24px;">
-            ¿Dudas o preguntas? Escríbenos a <a href="mailto:soporte@audazpos.com" style="color: #FB4C0A; text-decoration: none;">soporte@audazpos.com</a>
+            ¿Dudas o preguntas? Escríbenos a <a href="mailto:soporte@kubre.site" style="color: #FB4C0A; text-decoration: none;">soporte@kubre.site</a>
         </div>
     </div>
 </div>

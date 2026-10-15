@@ -54,7 +54,7 @@ class BusinessController extends Controller
         $this->moduleUtil = $moduleUtil;
 
         $this->theme_colors = [
-            'indigo' => 'Indigo (Audaz)',
+            'indigo' => 'Indigo (Kubre)',
             'primary' => 'Blue',
             // 'black' => 'Black',
             'purple' => 'Purple',

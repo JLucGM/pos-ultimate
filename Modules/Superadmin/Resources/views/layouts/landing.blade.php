@@ -35,6 +35,8 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@kubre">
+    <meta name="twitter:creator" content="@kubre">
     <meta name="twitter:title" content="@yield('og_title', 'Kubre | Plataforma de Gestión Empresarial y Control en la Nube')">
     <meta name="twitter:description" content="@yield('og_description', 'Centraliza finanzas, inventario multialmacén, operaciones multisede, facturación multimoneda y ventas en una sola plataforma inteligente.')">
     <meta name="twitter:image" content="{{ asset('images/kubre-og.jpg') }}">
@@ -54,7 +56,13 @@
             "@type": "ImageObject",
             "url": "{{ asset('img/logo_v2_full.png') }}"
           },
-          "description": "Plataforma de gestión empresarial, operaciones y control comercial en la nube."
+          "description": "Plataforma de gestión empresarial, operaciones y control comercial en la nube.",
+          "sameAs": [
+            "https://www.facebook.com/kubre",
+            "https://www.instagram.com/kubre",
+            "https://twitter.com/kubre",
+            "https://www.linkedin.com/company/kubre"
+          ]
         },
         {
           "@type": "WebSite",
@@ -94,8 +102,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Font Awesome (v6.5.2 for X / Twitter logo support) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <!-- AOS Animation -->
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
@@ -117,7 +125,7 @@
                 <!-- Dropdown Soluciones -->
                 <div class="nav-item-dropdown">
                     <a href="javascript:void(0);" class="nav-link nav-dropdown-trigger">
-                        Soluciones <i class="fas fa-chevron-down nav-dropdown-arrow"></i>
+                        Soluciones <i class="fas fa-chevron-up nav-dropdown-arrow"></i>
                     </a>
                     <div class="nav-dropdown-menu">
                         <a href="{{ route('landing.solution', 'restaurantes') }}" class="nav-dropdown-item">
@@ -206,10 +214,14 @@
                     </div>
                     <p>Plataforma de gestión comercial y punto de venta para todo tipo de organizaciones y negocios en crecimiento.</p>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="{{ config('landing.social.facebook') && config('landing.social.facebook') != '#' ? config('landing.social.facebook') : 'https://facebook.com/kubre' }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="{{ config('landing.social.twitter') && config('landing.social.twitter') != '#' ? config('landing.social.twitter') : 'https://twitter.com/kubre' }}" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display: block;">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                        </a>
+                        <a href="{{ config('landing.social.instagram') && config('landing.social.instagram') != '#' ? config('landing.social.instagram') : 'https://instagram.com/kubre' }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="{{ config('landing.social.linkedin') && config('landing.social.linkedin') != '#' ? config('landing.social.linkedin') : 'https://linkedin.com/company/kubre' }}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                     <div style="margin-top: 18px;">
                         <button type="button" onclick="shareKubre()" class="btn btn-sm btn-outline-white" style="border-radius: 20px; font-size: 13px; font-weight: 700; padding: 7px 18px; display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18); color: #FFFFFF; cursor: pointer; transition: all 0.25s ease;">
@@ -262,7 +274,7 @@
     </footer>
 
     <!-- WhatsApp Flotante -->
-    <a href="https://wa.me/584242909870?text=Hola!%20Estoy%20interesado%20en%20el%20sistema%20POS" 
+    <a href="https://wa.me/584242909870?text=Hola!%20Deseo%20informaci%C3%B3n%20sobre%20la%20plataforma%20Kubre" 
        class="whatsapp-float" 
        target="_blank"
        rel="noopener noreferrer">

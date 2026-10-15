@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Portal en Mantenimiento | {{ config('app.name', 'AudazPOS') }}</title>
+    <title>Portal en Mantenimiento | {{ config('app.name', 'Kubre') }}</title>
     <meta name="description" content="Sistema en mantenimiento programado. Volveremos muy pronto.">
     
     <!-- Favicon -->
@@ -470,13 +470,11 @@
 
     <!-- Header -->
     <header class="maintenance-header">
-        <a href="{{ url('/') }}" class="brand-logo" title="{{ config('app.name', 'AudazPOS') }}">
+        <a href="{{ url('/') }}" class="brand-logo" title="{{ config('app.name', 'Kubre') }}">
             @if(file_exists(public_path('img/logo_v2_full.png')))
-                <img src="{{ asset('img/logo_v2_full.png') }}" alt="{{ config('app.name', 'AudazPOS') }}">
-            @elseif(file_exists(public_path('img/logo-audaz.png')))
-                <img src="{{ asset('img/logo-audaz.png') }}" alt="{{ config('app.name', 'AudazPOS') }}">
+                <img src="{{ asset('img/logo_v2_full.png') }}" alt="{{ config('app.name', 'Kubre') }}">
             @else
-                <div class="brand-fallback-name">Audaz<span>POS</span></div>
+                <div class="brand-fallback-name">Kubre</div>
             @endif
         </a>
 
@@ -540,7 +538,7 @@
                 <button type="button" onclick="triggerRefresh(this)" class="btn-retry" id="btnRetry">
                     <i class="fa-solid fa-rotate-right" id="refreshIcon"></i> Reintentar Conexión
                 </button>
-                <a href="mailto:soporte@audazpos.com" class="btn-support">
+                <a href="mailto:soporte@kubre.site" class="btn-support">
                     <i class="fa-solid fa-envelope"></i> Soporte Técnico
                 </a>
             </div>
@@ -555,7 +553,7 @@
     <!-- Footer -->
     <footer class="maintenance-footer">
         <div>
-            &copy; {{ date('Y') }} {{ config('app.name', 'AudazPOS') }} &bull; Todos los derechos reservados.
+            &copy; {{ date('Y') }} {{ config('app.name', 'Kubre') }} &bull; Todos los derechos reservados.
         </div>
         <div>
             <span style="color: var(--primary);"><i class="fa-solid fa-circle-check"></i></span> Tus datos e inventario están 100% protegidos

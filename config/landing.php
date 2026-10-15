@@ -10,11 +10,11 @@ return [
     |
     */
 
-    'site_name' => env('APP_NAME', 'Audaz POS'),
+    'site_name' => env('APP_NAME', 'Kubre'),
     
-    'tagline' => 'Gestiona tu Negocio con el Sistema POS Más Completo',
+    'tagline' => 'Gestiona tu Negocio con la Plataforma Todo-en-Uno en la Nube',
     
-    'description' => 'Controla ventas, inventario, clientes y reportes desde cualquier lugar. Perfecto para restaurantes, tiendas y pequeñas empresas.',
+    'description' => 'Controla ventas, inventario multialmacén, clientes y reportes desde cualquier lugar. Perfecto para comercios, restaurantes, mayoristas y servicios.',
 
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'contact' => [
-        'email' => env('CONTACT_EMAIL', 'info@audaz.site'),
+        'email' => env('CONTACT_EMAIL', 'info@kubre.site'),
         'phone' => env('CONTACT_PHONE', '+58 424 290 9870'),
         'address' => env('CONTACT_ADDRESS', 'Carrera 34, Terrazas del ingenio'),
         'whatsapp' => env('WHATSAPP_NUMBER', '+58 424 290 9870'),
@@ -208,10 +208,10 @@ return [
     |--------------------------------------------------------------------------
     */
     'seo' => [
-        'title' => 'Sistema POS para Pequeñas Empresas | ' . env('APP_NAME', 'POS System'),
-        'description' => 'Sistema POS completo en la nube para gestionar ventas, inventario, clientes y reportes. Perfecto para restaurantes, tiendas y pequeñas empresas.',
-        'keywords' => 'pos, punto de venta, sistema pos, inventario, ventas, restaurante, tienda, pequeñas empresas',
-        'og_image' => env('APP_URL', 'http://localhost') . '/images/og-image.jpg',
+        'title' => 'Plataforma de Gestión Empresarial y POS | ' . env('APP_NAME', 'Kubre'),
+        'description' => 'Plataforma todo-en-uno en la nube para gestionar ventas, inventario multialmacén, compras, facturación y reportes.',
+        'keywords' => 'kubre, software empresarial, gestion comercial, erp en la nube, punto de venta, pos, facturacion multimoneda, inventario',
+        'og_image' => env('APP_URL', 'https://kubre.site') . '/images/kubre-og.jpg',
     ],
 
     /*

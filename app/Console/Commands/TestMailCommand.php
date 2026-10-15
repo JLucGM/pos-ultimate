@@ -54,9 +54,9 @@ class TestMailCommand extends Command
         $this->line("Sending test email...");
 
         try {
-            Mail::raw("¡Excelente! La configuración de correo SMTP en tu sistema " . config('app.name', 'AudazPOS') . " funciona perfectamente.\n\nFecha y hora: " . now()->toDateTimeString(), function ($message) use ($recipient) {
+            Mail::raw("¡Excelente! La configuración de correo SMTP en tu sistema " . config('app.name', 'Kubre') . " funciona perfectamente.\n\nFecha y hora: " . now()->toDateTimeString(), function ($message) use ($recipient) {
                 $message->to($recipient)
-                    ->subject('✅ Prueba Exitosa de Correo SMTP - ' . config('app.name', 'AudazPOS'));
+                    ->subject('✅ Prueba Exitosa de Correo SMTP - ' . config('app.name', 'Kubre'));
             });
 
             $this->info("✅ SUCCESS: Test email successfully sent to: {$recipient}");

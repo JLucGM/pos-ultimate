@@ -270,14 +270,14 @@ class SuperadminSettingsController extends Controller
             }
 
             $from_address = config('mail.from.address');
-            $from_name = config('mail.from.name', 'AudazPOS');
+            $from_name = config('mail.from.name', 'Kubre');
 
-            \Illuminate\Support\Facades\Mail::raw("¡Excelente! La configuración de correo SMTP en tu sistema " . config('app.name', 'AudazPOS') . " está funcionando perfectamente a través de Resend / SMTP.\n\nFecha de prueba: " . date('Y-m-d H:i:s'), function ($message) use ($email, $from_address, $from_name) {
+            \Illuminate\Support\Facades\Mail::raw("¡Excelente! La configuración de correo SMTP en tu sistema " . config('app.name', 'Kubre') . " está funcionando perfectamente a través de Resend / SMTP.\n\nFecha de prueba: " . date('Y-m-d H:i:s'), function ($message) use ($email, $from_address, $from_name) {
                 if (! empty($from_address)) {
                     $message->from($from_address, $from_name);
                 }
                 $message->to($email)
-                    ->subject('✅ Prueba Exitosa de Correo - ' . config('app.name', 'AudazPOS'));
+                    ->subject('✅ Prueba Exitosa de Correo - ' . config('app.name', 'Kubre'));
             });
 
             return response()->json([

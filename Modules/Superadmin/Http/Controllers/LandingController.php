@@ -115,6 +115,31 @@ class LandingController extends Controller
      *
      * @return Response
      */
+    public function contactPage()
+    {
+        return view('superadmin::contact.index');
+    }
+
+    /**
+     * Redirect or display features
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function features()
+    {
+        return redirect('/#features');
+    }
+
+    /**
+     * Redirect or display about page
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function about()
+    {
+        return redirect('/#features');
+    }
+
     /**
      * Display vertical solutions page
      *

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>403 - Acceso Denegado | {{ config('app.name', 'AudazPOS') }}</title>
+    <title>403 - Acceso Denegado | {{ config('app.name', 'Kubre') }}</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
@@ -231,11 +231,11 @@
     <div class="bg-mesh"></div>
 
     <header class="error-header">
-        <a href="{{ url('/') }}" class="brand-logo">
+        <a href="{{ url('/') }}" class="brand-logo" title="{{ config('app.name', 'Kubre') }}">
             @if(file_exists(public_path('img/logo_v2_full.png')))
-                <img src="{{ asset('img/logo_v2_full.png') }}" alt="{{ config('app.name', 'AudazPOS') }}">
+                <img src="{{ asset('img/logo_v2_full.png') }}" alt="{{ config('app.name', 'Kubre') }}">
             @else
-                <div class="brand-fallback-name">Audaz<span>POS</span></div>
+                <div class="brand-fallback-name">Kubre</div>
             @endif
         </a>
         <div class="system-badge">
@@ -266,7 +266,7 @@
     </main>
 
     <footer class="error-footer">
-        &copy; {{ date('Y') }} {{ config('app.name', 'AudazPOS') }} &bull; Todos los derechos reservados.
+        &copy; {{ date('Y') }} {{ config('app.name', 'Kubre') }} &bull; Todos los derechos reservados.
     </footer>
 </body>
 </html>

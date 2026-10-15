@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>404 - Página No Encontrada | {{ config('app.name', 'AudazPOS') }}</title>
+    <title>404 - Página No Encontrada | {{ config('app.name', 'Kubre') }}</title>
     <meta name="description" content="Página no encontrada - 404">
     
     <!-- Favicon -->
@@ -442,13 +442,11 @@
 
     <!-- Header -->
     <header class="error-header">
-        <a href="{{ url('/') }}" class="brand-logo" title="{{ config('app.name', 'AudazPOS') }}">
+        <a href="{{ url('/') }}" class="brand-logo" title="{{ config('app.name', 'Kubre') }}">
             @if(file_exists(public_path('img/logo_v2_full.png')))
-                <img src="{{ asset('img/logo_v2_full.png') }}" alt="{{ config('app.name', 'AudazPOS') }}">
-            @elseif(file_exists(public_path('img/logo-audaz.png')))
-                <img src="{{ asset('img/logo-audaz.png') }}" alt="{{ config('app.name', 'AudazPOS') }}">
+                <img src="{{ asset('img/logo_v2_full.png') }}" alt="{{ config('app.name', 'Kubre') }}">
             @else
-                <div class="brand-fallback-name">Audaz<span>POS</span></div>
+                <div class="brand-fallback-name">Kubre</div>
             @endif
         </a>
 
@@ -516,7 +514,7 @@
     <!-- Footer -->
     <footer class="error-footer">
         <div>
-            &copy; {{ date('Y') }} {{ config('app.name', 'AudazPOS') }} &bull; Todos los derechos reservados.
+            &copy; {{ date('Y') }} {{ config('app.name', 'Kubre') }} &bull; Todos los derechos reservados.
         </div>
         <div class="footer-links">
             <a href="javascript:void(0)" onclick="location.reload();"><i class="fa-solid fa-rotate-right"></i> Recargar</a>

@@ -245,7 +245,7 @@
 
         <!-- Footer Derecho -->
         <div class="auth-form-footer">
-            ¿Necesitas ayuda? Contáctanos a <a href="mailto:soporte@audazpos.com" style="color: #FB4C0A; text-decoration: none;">soporte@audazpos.com</a>
+            ¿Necesitas ayuda? Contáctanos a <a href="mailto:soporte@kubre.site" style="color: #FB4C0A; text-decoration: none;">soporte@kubre.site</a>
         </div>
     </div>
 </div>

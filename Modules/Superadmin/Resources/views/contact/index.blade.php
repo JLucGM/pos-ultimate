@@ -1,5 +1,6 @@
 @extends('superadmin::layouts.landing_modern')
-@section('title', 'Contacto')
+@section('title', 'Contacto | Kubre - Plataforma de Gestión Empresarial')
+@section('meta_description', 'Ponte en contacto con el equipo de Kubre. Estamos listos para ayudarte a implementar y optimizar la gestión de tu negocio.')
 
 @section('content')
 <!-- Contact Hero Section -->
@@ -33,8 +34,8 @@
                         </div>
                         <div class="contact-info-content">
                             <h4>Email</h4>
-                            <a href="mailto:{{ config('app.contact_email', 'contacto@kubre.site') }}">
-                                {{ config('app.contact_email', 'contacto@kubre.site') }}
+                            <a href="mailto:{{ config('app.contact_email', 'info@kubre.site') }}">
+                                {{ config('app.contact_email', 'info@kubre.site') }}
                             </a>
                         </div>
                     </div>
@@ -45,8 +46,8 @@
                         </div>
                         <div class="contact-info-content">
                             <h4>WhatsApp</h4>
-                            <a href="https://wa.me/{{ config('app.whatsapp_number', '584121234567') }}" target="_blank">
-                                {{ config('app.whatsapp_display', '+58 412 123 4567') }}
+                            <a href="https://wa.me/{{ config('app.whatsapp_number', '584242909870') }}" target="_blank">
+                                {{ config('app.whatsapp_display', '+58 424 290 9870') }}
                             </a>
                         </div>
                     </div>
@@ -75,23 +76,31 @@
                 <div class="contact-social">
                     <h4>Síguenos</h4>
                     <div class="social-links">
-                        @if(config('app.facebook_url'))
-                        <a href="{{ config('app.facebook_url') }}" target="_blank" class="social-link">
+                        @php
+                            $fb = config('landing.social.facebook') ?: config('app.facebook_url');
+                            $tw = config('landing.social.twitter') ?: config('app.twitter_url');
+                            $ig = config('landing.social.instagram') ?: config('app.instagram_url');
+                            $li = config('landing.social.linkedin') ?: config('app.linkedin_url');
+                        @endphp
+                        @if($fb && $fb !== '#')
+                        <a href="{{ $fb }}" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
                             <i class="fab fa-facebook-f"></i>
                         </a>
                         @endif
-                        @if(config('app.twitter_url'))
-                        <a href="{{ config('app.twitter_url') }}" target="_blank" class="social-link">
-                            <i class="fab fa-twitter"></i>
+                        @if($tw && $tw !== '#')
+                        <a href="{{ $tw }}" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display: block;">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
                         </a>
                         @endif
-                        @if(config('app.instagram_url'))
-                        <a href="{{ config('app.instagram_url') }}" target="_blank" class="social-link">
+                        @if($ig && $ig !== '#')
+                        <a href="{{ $ig }}" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
                             <i class="fab fa-instagram"></i>
                         </a>
                         @endif
-                        @if(config('app.linkedin_url'))
-                        <a href="{{ config('app.linkedin_url') }}" target="_blank" class="social-link">
+                        @if($li && $li !== '#')
+                        <a href="{{ $li }}" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn">
                             <i class="fab fa-linkedin-in"></i>
                         </a>
                         @endif

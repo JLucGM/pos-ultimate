@@ -203,7 +203,7 @@
                         <h4 class="modal-title" id="modal_module_name" style="font-weight: 700; font-size: 18px; margin: 0; color: white;">
                             Módulo Especializado
                         </h4>
-                        <span style="font-size: 12px; color: #94A3B8;">Función Avanzada de AudazPOS</span>
+                        <span style="font-size: 12px; color: #94A3B8;">Función Avanzada de Kubre</span>
                     </div>
                 </div>
             </div>

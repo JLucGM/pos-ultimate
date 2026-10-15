@@ -291,7 +291,7 @@
     <div class="container">
         <div class="how-to-start-card" style="background: #ffffff; border-radius: 20px; padding: 60px 48px; box-shadow: 0 4px 24px rgba(0,0,0,0.06); border: 1px solid #e2e8f0;">
             <div class="section-header-modern" data-aos="fade-up" style="text-align: center; margin-bottom: 48px;">
-                <h2 style="font-size: 36px; font-weight: 800; color: #1E293B;">¿Cómo empezar con Audaz POS?</h2>
+                <h2 style="font-size: 36px; font-weight: 800; color: #1E293B;">¿Cómo empezar con Kubre?</h2>
             </div>
 
             <div class="steps-container" style="display: flex; flex-direction: column; gap: 0; max-width: 640px; margin: 0 auto;">
@@ -302,7 +302,7 @@
                         </div>
                         <div>
                             <h3 style="font-size: 18px; font-weight: 700; color: #1E293B; margin-bottom: 6px;">1. Regístrate para empezar</h3>
-                            <p style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0;">Cuéntanos sobre tu negocio para ayudarte a aprovechar Audaz POS desde el primer día.</p>
+                            <p style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0;">Cuéntanos sobre tu negocio para ayudarte a aprovechar Kubre desde el primer día.</p>
                         </div>
                     </div>
                     <div style="width: 2px; height: 32px; background: #e2e8f0; margin-left: 27px;"></div>
@@ -328,7 +328,7 @@
                         </div>
                         <div>
                             <h3 style="font-size: 18px; font-weight: 700; color: #1E293B; margin-bottom: 6px;">3. Personaliza y comienza</h3>
-                            <p style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0;">Configura Audaz POS en pocos minutos. Registra tus productos, organiza tu inventario y automatiza tareas clave desde el primer día.</p>
+                            <p style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0;">Configura Kubre en pocos minutos. Registra tus productos, organiza tu inventario y automatiza tareas clave desde el primer día.</p>
                         </div>
                     </div>
                 </div>

@@ -8,31 +8,61 @@
 @section('content')
 <!-- Hero Section -->
 <section class="hero-section">
-    <div class="hero-overlay"></div>
-    <div class="container hero-content">
-        <div class="hero-text">
+    <div class="container">
+        <!-- Minimalist Top Brand Header (Anchors the top of the page) -->
+        <header class="hero-top-bar" data-aos="fade-down">
+            <a href="/" class="hero-brand-link">
+                <img src="{{ asset('img/logo_v2_full.png') }}" alt="{{ config('app.name', 'Kubre') }}" class="hero-brand-logo">
+                <span class="hero-status-pill">
+                    <span class="hero-status-dot"></span>
+                    <span>Kubre Cloud &bull; v{{ config('author.app_version', '2.5') }}</span>
+                </span>
+            </a>
+            <div class="hero-top-actions">
+                <a href="{{ route('login') }}" class="btn-hero-login">
+                    <i class="fas fa-arrow-right-to-bracket"></i>
+                    <span>Acceso Clientes</span>
+                </a>
+            </div>
+        </header>
+
+        <div class="hero-content">
+            <div class="hero-text">
             <div class="auth-pill-badge" data-aos="fade-down" style="margin-bottom: 20px;">
                 <span class="auth-pill-dot"></span>
                 <span>Plataforma de Control Operativo y Financiero en Vivo</span>
             </div>
 
             <h1 class="hero-title" data-aos="fade-up">
-                Escala tu Empresa con <span class="text-gradient">Kubre</span>: Todo en Uno
+                Toma el Control de tu Empresa: <span class="text-gradient">Ventas, Inventario y Finanzas</span> sin Fugas de Dinero
             </h1>
             <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="100">
-                Centraliza finanzas, inventario multialmacén, facturación multimoneda en tiempo real y operaciones comerciales desde cualquier lugar. El sistema integral para comercios, restaurantes, mayoristas y fábricas.
+                El sistema integral en la nube con facturación multimoneda en vivo, inventario multialmacén y analítica en tiempo real. Diseñado para comercios, mayoristas, restaurantes y fábricas que buscan crecer con orden y rentabilidad.
             </p>
             <div class="hero-buttons" data-aos="fade-up" data-aos-delay="200">
                 <a href="{{ route('business.getRegister') }}" class="btn btn-accent btn-lg">
-                    <i class="fas fa-rocket"></i> Prueba Gratis 14 Días
+                    <i class="fas fa-arrow-right"></i> Prueba Gratis 14 Días
                 </a>
-                <a href="{{ route('pricing') }}" class="btn btn-outline-white btn-lg">
-                    <i class="fas fa-tags"></i> Ver Planes y Precios
-                </a>
-                <a href="#features" class="btn btn-outline-white btn-lg">
-                    <i class="fas fa-sparkles"></i> Módulos
+                <a href="https://wa.me/584242909870?text=Hola,%20deseo%20una%20demostraci%C3%B3n%20guiada%20de%20Kubre%20para%20mi%20empresa" target="_blank" rel="noopener" class="btn btn-outline-white btn-lg btn-whatsapp-hero">
+                    <i class="fab fa-whatsapp"></i> Hablar con un Asesor
                 </a>
             </div>
+
+            <div class="hero-trust-bar" data-aos="fade-up" data-aos-delay="250">
+                <div class="trust-badge-item">
+                    <span class="trust-icon-box success"><i class="fas fa-shield-halved"></i></span>
+                    <span>14 días gratis &bull; Sin tarjeta</span>
+                </div>
+                <div class="trust-badge-item">
+                    <span class="trust-icon-box warning"><i class="fas fa-bolt"></i></span>
+                    <span>Activación inmediata en la nube</span>
+                </div>
+                <div class="trust-badge-item">
+                    <span class="trust-icon-box primary"><i class="fas fa-headset"></i></span>
+                    <span>Soporte prioritario en español</span>
+                </div>
+            </div>
+
             <div class="hero-stats" data-aos="fade-up" data-aos-delay="300">
                 <div class="stat-item">
                     <div class="stat-number">500+</div>
@@ -52,31 +82,58 @@
             <div class="hero-image-frame" style="position: relative; border-radius: 24px; overflow: hidden; box-shadow: 0 30px 70px rgba(0,0,0,0.65); border: 1px solid rgba(255,255,255,0.14);">
                 <img src="{{ asset('images/landing/Capture_dashboard.jpg') }}" alt="Kubre OS Dashboard Principal" class="dashboard-img" onerror="this.src='{{ asset('images/landing/dashboard-preview.png') }}'">
             </div>
-            <div class="floating-card card-1">
-                <i class="fas fa-coins" style="color: #10B981;"></i>
-                <span>Tasa Multimoneda en Vivo</span>
+            <div class="floating-card card-1" style="display: flex; align-items: center; gap: 12px; padding: 12px 18px; border-radius: 16px;">
+                <span class="kubre-micro-icon emerald"><i class="fas fa-coins"></i></span>
+                <div>
+                    <div style="font-size: 11px; color: #94A3B8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Multimoneda</div>
+                    <span style="font-size: 14px; font-weight: 700; color: #FFFFFF;">Tasa Oficial en Vivo</span>
+                </div>
             </div>
-            <div class="floating-card card-2">
-                <i class="fas fa-bolt" style="color: #6366F1;"></i>
-                <span>Sistema de Venta Rápido</span>
+            <div class="floating-card card-2" style="display: flex; align-items: center; gap: 12px; padding: 12px 18px; border-radius: 16px;">
+                <span class="kubre-micro-icon indigo"><i class="fas fa-layer-group"></i></span>
+                <div>
+                    <div style="font-size: 11px; color: #94A3B8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Multialmacén</div>
+                    <span style="font-size: 14px; font-weight: 700; color: #FFFFFF;">Stock en Tiempo Real</span>
+                </div>
             </div>
-            <div class="floating-card card-3">
-                <i class="fas fa-boxes" style="color: #F59E0B;"></i>
-                <span>Inventario en Tiempo Real</span>
+        </div>
+    </div>
+    </div>
+</section>
+
+<!-- Impact Highlights / 4 Value Pillars Section -->
+<section class="impact-highlights-section">
+    <div class="container">
+        <div class="impact-highlights-grid">
+            <div class="impact-highlight-card" data-aos="fade-up" data-aos-delay="0">
+                <span class="impact-icon-circle coral"><i class="fas fa-scale-balanced"></i></span>
+                <h3 class="impact-highlight-title">Cero Errores Multimoneda</h3>
+                <p class="impact-highlight-desc">Cobra en dólares, euros o moneda local con conversión exacta en cada ticket según la tasa oficial o personalizada del día.</p>
             </div>
-            <div class="floating-card card-4">
-                <i class="fas fa-chart-line" style="color: #EC4899;"></i>
-                <span>Reportes de Ganancias</span>
+            <div class="impact-highlight-card" data-aos="fade-up" data-aos-delay="100">
+                <span class="impact-icon-circle indigo"><i class="fas fa-boxes-stacked"></i></span>
+                <h3 class="impact-highlight-title">Inventario Multialmacén Blindado</h3>
+                <p class="impact-highlight-desc">Evita quiebres de stock y mermas invisibles. Monitorea transferencias, lotes y existencias en tiempo real entre todas tus sedes.</p>
+            </div>
+            <div class="impact-highlight-card" data-aos="fade-up" data-aos-delay="200">
+                <span class="impact-icon-circle emerald"><i class="fas fa-money-bill-transfer"></i></span>
+                <h3 class="impact-highlight-title">Control de Créditos y Cobranzas</h3>
+                <p class="impact-highlight-desc">Seguimiento riguroso de cuentas por cobrar, límites de crédito por cliente, arqueos ciegos por cajero y balances de utilidad neta.</p>
+            </div>
+            <div class="impact-highlight-card" data-aos="fade-up" data-aos-delay="300">
+                <span class="impact-icon-circle cyan"><i class="fas fa-cloud-arrow-up"></i></span>
+                <h3 class="impact-highlight-title">100% en la Nube y Siempre Seguro</h3>
+                <p class="impact-highlight-desc">Accede a tus operaciones desde computadoras, tablets o teléfonos. Respaldos automáticos diarios y soporte técnico humano.</p>
             </div>
         </div>
     </div>
 </section>
 
 <!-- Soluciones por Organización Showcase -->
-<section class="section solutions-showcase-section" id="solutions" style="background: #0B0F1D; padding: 80px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+<section class="section solutions-showcase-section" id="solutions">
     <div class="container">
         <div class="section-header text-center" data-aos="fade-up">
-            <span class="section-badge" style="background: rgba(251, 76, 10, 0.15); color: #FB4C0A; border-color: rgba(251, 76, 10, 0.3);">Organizaciones & Nichos</span>
+            <span class="section-badge">Organizaciones & Nichos</span>
             <h2 class="section-title">Soluciones Especializadas para Tu Tipo de Negocio</h2>
             <p class="section-subtitle">No importa si vendes comida, ropa, al mayor, fabricas productos o agendas citas. Kubre se adapta a tu modelo operativo.</p>
         </div>
@@ -279,7 +336,7 @@
 <section class="ui-showcase-section" id="experiencia">
     <div class="container">
         <div class="section-header text-center" data-aos="fade-up">
-            <span class="section-badge" style="background: rgba(251, 76, 10, 0.15); color: #FB4C0A; border-color: rgba(251, 76, 10, 0.3);">Nueva Experiencia Kubre OS</span>
+            <span class="section-badge">Nueva Experiencia Kubre OS</span>
             <h2 class="section-title">Diseñado para Operar a la Velocidad de tu Negocio</h2>
             <p class="section-subtitle">Descubre una interfaz ultra-moderna, con barra flotante de accesos directos, analítica financiera en tiempo real y navegación ergonómica en cada pantalla.</p>
         </div>
@@ -470,124 +527,116 @@
     </div>
 </section>
 
-<!-- Features Section -->
-<section id="features" class="features-section">
+<!-- Impact & Contrast Section (Antes vs Ahora: El Caos Tradicional vs Kubre OS) -->
+<section id="features" class="contrast-section">
     <div class="container">
-        <div class="section-header" data-aos="fade-up">
-            <span class="section-badge">Características</span>
-            <h2 class="section-title">Todo lo que Necesitas para Gestionar tu Negocio</h2>
-            <p class="section-subtitle">Un sistema completo diseñado para pequeñas y medianas empresas</p>
+        <div class="section-header text-center" data-aos="fade-up">
+            <span class="section-badge">Impacto Operativo & Resultados</span>
+            <h2 class="section-title">¿Por Qué Tu Negocio Necesita Kubre?</h2>
+            <p class="section-subtitle">Compara el desgaste de la administración manual frente a una operación comercial blindada y en piloto automático.</p>
         </div>
 
-        <div class="features-grid">
-            <div class="feature-card" data-aos="fade-up" data-aos-delay="0">
-                <div class="feature-icon bg-blue">
-                    <i class="fas fa-cash-register"></i>
+        <div class="contrast-grid">
+            <!-- Columna 1: El Caos Tradicional -->
+            <div class="contrast-card traditional" data-aos="fade-up" data-aos-delay="100">
+                <div class="contrast-header">
+                    <span class="contrast-badge-icon danger">
+                        <i class="fas fa-triangle-exclamation"></i>
+                    </span>
+                    <div>
+                        <h3 class="contrast-title">El Caos Tradicional</h3>
+                        <p class="contrast-subtitle">Pérdida de tiempo, fugas de dinero y estrés operativo</p>
+                    </div>
                 </div>
-                <h3>Sistema de Ventas Rápido</h3>
-                <p>Interfaz intuitiva para procesar ventas en segundos. Soporte para múltiples métodos de pago.</p>
-            </div>
-
-            <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="feature-icon bg-green">
-                    <i class="fas fa-boxes"></i>
-                </div>
-                <h3>Gestión de Inventario</h3>
-                <p>Control total de stock, alertas de bajo inventario, transferencias entre sucursales.</p>
-            </div>
-
-            <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="feature-icon bg-purple">
-                    <i class="fas fa-users"></i>
-                </div>
-                <h3>CRM de Clientes</h3>
-                <p>Gestiona clientes, historial de compras, programas de lealtad y grupos personalizados.</p>
-            </div>
-
-            <div class="feature-card" data-aos="fade-up" data-aos-delay="0">
-                <div class="feature-icon bg-orange">
-                    <i class="fas fa-chart-bar"></i>
-                </div>
-                <h3>Reportes Avanzados</h3>
-                <p>Análisis de ventas, Productos más vendidos, reportes financieros y gráficos en tiempo real.</p>
-            </div>
-
-            <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="feature-icon bg-red">
-                    <i class="fas fa-store-alt"></i>
-                </div>
-                <h3>Multi-Sucursal</h3>
-                <p>Gestiona múltiples ubicaciones desde un solo panel. Transferencias y reportes consolidados.</p>
-            </div>
-
-            <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="feature-icon bg-teal">
-                    <i class="fas fa-utensils"></i>
-                </div>
-                <h3>Módulo Restaurante</h3>
-                <p>Gestión de mesas, comandas de cocina, modificadores y Producto de meseros.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Benefits Section -->
-<section class="benefits-section">
-    <div class="container">
-        <div class="benefits-content">
-            <div class="benefits-image" data-aos="fade-right">
-                <div style="border-radius: 24px; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.12);">
-                    <img src="{{ asset('images/landing/Capture_dashboard_grafics.jpg') }}" alt="Kubre OS Analítica Financiera y Gráficos" style="width: 100%; height: auto; display: block;">
-                </div>
-            </div>
-            <div class="benefits-text" data-aos="fade-left">
-                <span class="section-badge">Beneficios</span>
-                <h2>¿Por Qué Elegir Kubre?</h2>
-                <ul class="benefits-list">
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <div>
-                            <strong>Fácil de Usar</strong>
-                            <p>Interfaz intuitiva que tu equipo aprenderá en minutos</p>
-                        </div>
+                <ul class="contrast-list">
+                    <li class="contrast-list-item">
+                        <span class="contrast-bullet danger"><i class="fas fa-xmark"></i></span>
+                        <span><strong>Descuadres continuos al cobrar en divisas:</strong> Errores de cálculo entre dólares, efectivo y transferencias que generan pérdidas en caja.</span>
                     </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <div>
-                            <strong>Acceso desde Cualquier Lugar</strong>
-                            <p>Sistema en la nube accesible desde cualquier dispositivo</p>
-                        </div>
+                    <li class="contrast-list-item">
+                        <span class="contrast-bullet danger"><i class="fas fa-xmark"></i></span>
+                        <span><strong>Hojas de Excel desactualizadas:</strong> Desconocimiento del inventario real, mermas sin justificar y quiebres de stock frente a clientes.</span>
                     </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <div>
-                            <strong>Soporte en Español</strong>
-                            <p>Equipo de soporte disponible para ayudarte cuando lo necesites</p>
-                        </div>
+                    <li class="contrast-list-item">
+                        <span class="contrast-bullet danger"><i class="fas fa-xmark"></i></span>
+                        <span><strong>Cuentas por cobrar descontroladas:</strong> Clientes con crédito vencido sin límite fijado, provocando asfixia en el flujo de caja.</span>
                     </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <div>
-                            <strong>Actualizaciones Constantes</strong>
-                            <p>Nuevas funcionalidades y mejoras incluidas en tu suscripción</p>
-                        </div>
+                    <li class="contrast-list-item">
+                        <span class="contrast-bullet danger"><i class="fas fa-xmark"></i></span>
+                        <span><strong>Ceguera de métricas comerciales:</strong> Sin saber con exactitud cuál es el margen de ganancia neto ni cuáles productos son los más rentables.</span>
+                    </li>
+                    <li class="contrast-list-item">
+                        <span class="contrast-bullet danger"><i class="fas fa-xmark"></i></span>
+                        <span><strong>Sistemas locales obsoletos:</strong> Obligación de estar físicamente en el local comercial para saber cuánto se vendió en el día.</span>
                     </li>
                 </ul>
-                <a href="{{ route('pricing') }}" class="btn btn-accent btn-lg">
-                    Comenzar Ahora <i class="fas fa-arrow-right"></i>
-                </a>
+            </div>
+
+            <!-- Columna 2: Tu Empresa con Kubre OS -->
+            <div class="contrast-card kubre" data-aos="fade-up" data-aos-delay="200">
+                <div class="contrast-header">
+                    <span class="contrast-badge-icon success">
+                        <i class="fas fa-shield-halved"></i>
+                    </span>
+                    <div>
+                        <h3 class="contrast-title">Tu Empresa con Kubre OS</h3>
+                        <p class="contrast-subtitle">Claridad financiera, control total y crecimiento rentable</p>
+                    </div>
+                </div>
+                <ul class="contrast-list">
+                    <li class="contrast-list-item">
+                        <span class="contrast-bullet success"><i class="fas fa-check"></i></span>
+                        <span><strong>Cobro multimoneda automático:</strong> Conversión en tiempo real con tasa oficial o fijada, liquidación mixta y arqueo ciego por cajero.</span>
+                    </li>
+                    <li class="contrast-list-item">
+                        <span class="contrast-bullet success"><i class="fas fa-check"></i></span>
+                        <span><strong>Inventario multialmacén inteligente:</strong> Trazabilidad por sucursal, alertas preventivas de bajo stock y cálculo de costos promedio.</span>
+                    </li>
+                    <li class="contrast-list-item">
+                        <span class="contrast-bullet success"><i class="fas fa-check"></i></span>
+                        <span><strong>Gestión de cobranza rigurosa:</strong> Reportes de saldos vencidos, historial por cliente y envío de estados de cuenta en 1 clic.</span>
+                    </li>
+                    <li class="contrast-list-item">
+                        <span class="contrast-bullet success"><i class="fas fa-check"></i></span>
+                        <span><strong>Analítica financiera en tiempo real:</strong> Tableros ejecutivos con gráficas dinámicas de ingresos, utilidades y rotación de productos.</span>
+                    </li>
+                    <li class="contrast-list-item">
+                        <span class="contrast-bullet success"><i class="fas fa-check"></i></span>
+                        <span><strong>Operación 100% en la nube:</strong> Supervisa todas tus sucursales y puntos de venta desde cualquier lugar y en cualquier dispositivo.</span>
+                    </li>
+                </ul>
+                <div style="margin-top: 28px; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+                    <a href="{{ route('business.getRegister') }}" class="btn btn-accent btn-lg" style="width: 100%; justify-content: center;">
+                        <span>Quiero Controlar Mi Negocio con Kubre</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
 <!-- Pricing Preview -->
-<section class="pricing-preview-section">
+<section id="pricing" class="pricing-preview-section">
     <div class="container">
         <div class="section-header" data-aos="fade-up">
             <span class="section-badge">Planes</span>
             <h2 class="section-title">Planes Flexibles para tu Negocio</h2>
             <p class="section-subtitle">Elige el plan que mejor se adapte a tus necesidades</p>
+        </div>
+
+        <!-- WhatsApp Advisory Strip -->
+        <div class="advisory-whatsapp-strip" data-aos="fade-up">
+            <div class="advisory-text-group">
+                <span class="advisory-icon-circle"><i class="fab fa-whatsapp"></i></span>
+                <div>
+                    <h4 style="margin: 0; font-size: 16px; font-weight: 700; color: #FFFFFF;">¿Tienes dudas sobre qué plan o módulos necesita tu empresa?</h4>
+                    <p style="margin: 4px 0 0 0; font-size: 13.5px; color: #94A3B8;">Escríbenos directamente por WhatsApp. Un especialista te brindará una asesoría personalizada sin costo ni compromiso.</p>
+                </div>
+            </div>
+            <a href="https://wa.me/584242909870?text=Hola,%20deseo%20asesor%C3%ADa%20personalizada%20para%20elegir%20el%20plan%20ideal%20de%20Kubre" target="_blank" rel="noopener" class="btn btn-outline-white" style="border-color: #25D366; color: #25D366; white-space: nowrap; font-weight: 600;">
+                <i class="fab fa-whatsapp"></i> Asesoría por WhatsApp
+            </a>
         </div>
 
         <div class="pricing-cards">
@@ -807,14 +856,14 @@
 <section class="cta-section">
     <div class="container">
         <div class="cta-content" data-aos="zoom-in">
-            <h2>¿Listo para Transformar tu Negocio?</h2>
-            <p>Únete a cientos de empresas que ya confían en nuestro sistema POS</p>
+            <h2>Comienza a Escalar tu Empresa con Kubre Hoy Mismo</h2>
+            <p>Pruébalo durante 14 días con acceso ilimitado a todas las herramientas. Sin tarjeta de crédito requerida y con acompañamiento personalizado de nuestro equipo.</p>
             <div class="cta-buttons">
                 <a href="{{ route('business.getRegister') }}" class="btn btn-white btn-lg">
-                    <i class="fas fa-rocket"></i> Comenzar Prueba Gratuita (14 Días)
+                    <i class="fas fa-arrow-right"></i> Crear Cuenta de Prueba Gratis (14 Días)
                 </a>
-                <a href="{{ route('pricing') }}" class="btn btn-outline-white btn-lg">
-                    <i class="fas fa-tags"></i> Ver Todos los Planes
+                <a href="https://wa.me/584242909870?text=Hola,%20deseo%20activar%20mi%20prueba%20gratuita%20de%20Kubre%20con%20ayuda%20de%20un%20asesor" target="_blank" rel="noopener" class="btn btn-outline-white btn-lg">
+                    <i class="fab fa-whatsapp"></i> Solicitar Demo por WhatsApp
                 </a>
             </div>
         </div>
