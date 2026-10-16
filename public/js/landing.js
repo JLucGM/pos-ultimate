@@ -37,58 +37,89 @@
         lastScroll = currentScroll;
     }, { passive: true });
 
-    // Mobile menu toggle con soporte táctil inmediato
+    // Mobile menu toggle con soporte táctil, backdrop y bloqueo de scroll
     function initMobileMenu() {
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const navMenu = document.getElementById('navMenu');
-        
-        if (mobileMenuBtn && navMenu) {
-            function toggleMenu(e) {
-                if (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
+        if (!mobileMenuBtn || !navMenu) return;
+
+        let navBackdrop = document.getElementById('navBackdrop');
+        if (!navBackdrop) {
+            navBackdrop = document.createElement('div');
+            navBackdrop.id = 'navBackdrop';
+            navBackdrop.className = 'nav-backdrop';
+            document.body.appendChild(navBackdrop);
+        }
+
+        function openMenu() {
+            navMenu.classList.add('active');
+            if (navBackdrop) navBackdrop.classList.add('active');
+            document.body.classList.add('menu-open');
+            const icon = mobileMenuBtn.querySelector('i');
+            if (icon) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            }
+        }
+
+        function closeMenu() {
+            navMenu.classList.remove('active');
+            if (navBackdrop) navBackdrop.classList.remove('active');
+            document.body.classList.remove('menu-open');
+            const icon = mobileMenuBtn.querySelector('i');
+            if (icon) {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+
+        function toggleMenu(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            if (navMenu.classList.contains('active')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMenu);
+
+        // Cerrar al tocar o hacer clic en el backdrop
+        if (navBackdrop) {
+            navBackdrop.addEventListener('click', closeMenu);
+            navBackdrop.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                closeMenu();
+            }, { passive: false });
+        }
+
+        // Cerrar menú al hacer clic en cualquier enlace de navegación (excepto el toggle del dropdown)
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (!link.classList.contains('nav-dropdown-trigger')) {
+                    closeMenu();
                 }
-                const isOpen = navMenu.classList.toggle('active');
-                const icon = mobileMenuBtn.querySelector('i');
-                if (icon) {
-                    if (isOpen) {
-                        icon.classList.remove('fa-bars');
-                        icon.classList.add('fa-times');
-                    } else {
-                        icon.classList.remove('fa-times');
-                        icon.classList.add('fa-bars');
-                    }
+            });
+        });
+
+        // Cerrar al hacer clic fuera del menú y del botón
+        document.addEventListener('click', (e) => {
+            if (navMenu.classList.contains('active')) {
+                if (!navMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    closeMenu();
                 }
             }
+        });
 
-            mobileMenuBtn.addEventListener('click', toggleMenu);
-
-            // Close menu when clicking on a link
-            navMenu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navMenu.classList.remove('active');
-                    const icon = mobileMenuBtn.querySelector('i');
-                    if (icon) {
-                        icon.classList.remove('fa-times');
-                        icon.classList.add('fa-bars');
-                    }
-                });
-            });
-
-            // Close when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!navMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-                    if (navMenu.classList.contains('active')) {
-                        navMenu.classList.remove('active');
-                        const icon = mobileMenuBtn.querySelector('i');
-                        if (icon) {
-                            icon.classList.remove('fa-times');
-                            icon.classList.add('fa-bars');
-                        }
-                    }
-                }
-            });
-        }
+        // Cerrar con la tecla Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                closeMenu();
+            }
+        });
     }
 
     if (document.readyState === 'loading') {

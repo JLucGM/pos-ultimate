@@ -114,6 +114,9 @@
     @yield('styles')
 </head>
 <body>
+    <!-- Mobile Backdrop -->
+    <div class="nav-backdrop" id="navBackdrop"></div>
+
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="container nav-container">
@@ -409,8 +412,11 @@
                         // Cerrar menú móvil si está abierto
                         var navMenu = document.getElementById('navMenu');
                         var mobileMenuBtn = document.getElementById('mobileMenuBtn');
+                        var navBackdrop = document.getElementById('navBackdrop');
                         if (navMenu && navMenu.classList.contains('active')) {
                             navMenu.classList.remove('active');
+                            if (navBackdrop) navBackdrop.classList.remove('active');
+                            document.body.classList.remove('menu-open');
                             if (mobileMenuBtn) {
                                 var icon = mobileMenuBtn.querySelector('i');
                                 if (icon) {
