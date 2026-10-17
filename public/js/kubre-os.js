@@ -47,6 +47,12 @@
         const unpinBtns = document.querySelectorAll('.kubre-subdock-unpin-btn[data-unpin]');
         const pinToggleBtns = document.querySelectorAll('.kubre-app-pin-btn[data-pin-toggle]');
 
+        // Quick Create Popover Elements
+        const quickCreateBtn = document.getElementById('kubre-global-quick-create-btn');
+        const quickCreateDropdown = document.getElementById('kubre-quick-create-dropdown');
+        const quickCreateWrap = document.querySelector('.kubre-quick-create-wrap');
+        const quickCreateDockTriggers = document.querySelectorAll('.kubre-trigger-quick-create');
+
         let subdockTimer = null;
 
         // 2. Apply Dock Preferences (Pin / Unpin state)
@@ -127,6 +133,7 @@
         // 4. Customizer Modal Controls
         function openCustomizerModal() {
             closeAllSubdocks();
+            closeQuickCreate();
             if (customizerModal) {
                 customizerModal.style.display = 'flex';
                 requestAnimationFrame(() => {
@@ -235,6 +242,7 @@
                 clearTimeout(subdockTimer);
                 subdockTimer = null;
             }
+            closeQuickCreate();
             subdockItems.forEach(other => {
                 if (other !== item) {
                     other.classList.remove('has-subdock-open');
@@ -296,10 +304,63 @@
             });
         });
 
-        // Close sub-docks on clicking outside
+        // 5.1 Quick Create Dropdown Controls
+        function closeQuickCreate() {
+            if (quickCreateDropdown) {
+                quickCreateDropdown.classList.remove('is-open');
+            }
+            if (quickCreateWrap) {
+                quickCreateWrap.classList.remove('is-open');
+            }
+        }
+
+        function openQuickCreate() {
+            closeAllSubdocks();
+            closeCustomizerModal();
+            if (launchpadOverlay && launchpadOverlay.classList.contains('is-open')) {
+                closeLaunchpad();
+            }
+            if (quickCreateDropdown) {
+                quickCreateDropdown.classList.add('is-open');
+            }
+            if (quickCreateWrap) {
+                quickCreateWrap.classList.add('is-open');
+            }
+        }
+
+        function toggleQuickCreate() {
+            if (!quickCreateDropdown) return;
+            if (quickCreateDropdown.classList.contains('is-open')) {
+                closeQuickCreate();
+            } else {
+                openQuickCreate();
+            }
+        }
+
+        if (quickCreateBtn) {
+            quickCreateBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleQuickCreate();
+            });
+        }
+
+        quickCreateDockTriggers.forEach(trigger => {
+            trigger.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                toggleQuickCreate();
+            });
+        });
+
+        // Close sub-docks & quick-create on clicking outside
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.kubre-has-subdock') && !e.target.closest('#kubre-dock-customizer-modal')) {
                 closeAllSubdocks();
+            }
+            if (!e.target.closest('#kubre-quick-create-dropdown') && !e.target.closest('#kubre-global-quick-create-btn') && !e.target.closest('.kubre-trigger-quick-create')) {
+                closeQuickCreate();
             }
         });
 
@@ -309,6 +370,7 @@
         function openLaunchpad() {
             closeAllSubdocks();
             closeCustomizerModal();
+            closeQuickCreate();
             if (launchpadOverlay) {
                 launchpadOverlay.style.display = 'flex';
                 requestAnimationFrame(() => {
@@ -399,6 +461,9 @@
                 } else if (launchpadOverlay.classList.contains('is-open')) {
                     e.preventDefault();
                     closeLaunchpad();
+                } else if (quickCreateDropdown && quickCreateDropdown.classList.contains('is-open')) {
+                    e.preventDefault();
+                    closeQuickCreate();
                 } else {
                     closeAllSubdocks();
                 }

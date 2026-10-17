@@ -50,6 +50,19 @@
                 <span class="active-dot"></span>
             </div>
 
+            <!-- Quick Global Create Trigger in Dock -->
+            <div class="kubre-dock-item kubre-trigger-quick-create" title="Acciones Rápidas • Crear (+)">
+                <div class="kubre-app-tile tile-quick-create">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9"></circle>
+                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                    </svg>
+                </div>
+                <span class="kubre-dock-label">+ Crear</span>
+                <span class="active-dot"></span>
+            </div>
+
             <div class="kubre-dock-divider"></div>
 
             <!-- 2. Dashboard Ejecutivo -->
@@ -522,6 +535,12 @@
                             <span class="kubre-subdock-icon"><i class="fas fa-receipt"></i></span>
                             <span>Impuestos & SENIAT</span>
                         </a>
+                        @can('user.create')
+                        <a href="{{ action([\App\Http\Controllers\ManageUserController::class, 'create']) }}" class="kubre-subdock-link" style="color: #60A5FA;">
+                            <span class="kubre-subdock-icon" style="color: #60A5FA;"><i class="fas fa-user-plus"></i></span>
+                            <span style="font-weight: 600;">+ Crear Nuevo Usuario</span>
+                        </a>
+                        @endcan
                         <a href="{{ action([\App\Http\Controllers\ManageUserController::class, 'index']) }}" class="kubre-subdock-link">
                             <span class="kubre-subdock-icon"><i class="fas fa-user-shield"></i></span>
                             <span>Usuarios & Roles</span>

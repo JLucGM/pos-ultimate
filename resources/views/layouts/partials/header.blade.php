@@ -55,6 +55,128 @@
             @includeIf('essentials::layouts.partials.header_part')
         @endif
 
+        <!-- Kubre OS Global Quick Create Dropdown Button ("+ Crear") -->
+        <div class="kubre-quick-create-wrap tw-relative">
+            <button type="button" class="kubre-btn-quick-create" id="kubre-global-quick-create-btn" title="Crear Nuevo (Usuario, Venta, Producto, Gasto, Contacto...)">
+                <span class="kubre-create-plus"><i class="fas fa-plus"></i></span>
+                <span class="kubre-create-text">Crear</span>
+                <i class="fas fa-chevron-down kubre-create-caret"></i>
+            </button>
+
+            <!-- Dropdown Popover Menu -->
+            <div class="kubre-quick-create-dropdown" id="kubre-quick-create-dropdown">
+                <div class="kubre-create-popover-header">
+                    <div>
+                        <div class="kubre-create-popover-title">
+                            <i class="fas fa-bolt" style="color: #F59E0B;"></i> Acciones Rápidas
+                        </div>
+                        <div class="kubre-create-popover-subtitle">Crea registros en un clic</div>
+                    </div>
+                    <span class="kubre-create-badge">Kubre OS</span>
+                </div>
+
+                <div class="kubre-create-popover-body">
+                    <!-- 1. Nuevo Usuario -->
+                    @can('user.create')
+                    <a href="{{ action([\App\Http\Controllers\ManageUserController::class, 'create']) }}" class="kubre-popover-item">
+                        <div class="kubre-popover-icon" style="background: rgba(59, 130, 246, 0.15); color: #3B82F6;">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="kubre-popover-content">
+                            <span class="kubre-popover-name">Nuevo Usuario</span>
+                            <span class="kubre-popover-desc">Cajero, vendedor o admin</span>
+                        </div>
+                        <i class="fas fa-chevron-right kubre-popover-arrow"></i>
+                    </a>
+                    @endcan
+
+                    <!-- 2. Nueva Venta / Factura -->
+                    @if(auth()->user()->can('sell.create') || auth()->user()->can('direct_sell.access'))
+                    <a href="{{ action([\App\Http\Controllers\SellController::class, 'create']) }}" class="kubre-popover-item">
+                        <div class="kubre-popover-icon" style="background: rgba(251, 76, 10, 0.15); color: #FB4C0A;">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <div class="kubre-popover-content">
+                            <span class="kubre-popover-name">Nueva Venta</span>
+                            <span class="kubre-popover-desc">Facturación a cliente o cotización</span>
+                        </div>
+                        <i class="fas fa-chevron-right kubre-popover-arrow"></i>
+                    </a>
+                    @endif
+
+                    <!-- 3. Nuevo Producto -->
+                    @can('product.create')
+                    <a href="{{ action([\App\Http\Controllers\ProductController::class, 'create']) }}" class="kubre-popover-item">
+                        <div class="kubre-popover-icon" style="background: rgba(99, 102, 241, 0.15); color: #6366F1;">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <div class="kubre-popover-content">
+                            <span class="kubre-popover-name">Nuevo Producto</span>
+                            <span class="kubre-popover-desc">Mercancía, inventario o combo</span>
+                        </div>
+                        <i class="fas fa-chevron-right kubre-popover-arrow"></i>
+                    </a>
+                    @endcan
+
+                    <!-- 4. Nuevo Gasto -->
+                    @can('expense.add')
+                    <a href="{{ action([\App\Http\Controllers\ExpenseController::class, 'create']) }}" class="kubre-popover-item">
+                        <div class="kubre-popover-icon" style="background: rgba(236, 72, 153, 0.15); color: #EC4899;">
+                            <i class="fas fa-receipt"></i>
+                        </div>
+                        <div class="kubre-popover-content">
+                            <span class="kubre-popover-name">Nuevo Gasto</span>
+                            <span class="kubre-popover-desc">Servicios, pagos o caja chica</span>
+                        </div>
+                        <i class="fas fa-chevron-right kubre-popover-arrow"></i>
+                    </a>
+                    @endcan
+
+                    <!-- 5. Nuevo Contacto (Cliente / Proveedor) -->
+                    @if(auth()->user()->can('customer.create') || auth()->user()->can('supplier.create'))
+                    <a href="{{ action([\App\Http\Controllers\ContactController::class, 'create']) }}" class="kubre-popover-item btn-modal" data-container=".view_modal">
+                        <div class="kubre-popover-icon" style="background: rgba(16, 185, 129, 0.15); color: #10B981;">
+                            <i class="fas fa-address-book"></i>
+                        </div>
+                        <div class="kubre-popover-content">
+                            <span class="kubre-popover-name">Nuevo Contacto</span>
+                            <span class="kubre-popover-desc">Registrar cliente o proveedor</span>
+                        </div>
+                        <i class="fas fa-chevron-right kubre-popover-arrow"></i>
+                    </a>
+                    @endif
+
+                    <!-- 6. Nueva Compra -->
+                    @can('purchase.create')
+                    <a href="{{ action([\App\Http\Controllers\PurchaseController::class, 'create']) }}" class="kubre-popover-item">
+                        <div class="kubre-popover-icon" style="background: rgba(14, 165, 233, 0.15); color: #0EA5E9;">
+                            <i class="fas fa-dolly"></i>
+                        </div>
+                        <div class="kubre-popover-content">
+                            <span class="kubre-popover-name">Nueva Compra</span>
+                            <span class="kubre-popover-desc">Ingreso de stock de proveedor</span>
+                        </div>
+                        <i class="fas fa-chevron-right kubre-popover-arrow"></i>
+                    </a>
+                    @endcan
+
+                    <!-- 7. Nuevo Rol -->
+                    @if(auth()->user()->can('roles.create'))
+                    <a href="{{ action([\App\Http\Controllers\RoleController::class, 'create']) }}" class="kubre-popover-item">
+                        <div class="kubre-popover-icon" style="background: rgba(168, 85, 247, 0.15); color: #A855F7;">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="kubre-popover-content">
+                            <span class="kubre-popover-name">Nuevo Rol</span>
+                            <span class="kubre-popover-desc">Permisos para tu equipo</span>
+                        </div>
+                        <i class="fas fa-chevron-right kubre-popover-arrow"></i>
+                    </a>
+                    @endif
+                </div>
+            </div>
+        </div>
+
         <!-- Direct POS Action Button -->
         @if (in_array('pos_sale', $enabled_modules))
             @can('sell.create')
